@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>반려견 돌봄 서비스</title>
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/care-available-dates|">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/schedules|">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/schedules}">돌봄 가능 날짜 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+                <span th:if="${session.member == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-5">
+    <!-- Introduction Section -->
+    <section class="hero-section text-center">
+        <h1>반려생활 파트너</h1>
+        <p class="lead">반려가족의 하루에 저희 서비스가 함께하겠습니다.</p>
+    </section>
+
+    <!-- Services Overview Section -->
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">펫시터의 집에서 돌봄을!</h5>
+                    <p class="card-text">우리집 방문 프라이버시의 걱정없이 펫시터의 집에서 돌봄을 안심하고 맡겨보세요!</p>
+                    <a th:href="@{/petsitter}" class="btn btn-primary">자세히 보기</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">훈련사의 체계적 교육!</h5>
+                    <p class="card-text">훈련을 예약하고 우리 아이 성향 맞춤 솔루션을 받아보세요!</p>
+                    <a th:href="@{/trainer}" class="btn btn-primary">자세히 보기</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">어떤 분들이 활동하고 있나요?</h5>
+                    <p class="card-text">반려동물을 사랑하는 마음은 물론, 반려동물 관련 자격증 또는 전문 지식을 갖춘 분들이 전문 펫시터로 활동하고 있습니다!</p>
+                    <a th:href="@{/pets-care/sitters}" class="btn btn-primary">자세히 보기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Reviews Section -->
+    <section class="latest-reviews text-center mt-5">
+        <h2>실시간 돌봄 후기</h2>
+        <div class="row">
+            <div class="col-md-4" th:each="review : ${reviews}">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p th:text="'작성자: ' + ${review.customerNickName}"></p>
+                        <p th:text="${review.comment}"></p>
+                        <p th:text="'평점: ' + ${review.rating}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a th:href="@{/reviews}" class="btn btn-secondary">후기 더보기</a>
+    </section>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
