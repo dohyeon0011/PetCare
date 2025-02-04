@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회원 정보 수정</title>
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/profileStyle.css}" rel="stylesheet">
+</head>
+<body>
+<!-- data-member-id 설정 -->
+<div id="memberData" th:attr="data-member-id=${session.member.id}"></div>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/care-available-dates|">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/schedules|">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/schedules}">돌봄 가능 날짜 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+                <span th:if="${session.member == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="text-center">👤 회원 정보 수정 👤</h2>
+    <form th:action="@{/api/pets-care/members/{memberId}(memberId=${session.member.id})}" method="post" id="editProfileForm" onsubmit="return updateMember(event)">
+        <input type="hidden" name="_method" value="PUT">  <!-- 이 부분을 추가 -->
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" class="form-control" required minlength="8" maxlength="20">
+        </div>
+
+        <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${session.member.name}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="nickName">닉네임</label>
+            <input type="text" id="nickName" name="nickName" class="form-control" th:value="${session.member.nickName}" required minlength="2" maxlength="8">
+        </div>
+
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" class="form-control" th:value="${session.member.email}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phoneNumber">전화번호</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" th:value="${session.member.phoneNumber}">
+        </div>
+
+        <div class="form-group">
+            <label for="zipcode">우편번호</label>
+            <input type="text" id="zipcode" name="zipcode" class="form-control" th:value="${session.member.zipcode}" required minlength="5" maxlength="5">
+        </div>
+
+        <div class="form-group">
+            <label for="address">상세 주소</label>
+            <input type="text" id="address" name="address" class="form-control" th:value="${session.member.address}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="introduction">소개</label>
+            <textarea id="introduction" name="introduction" class="form-control" rows="3" th:text="${session.member.introduction}"></textarea>
+        </div>
+
+        <div th:if="${session.member.role.name() == 'PET_SITTER'}" class="form-group">
+            <label for="careerYear">경력 연차</label>
+            <input type="number" id="careerYear" name="careerYear" class="form-control" th:value="${session.member.careerYear}" min="0">
+        </div>
+        <button type="submit" class="btn btn-primary">수정 완료</button>
+        <a th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}" class="btn btn-secondary">취소</a>
+    </form>
+</div>
+
+<script src="/js/member.js"></script>
+</body>
+</html>
