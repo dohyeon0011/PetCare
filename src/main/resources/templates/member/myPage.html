@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>회원 정보</title>
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- External CSS for Profile Page -->
+    <link th:href="@{/css/profileStyle.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/care-available-dates|">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item"
+                               th:href="|/pets-care/members/${session.member.id}/schedules|">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/schedules}">돌봄 가능 날짜 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+                <span th:if="${session.member == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="profile-header">
+        <h2 class="text-center">회원 정보</h2>
+    </div>
+
+    <div class="row">
+        <!-- 회원 공통 정보 -->
+        <div class="col-md-6">
+            <div class="card profile-card">
+                <div class="card-body">
+                    <h4 class="card-title">👤 회원 공통 정보</h4>
+                    <p class="card-text">
+                        <strong>이름:</strong> <span th:text="${session.member.name}"></span><br>
+                        <strong>닉네임:</strong> <span th:text="${session.member.nickName}"></span><br>
+                        <strong>이메일:</strong> <span th:text="${session.member.email}"></span><br>
+                        <strong>전화번호:</strong> <span th:text="${session.member.phoneNumber}"></span><br>
+                        <strong>우편번호:</strong> <span th:text="${session.member.zipcode}"></span><br>
+                        <strong>주소:</strong> <span th:text="${session.member.address}"></span><br>
+                        <strong>회원 역할:</strong>
+                        <span>
+                            <span th:switch="${session.member.role.name()}">
+                                <span th:case="'CUSTOMER'">고객</span>
+                                <span th:case="'PET_SITTER'">돌봄사</span>
+                                <span th:case="*">알 수 없음</span> <!-- 예외 처리 -->
+                            </span>
+                        </span>
+                        <br>
+                        <strong>소셜 제공자:</strong> <span th:text="${session.member.socialProvider ?: '소셜 제공자 정보가 없습니다.'}"></span><br>
+                        <strong>소개:</strong> <span th:text="${session.member.introduction}"></span><br>
+                        <strong>적립금:</strong> <span th:text="${session.member.amount}"></span>원<br>
+                    </p>
+
+                    <!-- PET_SITTER인 경우에만 경력 연차 표시 -->
+                    <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                        <strong>경력 연차:</strong> <span th:text="${session.member.careerYear}"></span>년<br>
+                    </div>
+
+                    <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{memberId}/edit(memberId=${session.member.id})}">회원정보 수정</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOMER인 경우 -->
+        <div th:if="${session.member != null and session.member.role.name() == 'CUSTOMER'}" class="col-md-6">
+            <div class="card profile-card">
+                <div class="card-body">
+                    <h4 class="card-title">🐾 등록된 반려견</h4>
+                    <ul>
+                        <li th:each="pet : ${session.member.pets}">
+                            <strong>반려견 이름:</strong> <span th:text="${pet.name}"></span><br>
+                            <strong>나이:</strong> <span th:text="${pet.age}"></span>살<br>
+                            <strong>품종:</strong> <span th:text="${pet.breed}"></span><br>
+                            <strong>건강 상태 및 특이사항:</strong> <span th:text="${pet.medicalConditions}"></span><br>
+<!--                            <strong>프로필 사진:</strong> <span th:text="${pet.profileImgPath}"></span><br>-->
+                        </li>
+                    </ul>
+                    <!-- 반려견이 등록된 경우, 반려견 목록 수정 버튼만 보여짐 -->
+                    <div th:if="${session.member.pets != null and not #lists.isEmpty(session.member.pets)}">
+                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{customerId}/pets/new(customerId=${session.member.id})}">반려견 목록 수정</a>
+                    </div>
+
+                    <!-- 반려견이 등록되지 않은 경우, 반려견 등록 버튼만 보여짐 -->
+                    <div th:if="${session.member.pets == null or #lists.isEmpty(session.member.pets)}">
+                        <a class="btn btn-primary mt-3" th:href="@{/pets-care/members/{customerId}/pets/new(customerId=${session.member.id})}">반려견 등록</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PET_SITTER인 경우 -->
+        <div th:if="${session.member != null and session.member.role.name() == 'PET_SITTER'}" class="col-md-6">
+            <div class="card profile-card">
+                <div class="card-body">
+                    <h4 class="card-title">📜 자격증 목록</h4>
+                    <ul>
+                        <li th:each="certification : ${session.member.certifications}">
+                            <strong>자격증 이름:</strong> <span th:text="${certification.name}"></span><br>
+                        </li>
+                    </ul>
+                    <!-- 자격증이 등록된 경우, 자격증 목록 수정 버튼만 보여짐 -->
+                    <div th:if="${session.member.certifications != null and not #lists.isEmpty(session.member.certifications)}">
+                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/new(sitterId=${session.member.id})}">자격증 목록 수정</a>
+                    </div>
+
+                    <!-- 자격증이 등록되지 않은 경우, 자격증 등록 버튼만 보여짐 -->
+                    <div th:if="${session.member.certifications == null or #lists.isEmpty(session.member.certifications)}">
+                        <a class="btn btn-primary mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/new(sitterId=${session.member.id})}">자격증 등록</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
