@@ -1,0 +1,93 @@
+/* Profile Page Styling */
+.profile-header {
+    margin-bottom: 20px;
+}
+
+.profile-card {
+    margin-bottom: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(173, 216, 230, 0.8); /* 버튼 색상에 맞춰 파란색으로 설정, 투명도 0.7 */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* 카드 확대 애니메이션 */
+.profile-card:hover {
+    transform: scale(1.05);
+}
+
+.card-body {
+    background-color: rgba(255, 255, 255, 0.9); /* 내부 카드는 살짝 투명한 흰색 */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.card-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.card-text strong {
+    color: #333;
+}
+
+/* 각 항목 간의 일정 간격 */
+.card-text br {
+    margin-bottom: 30px;
+}
+
+/* 버튼 스타일 */
+.btn-edit {
+    background-color: #D2B48C; /* 수정 버튼 색상 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: #E9967A; /* 호버 시 진한 파란색 */
+}
+
+.btn-primary {
+    background-color: #D2B48C; /* 등록 버튼 색상 */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #E9967A; /* 호버 시 진한 파란색 */
+}
+
+/* 각 정보 항목들 간의 간격 넓히기 */
+.card-text {
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    margin-bottom: 20px; /* 각 항목 간 간격 늘리기 */
+}
+
+ul li strong {
+    color: #2c3e50; /* 텍스트 색상 좀 더 어두운 톤으로 */
+}
+
+/* PET_SITTER 경력 연차 */
+.card-text .career {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #3498db; /* 경력 연차 색상 */
+}
