@@ -1,0 +1,63 @@
+server:
+  port: 9090
+
+  servlet:
+    session:
+      timeout: 30m # 세션 유효 시간 30분
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/PetCare
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  # Page Reload
+  thymeleaf:
+    prefix: "file:src/main/resources/templates/"
+    cache: false
+
+  profiles:
+    active: dev
+
+  logging:
+    level:
+      com:
+        PetCare: DEBUG  # 해당 패키지 내에서 모든 로그가 DEBUG 레벨로 출력됩니다.
+      org:
+        springframework:
+          web: DEBUG  # Spring 웹 관련 로그도 DEBUG 레벨로 출력됩니다.
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # 로그 출력 형식 설정
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+#        show_sql: true # System.out으로 뿌림
+        format_sql: true
+        default_batch_fetch_size: 100 # @BatchSize = 100 한 방에 100개 쫙 뽑아옴. 원래라면 whwer 1:N 관계의 컬렉션 id = ? 이랬을텐데 IN으로 100개 땡김
+    open-in-view: false # OSIV(Open Session In View)를 끄면 모든 지연로딩을 트랜잭션 안에서 처리해아 한다(한 트랜잭션까지만 디비 커넥터를 들고 있다가 끝나면 커넥터 끊고, 영속성 끝내버려서(준영속)), 뷰 템플릿에서 지연로딩 작동 X
+  #OrderService
+  #OrderService: 핵심 비즈니스 로직
+  #OrderQueryService: 화면이나 API에 맞춘 서비스 (주로 읽기 전용 트랜잭션 사용)
+  #보통 서비스 계층에서 트랜잭션을 유지한다. 두 서비스 모두 트랜잭션을 유지하면서 지연 로딩을 사용할 수 있다.
+  #**참고**: 필자는 고객 서비스의 실시간 API는 OSIV를 끄고, ADMIN 처럼 커넥션을 많이 사용하지 않는 곳에서는 OSIV를 켠다.
+
+logging.level:
+  org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
+  org.hibernate.orm.jdbc.bind: trace
+
+# swagger api
+springdoc:
+  swagger-ui:
+    path: /api/
+    enabled: true
+  packages-to-scan: com.PetCare.controller
+  paths-to-match: /api/**
