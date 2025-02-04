@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 /* @NoArgsConstructor -> DTO에서 필요한가?
     DTO가 JSON 요청 데이터를 매핑할 때 Jackson이나 다른 직렬화/역직렬화 라이브러리가 기본 생성자가 필요
-    예를 들어, 컨트롤러에서 요청 본문으로 들어온 JSON 데이터를 @RequestBody로 매핑할 경우 @NoArgsConstructor가 필요
+    예를 들어, 컨트롤러에서 요청 본문으로 들어온 JSON 데이터를 @RequestBody로 매핑할 경우 @NoArgsConstructor가 필요.
  */
 @NoArgsConstructor
 @AllArgsConstructor // 테스트 코드용 -> 임시로 빠르게 데이터를 생성해내려고 하기 위해 쓰임, Jackson이나 MapStruck 같은 매핑 라이브러리가 DTO 객체를 다룰 때 필요한 기본 생성자를 제외하고도 필드를 매핑하는 데 유리, Spring의 @ModelAttribute나 @RequestBody를 사용할 때도 유용.
