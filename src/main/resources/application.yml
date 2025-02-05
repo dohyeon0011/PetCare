@@ -49,6 +49,10 @@ spring:
   #OrderQueryService: 화면이나 API에 맞춘 서비스 (주로 읽기 전용 트랜잭션 사용)
   #보통 서비스 계층에서 트랜잭션을 유지한다. 두 서비스 모두 트랜잭션을 유지하면서 지연 로딩을 사용할 수 있다.
   #**참고**: 필자는 고객 서비스의 실시간 API는 OSIV를 끄고, ADMIN 처럼 커넥션을 많이 사용하지 않는 곳에서는 OSIV를 켠다.
+  mvc:
+    hidden method:
+      filter:
+        enabled: true
 
 logging.level:
   org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
