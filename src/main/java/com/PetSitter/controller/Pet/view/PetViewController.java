@@ -19,18 +19,19 @@ public class PetViewController {
 
     private final PetService petService;
 
-    @Comment("반려견 등록 || 수정")
+    @Comment("반려견 등록")
     @GetMapping("/members/{customerId}/pets/new")
-    public String newPet(@PathVariable("customerId") long customerId, Model model) {
-        List<PetResponse.GetList> pets = petService.findById(customerId);
-
-        if (pets.isEmpty()) {
-            model.addAttribute("pets", new PetResponse.GetList());
-        } else {
-            model.addAttribute("pets", pets);
-        }
-
+    public String newPet() {
         return "pet/newPet";
+    }
+
+    @Comment("반려견 수정")
+    @GetMapping("/members/{customerId}/pets/edit")
+    public String editPet(@PathVariable("customerId") long customerId, Model model) {
+        List<PetResponse.GetList> pets = petService.findById(customerId);
+        model.addAttribute("pets", pets);
+
+        return "pet/editPet";
     }
 
     @Comment("특정 회원의 모든 반려견 조회")
