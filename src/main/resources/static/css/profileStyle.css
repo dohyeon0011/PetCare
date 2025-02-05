@@ -55,16 +55,18 @@
     background-color: #E9967A; /* 호버 시 진한 파란색 */
 }
 
+/* btn-primary 클래스를 덮어씁니다 */
 .btn-primary {
-    background-color: #D2B48C; /* 등록 버튼 색상 */
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    background-color: #007bff !important; /* 진한 파란색 */
+    border-color: #007bff !important;
+    color: white !important;
 }
 
+/* 호버 스타일에 !important를 추가하여 우선순위 높이기 */
 .btn-primary:hover {
-    background-color: #E9967A; /* 호버 시 진한 파란색 */
+    background-color: #0056b3 !important; /* 더 진한 파란색 */
+    border-color: #0056b3 !important;
+    color: white !important;
 }
 
 /* 각 정보 항목들 간의 간격 넓히기 */
@@ -91,3 +93,67 @@ ul li strong {
     font-weight: bold;
     color: #3498db; /* 경력 연차 색상 */
 }
+
+/* custom-blue-btn 클래스를 사용하는 버튼 스타일 */
+.custom-blue-btn {
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* 호버 스타일을 정의하여 더 강하게 우선순위를 부여 */
+.custom-blue-btn:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+}
+
+/* 초록색 버튼 클래스 */
+.btn-green {
+    background-color: #28a745 !important; /* 초록색 */
+    border-color: #28a745 !important; /* 초록색 */
+    color: white !important; /* 텍스트 색상은 흰색 */
+}
+
+/* 호버 시 색상 변경 */
+.btn-green:hover {
+    background-color: #218838 !important; /* 호버 시 진한 초록색 */
+    border-color: #1e7e34 !important; /* 호버 시 진한 초록색 */
+}
+
+/* 각 반려견 폼 구분선 */
+.pet-section {
+    border-bottom: 1px solid #ddd; /* 가벼운 회색 구분선 */
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+/* 카드 스타일 */
+.pet-section {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    padding-bottom: 30px; /* 추가된 부분 */
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pet-section:last-child {
+    border-bottom: none;
+    box-shadow: none; /* 마지막 폼은 그림자 제거 */
+}
+
+.pet-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    margin-top: 50px; /* 버튼들이 폼과 겹치지 않도록 간격 추가 */
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 버튼 사이 여백 추가 */
+}
+
