@@ -69,10 +69,6 @@
                         <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
                     </div>
                 </span>
-                <span th:if="${session.member == null}">
-                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
-                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
-                </span>
             </div>
         </div>
     </div>
@@ -89,48 +85,51 @@
 
         <div class="form-group">
             <label for="name">이름</label>
-            <input type="text" id="name" name="name" class="form-control" th:value="${session.member.name}" required>
+            <input type="text" id="name" name="name" class="form-control" th:value="${member.name}" required>
         </div>
 
         <div class="form-group">
             <label for="nickName">닉네임</label>
-            <input type="text" id="nickName" name="nickName" class="form-control" th:value="${session.member.nickName}" required minlength="2" maxlength="8">
+            <input type="text" id="nickName" name="nickName" class="form-control" th:value="${member.nickName}" required minlength="2" maxlength="8">
         </div>
 
         <div class="form-group">
             <label for="email">이메일</label>
-            <input type="email" id="email" name="email" class="form-control" th:value="${session.member.email}" required>
+            <input type="email" id="email" name="email" class="form-control" th:value="${member.email}" required>
         </div>
 
         <div class="form-group">
             <label for="phoneNumber">전화번호</label>
-            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" th:value="${session.member.phoneNumber}">
+            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" th:value="${member.phoneNumber}">
         </div>
 
         <div class="form-group">
             <label for="zipcode">우편번호</label>
-            <input type="text" id="zipcode" name="zipcode" class="form-control" th:value="${session.member.zipcode}" required minlength="5" maxlength="5">
+            <input type="text" id="zipcode" name="zipcode" class="form-control" th:value="${member.zipcode}" required minlength="5" maxlength="5">
         </div>
 
         <div class="form-group">
             <label for="address">상세 주소</label>
-            <input type="text" id="address" name="address" class="form-control" th:value="${session.member.address}" required>
+            <input type="text" id="address" name="address" class="form-control" th:value="${member.address}" required>
         </div>
 
         <div class="form-group">
             <label for="introduction">소개</label>
-            <textarea id="introduction" name="introduction" class="form-control" rows="3" th:text="${session.member.introduction}"></textarea>
+            <textarea id="introduction" name="introduction" class="form-control" rows="3" th:text="${member.introduction}"></textarea>
         </div>
 
         <div th:if="${session.member.role.name() == 'PET_SITTER'}" class="form-group">
             <label for="careerYear">경력 연차</label>
-            <input type="number" id="careerYear" name="careerYear" class="form-control" th:value="${session.member.careerYear}" min="0">
+            <input type="number" id="careerYear" name="careerYear" class="form-control" th:value="${member.careerYear}" min="0">
         </div>
-        <button type="submit" class="btn btn-primary">수정 완료</button>
+        <button type="submit" class="btn btn-primary">수정하기</button>
         <a th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}" class="btn btn-secondary">취소</a>
     </form>
 </div>
 
-<script src="/js/member.js"></script>
+<script src="/js/member/member.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
 </body>
 </html>
