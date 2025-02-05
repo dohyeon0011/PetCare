@@ -45,14 +45,21 @@ public class MemberService {
 
         return member.toResponse();*/
 
-        Member member = memberRepository.findById(id)
+        Role role = memberRepository.findRoleById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-        if (member.getRole().equals(Role.CUSTOMER)) {
-            return new MemberResponse.GetCustomer(member);
-        } else if (member.getRole().equals(Role.PET_SITTER)) {
-            return new MemberResponse.GetSitter(member);
-        } else if (member.getRole().equals(Role.ADMIN)) {
+        if (role.equals(Role.CUSTOMER)) {
+            Member member = memberRepository.findByCustomerId(id, role)
+                    .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+
+            return new MemberResponse.GetCustomer(member, member.getPets());
+        } else if (role.equals(Role.PET_SITTER)) {
+            Member member = memberRepository.findBySitterId(id, role)
+                    .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+
+//            return new MemberResponse.GetSitter(member, member.getCertifications());
+            return member.toResponse();
+        } else if (role.equals(Role.ADMIN)) {
             return new MemberResponse();
         }
 
