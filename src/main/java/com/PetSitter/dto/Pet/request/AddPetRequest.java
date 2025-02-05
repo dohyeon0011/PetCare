@@ -21,7 +21,7 @@ public class AddPetRequest {
 
     private String medicalConditions;
 
-    private String profileImgPath;
+//    private String profileImgPath;
 
     public Pet toEntity() {
         return Pet.builder()
@@ -29,7 +29,7 @@ public class AddPetRequest {
                 .age(age)
                 .breed(breed)
                 .medicalConditions(medicalConditions)
-                .profileImgPath(profileImgPath)
+//                .profileImgPath(profileImgPath)
                 .build();
     }
 
