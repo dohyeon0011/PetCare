@@ -6,6 +6,7 @@ import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.Member.response.MemberResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AccessLevel;
@@ -114,13 +115,13 @@ public class Member {
     // 1. Cascade되는 엔티티와 Cascade를 설정하는 엔티티의 라이프사이클이 동일하거나 비슷해야한다.
     // 2. Cascade되는 엔티티가 Cascade를 설정하는 엔티티에서만 사용되어야 한다.
     @Comment("고객이 보유한 반려견 목록")
-    @OneToMany(mappedBy = "customer", orphanRemoval = true, fetch = FetchType.EAGER)
-//    @JsonIgnore // api 조회시 반려견 목록은 빠지고 조회됨
+    @OneToMany(mappedBy = "customer", orphanRemoval = true)
+    @JsonIgnore // api 조회시 반려견 목록은 빠지고 조회됨
     private List<Pet> pets = new ArrayList<>();
 
     @Comment("고객이 예약한 예약 목록")
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
-//    @JsonIgnore
+    @JsonIgnore
     private List<CustomerReservation> customerReservations = new ArrayList<>();
 
     // ----------- 여기까지 고객 필드 -----------
@@ -129,18 +130,18 @@ public class Member {
     private Integer careerYear;
 
     @Comment("돌봄사가 보유한 자격증")
-    @OneToMany(mappedBy = "sitter", orphanRemoval = true, fetch = FetchType.EAGER)
-//    @JsonIgnore
+    @OneToMany(mappedBy = "sitter", orphanRemoval = true)
+    @JsonIgnore
     private List<Certification> certifications = new ArrayList<>();
 
     @Comment("돌봄사가 돌봄 가능한 시간")
     @OneToMany(mappedBy = "sitter", orphanRemoval = true)
-//    @JsonIgnore
+    @JsonIgnore
     private List<CareAvailableDate> careAvailabilities = new ArrayList<>();
 
     @Comment("돌봄사의 예약된 목록")
     @OneToMany(mappedBy = "sitter", orphanRemoval = true)
-//    @JsonIgnore
+    @JsonIgnore
     private List<SitterSchedule> sitterSchedules = new ArrayList<>();
 
     // ----------- 여기는 돌봄사 필드 -----------
@@ -196,9 +197,9 @@ public class Member {
     // 서비스 레벨에서는 데이터 조회 및 비즈니스 로직 처리 요청만을 하는 것이 좋다.
     public Object toResponse() {
         if (Role.CUSTOMER.equals(this.getRole())) {
-            return new MemberResponse.GetCustomer(this);
+            return new MemberResponse.GetCustomer(this, this.pets);
         } else if (Role.PET_SITTER.equals(this.getRole())) {
-            return new MemberResponse.GetSitter(this);
+            return new MemberResponse.GetSitter(this, this.certifications);
         }
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
