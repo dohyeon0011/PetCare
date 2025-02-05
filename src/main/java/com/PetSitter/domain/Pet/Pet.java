@@ -50,7 +50,7 @@ public class Pet {
         this.age = age;
         this.breed = breed;
         this.medicalConditions = medicalConditions;
-        this.profileImgPath = profileImgPath;
+//        this.profileImgPath = profileImgPath;
     }
 
     public void update(String name, int age, String breed, String medicalConditions, String profileImgPath) {
