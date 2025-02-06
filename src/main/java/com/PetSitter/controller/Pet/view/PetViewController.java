@@ -20,7 +20,7 @@ public class PetViewController {
     private final PetService petService;
 
     @Comment("반려견 등록")
-    @GetMapping("/members/{customerId}/pets/new")
+    @GetMapping("/pets/new")
     public String newPet() {
         return "pet/newPet";
     }
