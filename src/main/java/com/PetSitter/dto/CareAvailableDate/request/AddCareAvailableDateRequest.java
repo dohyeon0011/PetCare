@@ -19,7 +19,7 @@ public class AddCareAvailableDateRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd") // DTO는 뷰와 컨트롤러 간 데이터 처리에 집중
     private LocalDate availabilityAt;
 
-    @NotBlank(message = "돌봄 비용 입력은 필수입니다.")
+    @NotNull(message = "돌봄 비용 입력은 필수입니다.")
     private int price;
 
     public CareAvailableDate toEntity() {
