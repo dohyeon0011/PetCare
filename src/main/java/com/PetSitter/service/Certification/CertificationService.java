@@ -80,7 +80,14 @@ public class CertificationService {
 
         List<Certification> certifications = certificationRepository.findBySitterId(sitterId);
 
+        if (certifications == null || certifications.isEmpty()) {
+            throw new NoSuchElementException("해당 회원의 자격증이 존재하지 않습니다.");
+        }
+
         for (UpdateCertificationRequest request : requests) {
+            System.out.println("Request ID: " + request.getId());
+            certifications.forEach(cert -> System.out.println("Certification ID: " + cert.getId()));
+
             Certification certification = certifications.stream()
                     .filter(c -> c.getId() == request.getId())
                     .findFirst()
@@ -92,7 +99,6 @@ public class CertificationService {
         return certifications.stream()
                 .map(CertificationResponse.GetList::new)
                 .toList();
-
     }
 
     private static void authorizetionMember(Member member) {
