@@ -27,7 +27,7 @@ public class CareAvailableDateService {
     private final CareAvailableDateRepository careAvailableDateRepository;
 
     @Transactional
-    public CareAvailableDate save(long sitterId, AddCareAvailableDateRequest request) {
+    public CareAvailableDateResponse.GetDetail save(long sitterId, AddCareAvailableDateRequest request) {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("돌봄 날짜 등록 오류: 현재 회원은 존재하지 않는 회원입니다."));
 
@@ -36,7 +36,12 @@ public class CareAvailableDateService {
         CareAvailableDate careAvailableDate = request.toEntity();
         careAvailableDate.addPetSitter(sitter);
 
-        return careAvailableDateRepository.save(careAvailableDate);
+//        return careAvailableDateRepository.save(careAvailableDate);
+
+        careAvailableDateRepository.save(careAvailableDate);
+
+        return careAvailableDateRepository.findBySitterIdAndIdDetail(sitter.getId(), careAvailableDate.getId())
+                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
     }
 
     @Comment("모든 회원의 돌봄 가능 날짜 조회")
