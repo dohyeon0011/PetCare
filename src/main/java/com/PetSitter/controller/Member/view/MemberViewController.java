@@ -42,7 +42,7 @@ public class MemberViewController {
         List<Object> members = memberService.findAll();
         model.addAttribute("members", members);
 
-        return "admin/member/memberList";
+        return "admin/member/member-list";
     }
 
     @Comment("특정 회원 조회")
@@ -51,7 +51,7 @@ public class MemberViewController {
         Object member = memberService.findById(id);
         model.addAttribute("member", member);
 
-        return "member/myPage";
+        return "member/mypage";
     }
 
     @Comment("돌봄사 전체 조회")
@@ -62,7 +62,7 @@ public class MemberViewController {
         Object member = memberService.findById(id);
         model.addAttribute("member", member);
 
-        return "member/editMember";
+        return "member/edit-member";
     }
 
     @GetMapping("/main")
