@@ -1,3 +1,4 @@
+/*
 // 반려견 추가 버튼 클릭 시
 document.getElementById('addMorePets').addEventListener('click', function() {
     const petFormSections = document.getElementById('petFormSections');
@@ -79,4 +80,4 @@ function httpRequest(method, url, body, success, fail) {
             response.text().then(errorMessage => fail(errorMessage));
         }
     });
-}
+}*/
