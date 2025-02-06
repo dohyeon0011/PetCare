@@ -1,3 +1,4 @@
+/*
 // 반려견 삭제 기능
 const deleteButtons = document.querySelectorAll('.delete-pet-btn');
 
@@ -86,3 +87,4 @@ function httpRequest(method, url, body, success, fail) {
         }
     });
 }
+*/
