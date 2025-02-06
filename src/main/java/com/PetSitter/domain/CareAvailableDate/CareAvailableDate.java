@@ -73,7 +73,7 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
         this.status = CareAvailableDateStatus.POSSIBILITY;
     }
 
-    public CareAvailableDateResponse.GetList toResponse() {
+    public CareAvailableDateResponse.GetList toListResponse() {
         return new CareAvailableDateResponse.GetList(this);
     }
 
