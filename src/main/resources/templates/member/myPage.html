@@ -139,12 +139,12 @@
                     <!-- 반려견이 등록된 경우, 반려견 목록 수정 버튼과 등록 버튼 모두 보이게 함 -->
                     <div th:if="${member.pets != null and not #lists.isEmpty(member.pets)}">
                         <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{customerId}/pets/edit(customerId=${session.member.id})}">반려견 목록 수정</a>
-                        <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/members/{customerId}/pets/new(customerId=${session.member.id})}">반려견 등록</a>
+                        <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/pets/new}">반려견 등록</a>
                     </div>
 
                     <!-- 반려견이 등록되지 않은 경우, 반려견 등록 버튼만 보이게 함 -->
                     <div th:if="${member.pets == null or #lists.isEmpty(member.pets)}">
-                        <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/members/{customerId}/pets/new(customerId=${session.member.id})}">반려견 등록</a>
+                        <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/pets/new}">반려견 등록</a>
                     </div>
                 </div>
             </div>
@@ -160,14 +160,15 @@
                             <strong>자격증 이름:</strong> <span th:text="${certification.name}"></span><br>
                         </li>
                     </ul>
-                    <!-- 자격증이 등록된 경우, 자격증 목록 수정 버튼만 보여짐 -->
+                    <!-- 자격증이 등록된 경우, 자격증 목록 수정 버튼과 등록 버튼 모두 보여짐 -->
                     <div th:if="${member.certifications != null and not #lists.isEmpty(member.certifications)}">
-                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/new(sitterId=${session.member.id})}">자격증 목록 수정</a>
+                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/edit(sitterId=${session.member.id})}">자격증 목록 수정</a>
+                        <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/certifications/new}">자격증 등록</a>
                     </div>
 
                     <!-- 자격증이 등록되지 않은 경우, 자격증 등록 버튼만 보여짐 -->
                     <div th:if="${member.certifications == null or #lists.isEmpty(member.certifications)}">
-                        <a class="btn btn-primary mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/new(sitterId=${session.member.id})}">자격증 등록</a>
+                        <a class="btn btn-primary mt-3" th:href="@{/pets-care/certifications/new}">자격증 등록</a>
                     </div>
                 </div>
             </div>
