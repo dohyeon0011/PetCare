@@ -95,7 +95,6 @@ public class PetService {
                     request.getName(), request.getAge(), request.getBreed(),
                     request.getMedicalConditions(), request.getProfileImgUrl()
             );
-
         }
 
         return pets.stream()
