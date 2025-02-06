@@ -22,7 +22,7 @@ public class PetViewController {
     @Comment("반려견 등록")
     @GetMapping("/pets/new")
     public String newPet() {
-        return "pet/newPet";
+        return "pet/new-pet";
     }
 
     @Comment("반려견 수정")
@@ -31,16 +31,16 @@ public class PetViewController {
         List<PetResponse.GetList> pets = petService.findById(customerId);
         model.addAttribute("pets", pets);
 
-        return "pet/editPet";
+        return "pet/edit-pet";
     }
 
-    @Comment("특정 회원의 모든 반려견 조회")
+    /*@Comment("특정 회원의 모든 반려견 조회")
     @GetMapping("/members/{customerId}/pets")
     public String getAllPet(@PathVariable("customerId") long customerId, Model model) {
         List<PetResponse.GetList> pets = petService.findById(customerId);
         model.addAttribute("pets", pets);
 
-        return "pet/petList";
-    }
+        return "pet/pet-list";
+    }*/
 
 }
