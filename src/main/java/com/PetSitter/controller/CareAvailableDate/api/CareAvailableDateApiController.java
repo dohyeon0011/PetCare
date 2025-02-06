@@ -25,9 +25,10 @@ public class CareAvailableDateApiController {
 
     @Operation(description = "돌봄 가능 일정 등록 API")
     @PostMapping("/{sitterId}/care-available-dates/new")
-    public ResponseEntity<CareAvailableDate> saveCareAvailability(@PathVariable("sitterId") long id,
+    public ResponseEntity<CareAvailableDateResponse.GetDetail> saveCareAvailability(@PathVariable("sitterId") long id,
                                                                   @RequestBody @Valid AddCareAvailableDateRequest request) {
-        CareAvailableDate careAvailableDate = careAvailableDateService.save(id, request);
+//        CareAvailableDate careAvailableDate = careAvailableDateService.save(id, request);
+        CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.save(id, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(careAvailableDate);
