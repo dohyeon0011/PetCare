@@ -20,16 +20,8 @@ public class CertificationViewController {
     private final CertificationService certificationService;
 
     @Comment("회원의 자격증 추가")
-    @GetMapping("/members/{sitterId}/certifications/new")
-    public String newCertification(@PathVariable("sitterId") long sitterId, Model model) {
-        List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
-
-        if (certifications.isEmpty()) {
-            model.addAttribute("certifications", new CertificationResponse.GetList());
-        } else {
-            model.addAttribute("certifications", certifications);
-        }
-
+    @GetMapping("/certifications/new")
+    public String newCertification(Model model) {
         return "certification/newCertification";
     }
 
@@ -40,5 +32,14 @@ public class CertificationViewController {
         model.addAttribute("certifications", certifications);
 
         return "certification/certificationList";
+    }
+
+    @Comment("회원의 자격증 수정")
+    @GetMapping("/members/{sitterId}/certifications/edit")
+    public String editCertification(@PathVariable("sitterId") long sitterId, Model model) {
+        List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
+        model.addAttribute("certifications", certifications);
+
+        return "certification/editCertification";
     }
 }
