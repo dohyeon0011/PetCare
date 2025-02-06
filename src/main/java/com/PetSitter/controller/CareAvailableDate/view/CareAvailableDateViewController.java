@@ -26,7 +26,7 @@ public class CareAvailableDateViewController {
     public String newCareAvailableDate(@PathVariable("sitterId") long sitterId, Model model) {
         model.addAttribute("careAvailableDate", new CareAvailableDateResponse.GetList());
 
-        return "careAvailableDate/newCareAvailableDate";
+        return "careavailabledate/newCareAvailableDate";
     }
 
     @Comment("회원의 등록한 돌봄 일정 상세 조회")
@@ -35,7 +35,7 @@ public class CareAvailableDateViewController {
         List<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAll();
         model.addAttribute("careAvailableDates", careAvailableDates);
 
-        return "admin/careAvailableDate/careAvailableDateList";
+        return "admin/careavailabledate/careAvailableDateList";
     }
 
     @Comment("회원의 등록한 모든 돌봄 일정 조회")
@@ -44,7 +44,7 @@ public class CareAvailableDateViewController {
         Page<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAllById(sitterId, pageable);
         model.addAttribute("careAvailableDates", careAvailableDates);
 
-        return "careAvailableDate/careAvailableDateList";
+        return "careavailabledate/careAvailableDateList";
     }
 
     @Comment("회원의 등록한 돌봄 일정 상세 조회")
@@ -54,7 +54,7 @@ public class CareAvailableDateViewController {
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
         model.addAttribute("careAvailableDate", careAvailableDate);
 
-        return "careAvailableDate/careAvailableDateDetail";
+        return "careavailabledate/careAvailableDateDetail";
     }
 
     @Comment("회원의 등록한 돌봄 가능 일정 수정")
@@ -63,7 +63,7 @@ public class CareAvailableDateViewController {
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
         model.addAttribute("careAvailableDate", careAvailableDate);
 
-        return "careAvailableDate/editCareAvailableDate";
+        return "careavailabledate/editCareAvailableDate";
     }
 
 }
