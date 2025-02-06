@@ -11,25 +11,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const petFormSections = document.getElementById("petFormSections");
 
         // 새로운 반려견 폼 추가
+        const petCount = petFormSections.querySelectorAll(".pet-section").length; // 기존 반려견 개수
         const newPetForm = document.createElement("div");
         newPetForm.classList.add("pet-section");
         newPetForm.innerHTML = `
-            <h3>반려견 정보</h3>
+            <h3>반려견 ${petCount + 1} 정보</h3>
             <div class="form-group">
                 <label for="name">이름</label>
-                <input type="text" name="" class="form-control" required>
+                <input type="text" name="pets[${petCount}].name" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="age">나이</label>
-                <input type="number" name="" class="form-control" min="0" required>
+                <input type="number" name="pets[${petCount}].age" class="form-control" min="0" required>
             </div>
             <div class="form-group">
                 <label for="breed">품종</label>
-                <input type="text" name="" class="form-control" required>
+                <input type="text" name="pets[${petCount}].breed" class="form-control" required>
             </div>
             <div class="form-group">
                 <label for="medicalConditions">건강 상태 및 특이사항</label>
-                <textarea name="" class="form-control" rows="2"></textarea>
+                <textarea name="pets[${petCount}].medicalConditions" class="form-control" rows="2"></textarea>
             </div>
         `;
 
@@ -48,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 반려견 수정
     document.getElementById("editPetForm")?.addEventListener("submit", function (event) {
         event.preventDefault();
-        submitPetData("PUT", `/api/pets-care/members/${memberId}/pets`, "반려견 정보가 성공적으로 수정되었습니다.");
+        submitPetData("PUT", `/api/pets-care/members/${memberId}/pets`, "반려견 정보가 수정되었습니다.");
     });
 
     // 반려견 삭제
