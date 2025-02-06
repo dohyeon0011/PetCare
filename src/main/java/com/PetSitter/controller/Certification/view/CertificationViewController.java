@@ -22,16 +22,7 @@ public class CertificationViewController {
     @Comment("회원의 자격증 추가")
     @GetMapping("/certifications/new")
     public String newCertification(Model model) {
-        return "certification/newCertification";
-    }
-
-    @Comment("회원의 모든 자격증 조회")
-    @GetMapping("/members/{sitterId}/certifications")
-    public String getAllCertification(@PathVariable("sitterId") long sitterId, Model model) {
-        List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
-        model.addAttribute("certifications", certifications);
-
-        return "certification/certificationList";
+        return "certification/new-certification";
     }
 
     @Comment("회원의 자격증 수정")
@@ -40,6 +31,15 @@ public class CertificationViewController {
         List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
         model.addAttribute("certifications", certifications);
 
-        return "certification/editCertification";
+        return "certification/edit-certification";
     }
+
+    /*@Comment("회원의 모든 자격증 조회")
+    @GetMapping("/members/{sitterId}/certifications")
+    public String getAllCertification(@PathVariable("sitterId") long sitterId, Model model) {
+        List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
+        model.addAttribute("certifications", certifications);
+
+        return "certification/certificationList";
+    }*/
 }
