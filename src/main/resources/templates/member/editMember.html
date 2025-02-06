@@ -8,7 +8,7 @@
 </head>
 <body>
 <!-- data-member-id 설정 -->
-<div id="memberData" th:attr="data-member-id=${session.member.id}"></div>
+<div id="memberData" th:data-member-id="${session.member?.id}"></div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
@@ -127,9 +127,9 @@
     </form>
 </div>
 
-<script src="/js/member/member.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+<script src="/js/member/member.js"></script>
 </body>
 </html>
