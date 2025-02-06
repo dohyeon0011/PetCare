@@ -123,13 +123,6 @@ ul li strong {
     border-color: #1e7e34 !important; /* 호버 시 진한 초록색 */
 }
 
-/* 각 반려견 폼 구분선 */
-.pet-section {
-    border-bottom: 1px solid #ddd; /* 가벼운 회색 구분선 */
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-}
-
 /* 카드 스타일 */
 .pet-section {
     border: 1px solid #ccc;
@@ -155,5 +148,25 @@ ul li strong {
     display: flex;
     justify-content: center;
     gap: 10px; /* 버튼 사이 여백 추가 */
+}
+
+/* 카드 스타일 */
+.certification-section {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    padding-bottom: 30px; /* 추가된 부분 */
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}*/
+
+.certification-section:last-child {
+    border-bottom: none;
+    box-shadow: none; /* 마지막 폼은 그림자 제거 */
+}
+
+.certification-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
 }
 
