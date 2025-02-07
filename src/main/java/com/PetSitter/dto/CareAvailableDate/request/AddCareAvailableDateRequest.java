@@ -1,6 +1,7 @@
 package com.PetSitter.dto.CareAvailableDate.request;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,10 @@ public class AddCareAvailableDateRequest {
 
     @NotNull(message = "날짜 입력은 필수입니다.")
     @DateTimeFormat(pattern = "yyyy-MM-dd") // DTO는 뷰와 컨트롤러 간 데이터 처리에 집중
-    private LocalDate availabilityAt;
+    private LocalDate availableAt;
 
-    @NotNull(message = "돌봄 비용 입력은 필수입니다.")
+    @NotNull
+    @Min(value = 1, message = "돌봄 비용 입력은 필수입니다.")
     private int price;
 
     public CareAvailableDate toEntity() {
@@ -29,7 +31,7 @@ public class AddCareAvailableDateRequest {
 
         // <input type="date" th:field="*{date}" /> 타임리프 폼에서 이런 식으로 받으면 자동으로 스프링이 변환해줌
         return CareAvailableDate.builder()
-                .availabilityAt(availabilityAt)
+                .availableAt(availableAt)
                 .price(price)
                 .build();
     }
