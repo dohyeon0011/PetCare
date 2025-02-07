@@ -38,8 +38,7 @@
 
                         <!-- PET_SITTER인 경우 -->
                         <div th:if="${session.member.role.name() == 'PET_SITTER'}">
-                            <a class="dropdown-item"
-                               th:href="|/pets-care/members/${session.member.id}/care-available-dates|">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
                                 등록한 돌봄 가능 일정
                             </a>
 
