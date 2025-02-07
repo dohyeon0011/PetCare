@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -32,6 +33,14 @@ public class CareAvailableDateService {
                 .orElseThrow(() -> new NoSuchElementException("돌봄 날짜 등록 오류: 현재 회원은 존재하지 않는 회원입니다."));
 
         verifyingPermissions(sitter);
+
+        if (request.getAvailableAt().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
+        }
+
+        if (careAvailableDateRepository.findBySitterId(sitter.getId()).stream().anyMatch(c -> c.getAvailableAt().equals(request.getAvailableAt()))) {
+            throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
+        }
 
         CareAvailableDate careAvailableDate = request.toEntity();
         careAvailableDate.addPetSitter(sitter);
@@ -108,10 +117,20 @@ public class CareAvailableDateService {
         verifyingPermissions(sitter);
         authorizetionMember(sitter);
 
+        if (request.getAvailableAt().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
+        }
+
+        // 이미 등록된 돌봄 날짜가 현재 수정하려는 날짜와 동일하지 않은지 확인
+        if (careAvailableDateRepository.findBySitterId(sitter.getId()).stream()
+                .anyMatch(c -> c.getId() != careAvailableDateId && c.getAvailableAt().equals(request.getAvailableAt()))) {
+            throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
+        }
+
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
-        careAvailableDate.update(request.getAvailabilityAt(), request.getPrice());
+        careAvailableDate.update(request.getAvailableAt(), request.getPrice(), request.getStatus());
 
 //        return new CareAvailableDateResponse.GetDetail(careAvailableDate);
 
