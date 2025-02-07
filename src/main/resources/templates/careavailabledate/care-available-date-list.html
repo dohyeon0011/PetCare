@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>돌봄 가능 날짜 목록 - 반려견 돌봄 서비스</title>
+    <!-- 공통 CSS (mainStyle.css), 페이지 전용 CSS, 및 Bootstrap CSS -->
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/careAvailableDates.css}" rel="stylesheet">
+    <!-- 페이지네이션 CSS 추가 -->
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- data-member-id 설정 -->
+<div id="memberData" th:data-member-id="${session.member?.id}"></div>
+<!-- Navigation Bar (공통) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+                                등록한 돌봄 가능 일정
+                            </a>
+                            <a class="dropdown-item" th:href="@{/pets-care/members/${sitterId}/schedules(sitterId=${session.member.id})}">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/admin/schedules}">돌봄 가능 날짜 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <!-- 페이지 타이틀 및 새 날짜 등록 버튼 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📅 등록한 돌봄 가능 날짜 목록 📅</h2>
+        <a th:href="@{/pets-care/care-available-dates/new}" class="btn btn-primary">새 날짜 등록</a>
+    </div>
+
+    <!-- 등록한 날짜들을 카드 형식으로 출력 -->
+    <div class="row">
+        <!-- careAvailableDates 리스트가 모델에 담겨 있다고 가정 -->
+        <div class="col-md-4 mb-4" th:each="careAvailableDate : ${careAvailableDates}">
+            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}(sitterId=${session.member.id}, careAvailableDateId=${careAvailableDate.id})}"
+               class="text-decoration-none text-dark">
+            <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${careAvailableDate.availableAt != null ? careAvailableDate.availableAt.toString() : '날짜 없음'}">날짜 없음</h5>
+                        <p class="card-text">
+                            <strong>돌봄 가격:</strong> <span th:text="${careAvailableDate.price}">0</span>원<br>
+                            <strong>예약 상태:</strong>
+                            <span th:text="${careAvailableDate.status.name() == 'POSSIBILITY' ? '예약 가능' : (careAvailableDate.status.name() == 'IMPOSSIBILITY' ? '예약됨' : '알 수 없음')}">상태</span>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="btn-group" role="group">
+                            <!-- 수정 버튼 -->
+                            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}/edit(careAvailableDateId=${careAvailableDate.id}, sitterId=${session.member.id})}" class="btn btn-sm btn-outline-secondary">수정</a>
+                            <!-- 삭제 버튼 -->
+                            <a href="javascript:void(0);" th:attr="onclick='deleteCareAvailableDate(' + ${careAvailableDate.id} + ')'" class="btn btn-sm btn-outline-danger">삭제</a>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 등록된 날짜가 없을 경우 안내 메시지 출력 -->
+        <div id="noDatesMessage" class="col-12" th:if="${#lists.isEmpty(careAvailableDates.content)}">
+            <div class="alert alert-info text-center" role="alert">
+                등록된 돌봄 가능 날짜가 없습니다. 새 날짜를 등록해보세요!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 페이지네이션 네비게이션 추가 -->
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${careAvailableDates.hasPrevious()}">
+            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number - 1}, size=9)}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <!-- 페이지 번호 표시 -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, careAvailableDates.totalPages - 1)}">
+            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${i}, size=9)}"
+               th:text="${i + 1}" class="page-link page-link-number">  <!-- 중복된 class를 하나로 합침 -->
+            </a>
+        </li>
+        <li class="page-item" th:if="${careAvailableDates.hasNext()}">
+            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number + 1}, size=9)}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Bootstrap 및 관련 플러그인 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/careavailabledate/care-available-date.js"></script>
+</body>
+</html>
