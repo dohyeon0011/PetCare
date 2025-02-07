@@ -36,12 +36,10 @@
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
                         <div th:if="${session.member.role.name() == 'PET_SITTER'}">
-                            <a class="dropdown-item"
-                               th:href="|/pets-care/members/${session.member.id}/care-available-dates|">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
                                 등록한 돌봄 가능 일정
                             </a>
-                            <a class="dropdown-item"
-                               th:href="|/pets-care/members/${session.member.id}/schedules|">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/${sitterId}/schedules(sitterId=${session.member.id})}">
                                 나의 돌봄 일정
                             </a>
                         </div>
