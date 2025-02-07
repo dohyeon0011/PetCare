@@ -44,17 +44,18 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
     }
 
     @Builder
-    public CareAvailableDate(LocalDate availabilityAt, int price) {
-        this.availableAt = availabilityAt;
+    public CareAvailableDate(LocalDate availableAt, int price) {
+        this.availableAt = availableAt;
         this.price = price;
         this.status = CareAvailableDateStatus.POSSIBILITY;
     }
 
-    public void update(LocalDate availabilityAt, int price) {
+    public void update(LocalDate availableAt, int price, CareAvailableDateStatus status) {
         verifyingStatus();
 
-        this.availableAt = availabilityAt;
+        this.availableAt = availableAt;
         this.price = price;
+        this.status = status;
     }
 
     // 예약 상태
@@ -80,7 +81,7 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
     @Comment("예약 상태 확인")
     private void verifyingStatus() {
         if (!this.status.equals(CareAvailableDateStatus.POSSIBILITY)) {
-            throw new IllegalArgumentException("돌봄 예약이 배정된 상태라 수정이 불가합니다.");
+            throw new IllegalArgumentException("해당 날짜는 돌봄 예약이 배정된 상태라 수정이 불가합니다.");
         }
     }
 
