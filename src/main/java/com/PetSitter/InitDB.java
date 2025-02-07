@@ -103,12 +103,12 @@ public class InitDB {
                     .build();
 
             CareAvailableDate careAvailableDate1 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("1999-01-31"))
+                    .availableAt(LocalDate.parse("1999-01-31"))
                     .price(70000)
                     .build();
 
             CareAvailableDate careAvailableDate2 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("1980-05-12"))
+                    .availableAt(LocalDate.parse("1980-05-12"))
                     .price(50000)
                     .build();
 
@@ -193,22 +193,22 @@ public class InitDB {
                     .build();
 
             CareAvailableDate careAvailableDate1 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("2024-12-31"))
+                    .availableAt(LocalDate.parse("2024-12-31"))
                     .price(30000)
                     .build();
 
             CareAvailableDate careAvailableDate2 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("2023-12-31"))
+                    .availableAt(LocalDate.parse("2023-12-31"))
                     .price(50000)
                     .build();
 
             CareAvailableDate careAvailableDate3 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("2025-01-05"))
+                    .availableAt(LocalDate.parse("2025-01-05"))
                     .price(50000)
                     .build();
 
             CareAvailableDate careAvailableDate4 = CareAvailableDate.builder()
-                    .availabilityAt(LocalDate.parse("2024-01-14"))
+                    .availableAt(LocalDate.parse("2024-01-14"))
                     .price(50000)
                     .build();
 
