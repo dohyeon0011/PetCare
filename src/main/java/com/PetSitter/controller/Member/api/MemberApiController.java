@@ -27,12 +27,12 @@ public class MemberApiController {
 
     @Operation(description = "회원가입 API")
     @PostMapping("/new")
-    public ResponseEntity<?> saveMember(@RequestBody @Valid AddMemberRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+    public ResponseEntity<?> saveMember(@RequestBody @Valid AddMemberRequest request, BindingResult result) {
+        if (result.hasErrors()) {
             // 오류 메시지를 담아 반환
             Map<String, String> errorMessages = new HashMap<>();
 
-            bindingResult.getAllErrors().forEach(error -> {
+            result.getAllErrors().forEach(error -> {
                 String fieldName = ((FieldError) error).getField();
                 String errorMessage = error.getDefaultMessage();
                 errorMessages.put(fieldName, errorMessage);
