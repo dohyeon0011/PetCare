@@ -22,14 +22,14 @@ public class CareAvailableDateViewController {
     private final CareAvailableDateService careAvailableDateService;
 
     @Comment("돌봄 가능 일정 등록")
-    @GetMapping("/members/{sitterId}/care-available-dates/new")
-    public String newCareAvailableDate(@PathVariable("sitterId") long sitterId, Model model) {
+    @GetMapping("/care-available-dates/new")
+    public String newCareAvailableDate(Model model) {
         model.addAttribute("careAvailableDate", new CareAvailableDateResponse.GetList());
 
         return "careavailabledate/new-care-available-date";
     }
 
-    @Comment("회원의 등록한 돌봄 일정 상세 조회")
+    @Comment("모든 회원의 등록한 돌봄 일정 상세 조회")
     @GetMapping("/members/care-available-dates")
     public String getAllCareAvailableDate(Model model) {
         List<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAll();
@@ -48,7 +48,7 @@ public class CareAvailableDateViewController {
     }
 
     @Comment("회원의 등록한 돌봄 일정 상세 조회")
-    @GetMapping("/members/{sitterId}/care-available-dates/{careAvailablaDateId}")
+    @GetMapping("/members/{sitterId}/care-available-dates/{careAvailableDateId}")
     public String getCareAvailableDate(@PathVariable("sitterId") long sitterId,
                                        @PathVariable("careAvailableDateId") long careAvailableDateId, Model model) {
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
