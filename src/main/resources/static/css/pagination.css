@@ -1,0 +1,26 @@
+/* pagination.css */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-item {
+    margin: 0 5px; /* 각 페이지 번호 간 간격 추가 */
+}
+
+.page-link {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+.page-link:hover {
+    background-color: #007bff; /* 호버 시 배경 색 */
+    color: white; /* 텍스트 색상 */
+}
+
+.page-item.active .page-link {
+    background-color: #007bff; /* 현재 페이지 활성화 */
+    color: white;
+}
