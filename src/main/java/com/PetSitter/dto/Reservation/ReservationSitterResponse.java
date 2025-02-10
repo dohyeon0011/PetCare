@@ -18,6 +18,7 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         private long sitterId;
         private String sitterName;
         private String introduction;
+        private Integer careerYear;
 
         /*public GetList(Member sitter) {
             this.sitterId = sitter.getId();
@@ -26,10 +27,11 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         }*/
 
         @QueryProjection
-        public GetList(long sitterId, String sitterName, String introduction) {
+        public GetList(long sitterId, String sitterName, String introduction, Integer careerYear) {
             this.sitterId = sitterId;
             this.sitterName = sitterName;
             this.introduction = introduction;
+            this.careerYear = careerYear;
         }
     }
 
