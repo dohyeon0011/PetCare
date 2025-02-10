@@ -49,7 +49,7 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
     @Override
     public Page<ReservationSitterResponse.GetList> findDistinctSitterDetail(Pageable pageable) {
         List<ReservationSitterResponse.GetList> content = queryFactory
-                .select(new QReservationSitterResponse_GetList(careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction)).distinct()
+                .select(new QReservationSitterResponse_GetList(careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction, careAvailableDate.sitter.careerYear)).distinct()
                 .from(careAvailableDate)
                 .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY))
                 .distinct()
@@ -57,11 +57,18 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<CareAvailableDate> countQuery = queryFactory
-                .selectFrom(careAvailableDate)
+        JPAQuery<Long> countQuery = queryFactory
+                .select(careAvailableDate.sitter.id.countDistinct()) // careAvailableDate.sitter.countDistinct()으로 해도 됨.
+                .from(careAvailableDate)
                 .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY));
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+//        System.out.println("countQuery.fetchCount() = " + countQuery.fetchCount()); countQuery는 중복 제거를 못 함. 그래서 fetchOne()으로 총 컨텐트 개수 구해야 함.
+
+        // fetchOne()으로 가져와야 countQuery에서 중복 제거를 해줘도 되질 않아서 여기서 중복 제거가 됨.
+        /*long totalCount = countQuery.fetchOne();
+        System.out.println("totalCount = " + totalCount);*/
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     // 특정 돌봄사의 돌봄 예약 가능한 날짜만을 조회
