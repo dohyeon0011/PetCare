@@ -26,7 +26,7 @@
                     <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
@@ -118,20 +118,24 @@
 </div>
 
 <!-- 페이지네이션 네비게이션 추가 -->
-<nav>
+<nav th:if="${careAvailableDates.totalPages > 0}">
     <ul class="pagination justify-content-center">
-        <li class="page-item" th:if="${careAvailableDates.hasPrevious()}">
+        <!-- 이전 버튼 -->
+        <li class="page-item" th:if="${careAvailableDates.hasPrevious()}" th:classappend="${careAvailableDates.number == 0 ? 'disabled' : ''}">
             <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number - 1}, size=9)}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <!-- 페이지 번호 표시 -->
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, careAvailableDates.totalPages - 1)}">
+
+        <!-- 페이지 번호 버튼 -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, careAvailableDates.totalPages - 1)}"
+            th:classappend="${i == careAvailableDates.number ? 'active' : ''}">
             <a th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${i}, size=9)}"
-               th:text="${i + 1}" class="page-link page-link-number">  <!-- 중복된 class를 하나로 합침 -->
-            </a>
+               th:text="${i + 1}" class="page-link"></a>
         </li>
-        <li class="page-item" th:if="${careAvailableDates.hasNext()}">
+
+        <!-- 다음 버튼 -->
+        <li class="page-item" th:if="${careAvailableDates.hasNext()}" th:classappend="${careAvailableDates.number == careAvailableDates.totalPages - 1 ? 'disabled' : ''}">
             <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number + 1}, size=9)}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
@@ -140,7 +144,7 @@
 </nav>
 
 <!-- Bootstrap 및 관련 플러그인 -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
