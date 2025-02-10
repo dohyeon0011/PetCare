@@ -21,7 +21,7 @@
                     <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
@@ -72,7 +72,7 @@
                 <h3>자격증 1 정보</h3>
                 <div class="form-group">
                     <label for="name">자격증 이름</label>
-                    <input type="text" name="certifications[0].name" class="form-control" required placeholder="자격증 이름을 입력하세요.">
+                    <input type="text" name="certifications[0].name" class="form-control" placeholder="자격증 이름을 입력하세요.">
                 </div>
             </div>
         </div>
@@ -86,6 +86,7 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/certification/certification.js"></script>
