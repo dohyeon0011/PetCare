@@ -20,7 +20,7 @@
                     <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
@@ -61,11 +61,11 @@
                     <form onsubmit="event.preventDefault(); login();">
                         <div class="form-group">
                             <label for="loginId">아이디</label>
-                            <input type="text" class="form-control" id="loginId" placeholder="아이디를 입력하세요." required>
+                            <input type="text" class="form-control" id="loginId" placeholder="아이디를 입력하세요.">
                         </div>
                         <div class="form-group">
                             <label for="password">비밀번호</label>
-                            <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요." required>
+                            <input type="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요.">
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">로그인</button>
                     </form>
