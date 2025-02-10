@@ -21,7 +21,7 @@
                     <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/pets-care/reservableList}">훈련사 프로필</a>
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
@@ -75,7 +75,7 @@
 
             <div class="form-group">
                 <label for="name">자격증 이름</label>
-                <input type="text" name="certifications[${iterStat.index}].name" class="form-control" th:value="${certification.name}" required>
+                <input type="text" name="certifications[${iterStat.index}].name" class="form-control" th:value="${certification.name}">
             </div>
             <button type="button" class="btn btn-danger btn-sm delete-certification-btn" th:data-certification-id="${certification.id}">삭제</button>
         </div>
