@@ -18,7 +18,7 @@ public class SitterReservationApiController {
     private final SitterReservationService sitterReservationService;
 
     @Operation(description = "고객에게 돌봄 예약 가능한 돌봄사들의 정보 조회 API")
-    @GetMapping("/reservableList")
+    @GetMapping("/reservable-list")
     public ResponseEntity<Page<ReservationSitterResponse.GetList>> findAllAvailableReservation(Pageable pageable) {
 //        List<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters();
         Page<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters(pageable);
