@@ -21,13 +21,13 @@ public class SitterReservationViewController {
     private final SitterReservationService sitterReservationService;
 
     @Operation(description = "고객에게 돌봄 예약 가능한 돌봄사들의 정보 조회")
-    @GetMapping("/reservableList")
+    @GetMapping("/reservable-list")
     public String getAllReservable(Pageable pageable, Model model) {
 //        List<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters();
         Page<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters(pageable);
         model.addAttribute("reservableSitters", reservableSitters);
 
-        return "reservable/reservableList";
+        return "reservable/reservable-list";
     }
 
     @Operation(description = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회")
@@ -36,7 +36,7 @@ public class SitterReservationViewController {
         ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
         model.addAttribute("reservableSitter", reservableSitter);
 
-        return "reservable/reservableDetail";
+        return "reservable/reservable-detail";
     }
 
 }
