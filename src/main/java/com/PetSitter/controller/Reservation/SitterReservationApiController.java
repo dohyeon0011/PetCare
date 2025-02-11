@@ -2,6 +2,7 @@ package com.PetSitter.controller.Reservation;
 
 import com.PetSitter.dto.Reservation.ReservationResponse;
 import com.PetSitter.dto.Reservation.ReservationSitterResponse;
+import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Reservation.SitterReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +34,7 @@ public class SitterReservationApiController {
 
     @Operation(description = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회 API")
     @GetMapping("/reservable/members/{sitterId}")
-    public ResponseEntity<ReservationSitterResponse.GetDetail> findReservationSitter(@PathVariable("sitterId") long sitterId, @RequestParam int page) {
+    public ResponseEntity<ReservationSitterResponse.GetDetail> findReservationSitter(@PathVariable("sitterId") long sitterId, @RequestParam(defaultValue = "0") int page) {
         ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
 
         return ResponseEntity.ok()
@@ -43,6 +48,20 @@ public class SitterReservationApiController {
 
         return ResponseEntity.ok()
                 .body(reservationDetails);
+    }
+
+    @Operation(description = "선택한 돌봄사의 자세한 정보 중 리뷰 정보만 더 조회")
+    @GetMapping("/reservable/members/{sitterId}/reviews")
+    public ResponseEntity<Map<String, Object>> getMoreReviews(@PathVariable("sitterId") long sitterId, @RequestParam(defaultValue = "0") int page) {
+        List<ReviewResponse.GetDetail> reviews = sitterReservationService.getReviewsBySitterId(sitterId, page, 5);
+        long totalReviews = sitterReservationService.getTotalReviewsBySitterId(sitterId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("reviews", reviews);
+        response.put("totalReviews", totalReviews);
+
+        return ResponseEntity.ok()
+                .body(response);
     }
 
 }
