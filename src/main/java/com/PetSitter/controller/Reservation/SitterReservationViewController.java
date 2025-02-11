@@ -32,7 +32,7 @@ public class SitterReservationViewController {
 
     @Operation(description = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회")
     @GetMapping("/reservable/members/{sitterId}")
-    public String getReservableSitter(@PathVariable("sitterId") long sitterId, @RequestParam int page, Model model) {
+    public String getReservableSitter(@PathVariable("sitterId") long sitterId, @RequestParam(defaultValue = "0") int page, Model model) {
         ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
         model.addAttribute("reservableSitter", reservableSitter);
 
