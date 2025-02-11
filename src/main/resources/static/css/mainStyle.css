@@ -168,12 +168,13 @@ p.lead {
 
 .latest-reviews .row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* 좌측 정렬로 변경 */
     flex-wrap: wrap;
+    gap: 20px; /* 카드 사이에 일정 간격 추가 */
 }
 
 .latest-reviews .col-md-4 {
-    flex: 1 1 calc(33% - 20px); /* Adjust for responsive layout */
+    flex: 1 1 calc(33% - 20px); /* 3개 카드가 한 줄에 배치되도록 설정 */
     margin-bottom: 20px;
 }
 
