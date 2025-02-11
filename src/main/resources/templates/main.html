@@ -4,6 +4,7 @@
     <title>반려견 돌봄 서비스</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/reviewStyle.css}" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -122,12 +123,25 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <p th:text="'작성자: ' + ${review.customerNickName}"></p>
+                        <p th:text="'돌봄사: ' + ${review.sitterName}"></p>
+                        <!-- 별 평점 표시 -->
+                        <p class="rating">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <!-- 채워진 별 (filled) -->
+                                <span th:if="${i <= review.rating}" class="star filled">★</span>
+
+                                <!-- 반 채워진 별 (half-filled) -->
+                                <span th:if="${i == (review.rating + 0.5)}" class="star half-filled">★</span>
+
+                                <!-- 비어있는 별 (empty) -->
+                                <span th:if="${i > (review.rating + 0.5)}" class="star empty">★</span>
+                            </span>
+                        </p>
                         <p th:text="${review.comment}"></p>
-                        <p th:text="'평점: ' + ${review.rating}"></p>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><br>
         <a th:href="@{/reviews}" class="btn btn-secondary">후기 더보기</a>
     </section>
 </div>
