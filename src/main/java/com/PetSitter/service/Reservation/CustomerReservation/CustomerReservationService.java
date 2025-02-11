@@ -51,7 +51,7 @@ public class CustomerReservationService {
         verifyingPermissionsSitter(sitter);
 
         // 예약으로 선택된 날짜 찾기
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findById(request.getCareAvailableId())
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), request.getCareAvailableId())
                 .orElseThrow(() -> new NoSuchElementException("예약 오류: 돌봄사가 해당 날짜를 돌봄 가능 날짜로 등록하지 않았습니다."));
 
         // 돌봄에 배정될 반려견 중간 매핑 엔티티

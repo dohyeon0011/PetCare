@@ -1,0 +1,35 @@
+.rating {
+    display: inline-block;
+    font-size: 1.5rem;
+}
+
+.star {
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 24px; /* 별 크기 */
+    position: relative;
+    color: #ddd; /* 기본 색: 비어있는 별 */
+}
+
+/* 채워진 별 */
+.star.filled {
+    color: gold; /* 채워진 별 색 */
+}
+
+/* 반 채워진 별 */
+.star.half-filled {
+    background: linear-gradient(to right, gold 50%, #ddd 50%); /* 왼쪽 반은 gold, 오른쪽 반은 #ddd */
+    -webkit-background-clip: text;
+    background-clip: text; /* 배경을 텍스트에 맞게 잘라서 반별 처리 */
+    color: transparent; /* 텍스트 색상은 투명으로 설정 */
+}
+
+/* 비어있는 별 */
+.star.empty {
+    color: #ddd; /* 비어있는 별 색 */
+}
+
+/* 별 hover 효과 */
+.star:hover {
+    transform: scale(1.2);
+}
