@@ -81,7 +81,8 @@
     <h1 class="text-center">👨‍⚕️ 예약 가능한 펫시터 👩‍⚕️</h1><br><br>
     <div class="row" id="sitter-list">
         <div class="col-md-4" th:each="sitter : ${reservableSitters}">
-            <div class="sitter-card" th:attr="data-sitter-id=${sitter.sitterId}">
+            <div class="sitter-card">
+                <input type="hidden" class="sitter-id" th:value="${sitter.sitterId}">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${sitter.sitterName}"></h5>
