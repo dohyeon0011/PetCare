@@ -19,7 +19,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                         "select r from Review r " +
                                 "where r.customerReservation.sitter.id = :sitterId", Review.class)
                 .setParameter("sitterId", sitterId)
-                .setFirstResult(page)
+                .setFirstResult(page * size)
                 .setMaxResults(size)
                 .getResultList();
     }
@@ -38,4 +38,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .setMaxResults(6)
                 .getResultList();
     }
+
+    // 전체 리뷰 개수 조회(돌봄 가능한 돌봄사의 자세한 정보에서 리뷰 조회 시)
+    @Override
+    public Long countBySitterId(long sitterId) {
+        return em.createQuery(
+                        "select count(r) from Review r where r.customerReservation.sitter.id = :sitterId", Long.class)
+                .setParameter("sitterId", sitterId)
+                .getSingleResult();
+    }
+
 }

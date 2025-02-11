@@ -12,4 +12,7 @@ public interface ReviewRepositoryCustom {
 
     // 모든 리뷰 조회(+최신 6개만)
     List<ReviewResponse.GetDetail> findAllReview();
+
+    // 전체 리뷰 개수 조회(돌봄 가능한 돌봄사의 자세한 정보에서 리뷰 조회 시)
+    Long countBySitterId(long sitterId);
 }
