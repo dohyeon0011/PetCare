@@ -7,6 +7,7 @@ import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.Reservation.ReservationResponse;
 import com.PetSitter.dto.Reservation.ReservationSitterResponse;
+import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Pet.PetRepository;
@@ -58,7 +59,7 @@ public class SitterReservationService {
         }
 
 //        List<Review> reviews = reviewRepository.findByCustomerReservationSitterId(sitter.getId());
-        List<Review> reviews = reviewRepository.findBySitterId(sitterId, page, 5); // 한 페이지에 항목 수 5개 고정.
+        List<Review> reviews = reviewRepository.findBySitterId(sitter.getId(), page, 5); // 한 페이지에 항목 수 5개 고정.
 
         return new ReservationSitterResponse.GetDetail(sitter, reviews);
     }
@@ -84,6 +85,28 @@ public class SitterReservationService {
         List<Pet> pets = petRepository.findByCustomerId(customer.getId());
 
         return new ReservationResponse(customer, sitter, careAvailableDates, pets);
+    }
+
+    @Comment("선택한 돌봄사의 자세한 정보 중 리뷰 정보만 더 조회")
+    @Transactional(readOnly = true)
+    public List<ReviewResponse.GetDetail> getReviewsBySitterId(long sitterId, int page, int size) {
+        List<Review> reviews = reviewRepository.findBySitterId(sitterId, page, size);
+
+        return reviews.stream()
+                .map(review -> new ReviewResponse.GetDetail(
+                        review.getId(),
+                        review.getCustomerReservation().getId(),
+                        review.getCustomerReservation().getCustomer().getNickName(),
+                        review.getCustomerReservation().getSitter().getName(),
+                        review.getRating(),
+                        review.getComment()))
+                .toList();
+    }
+
+    @Comment("전체 리뷰 개수 조회(돌봄 가능한 돌봄사의 자세한 정보에서 리뷰 조회 시)")
+    @Transactional(readOnly = true)
+    public long getTotalReviewsBySitterId(long sitterId) {
+        return reviewRepository.countBySitterId(sitterId);
     }
 
     public static void verifyingPermissionsCustomer(Member customer) {
