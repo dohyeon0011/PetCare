@@ -31,8 +31,8 @@ public class CareAvailableDateApiController {
     @Operation(description = "돌봄 가능 일정 등록 API")
     @PostMapping("/{sitterId}/care-available-dates/new")
     public ResponseEntity<?> saveCareAvailability(@PathVariable("sitterId") long id,
-                                                                                    @RequestBody @Valid AddCareAvailableDateRequest request,
-                                                                                    BindingResult result) {
+                                                  @RequestBody @Valid AddCareAvailableDateRequest request,
+                                                  BindingResult result) {
 //        CareAvailableDate careAvailableDate = careAvailableDateService.save(id, request);
 
         // 검증 오류가 있을 경우 에러 메시지를 리턴
