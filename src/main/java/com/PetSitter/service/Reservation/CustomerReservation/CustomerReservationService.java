@@ -63,15 +63,30 @@ public class CustomerReservationService {
                 })
                 .toList();
 
+        CustomerReservation customerReservation;
+        int resultPrice; // 결제될 금액
+
+        if (request.getAmount() > 0) { // 적립금을 사용하는 경우
+            if (request.getAmount() > customer.getAmount()) {
+                throw new IllegalArgumentException("현재 보유 중인 적립금보다 큰 수를 입력하셨습니다. 다시 입력하세요.");
+            }
+            resultPrice = careAvailableDate.getPrice() - request.getAmount(); // 원래 돌봄 비용 - 적립금 사용 금액
+
+            customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, resultPrice, request.getRequests(), petReservations.toArray(new PetReservation[0])); // 차감한 적립금 만큼 결제 금액 산정
+            customer.subRewardPoints(request.getAmount()); // 사용한 적립금 차감
+        } else { // 적립금을 사용하지 않는 경우
+            resultPrice = careAvailableDate.getPrice();
+            customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, careAvailableDate.getPrice(), request.getRequests(), petReservations.toArray(new PetReservation[0]));
+        }
+
         // 고객 시점 돌봄 예약 생성
-        CustomerReservation customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, careAvailableDate.getPrice(), petReservations.toArray(new PetReservation[0]));
         customerReservation.changeReservationAt(careAvailableDate.getAvailableAt());
 
         // 돌봄사 시점 돌봄 예약 생성
         SitterSchedule sitterReservation = SitterSchedule.createSitterReservation(customerReservation);
         sitterReservation.changeReservationAt(careAvailableDate.getAvailableAt());
         careAvailableDate.reservation();
-        rewardService.addReward(customer.getId(), careAvailableDate.getPrice());
+        rewardService.addReward(customer.getId(), resultPrice);
 
         customerReservationRepository.save(customerReservation);
 
