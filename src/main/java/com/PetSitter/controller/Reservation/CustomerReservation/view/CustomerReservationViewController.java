@@ -43,8 +43,8 @@ public class CustomerReservationViewController {
 
     @Operation(description = "회원의 특정 돌봄 예약 상세 조회")
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}")
-    public String getReservation(@PathVariable("customerId") long customerId, @PathVariable("customerReservationId") long customerReservationId,
-                                 Model model) {
+    public String getReservation(@PathVariable("customerId") long customerId,
+                                 @PathVariable("customerReservationId") long customerReservationId, Model model) {
         CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
         model.addAttribute("reservation", reservation);
 
