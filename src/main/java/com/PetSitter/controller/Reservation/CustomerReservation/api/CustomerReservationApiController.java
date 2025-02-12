@@ -6,22 +6,39 @@ import com.PetSitter.service.Reservation.CustomerReservation.CustomerReservation
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/pets-care")
+@Slf4j
 public class CustomerReservationApiController {
 
     private final CustomerReservationService customerReservationService;
 
     @Operation(description = "회원 돌봄 예약 생성 API")
     @PostMapping("/reservations/new")
-    public ResponseEntity<CustomerReservationResponse.GetDetail> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request) {
+    public ResponseEntity<?> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+
+            result.getFieldErrors().forEach(error -> {
+                errors.put(error.getField(), error.getDefaultMessage());
+                log.error("Field: {}, Error : {}", error.getField(), error.getDefaultMessage());
+            });
+
+            return ResponseEntity.badRequest()
+                    .body(errors);
+        }
         CustomerReservationResponse.GetDetail customerReservation = customerReservationService.save(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
