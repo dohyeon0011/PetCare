@@ -44,6 +44,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
+        private String requests;
         private LocalDateTime createdAt;
         private ReservationStatus status;
         private List<PetReservationResponse> pets;
@@ -58,6 +59,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
             this.reservationAt = customerReservation.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.requests = customerReservation.getRequests();
             this.createdAt = customerReservation.getCreatedAt();
             this.status = customerReservation.getStatus();
             this.pets = pets
