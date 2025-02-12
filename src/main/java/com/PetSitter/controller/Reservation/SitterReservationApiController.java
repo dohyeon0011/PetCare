@@ -50,6 +50,7 @@ public class SitterReservationApiController {
                 .body(reservationDetails);
     }
 
+    // 일반적인 List<>가 아닌, Map<>에 담아 뷰에 넘겨줄 경우, 한번에 여러 정보를 담아서 보내줄 수 있어서 좋음.
     @Operation(description = "선택한 돌봄사의 자세한 정보 중 리뷰 정보만 더 조회")
     @GetMapping("/reservable/members/{sitterId}/reviews")
     public ResponseEntity<Map<String, Object>> getMoreReviews(@PathVariable("sitterId") long sitterId, @RequestParam(defaultValue = "0") int page) {
