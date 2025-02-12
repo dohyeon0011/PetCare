@@ -59,6 +59,9 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
     @Comment("돌봄 장소 주소(상세주소)")
     private String address;
 
+    @Comment("고객 요청 사항")
+    private String requests;
+
     @Comment("예약이 발생한 시간")
     @CreatedDate
     @Column(name = "create_at")
@@ -71,7 +74,7 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customerReservation", orphanRemoval = true)
     private Review review;
 
-    public static CustomerReservation createCustomerReservation(Member customer, Member sitter, int price, PetReservation... petReservations) {
+    public static CustomerReservation createCustomerReservation(Member customer, Member sitter, int price, String requests, PetReservation... petReservations) {
         CustomerReservation customerReservation = new CustomerReservation();
         customerReservation.addCustomer(customer);
         customerReservation.addSitter(sitter);
@@ -80,6 +83,7 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
             customerReservation.addPetReservation(petReservation);
         }
         customerReservation.price = price;
+        customerReservation.requests = requests;
         customerReservation.changeAddress(sitter);
         customerReservation.status = ReservationStatus.RESERVATION;
 
