@@ -9,6 +9,7 @@ import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,6 +47,7 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
+        private String requests;
         private LocalDateTime createdAt;
         private ReservationStatus status;
         private List<PetReservationResponse> pets;
@@ -61,13 +63,13 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
             this.reservationAt = sitterSchedule.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.requests = sitterSchedule.getRequests();
             this.createdAt = sitterSchedule.getCreatedAt();
             this.status = sitterSchedule.getStatus();
             this.pets = pets
                     .stream()
                     .map(PetReservationResponse::new)
                     .toList();
-
             this.review = Optional.ofNullable(sitterSchedule.getCustomerReservation().getReview())
                     .map(r -> {
                         return new ReviewResponse.GetDetail(r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
