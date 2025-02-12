@@ -114,37 +114,37 @@ public class InitDB {
                     .build();
 
             CareAvailableDate careAvailableDate3 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-05-12"))
+                    .availableAt(LocalDate.parse("2025-05-12"))
                     .price(50000)
                     .build();
 
             CareAvailableDate careAvailableDate4 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-05-31"))
+                    .availableAt(LocalDate.parse("2025-05-31"))
                     .price(25000)
                     .build();
 
             CareAvailableDate careAvailableDate5 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-04-30"))
+                    .availableAt(LocalDate.parse("2025-04-30"))
                     .price(35000)
                     .build();
 
             CareAvailableDate careAvailableDate6 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-09-02"))
+                    .availableAt(LocalDate.parse("2025-09-02"))
                     .price(45000)
                     .build();
 
             CareAvailableDate careAvailableDate7 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-10-21"))
+                    .availableAt(LocalDate.parse("2025-10-21"))
                     .price(55000)
                     .build();
 
             CareAvailableDate careAvailableDate8 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-10-24"))
+                    .availableAt(LocalDate.parse("2025-10-24"))
                     .price(65000)
                     .build();
 
             CareAvailableDate careAvailableDate9 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-12-12"))
+                    .availableAt(LocalDate.parse("2025-12-12"))
                     .price(70000)
                     .build();
 
@@ -263,32 +263,32 @@ public class InitDB {
                     .build();
 
             CareAvailableDate careAvailableDate5 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-12-11"))
+                    .availableAt(LocalDate.parse("2025-12-11"))
                     .price(30000)
                     .build();
 
             CareAvailableDate careAvailableDate6 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-08-07"))
+                    .availableAt(LocalDate.parse("2025-08-07"))
                     .price(35000)
                     .build();
 
             CareAvailableDate careAvailableDate7 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-07-03"))
+                    .availableAt(LocalDate.parse("2025-07-03"))
                     .price(40000)
                     .build();
 
             CareAvailableDate careAvailableDate8 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-03-23"))
+                    .availableAt(LocalDate.parse("2025-03-23"))
                     .price(45000)
                     .build();
 
             CareAvailableDate careAvailableDate9 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-11-03"))
+                    .availableAt(LocalDate.parse("2025-11-03"))
                     .price(75000)
                     .build();
 
             CareAvailableDate careAvailableDate10 = CareAvailableDate.builder()
-                    .availableAt(LocalDate.parse("2024-08-08"))
+                    .availableAt(LocalDate.parse("2025-08-08"))
                     .price(80000)
                     .build();
 
