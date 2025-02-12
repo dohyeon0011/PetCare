@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -77,7 +78,8 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
         return queryFactory
                 .selectFrom(careAvailableDate)
                 .where(careAvailableDate.sitter.id.eq(sitterId)
-                        .and(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY)))
+                        .and(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY))
+                        .and(careAvailableDate.availableAt.goe(LocalDate.now())))
                 .fetch();
     }
 }
