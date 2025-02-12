@@ -192,6 +192,11 @@ public class Member {
         this.amount += amount;
     }
 
+    @Comment("적립금 차감")
+    public void subRewardPoints(int amount) {
+        this.amount -= amount;
+    }
+
     // 이러한 상황(Member의 Role)에 따른 로직은 도메인 내부에 있어야 변경사항이 있을 때 도메인만 수정하면 돼서 유지보수가 쉽다.
     // 이런 로직 같은 경우는 서비스, 컨트롤러 레벨에 작성해도 되지만 컨트롤러 레벨에서는 요청 전달 및 응답 반환만 해야 하는 것이 정석이고,
     // 서비스 레벨에서는 데이터 조회 및 비즈니스 로직 처리 요청만을 하는 것이 좋다.
