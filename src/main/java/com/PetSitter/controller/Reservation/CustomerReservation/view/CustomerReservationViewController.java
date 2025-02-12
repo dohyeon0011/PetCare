@@ -25,10 +25,10 @@ public class CustomerReservationViewController {
     @Operation(description = "회원 돌봄 예약 생성")
     @GetMapping("/members/{customerId}/sitters/{sitterId}/reservations/new")
     public String newReservation(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId, Model model) {
-        ReservationResponse reservationResponse = sitterReservationService.getReservationDetails(customerId, sitterId);
-        model.addAttribute("reservationResponse", reservationResponse);
+        ReservationResponse reservationInfo = sitterReservationService.getReservationDetails(customerId, sitterId);
+        model.addAttribute("reservationInfo", reservationInfo);
 
-        return "reservation/newReservation";
+        return "reservation/new-reservation";
     }
 
     @Operation(description = "회원의 모든 돌봄 예약 내역 조회")
@@ -38,7 +38,7 @@ public class CustomerReservationViewController {
         Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
         model.addAttribute("reservations", reservations);
 
-        return "reservation/reservationList";
+        return "reservation/reservation-list";
     }
 
     @Operation(description = "회원의 특정 돌봄 예약 상세 조회")
@@ -48,7 +48,7 @@ public class CustomerReservationViewController {
         CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
         model.addAttribute("reservation", reservation);
 
-        return "reservation/reservationDetail";
+        return "reservation/reservation-detail";
     }
 
 }
