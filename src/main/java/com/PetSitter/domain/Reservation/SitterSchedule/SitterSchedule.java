@@ -59,6 +59,9 @@ public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
     @Comment("돌봄 장소 주소(상세주소)")
     private String address;
 
+    @Comment("고객 요청 사항")
+    private String requests;
+
 //    @Comment("돌봄에 맡겨지는 반려견 목록")
 //    @OneToMany(mappedBy = "sitterSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
 //    List<SitterPetReservation> sitterPetReservations = new ArrayList<>();
@@ -95,6 +98,7 @@ public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
         sitterSchedule.addCustomerReservation(customerReservation);
         sitterSchedule.price = customerReservation.getPrice();
         sitterSchedule.changeAddress(customerReservation.getZipcode(), customerReservation.getAddress());
+        sitterSchedule.requests = customerReservation.getRequests();
         sitterSchedule.reservationAt = customerReservation.getReservationAt();
         sitterSchedule.status = ReservationStatus.RESERVATION;
 
