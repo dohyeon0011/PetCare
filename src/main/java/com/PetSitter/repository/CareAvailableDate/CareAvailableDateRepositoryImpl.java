@@ -80,6 +80,7 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
                 .where(careAvailableDate.sitter.id.eq(sitterId)
                         .and(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY))
                         .and(careAvailableDate.availableAt.goe(LocalDate.now())))
+                .orderBy(careAvailableDate.availableAt.asc())
                 .fetch();
     }
 }
