@@ -148,6 +148,41 @@ public class InitDB {
                     .price(70000)
                     .build();
 
+            CareAvailableDate careAvailableDate10 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-12-10"))
+                    .price(80000)
+                    .build();
+
+            CareAvailableDate careAvailableDate11 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-11-12"))
+                    .price(85000)
+                    .build();
+
+            CareAvailableDate careAvailableDate12 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-10-12"))
+                    .price(90000)
+                    .build();
+
+            CareAvailableDate careAvailableDate13 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-09-30"))
+                    .price(95000)
+                    .build();
+
+            CareAvailableDate careAvailableDate14 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-05-04"))
+                    .price(75000)
+                    .build();
+
+            CareAvailableDate careAvailableDate15 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-10-01"))
+                    .price(75000)
+                    .build();
+
+            CareAvailableDate careAvailableDate16 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-10-15"))
+                    .price(75000)
+                    .build();
+
             certification1.addSitter(member);
             certification2.addSitter(member);
 
@@ -160,6 +195,13 @@ public class InitDB {
             careAvailableDate7.addPetSitter(member);
             careAvailableDate8.addPetSitter(member);
             careAvailableDate9.addPetSitter(member);
+            careAvailableDate10.addPetSitter(member);
+            careAvailableDate11.addPetSitter(member);
+            careAvailableDate12.addPetSitter(member);
+            careAvailableDate13.addPetSitter(member);
+            careAvailableDate14.addPetSitter(member);
+            careAvailableDate15.addPetSitter(member);
+            careAvailableDate16.addPetSitter(member);
 
             em.persist(certification1);
             em.persist(certification2);
@@ -173,6 +215,13 @@ public class InitDB {
             em.persist(careAvailableDate7);
             em.persist(careAvailableDate8);
             em.persist(careAvailableDate9);
+            em.persist(careAvailableDate10);
+            em.persist(careAvailableDate11);
+            em.persist(careAvailableDate12);
+            em.persist(careAvailableDate13);
+            em.persist(careAvailableDate14);
+            em.persist(careAvailableDate15);
+            em.persist(careAvailableDate16);
         }
 
         public void dbInit3() {
@@ -292,6 +341,41 @@ public class InitDB {
                     .price(80000)
                     .build();
 
+            CareAvailableDate careAvailableDate11 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-07-08"))
+                    .price(85000)
+                    .build();
+
+            CareAvailableDate careAvailableDate12 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-07-21"))
+                    .price(90000)
+                    .build();
+
+            CareAvailableDate careAvailableDate13 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-09-15"))
+                    .price(95000)
+                    .build();
+
+            CareAvailableDate careAvailableDate14 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-09-23"))
+                    .price(100000)
+                    .build();
+
+            CareAvailableDate careAvailableDate15 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-10-11"))
+                    .price(105000)
+                    .build();
+
+            CareAvailableDate careAvailableDate16 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-10-30"))
+                    .price(110000)
+                    .build();
+
+            CareAvailableDate careAvailableDate17 = CareAvailableDate.builder()
+                    .availableAt(LocalDate.parse("2025-11-24"))
+                    .price(115000)
+                    .build();
+
             certification1.addSitter(member);
             certification2.addSitter(member);
 
@@ -305,6 +389,13 @@ public class InitDB {
             careAvailableDate8.addPetSitter(member);
             careAvailableDate9.addPetSitter(member);
             careAvailableDate10.addPetSitter(member);
+            careAvailableDate11.addPetSitter(member);
+            careAvailableDate12.addPetSitter(member);
+            careAvailableDate13.addPetSitter(member);
+            careAvailableDate14.addPetSitter(member);
+            careAvailableDate15.addPetSitter(member);
+            careAvailableDate16.addPetSitter(member);
+            careAvailableDate17.addPetSitter(member);
             careAvailableDate2.reservation();
 
             em.persist(certification1);
@@ -320,6 +411,13 @@ public class InitDB {
             em.persist(careAvailableDate8);
             em.persist(careAvailableDate9);
             em.persist(careAvailableDate10);
+            em.persist(careAvailableDate11);
+            em.persist(careAvailableDate12);
+            em.persist(careAvailableDate13);
+            em.persist(careAvailableDate14);
+            em.persist(careAvailableDate15);
+            em.persist(careAvailableDate16);
+            em.persist(careAvailableDate17);
         }
     }
 }
