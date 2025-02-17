@@ -64,7 +64,7 @@ public class CustomerReservationService {
                 .toList();
 
         CustomerReservation customerReservation;
-        int resultPrice; // 결제될 금액
+        int resultPrice; // 결제될 최종 금액
 
         if (request.getAmount() > 0) { // 적립금을 사용하는 경우
             if (request.getAmount() > customer.getAmount()) {
