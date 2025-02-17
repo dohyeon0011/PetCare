@@ -106,9 +106,7 @@ public class CustomerReservationService {
 //                .map(CustomerReservationResponse.GetList::new) // Constructor Reference 사용
 //                .collect(Collectors.toList());
 
-        Page<CustomerReservationResponse.GetList> reservations = customerReservationRepository.findByCustomerId(customerId, pageable);
-
-        return reservations;
+        return customerReservationRepository.findByCustomerId(customerId, pageable);
     }
 
     @Comment("특정 회원의 특정 돌봄 예약 조회")
