@@ -21,15 +21,17 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
     @Getter
     public static class GetList {
         private long id;
+        private String sitterName;
         private LocalDate reservationAt;
         private LocalDateTime createdAt;
         private ReservationStatus status;
 
-        public GetList(CustomerReservation customerReservation) {
-            this.id = customerReservation.getId();
-            this.reservationAt = customerReservation.getReservationAt();
-            this.createdAt = customerReservation.getCreatedAt();
-            this.status = customerReservation.getStatus();
+        public GetList(long id, String sitterName, LocalDate reservationAt, LocalDateTime createdAt, ReservationStatus status) {
+            this.id = id;
+            this.sitterName = sitterName;
+            this.reservationAt = reservationAt;
+            this.createdAt = createdAt;
+            this.status = status;
         }
     }
 
