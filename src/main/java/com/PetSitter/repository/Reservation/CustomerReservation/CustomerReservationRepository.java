@@ -30,8 +30,12 @@ public interface CustomerReservationRepository extends JpaRepository<CustomerRes
     Optional<ReviewResponse.GetNewReview> findReviewResponseDetail(@Param("customerId") long customerId, @Param("id") long id);
 
     // 특정 고객의 돌봄 예약 내역 전체 조회(+페이징)
-    @Query("select new com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse$GetList(c) " +
-            "from CustomerReservation c where c.customer.id = :customerId")
+    @Query("select new com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse$GetList(" +
+            "cr.id, s.name, cr.reservationAt, cr.createdAt, cr.status) " +
+            "from CustomerReservation cr " +
+            "join cr.sitter s " +
+            "where cr.customer.id = :customerId " +
+            "order by cr.id desc")
     Page<CustomerReservationResponse.GetList> findByCustomerId(@Param("customerId") long customerId, Pageable pageable);
 
     // 돌봄사의 예약 번호로 특정 회원의 특정 돌봄 예약 내역 조회
