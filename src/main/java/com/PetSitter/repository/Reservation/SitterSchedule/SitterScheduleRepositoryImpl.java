@@ -25,11 +25,12 @@ public class SitterScheduleRepositoryImpl implements SitterScheduleRepositoryCus
         // 컨텐트(데이터)만 가져오기
         List<SitterScheduleResponse.GetList> content = queryFactory
                 .select(new QSitterScheduleResponse_GetList(
-                        sitterSchedule.id, sitterSchedule.reservationAt, sitterSchedule.createdAt, sitterSchedule.status))
+                        sitterSchedule.id, sitterSchedule.customer.nickName, sitterSchedule.reservationAt, sitterSchedule.createdAt, sitterSchedule.status))
                 .from(sitterSchedule)
                 .where(sitterSchedule.sitter.id.eq(sitterId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(sitterSchedule.id.desc())
                 .fetch();
 
         // 조회된 데이터가 페이지 항목 수보다 많을 때만 countQuery가 나감.(fetchCount() 호출)
