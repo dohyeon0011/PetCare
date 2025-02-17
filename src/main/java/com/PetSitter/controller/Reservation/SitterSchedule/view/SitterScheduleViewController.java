@@ -26,17 +26,17 @@ public class SitterScheduleViewController {
         Page<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId, pageable);
         model.addAttribute("schedules", schedules);
 
-        return "schedule/scheduleList";
+        return "schedule/schedule-list";
     }
 
-    @Operation(description = "특정 돌봄사의 특정 돌봄 예약 정보 조회 API")
+    @Operation(description = "특정 돌봄사의 특정 돌봄 예약 상세 정보 조회")
     @GetMapping("/members/{sitterId}/schedules/{sitterScheduleId}")
     public String getSitterSchedule(@PathVariable("sitterId") long sitterId,
                                     @PathVariable("sitterScheduleId") long sitterScheduleId, Model model) {
         SitterScheduleResponse.GetDetail schedule = sitterScheduleService.findById(sitterId, sitterScheduleId);
         model.addAttribute("schedule", schedule);
 
-        return "schedule/scheduleDetail";
+        return "schedule/schedule-detail";
     }
 
 }
