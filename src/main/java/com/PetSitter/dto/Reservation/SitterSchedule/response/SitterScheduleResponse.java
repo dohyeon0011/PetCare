@@ -22,13 +22,15 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
     @Getter
     public static class GetList {
         private long id;
+        private String customerNickName;
         private LocalDate reservationAt;
         private LocalDateTime createdAt;
         private ReservationStatus status;
 
         @QueryProjection
-        public GetList(long id, LocalDate reservationAt, LocalDateTime createdAt, ReservationStatus status) {
+        public GetList(long id, String customerNickName, LocalDate reservationAt, LocalDateTime createdAt, ReservationStatus status) {
             this.id = id;
+            this.customerNickName = customerNickName;
             this.reservationAt = reservationAt;
             this.createdAt = createdAt;
             this.status = status;
