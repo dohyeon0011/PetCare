@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             if (data && data.customerId) {
                 alert("예약이 완료되었습니다!");
-                window.location.href = `/pets-care/members/${requestData.customerId}/reservations`;
+                window.location.href = `/pets-care/members/${requestData.customerId}/reservations?page=0&size=10`;
             } else {
                 // 정상 응답이라면 필드 에러 메시지를 화면에 표시
                 displayErrorMessages(data);
