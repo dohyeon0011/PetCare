@@ -76,7 +76,7 @@ public class CustomerReservationService {
             customer.subRewardPoints(request.getAmount()); // 사용한 적립금 차감
         } else { // 적립금을 사용하지 않는 경우
             resultPrice = careAvailableDate.getPrice();
-            customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, careAvailableDate.getPrice(), request.getRequests(), petReservations.toArray(new PetReservation[0]));
+            customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, resultPrice, request.getRequests(), petReservations.toArray(new PetReservation[0]));
         }
 
         // 고객 시점 돌봄 예약 생성
