@@ -137,7 +137,7 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
 
     // 해당 예약 상세 조회
     public CustomerReservationResponse.GetDetail toResponse(List<CareLog> careLogList) {
-        return new CustomerReservationResponse.GetDetail(this.customer, this.sitter, this, this.petReservations, careLogList);
+        return new CustomerReservationResponse.GetDetail(this.customer, this.sitter, this, this.petReservations, careLogList, this.review);
     }
 }
 
