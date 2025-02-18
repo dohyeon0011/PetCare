@@ -64,7 +64,7 @@ public class CareLogApiController {
     public ResponseEntity<Void> deleteCareLog(@PathVariable("sitterId") long sitterId, @PathVariable("careLogId") long careLogId) {
         careLogService.delete(sitterId, careLogId);
 
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent() // 204 No content 응답(백엔드가 204 No Content를 반환하는 경우 프론트엔드 json() 파싱에서 오류 발생 가능)
                 .build();
     }
 
