@@ -149,6 +149,6 @@ public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
     }
 
     public SitterScheduleResponse.GetDetail toResponse() {
-        return new SitterScheduleResponse.GetDetail(this.customer, this.sitter, this, this.petReservations);
+        return new SitterScheduleResponse.GetDetail(this.customer, this.sitter, this, this.petReservations, this.careLogList);
     }
 }
