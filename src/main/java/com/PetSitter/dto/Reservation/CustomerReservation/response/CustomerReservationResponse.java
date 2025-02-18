@@ -5,14 +5,17 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Pet.PetReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
+import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.dto.Pet.response.PetReservationResponse;
+import com.PetSitter.dto.Review.response.ReviewResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 public class CustomerReservationResponse { // 고객 시점 예약 조회
@@ -51,8 +54,9 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private ReservationStatus status;
         private List<PetReservationResponse> pets;
         private List<CareLogResponse.GetDetail> careLogList;
+        private ReviewResponse.GetDetail review;
 
-        public GetDetail(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList) {
+        public GetDetail(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review) {
             this.id = customerReservation.getId();
             this.customerId = customer.getId();
             this.customerNickName = customer.getNickName();
@@ -83,6 +87,9 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                             careLog.getCreatedAt()
                     ))
                     .toList();
+//            this.review = Optional.of(new ReviewResponse.GetDetail(review.getId(), review.getCustomerReservation().getId(), review.getCustomerReservation().getCustomer().getNickName(),
+//                    review.getCustomerReservation().getSitter().getName(), review.getRating(), review.getComment()))
+//                    .orElse(new ReviewResponse.GetDetail());
         }
     }
 
