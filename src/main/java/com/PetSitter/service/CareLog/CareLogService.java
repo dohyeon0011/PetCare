@@ -3,6 +3,7 @@ package com.PetSitter.service.CareLog;
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
+import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.CareLog.request.AddCareLogRequest;
 import com.PetSitter.dto.CareLog.request.UpdateCareLogRequest;
@@ -37,6 +38,10 @@ public class CareLogService {
 
         SitterSchedule sitterSchedule = sitterScheduleRepository.findById(sitterScheduleId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 예약이 존재하지 않습니다."));
+
+        if (sitterSchedule.getStatus().equals(ReservationStatus.CANCEL)) {
+            throw new IllegalArgumentException("취소된 예약에는 케어 로그 작성이 불가능합니다.");
+        }
 
         CareLog careLog = request.toEntity(sitterSchedule);
         careLogRepository.save(careLog);
