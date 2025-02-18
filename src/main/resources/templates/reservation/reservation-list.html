@@ -95,10 +95,11 @@
                     <td th:text="${reservations.totalElements - (reservations.number * reservations.size) - stat.index}"></td>
                     <td th:text="${reservation.sitterName}"></td>
                     <td th:text="${#temporals.format(reservation.reservationAt, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     <td>
-                        <span th:classappend="${reservation.status == T(com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus).RESERVATION} ? 'text-success' : 'text-danger'"
-                              th:text="${reservation.status == T(com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus).RESERVATION} ? '예약 완료' : '취소'"></span>
+                        <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
+                              th:text="${reservation.status.name() == 'RESERVATION'} ? '예약 완료' : '취소'">
+                        </span>
                     </td>
                 </tr>
             </tbody>
