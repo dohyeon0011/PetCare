@@ -1,9 +1,11 @@
 package com.PetSitter.dto.Reservation.SitterSchedule.response;
 
+import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Pet.PetReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
+import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.dto.Pet.response.PetReservationResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.querydsl.core.annotations.QueryProjection;
@@ -43,7 +45,6 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private long id;
         private long customerId;
         private String customerNickName;
-        private long sitterId;
         private String sitterName;
         private int price;
         private LocalDate reservationAt;
@@ -53,13 +54,13 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private LocalDateTime createdAt;
         private ReservationStatus status;
         private List<PetReservationResponse> pets;
+        private List<CareLogResponse.GetDetail> careLogList;
         private ReviewResponse.GetDetail review;
 
-        public GetDetail(Member customer, Member sitter, SitterSchedule sitterSchedule, List<PetReservation> pets) {
+        public GetDetail(Member customer, Member sitter, SitterSchedule sitterSchedule, List<PetReservation> pets, List<CareLog> careLogList) {
             this.id = sitterSchedule.getId();
             this.customerId = customer.getId();
             this.customerNickName = customer.getNickName();
-            this.sitterId = sitter.getId();
             this.sitterName = sitter.getName();
             this.price = sitterSchedule.getPrice();
             this.reservationAt = sitterSchedule.getReservationAt();
@@ -72,6 +73,11 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
                     .stream()
                     .map(PetReservationResponse::new)
                     .toList();
+            this.careLogList = careLogList.stream()
+                    .map(c -> {
+                        return new CareLogResponse.GetDetail(c.getId(), c.getSitterSchedule().getSitter().getName(), c.getCareType(),
+                                c.getDescription(), c.getImgPath(), c.getCreatedAt());
+                    }).toList();
             this.review = Optional.ofNullable(sitterSchedule.getCustomerReservation().getReview())
                     .map(r -> {
                         return new ReviewResponse.GetDetail(r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
