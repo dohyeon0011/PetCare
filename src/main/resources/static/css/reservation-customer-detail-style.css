@@ -1,0 +1,123 @@
+.reservation-info, .pets-info, .care-log-section {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h4 {
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.list-group-item {
+    background: #f8f9fa;
+    border: none;
+    padding: 10px;
+}
+
+.care-log-section {
+    margin-top: 30px;
+}
+
+.care-log-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.care-log-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.care-log-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.button-group {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.button-group .btn {
+    margin: 5px;
+}
+
+/* 전체 리뷰 컨테이너 */
+.review, .no-review {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 리뷰 헤더 (고객 이름) */
+.review-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 리뷰 내용 */
+.review p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* 리뷰 버튼 */
+.review-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-warning {
+    background-color: #ffcc00;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #e0b900;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+}
+
+.no-review {
+    text-align: center;
+    font-size: 1rem;
+    color: #777;
+}
+
+/* "리뷰 작성하기" 버튼 */
+.no-review .btn-primary {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 25px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.no-review .btn-primary:hover {
+    background-color: #0056b3;
+}
+
