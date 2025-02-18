@@ -1,5 +1,6 @@
 package com.PetSitter.config.exception;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,6 +27,17 @@ public class GlobalExceptionHandler {
         errorResponse.put("error", ex.getMessage());
 
         return ResponseEntity.badRequest()
+                .body(errorResponse);
+    }
+
+    // 전역 오류 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGeneralException(Exception ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "알 수 없는 오류가 발생했습니다.");
+        errorResponse.put("details", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) // 500 에러랑 같이 JSON 형식의 오류 메시지 응답
                 .body(errorResponse);
     }
 }
