@@ -3,6 +3,7 @@ package com.PetSitter.service.Review;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
+import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.Review.request.AddReviewRequest;
 import com.PetSitter.dto.Review.request.UpdateReviewRequest;
@@ -42,6 +43,10 @@ public class ReviewService {
 
         if (reviewRepository.existsByCustomerReservation(customerReservation)) {
             throw new IllegalArgumentException("이미 해당 예약에 대한 리뷰가 존재합니다.");
+        }
+
+        if (customerReservation.getStatus().equals(ReservationStatus.CANCEL)) {
+            throw new IllegalArgumentException("취소된 예약에는 리뷰 작성이 불가능합니다.");
         }
 
         Review review = request.toEntity(customerReservation);
