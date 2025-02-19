@@ -55,7 +55,7 @@ public class ReviewApiController {
     public ResponseEntity<Void> deleteReview(@PathVariable("customerId") long customerId, @PathVariable("reviewId") long reviewId) {
         reviewService.delete(customerId, reviewId);
 
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent()
                 .build();
     }
 
