@@ -87,9 +87,12 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                             careLog.getCreatedAt()
                     ))
                     .toList();
-//            this.review = Optional.of(new ReviewResponse.GetDetail(review.getId(), review.getCustomerReservation().getId(), review.getCustomerReservation().getCustomer().getNickName(),
-//                    review.getCustomerReservation().getSitter().getName(), review.getRating(), review.getComment()))
-//                    .orElse(new ReviewResponse.GetDetail());
+            this.review = Optional.ofNullable(review) // Optional.of()은 null 허용 X(value가 null이면 NPE 터짐. null이 아닐 때만 사용.)
+                    .map(r -> new ReviewResponse.GetDetail(
+                            r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
+                            r.getCustomerReservation().getSitter().getName(), r.getRating(), r.getComment()
+                    ))
+                    .orElse(new ReviewResponse.GetDetail());
         }
     }
 
