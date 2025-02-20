@@ -148,9 +148,10 @@
                     <span th:if="${i > (schedule.review.rating != null ? schedule.review.rating + 0.5 : 0)}" class="star empty">★</span>
                 </span>
                 </p>
-
                 <!-- 리뷰 댓글 -->
                 <p th:text="${schedule.review.comment}"></p>
+                <!-- 리뷰 작성일 -->
+                <p><strong>작성일:</strong> <span th:text="${#temporals.format(schedule.review.createdAt, 'yyyy-MM-dd')}"></span></p>
             </div>
         </div>
     </div>
