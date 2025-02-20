@@ -1,0 +1,57 @@
+/* 페이지 제목 중앙 정렬 */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 카드 텍스트 중앙 정렬 */
+.card-body {
+    text-align: center; /* 카드 내의 모든 텍스트를 중앙 정렬 */
+    background-color: #fff4e6; /* 부드러운 따뜻한 배경 색상 */
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+}
+
+/* 카드 내용 수정 및 삭제 버튼 */
+.card-body .btn {
+    margin: 5px 0; /* 버튼 간격 조정 */
+}
+
+/* 버튼 스타일 */
+.btn {
+    border-radius: 25px;
+    padding: 10px 20px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
