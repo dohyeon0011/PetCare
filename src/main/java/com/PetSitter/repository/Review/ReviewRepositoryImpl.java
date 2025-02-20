@@ -29,7 +29,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<ReviewResponse.GetDetail> findAllReview() {
         return em.createQuery(
                         "select new com.PetSitter.dto.Review.response.ReviewResponse$GetDetail(" +
-                                "r.id, cr.id, c.nickName, s.name, r.rating, r.comment) " +
+                                "r.id, cr.id, c.nickName, s.name, cr.reservationAt, r.rating, r.comment, r.createdAt) " +
                                 "from Review r " +
                                 "join r.customerReservation cr " +
                                 "join cr.customer c " +

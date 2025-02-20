@@ -20,25 +20,27 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRep
     List<Review> findByCustomerReservationCustomerId(long customerId);
 
     // 고객 시점 예약 엔티티의 customerId(고객)를 기준으로 모든 리뷰 조회(+페이징)
-    @Query("select new com.PetSitter.dto.Review.response.ReviewResponse$GetList(r.id, c.nickName, s.name, r.rating) " +
+    @Query("select new com.PetSitter.dto.Review.response.ReviewResponse$GetList(r.id, cr.id, c.nickName, s.name, r.rating, r.createdAt, c.role) " +
             "from Review r " +
             "join r.customerReservation cr " +
             "join cr.customer c " +
             "join cr.sitter s " +
-            "where c.id = :customerId")
+            "where c.id = :customerId " +
+            "order by r.id desc")
     Page<ReviewResponse.GetList> findByCustomerReservationCustomerId(@Param("customerId") long customerId, Pageable pageable);
 
     // 고객 시점 예약 엔티티의 sitterId(돌봄사)를 기준으로 모든 리뷰 조회(+페이징)
-    @Query("select new com.PetSitter.dto.Review.response.ReviewResponse$GetList(r.id, c.nickName, s.name, r.rating) " +
+    @Query("select new com.PetSitter.dto.Review.response.ReviewResponse$GetList(r.id, cr.id, c.nickName, s.name, r.rating, r.createdAt, s.role) " +
             "from Review r " +
             "join r.customerReservation cr " +
             "join cr.customer c " +
             "join cr.sitter s " +
-            "where s.id = :sitterId")
+            "where s.id = :sitterId " +
+            "order by r.id desc")
     Page<ReviewResponse.GetList> findByCustomerReservationSitterId(@Param("sitterId") long sitterId, Pageable pageable);
 
     @Query("select new com.PetSitter.dto.Review.response.ReviewResponse$GetDetail(" +
-            "r.id, cr.id, c.nickName, s.name, r.rating, r.comment) " +
+            "r.id, cr.id, c.nickName, s.name, cr.reservationAt, r.rating, r.comment, r.createdAt) " +
             "from Review r " +
             "join r.customerReservation cr " +
             "join cr.customer c " +
