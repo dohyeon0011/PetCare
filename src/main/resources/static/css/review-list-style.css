@@ -1,0 +1,58 @@
+/* 전체적인 리뷰 목록 스타일 */
+body {
+    background-color: #fff8e7; /* 부드러운 파스텔톤 배경 */
+    font-family: 'Arial', sans-serif;
+    color: #5a3e36; /* 따뜻한 브라운 계열 글씨 색 */
+}
+
+h2 {
+    text-align: center;
+    color: #8d5524;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fffaf0;
+}
+
+.table thead {
+    background: #ffdab9;
+}
+
+.table th, .table td {
+    text-align: center;
+    padding: 12px;
+}
+
+.pagination-container {
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background: #ff8c42;
+    border-color: #ff8c42;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #e07a34;
+}
+
+.review-title {
+    color: #5a5a5a;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table.table-striped tbody tr {
+    background-color: white !important;  /* 기본 배경색을 흰색으로 고정 */
+    transition: background-color 0.2s ease-in-out;
+}
+
+table.table-striped tbody tr:hover {
+    background-color: #f8f9fa !important;  /* 마우스 올렸을 때만 연한 회색으로 변경 */
+}
