@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Review.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Review.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,6 +48,15 @@ public class ReviewViewController {
         model.addAttribute("review", review);
 
         return "review/review-detail";
+    }
+
+    @Operation(description = "리뷰 수정")
+    @GetMapping("/reviews/{reviewId}/edit")
+    public String editReview(@PathVariable("reviewId") long reviewId, Model model) {
+        ReviewResponse.GetDetail review = reviewService.findById(reviewId);
+        model.addAttribute("review", review);
+
+        return "review/edit-review";
     }
 
 }
