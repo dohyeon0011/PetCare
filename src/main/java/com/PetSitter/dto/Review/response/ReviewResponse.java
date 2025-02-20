@@ -1,7 +1,11 @@
 package com.PetSitter.dto.Review.response;
 
+import com.PetSitter.domain.Member.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ReviewResponse {
 
@@ -9,15 +13,21 @@ public class ReviewResponse {
     @Getter
     public static class GetList { // 모든 리뷰 조회할 때
         private long id;
+        private long customerReservationId;
         private String customerNickName;
         private String sitterName;
         private Double rating;
+        private LocalDateTime createdAt;
+        private Role role;
 
-        public GetList(long reviewId, String nickName, String name, Double rating) {
+        public GetList(long reviewId, long customerReservationId, String nickName, String name, Double rating, LocalDateTime createdAt, Role role) {
             this.id = reviewId;
+            this.customerReservationId = customerReservationId;
             this.customerNickName = nickName;
             this.sitterName = name;
             this.rating = rating;
+            this.createdAt = createdAt;
+            this.role = role;
         }
     }
 
@@ -28,8 +38,10 @@ public class ReviewResponse {
         private long customerReservationId;
         private String customerNickName;
         private String sitterName;
+        private LocalDate reservationAt;
         private Double rating;
         private String comment;
+        private LocalDateTime createdAt;
 
         /*public GetDetail(Review review) {
             this.id = review.getId();
@@ -40,13 +52,15 @@ public class ReviewResponse {
             this.comment = review.getComment();
         }*/
 
-        public GetDetail(long id, long customerReservationId, String customerNickName, String sitterName, Double rating, String comment) {
+        public GetDetail(long id, long customerReservationId, String customerNickName, String sitterName, LocalDate reservationAt, Double rating, String comment, LocalDateTime createdAt) {
             this.id = id;
             this.customerReservationId = customerReservationId;
             this.customerNickName = customerNickName;
             this.sitterName = sitterName;
+            this.reservationAt = reservationAt;
             this.rating = rating;
             this.comment = comment;
+            this.createdAt = createdAt;
         }
     }
 
