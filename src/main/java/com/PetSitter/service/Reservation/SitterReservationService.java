@@ -98,8 +98,10 @@ public class SitterReservationService {
                         review.getCustomerReservation().getId(),
                         review.getCustomerReservation().getCustomer().getNickName(),
                         review.getCustomerReservation().getSitter().getName(),
+                        review.getCustomerReservation().getReservationAt(),
                         review.getRating(),
-                        review.getComment()))
+                        review.getComment(),
+                        review.getCreatedAt()))
                 .toList();
     }
 
