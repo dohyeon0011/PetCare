@@ -26,7 +26,7 @@ public class ReviewViewController {
         ReviewResponse.GetNewReview response = reviewService.getNewReview(customerId, customerReservationId);
         model.addAttribute("response", response);
 
-        return "review/newReview";
+        return "review/new-review";
     }
 
     @Operation(description = "특정 회원의 모든 리뷰 조회")
@@ -36,7 +36,7 @@ public class ReviewViewController {
         Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
         model.addAttribute("reviews", reviews);
 
-        return "review/review";
+        return "review/review-list";
     }
 
     @Operation(description = "특정 리뷰 조회")
@@ -45,7 +45,7 @@ public class ReviewViewController {
         ReviewResponse.GetDetail review = reviewService.findById(reviewId);
         model.addAttribute("review", review);
 
-        return "review/reviewDetail";
+        return "review/review-detail";
     }
 
 }
