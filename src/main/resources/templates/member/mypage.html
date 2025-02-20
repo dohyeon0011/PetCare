@@ -5,7 +5,6 @@
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- External CSS for Profile Page -->
     <link th:href="@{/css/profileStyle.css}" rel="stylesheet">
 </head>
 <body>
@@ -79,7 +78,7 @@
 
 <div class="container mt-5">
     <div class="profile-header">
-        <h2 class="text-center">회원 정보</h2>
+        <h2 class="text-center">회원 정보</h2><br>
     </div>
 
     <div class="row">
@@ -114,7 +113,13 @@
                     <div th:if="${member.role.name() == 'PET_SITTER'}">
                         <strong>경력 연차:</strong> <span th:text="${member.careerYear}"></span>년<br>
                     </div>
-                    <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{memberId}/edit(memberId=${member.id})}">회원정보 수정</a>
+                    <a class="btn btn-edit mt-3"
+                       th:href="@{/pets-care/members/{memberId}/edit(memberId=${member.id})}">
+                        회원정보 수정
+                    </a>
+                    <button id="deleteMemberBtn" class="btn btn-danger btn-sm mt-3 ml-2">
+                        회원 탈퇴
+                    </button>
                 </div>
             </div>
         </div>
@@ -171,8 +176,34 @@
             </div>
         </div>
     </div>
-    <div class="text-center mt-4">
-        <button id="deleteMemberBtn" class="btn btn-danger btn-sm">회원 탈퇴</button>
+</div>
+
+<div class="col-md-8 mx-auto">
+    <div class="card profile-card text-center"> <!-- text-center로 내용도 중앙 정렬 -->
+        <div class="card-body">
+            <h4 class="card-title">
+                <span th:if="${member.role.name() == 'CUSTOMER'}">✍ 내가 작성한 돌봄 리뷰</span>
+                <span th:if="${member.role.name() == 'PET_SITTER'}">📢 내가 받은 돌봄 리뷰</span>
+            </h4>
+            <p class="card-text">
+                <span th:if="${member.role.name() == 'CUSTOMER'}">
+                    고객으로서 작성한 돌봄 서비스 리뷰를 확인할 수 있습니다.
+                </span>
+                <span th:if="${member.role.name() == 'PET_SITTER'}">
+                    펫시터로서 받은 리뷰를 확인할 수 있습니다.
+                </span>
+            </p>
+            <a th:if="${member.role.name() == 'CUSTOMER'}"
+               class="btn btn-outline-primary"
+               th:href="@{/pets-care/members/{customerId}/reviews?page=0&size=10(customerId=${session.member.id})}">
+                작성한 리뷰 보기
+            </a>
+            <a th:if="${member.role.name() == 'PET_SITTER'}"
+               class="btn btn-outline-primary"
+               th:href="@{/pets-care/members/{sitterId}/reviews?page=0&size=10(sitterId=${session.member.id})}">
+                받은 리뷰 보기
+            </a>
+        </div>
     </div>
 </div>
 
