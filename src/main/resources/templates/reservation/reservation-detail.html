@@ -149,9 +149,10 @@
                         <span th:if="${i > (reservation.review.rating != null ? reservation.review.rating + 0.5 : 0)}" class="star empty">★</span>
                     </span>
                 </p>
-
                 <!-- 리뷰 내용 -->
                 <p th:text="${reservation.review.comment}"></p>
+                <!-- 리뷰 작성일 -->
+                <p><strong>작성일:</strong> <span th:text="${#temporals.format(reservation.review.createdAt, 'yyyy-MM-dd')}"></span></p>
 
                 <!-- 리뷰 수정 및 삭제 버튼 -->
                 <div class="review-buttons">
