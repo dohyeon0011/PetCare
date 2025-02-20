@@ -66,7 +66,7 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
                     .stream()
                     .map(review -> {
                         return new ReviewResponse.GetDetail(review.getId(), review.getCustomerReservation().getId(), review.getCustomerReservation().getCustomer().getNickName(),
-                                review.getCustomerReservation().getSitter().getName(), review.getRating(), review.getComment());
+                                review.getCustomerReservation().getSitter().getName(), review.getCustomerReservation().getReservationAt(), review.getRating(), review.getComment(), review.getCreatedAt());
                     })
                     .toList();
         }
