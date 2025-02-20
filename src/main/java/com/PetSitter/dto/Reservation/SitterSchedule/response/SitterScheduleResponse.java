@@ -81,7 +81,7 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
             this.review = Optional.ofNullable(sitterSchedule.getCustomerReservation().getReview())
                     .map(r -> {
                         return new ReviewResponse.GetDetail(r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
-                                r.getCustomerReservation().getSitter().getName(), r.getRating(), r.getComment());
+                                r.getCustomerReservation().getSitter().getName(), r.getCustomerReservation().getReservationAt(), r.getRating(), r.getComment(), r.getCreatedAt());
                     })
                     .orElse(new ReviewResponse.GetDetail());
         }
