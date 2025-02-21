@@ -1,6 +1,6 @@
 /* 전체적인 리뷰 목록 스타일 */
 body {
-    background-color: #fff8e7; /* 부드러운 파스텔톤 배경 */
+    background-color: #fff8e7; !important /* 부드러운 파스텔톤 배경 */
     font-family: 'Arial', sans-serif;
     color: #5a3e36; /* 따뜻한 브라운 계열 글씨 색 */
 }
@@ -55,4 +55,5 @@ table.table-striped tbody tr {
 
 table.table-striped tbody tr:hover {
     background-color: #f8f9fa !important;  /* 마우스 올렸을 때만 연한 회색으로 변경 */
+    cursor: pointer;
 }
