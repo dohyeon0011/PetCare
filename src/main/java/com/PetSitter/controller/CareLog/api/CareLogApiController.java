@@ -7,6 +7,8 @@ import com.PetSitter.service.CareLog.CareLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,8 @@ public class CareLogApiController {
 
     @Operation(description = "돌봄사가 작성한 모든 돌봄 케어 로그 조회 API")
     @GetMapping("/members/{sitterId}/care-logs")
-    public ResponseEntity<List<CareLogResponse.GetList>> findAllCareLog(@PathVariable("sitterId") long sitterId) {
-        List<CareLogResponse.GetList> careLogList = careLogService.findAll(sitterId);
+    public ResponseEntity<Page<CareLogResponse.GetList>> findAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable) {
+        Page<CareLogResponse.GetList> careLogList = careLogService.findAll(sitterId, pageable);
 
         return ResponseEntity.ok()
                 .body(careLogList);
