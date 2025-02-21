@@ -13,6 +13,8 @@ import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,14 +58,14 @@ public class CareLogService {
 
     @Comment("돌봄사가 작성한 모든 돌봄 케어 로그 조회")
     @Transactional(readOnly = true)
-    public List<CareLogResponse.GetList> findAll(long sitterId) {
+    public Page<CareLogResponse.GetList> findAll(long sitterId, Pageable pageable) {
         /*List<CareLog> careLogList = careLogRepository.findAllBySitterScheduleSitterId(sitterId);
 
         return careLogList.stream()
                 .map(CareLogResponse.GetList::new)
                 .toList();*/
 
-        List<CareLogResponse.GetList> careLogList = careLogRepository.findAllBySitterId(sitterId);
+        Page<CareLogResponse.GetList> careLogList = careLogRepository.findAllBySitterId(sitterId, pageable);
 
         return careLogList;
     }
