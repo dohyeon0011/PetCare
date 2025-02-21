@@ -4,8 +4,8 @@
     <title>반려견 돌봄 서비스</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
-    <link th:href="@{/css/reviewStyle.css}" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/reviewStyle.css}" rel="stylesheet">
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -136,7 +136,7 @@
                                 <span th:if="${i > (review.rating + 0.5)}" class="star empty">★</span>
                             </span>
                         </p>
-                        <p th:text="${review.comment}"></p>
+                        <p class="comment-ellipsis" th:text="${review.comment}"></p>
                     </div>
                 </div>
             </div>
