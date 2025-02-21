@@ -11,14 +11,18 @@ public class CareLogResponse {
     @Getter
     public static class GetList {
         private long id;
+        private long reservationId;
         private String sitterName; // 케어 로그 작성 돌봄자
+        private String customerNickName;
         private String careType;
         private String description;
         private LocalDateTime createdAt;
 
-        public GetList(long id, String sitterName, String careType, String description, LocalDateTime createdAt) {
+        public GetList(long id, long reservationId, String sitterName, String customerNickName, String careType, String description, LocalDateTime createdAt) {
             this.id = id;
+            this.reservationId = reservationId;
             this.sitterName = sitterName;
+            this.customerNickName = customerNickName;
             this.careType = careType;
             this.description = description;
             this.createdAt = createdAt;
