@@ -4,6 +4,8 @@ import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.service.CareLog.CareLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +27,16 @@ public class CareLogViewController {
         CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
         model.addAttribute("careLog", careLog);
 
-        return "careLog/newCareLog";
+        return "carelog/new-carelog";
     }
 
     @Operation(description = "돌봄사가 작성한 모든 돌봄 케어 로그 조회")
     @GetMapping("/members/{sitterId}/care-logs")
-    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Model model) {
-        List<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId);
+    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, Model model) {
+        Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
         model.addAttribute("careLogs", careLogs);
 
-        return "careLog/careLogList";
+        return "carelog/carelog-list";
     }
 
     @Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 돌봄 케어 로그 전체 조회")
@@ -44,7 +46,7 @@ public class CareLogViewController {
         List<CareLogResponse.GetDetail> careLogs = careLogService.findAllById(sitterId, sitterScheduleId);
         model.addAttribute("careLogs", careLogs);
 
-        return "careLog/careLog";
+        return "carelog/carelog";
     }
 
     @Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 상세 조회")
@@ -53,7 +55,7 @@ public class CareLogViewController {
         CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
         model.addAttribute("careLog", careLog);
 
-        return "careLog/careLogDetail";
+        return "carelog/carelog-detail";
     }
 
     @Operation(description = "돌봄사의 특정 돌봄 케어 로그 수정")
@@ -62,6 +64,6 @@ public class CareLogViewController {
         CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
         model.addAttribute("careLog", careLog);
 
-        return "careLog/editCareLog";
+        return "carelog/edit-carelog";
     }
 }
