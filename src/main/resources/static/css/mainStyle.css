@@ -204,3 +204,14 @@ footer {
     color: red;
     font-size: 12px;
 }
+
+.comment-ellipsis {
+    display: block;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin: 0 auto;
+}
+
