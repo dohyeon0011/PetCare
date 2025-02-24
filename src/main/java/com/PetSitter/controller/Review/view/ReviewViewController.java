@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Review.view;
 
+import com.PetSitter.controller.Review.api.ReviewSearch;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Review.ReviewService;
@@ -9,10 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class ReviewViewController {
         Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
         model.addAttribute("reviews", reviews);
 
-        return "review/review-list";
+        return "review/review-my-list";
     }
 
     @Operation(description = "특정 리뷰 조회")
@@ -57,6 +57,38 @@ public class ReviewViewController {
         model.addAttribute("review", review);
 
         return "review/edit-review";
+    }
+
+    /**
+     * API V2로 통합
+     */
+    /*@Operation(description = "이용 후기 페이지에서 전체 리뷰 조회")
+    @GetMapping("/reviews-all")
+    public String getAllReviews(@RequestParam(defaultValue = "0") int page, Model model) {
+        List<ReviewResponse.GetDetail> reviews = reviewService.getAllReviews(page);
+        model.addAttribute("reviews", reviews);
+
+        return "review/review-all-list";
+    }*/
+
+    @Operation(description = "이용 후기 페이지에서 전체 리뷰 및 특정 돌봄사의 리뷰 조회")
+    @GetMapping("/reviews")
+    public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, Model model) {
+        List<ReviewResponse.GetDetail> reviews = reviewService.getAllReviewsBySitterV2(reviewSearch, page);
+        List<String> sitters = reviewService.getAllSitters();
+
+        // 전체 리뷰 개수 조회
+        long totalReviews = reviewService.countAllReviewsBySitter(reviewSearch);
+        int totalPages = (int) Math.ceil((double) totalReviews / 15); // 한 페이지 당 항목 수 15개
+
+        model.addAttribute("reviews", reviews); // 리뷰 목록
+        model.addAttribute("reviewSearch", reviewSearch); // 검색 조건
+        model.addAttribute("totalReviews", totalReviews); // 총 리뷰 개수
+        model.addAttribute("totalPages", totalPages); // 총 페이지 수
+        model.addAttribute("currentPage", page); // 현재 페이지
+        model.addAttribute("sitters", sitters); // 검색 드롭다운에 전체 돌봄사 목록 전달
+
+        return "review/review-list";
     }
 
 }
