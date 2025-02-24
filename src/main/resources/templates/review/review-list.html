@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>내 돌봄 리뷰 작성 목록</title>
+    <title>이용 후기</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
-    <link th:href="@{/css/review-rating.css}" rel="stylesheet">
     <link th:href="@{/css/pagination.css}" rel="stylesheet">
+    <link th:href="@{/css/review-list.css}" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/review-list-style.css}" rel="stylesheet">
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -74,64 +73,62 @@
             </div>
         </div>
     </div>
-</nav>
+</nav><br>
 
-<div class="container mt-4">
-    <h2 class="review-title">📊 나의 돌봄 리뷰 목록</h2><br>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>작성자</th>
-            <th>펫시터</th>
-            <th>별점</th>
-            <th>작성일</th>
-        </tr>
-        </thead>
-        <tbody>
-            <tr th:if="${reviews.totalElements == 0}">
-                <td colspan="5" class="text-center text-muted">
-                    아직 작성된 리뷰가 없습니다.! 😊
-                </td>
-            </tr>
-            <tr th:each="review, iterStat : ${reviews.content}"
-                th:onclick="|window.location.href='@{${review.role.name() == 'CUSTOMER' ? '/pets-care/members/{customerId}/reservations/{reservationId}' : '/pets-care/members/{customerId}/schedules/{reservationId}'}(customerId=${session.member.id}, reservationId=${review.customerReservationId})}'|">
-                <td th:text="${reviews.totalElements - (reviews.number * reviews.size) - iterStat.index}"></td> <!-- 내림차순으로 번호 출력 -->
-                <td th:text="${review.customerNickName}"></td>
-                <td th:text="${review.sitterName}"></td>
-                <td class="rating">
-                    <span th:each="i : ${#numbers.sequence(1, 5)}">
-                        <span th:if="${i <= review.rating}" class="star filled">★</span>
-                        <span th:if="${i == review.rating + 0.5}" class="star half-filled">★</span>
-                        <span th:if="${i > review.rating + 0.5}" class="star empty">★</span>
-                    </span>
-                </td>
-                <td th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="container">
+    <h2 class="review-title">돌봄 이용 후기</h2><br>
+
+    <!-- 돌봄사 선택 드롭다운 -->
+    <form th:action="@{/pets-care/reviews}" method="get" class="search-form">
+        <label for="sitterSelect">🔎 돌봄사 선택:</label>
+        <select id="sitterSelect" name="sitter" class="custom-select">
+            <option value="">전체 보기</option>
+            <option th:each="sitter : ${sitters}" th:value="${sitter}" th:text="${sitter}"></option>
+        </select>
+        <button type="submit" class="btn btn-primary">검색</button>
+    </form>
+
+    <!-- 후기 리스트 -->
+    <div class="review-list">
+        <div th:each="review : ${reviews}" class="review-card">
+            <h3 th:text="${review.sitterName}">돌봄사 이름</h3><br>
+
+            <!-- 별점 표시 -->
+            <p class="rating">
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:if="${i <= review.rating}" class="star filled">★</span>
+                    <span th:if="${i == (review.rating + 0.5)}" class="star half-filled">★</span>
+                    <span th:if="${i > (review.rating + 0.5)}" class="star empty">★</span>
+                </span>
+            </p>
+            <p class="comment" th:text="${review.comment}">후기 내용</p><br>
+            <p class="customer"><strong>작성자:</strong> <span th:text="${review.customerNickName}"></span></p><br>
+            <p class="date"><strong>예약 날짜:</strong> <span th:text="${review.reservationAt}"></span></p>
+            <p class="created"><strong>작성일:</strong> <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></span></p>
+        </div>
+    </div>
 </div>
 
 <!-- 페이지네이션 네비게이션 추가 -->
-<nav th:if="${reviews.totalPages > 0}">
+<nav th:if="${totalPages > 0}">
     <ul class="pagination justify-content-center">
         <!-- 이전 버튼 -->
-        <li class="page-item" th:if="${reviews.hasPrevious()}" th:classappend="${reviews.number == 0 ? 'disabled' : ''}">
-            <a class="page-link" th:href="@{/pets-care/members/{memberId}/reviews(memberId=${session.member.id}, page=${reviews.number - 1}, size=10)}" aria-label="Previous">
+        <li class="page-item" th:if="${currentPage > 0}" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/pets-care/reviews(sitter=${reviewSearch.sitter}, page=${currentPage - 1})}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
 
         <!-- 페이지 번호 버튼 -->
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, reviews.totalPages - 1)}"
-            th:classappend="${i == reviews.number ? 'active' : ''}">
-            <a th:href="@{/pets-care/members/{memberId}/reviews(memberId=${session.member.id}, page=${i}, size=10)}"
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage ? 'active' : ''}">
+            <a th:href="@{/pets-care/reviews(sitter=${reviewSearch.sitter}, page=${i})}"
                th:text="${i + 1}" class="page-link"></a>
         </li>
 
         <!-- 다음 버튼 -->
-        <li class="page-item" th:if="${reviews.hasNext()}" th:classappend="${reviews.number == reviews.totalPages - 1 ? 'disabled' : ''}">
-            <a class="page-link" th:href="@{/pets-care/members/{memberId}/reviews(memberId=${session.member.id}, page=${reviews.number + 1}, size=10)}" aria-label="Next">
+        <li class="page-item" th:if="${currentPage < totalPages - 1}" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/pets-care/reviews(sitter=${reviewSearch.sitter}, page=${currentPage + 1})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
