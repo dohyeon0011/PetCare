@@ -1,5 +1,6 @@
 package com.PetSitter.service.Review;
 
+import com.PetSitter.controller.Review.api.ReviewSearch;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
@@ -147,7 +148,37 @@ public class ReviewService {
     @Comment("모든 리뷰 조회")
     @Transactional(readOnly = true)
     public List<ReviewResponse.GetDetail> getAllReview() {
-        return reviewRepository.findAllReview();
+        return reviewRepository.findLatestReviews();
+    }
+
+    @Comment("이용 후기 페이지에서 전체 조회")
+    @Transactional(readOnly = true)
+    public List<ReviewResponse.GetDetail> getAllReviews(int page) {
+        return reviewRepository.findAllReviews(page);
+    }
+
+    @Comment("이용 후기 페이지에서 사용자가 선택한 돌봄사의 리뷰만 전체 조회(V2: 검색 조건을 검색 전용 클래스 객체로 받기)")
+    @Transactional(readOnly = true)
+    public List<ReviewResponse.GetDetail> getAllReviewsBySitterV2(ReviewSearch reviewSearch, int page) {
+        return reviewRepository.findAllReviewsBySitterV2(reviewSearch, page);
+    }
+
+    @Comment("이용 후기 페이지에서 사용자가 선택한 돌봄사의 리뷰만 전체 조회(V1: 검색 조건 @RequestParam 으로 받기)")
+    @Transactional(readOnly = true)
+    public List<ReviewResponse.GetDetail> getAllReviewsBySitterV1(String sitterName, int page) {
+        return reviewRepository.findAllReviewsBySitterV1(sitterName, page);
+    }
+
+    @Comment("조건 검색 시 총 리뷰 개수")
+    @Transactional(readOnly = true)
+    public long countAllReviewsBySitter(ReviewSearch reviewSearch) {
+        return reviewRepository.countAllReviewsBySitter(reviewSearch);
+    }
+
+    @Comment("드롭다운 전체 돌봄사 목록 조회")
+    @Transactional(readOnly = true)
+    public List<String> getAllSitters() {
+        return reviewRepository.getAllSitters();
     }
 
     private static void authorizationMember(Member member) {
