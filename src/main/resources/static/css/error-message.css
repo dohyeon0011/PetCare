@@ -1,0 +1,9 @@
+.error {
+    border: 1px solid red; /* 빨간 테두리로 강조 */
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
