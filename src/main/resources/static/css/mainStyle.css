@@ -21,6 +21,12 @@ body {
     font-size: 1rem;
     padding: 15px 20px;
     backdrop-filter: blur(10px) !important; /* 배경 흐림 효과 */
+    position: relative; /* 네비게이션을 상대 위치로 설정 */
+    z-index: 1050; /* 높은 z-index 값 설정 */
+}
+
+.dropdown-menu {
+    z-index: 1100 !important; /* 네비게이션보다 더 높은 값 설정 */
 }
 
 .navbar-brand {
