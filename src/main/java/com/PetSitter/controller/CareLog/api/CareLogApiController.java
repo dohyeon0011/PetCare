@@ -11,9 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,9 +27,21 @@ public class CareLogApiController {
 
     @Operation(description = "케어 로그 작성 API")
     @PostMapping("/members/{sitterId}/schedules/{sitterScheduleId}/care-logs/new")
-    public ResponseEntity<CareLogResponse.GetDetail> saveCareLog(@PathVariable("sitterId") long sitterId,
+    public ResponseEntity<?> saveCareLog(@PathVariable("sitterId") long sitterId,
                                                                  @PathVariable("sitterScheduleId") long sitterScheduleId,
-                                                                 @RequestBody @Valid AddCareLogRequest request) {
+                                                                 @RequestBody @Valid AddCareLogRequest request,
+                                                                 BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+
+            result.getFieldErrors().forEach(error -> {
+                errors.put(error.getField(), error.getDefaultMessage());
+            });
+
+            return ResponseEntity.badRequest()
+                    .body(errors);
+        }
+
         CareLogResponse.GetDetail careLog = careLogService.save(sitterId, sitterScheduleId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
