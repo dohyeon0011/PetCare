@@ -15,6 +15,7 @@ import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,11 +75,14 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
                     .map(PetReservationResponse::new)
                     .toList();
             this.careLogList = careLogList.stream()
+                    .filter(c -> !c.isDeleted())
+                    .sorted(Comparator.comparing(CareLog::getId).reversed()) // CareLog ID 기준 내림차순 정렬
                     .map(c -> {
                         return new CareLogResponse.GetDetail(c.getId(), c.getSitterSchedule().getSitter().getName(), c.getCareType(),
                                 c.getDescription(), c.getImgPath(), c.getCreatedAt());
                     }).toList();
             this.review = Optional.ofNullable(sitterSchedule.getCustomerReservation().getReview())
+                    .filter(r -> !r.isDeleted())
                     .map(r -> {
                         return new ReviewResponse.GetDetail(r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
                                 r.getCustomerReservation().getSitter().getName(), r.getCustomerReservation().getReservationAt(), r.getRating(), r.getComment(), r.getCreatedAt());
