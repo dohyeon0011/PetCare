@@ -62,7 +62,7 @@ public class CertificationApiController {
     public ResponseEntity<Void> deleteCertification(@PathVariable("sitterId") long id, @PathVariable("certificationId") long certificationId) {
         certificationService.delete(id, certificationId);
 
-        return ResponseEntity.ok()
+        return ResponseEntity.noContent()
                 .build();
     }
 
