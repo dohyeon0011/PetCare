@@ -49,6 +49,10 @@ async function updateMember(event) {
     if (isFetching) return;
     isFetching = true;
 
+    // 기존 오류 메시지 제거
+    document.querySelectorAll(".error-message").forEach(el => el.remove());
+    document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+
     try {
         const formData = {
             password: document.getElementById("password")?.value,
@@ -74,12 +78,32 @@ async function updateMember(event) {
             body: JSON.stringify(formData)
         });
 
-        if (!response.ok && response.status !== 204) throw new Error("회원 정보 수정 실패");
+        if (!response.ok) {
+            if (response.status === 400) {
+                // 유효성 검사 오류 처리
+                const errors = await response.json();
+                Object.keys(errors).forEach(field => {
+                    const inputField = document.getElementById(field);
+                    if (inputField) {
+                        inputField.classList.add("error"); // 입력 필드 테두리 강조
+
+                        const errorMessage = document.createElement("div");
+                        errorMessage.classList.add("error-message");
+                        errorMessage.textContent = errors[field];
+
+                        inputField.insertAdjacentElement("afterend", errorMessage); // 필드 아래 오류 메시지 추가
+                    }
+                });
+                throw new Error("입력 값을 확인하세요.");
+            } else {
+                throw new Error("회원 정보 수정 실패");
+            }
+        }
 
         alert("회원 정보가 수정되었습니다.");
         window.location.href = `/pets-care/members/${memberId}/myPage`;
     } catch (error) {
-        alert("오류 발생: " + error.message);
+        alert(error.message);
     } finally {
         isFetching = false;
     }
