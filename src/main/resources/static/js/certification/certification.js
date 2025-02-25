@@ -115,7 +115,36 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 success();
             } else {
-                response.text().then(errorMessage => fail(errorMessage));
+                response.json().then(errors => {
+                    // 필드 에러를 화면에 표시
+                    displayFieldErrors(errors);
+                    fail("입력 값을 확인하세요.");  // 작업 실패 메시지는 그대로
+                }).catch(err => {
+                    fail("서버 응답을 처리하는 중 오류가 발생했습니다.");
+                });
+            }
+        }).catch(err => {
+            fail("네트워크 오류가 발생했습니다.");
+        });
+    }
+
+    // 필드 오류 메시지를 동적으로 표시하는 함수
+    function displayFieldErrors(errors) {
+        // 기존 오류 메시지 제거
+        document.querySelectorAll(".error-message").forEach(el => el.remove());
+        document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
+
+        // 각 필드의 오류 메시지 처리
+        Object.keys(errors).forEach(field => {
+            const inputField = document.querySelector(`[name="${field}"]`);
+            if (inputField) {
+                inputField.classList.add("error"); // 입력 필드 테두리 강조
+
+                const errorMessage = document.createElement("div");
+                errorMessage.classList.add("error-message");
+                errorMessage.textContent = errors[field];
+
+                inputField.insertAdjacentElement("afterend", errorMessage); // 필드 아래 오류 메시지 추가
             }
         });
     }
