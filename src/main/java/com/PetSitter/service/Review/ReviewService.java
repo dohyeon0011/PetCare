@@ -1,6 +1,6 @@
 package com.PetSitter.service.Review;
 
-import com.PetSitter.controller.Review.api.ReviewSearch;
+import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
