@@ -84,12 +84,12 @@
         <h4>📋 예약 정보</h4>
         <p><strong>고객 닉네임:</strong> <span th:text="${reservation.customerNickName}"></span></p>
         <p><strong>펫시터:</strong> <span th:text="${reservation.sitterName}"></span></p>
-        <p><strong>예약일:</strong> <span th:text="${reservation.reservationAt}"></span></p>
+        <p><strong>📅 예약일자:</strong> <span th:text="${reservation.reservationAt}"></span></p>
         <p><strong>가격:</strong> <span th:text="${reservation.price}"></span>원</p>
         <p><strong>우편번호:</strong> <span th:text="${reservation.zipcode}"></span></p>
         <p><strong>상세주소:</strong> <span th:text="${reservation.address}"></span></p>
         <p><strong>고객 요청사항:</strong> <span th:text="${reservation.requests}"></span></p>
-        <p><strong>등록일:</strong> <span th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        <p><strong>등록일자:</strong> <span th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>
             <strong>예약 상태:</strong>
             <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
@@ -117,7 +117,7 @@
                 <h5 th:text="${log.sitterName} + '님의 기록'"></h5>
                 <p><strong>돌봄 유형:</strong> <span th:text="${log.careType}"></span></p>
                 <p><strong>설명:</strong> <span th:text="${log.description}"></span></p>
-                <p><strong>작성일:</strong> <span th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                <p><strong>🕒 작성일:</strong> <span th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
                 <div th:if="${log.imgPath != null}">
                     <img th:src="@{${log.imgPath}}" alt="돌봄 이미지" class="care-log-img">
                 </div>
@@ -152,7 +152,7 @@
                 <!-- 리뷰 내용 -->
                 <p th:text="${reservation.review.comment}"></p>
                 <!-- 리뷰 작성일 -->
-                <p><strong>작성일:</strong> <span th:text="${#temporals.format(reservation.review.createdAt, 'yyyy-MM-dd')}"></span></p>
+                <p><strong>🕒 작성일:</strong> <span th:text="${#temporals.format(reservation.review.createdAt, 'yyyy-MM-dd')}"></span></p>
 
                 <!-- 리뷰 수정 및 삭제 버튼 -->
                 <div class="review-buttons">
