@@ -83,12 +83,12 @@
     <div class="reservation-info">
         <h4>📋 예약 정보</h4>
         <p><strong>고객 닉네임:</strong> <span th:text="${schedule.customerNickName}"></span></p>
-        <p><strong>예약일:</strong> <span th:text="${schedule.reservationAt}"></span></p>
+        <p><strong>📅 예약일자:</strong> <span th:text="${schedule.reservationAt}"></span></p>
         <p><strong>가격:</strong> <span th:text="${schedule.price}"></span>원</p>
         <p><strong>우편번호:</strong> <span th:text="${schedule.zipcode}"></span></p>
         <p><strong>상세주소:</strong> <span th:text="${schedule.address}"></span></p>
         <p><strong>고객 요청사항:</strong> <span th:text="${schedule.requests}"></span></p>
-        <p><strong>등록일:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        <p><strong>등록일자:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>
             <strong>예약 상태:</strong>
             <span th:classappend="${schedule.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
@@ -113,7 +113,7 @@
                 <h5 th:text="${log.sitterName} + '님의 기록'"></h5>
                 <p><strong>돌봄 유형:</strong> <span th:text="${log.careType}"></span></p>
                 <p><strong>설명:</strong> <span th:text="${log.description}"></span></p>
-                <p><strong>작성일:</strong> <span th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                <p><strong>🕒 작성일:</strong> <span th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
                 <div th:if="${log.imgPath != null}">
                     <img th:src="@{${log.imgPath}}" alt="돌봄 이미지" class="care-log-img">
                 </div>
@@ -151,7 +151,7 @@
                 <!-- 리뷰 댓글 -->
                 <p th:text="${schedule.review.comment}"></p>
                 <!-- 리뷰 작성일 -->
-                <p><strong>작성일:</strong> <span th:text="${#temporals.format(schedule.review.createdAt, 'yyyy-MM-dd')}"></span></p>
+                <p><strong>🕒 작성일:</strong> <span th:text="${#temporals.format(schedule.review.createdAt, 'yyyy-MM-dd')}"></span></p>
             </div>
         </div>
     </div>
