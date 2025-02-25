@@ -1,7 +1,8 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #7fffd4 !important;
     margin: 0;
+    padding: 0
 }
 
 /* 검색 폼 */
@@ -40,30 +41,49 @@ body {
     background-color: #0056b3;
 }
 
-/* 리뷰 카드 */
-.review-list {
+/* 후기 리스트 영역 */
+.review-container {
+    background: #f0f8ff; /* 부드러운 블루 계열 배경 */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 개별 후기 스타일 */
+.review-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+/* 후기 상단 정보 (별점 및 작성자) */
+.review-header {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    margin-bottom: 5px;
 }
 
-.review-card {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border-left: 5px solid #007bff;
-    margin-bottom: 20px;
-}
-
-.review-card h3 {
-    margin: 0;
-    color: #007bff;
-}
-
-.review-card .customer, .review-card .date, .review-card .comment, .review-card .created {
-    margin: 5px 0;
+/* 후기 내용 */
+.review-comment {
+    font-size: 1rem;
     color: #333;
+    margin: 8px 0;
+    line-height: 1.4;
+}
+
+/* 작성일 & 예약 날짜 */
+.review-meta {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
 }
 
 /* ⭐ 별점 스타일 */
