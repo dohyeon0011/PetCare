@@ -20,7 +20,9 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     public List<Review> findBySitterId(long sitterId, int page, int size) {
         return em.createQuery(
                         "select r from Review r " +
-                                "where r.customerReservation.sitter.id = :sitterId", Review.class)
+                                "where r.customerReservation.sitter.id = :sitterId " +
+                                "and r.isDeleted = false " +
+                                "order by r.id desc", Review.class)
                 .setParameter("sitterId", sitterId)
                 .setFirstResult(page * size)
                 .setMaxResults(size)
@@ -37,6 +39,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                                 "join r.customerReservation cr " +
                                 "join cr.customer c " +
                                 "join cr.sitter s " +
+                                "where r.isDeleted = false " +
                                 "order by r.id desc", ReviewResponse.GetDetail.class)
                 .setMaxResults(6)
                 .getResultList();
@@ -46,7 +49,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     @Override
     public Long countBySitterId(long sitterId) {
         return em.createQuery(
-                        "select count(r) from Review r where r.customerReservation.sitter.id = :sitterId", Long.class)
+                        "select count(r) from Review r where r.customerReservation.sitter.id = :sitterId " +
+                                "and r.isDeleted = false", Long.class)
                 .setParameter("sitterId", sitterId)
                 .getSingleResult();
     }
@@ -61,6 +65,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                                 "join r.customerReservation cr " +
                                 "join cr.customer c " +
                                 "join cr.sitter s " +
+                                "where r.isDeleted = false " +
                                 "order by r.id desc", ReviewResponse.GetDetail.class)
                 .setFirstResult(page * 15)
                 .setMaxResults(15)
@@ -78,6 +83,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                                 "join cr.customer c " +
                                 "join cr.sitter s " +
                                 "where cr.sitter.name = :sitterName " +
+                                "and r.isDeleted = false " +
                                 "order by r.id desc", ReviewResponse.GetDetail.class)
                 .setParameter("sitterName", sitterName)
                 .setFirstResult(page * 15)
@@ -96,6 +102,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                                 "join cr.customer c " +
                                 "join cr.sitter s " +
                                 "where cr.sitter.name = :sitterName " +
+                                "and r.isDeleted = false " +
                                 "order by r.id desc", ReviewResponse.GetDetail.class)
                 .setParameter("sitterName", reviewSearch.getSitter())
                 .setFirstResult(page * 15)
@@ -108,11 +115,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 "from Review r " +
                 "join r.customerReservation cr " +
                 "join cr.customer c " +
-                "join cr.sitter s ";
+                "join cr.sitter s " +
+                "where r.isDeleted = false ";
 
         // reviewSearch에 값이 있으면(검색 조건)
         if (reviewSearch.getSitter() != null && StringUtils.hasText(reviewSearch.getSitter())) {
-            jpql += "where cr.sitter.name = :sitterName ";
+            jpql += "and cr.sitter.name = :sitterName ";
         }
 
         jpql += "order by r.id desc";
@@ -134,10 +142,11 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         String jpql = "select count(r) from Review r " +
                 "join r.customerReservation cr " +
                 "join cr.customer c " +
-                "join cr.sitter s ";
+                "join cr.sitter s " +
+                "where r.isDeleted = false ";
 
         if (reviewSearch.getSitter() != null && StringUtils.hasText(reviewSearch.getSitter())) {
-            jpql += "where cr.sitter.name = :sitterName ";
+            jpql += "and cr.sitter.name = :sitterName ";
         }
 
         TypedQuery<Long> query = em.createQuery(jpql, Long.class);
@@ -153,7 +162,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     @Override
     public List<String> getAllSitters() {
         return em.createQuery(
-                        "select s.name from Review r " +
+                        "select distinct(s.name) from Review r " +
                                 "join r.customerReservation cr " +
                                 "join cr.customer c " +
                                 "join cr.sitter s " +
