@@ -22,6 +22,7 @@ public interface CareLogRepository extends JpaRepository<CareLog, Long> {
             "join c.sitterSchedule ss " +
             "join ss.sitter s " +
             "where s.id = :sitterId " +
+            "and c.isDeleted = false " +
             "order by c.id desc")
     Page<CareLogResponse.GetList> findAllBySitterId(@Param("sitterId") long sitterId, Pageable pageable);
 
@@ -33,7 +34,9 @@ public interface CareLogRepository extends JpaRepository<CareLog, Long> {
             "from CareLog c " +
             "join c.sitterSchedule ss " +
             "join ss.sitter s " +
-            "where s.id = :sitterId AND ss.id = :sitterScheduleId")
+            "where s.id = :sitterId AND ss.id = :sitterScheduleId " +
+            "and c.isDeleted = false " +
+            "order by c.id desc")
     List<CareLogResponse.GetDetail> findAllCareLogDetail(@Param("sitterId") long sitterId, @Param("sitterScheduleId") long sitterScheduleId);
 
     // 돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 조회(DTO로 조회)
@@ -41,9 +44,10 @@ public interface CareLogRepository extends JpaRepository<CareLog, Long> {
             "from CareLog c " +
             "join c.sitterSchedule ss " +
             "join ss.sitter s " +
-            "where c.id = :careLogId AND s.id = :sitterId")
+            "where c.id = :careLogId AND s.id = :sitterId " +
+            "and c.isDeleted = false")
     Optional<CareLogResponse.GetDetail> findCareLogDetail(@Param("careLogId") long careLogId, @Param("sitterId") long sitterId);
 
     // 돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 조회
-    Optional<CareLog> findBySitterScheduleSitterIdAndId(long sitterId, long careLogId);
+    Optional<CareLog> findBySitterScheduleSitterIdAndIdAndIsDeletedFalse(long sitterId, long careLogId);
 }
