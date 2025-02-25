@@ -42,7 +42,7 @@ public class ReviewService {
         CustomerReservation customerReservation = customerReservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NoSuchElementException("리뷰 등록 실패: 해당 예약을 찾을 수 없습니다."));
 
-        if (reviewRepository.existsByCustomerReservation(customerReservation)) {
+        if (reviewRepository.existsByCustomerReservationAndIsDeletedFalse(customerReservation)) {
             throw new IllegalArgumentException("이미 해당 예약에 대한 리뷰가 존재합니다.");
         }
 
@@ -106,10 +106,12 @@ public class ReviewService {
         authorizationMember(customer);
         verifyingPermissionsCustomer(customer);
 
-        Review review = reviewRepository.findByCustomerReservationCustomerIdAndId(customer.getId(), reviewId)
+        Review review = reviewRepository.findByCustomerReservationCustomerIdAndIdAndIsDeletedFalse(customer.getId(), reviewId)
                 .orElseThrow(() -> new NoSuchElementException("해당 리뷰를 찾을 수 없습니다."));
 
-        reviewRepository.delete(review);
+//        reviewRepository.delete(review);
+
+        review.changeIsDeleted(true);
     }
 
     @Comment("특정 회원의 특정 리뷰 수정")
@@ -121,7 +123,7 @@ public class ReviewService {
         authorizationMember(customer);
         verifyingPermissionsCustomer(customer);
 
-        Review review = reviewRepository.findByCustomerReservationCustomerIdAndId(customer.getId(), reviewId)
+        Review review = reviewRepository.findByCustomerReservationCustomerIdAndIdAndIsDeletedFalse(customer.getId(), reviewId)
                 .orElseThrow(() -> new NoSuchElementException("해당 리뷰를 찾을 수 없습니다."));
 
         review.updateReview(request.getRating(), request.getComment());
