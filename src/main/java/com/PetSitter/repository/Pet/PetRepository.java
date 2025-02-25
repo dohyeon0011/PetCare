@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
     // 특정 회원의 반려견 목록 조회
-    List<Pet> findByCustomerId(long customerId);
+    List<Pet> findByCustomerIdAndIsDeletedFalse(long customerId);
 
     Optional<Pet> findByCustomerIdAndId(long customerId, long id);
 
