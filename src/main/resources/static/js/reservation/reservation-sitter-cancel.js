@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     throw new Error(data.error);
                 }
                 alert("예약이 취소되었습니다.");
-                window.location.href = `/pets-care/members/${sitterId}/reservations`; // 예약 목록 페이지로 이동
+                window.location.href = `/pets-care/members/${sitterId}/schedules?page=0&size=10`; // 예약 목록 페이지로 이동
             })
             .catch(error => {
                 console.error("예약 취소 오류:", error);
