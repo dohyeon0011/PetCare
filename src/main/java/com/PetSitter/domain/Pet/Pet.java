@@ -38,6 +38,9 @@ public class Pet {
     @Comment("반려견 프로필 사진")
     private String profileImgPath;
 
+    @Comment("삭제 여부(soft delete), True: 삭제, False: 존재")
+    private boolean isDeleted;
+
     // 고객-반려견 연관관계 편의 메서드
     public void addCustomer(Member customer) {
         this.customer = customer;
@@ -61,4 +64,8 @@ public class Pet {
         this.profileImgPath = profileImgPath;
     }
 
+    @Comment("반려견 삭제 시 Soft Delete 적용")
+    public void changeIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
