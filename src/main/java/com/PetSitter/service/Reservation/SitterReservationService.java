@@ -82,7 +82,7 @@ public class SitterReservationService {
         if (careAvailableDates.isEmpty()) {
             throw new NoSuchElementException("해당 돌봄사는 돌봄 예약 가능한 날짜가 없습니다.");
         }
-        List<Pet> pets = petRepository.findByCustomerId(customer.getId());
+        List<Pet> pets = petRepository.findByCustomerIdAndIsDeletedFalse(customer.getId());
 
         return new ReservationResponse(customer, sitter, careAvailableDates, pets);
     }
