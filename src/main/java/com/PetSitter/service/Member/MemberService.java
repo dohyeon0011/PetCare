@@ -11,16 +11,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PetRepository petRepository;
 
     @Transactional
     public Object save(AddMemberRequest request) {
@@ -52,7 +53,9 @@ public class MemberService {
             Member member = memberRepository.findByCustomerId(id, role)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-            return new MemberResponse.GetCustomer(member, member.getPets());
+            return new MemberResponse.GetCustomer(member, member.getPets().stream()
+                    .filter(pet -> !pet.isDeleted())
+                    .collect(Collectors.toList()));
         } else if (role.equals(Role.PET_SITTER)) {
             Member member = memberRepository.findBySitterId(id, role)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
@@ -81,7 +84,13 @@ public class MemberService {
 
         authorizetionMember(member);
 
-        memberRepository.delete(member);
+//        memberRepository.delete(member);
+
+        if (member.isDeleted()) {
+            throw new IllegalArgumentException("이미 탈퇴 처리된 회원입니다.");
+        }
+
+        member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
     }
 
     @Transactional
