@@ -1,6 +1,6 @@
 package com.PetSitter.repository.Review;
 
-import com.PetSitter.controller.Review.api.ReviewSearch;
+import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import jakarta.persistence.EntityManager;
