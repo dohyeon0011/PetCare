@@ -38,6 +38,9 @@ public class Review {
     @Column(name = "create_at")
     private LocalDateTime createdAt;
 
+    @Comment("삭제 여부(soft delete), True: 삭제, False: 존재")
+    private boolean isDeleted;
+
     @Builder
     public Review(CustomerReservation customerReservation, Double rating, String comment) {
         addCustomerReservation(customerReservation);
@@ -55,6 +58,11 @@ public class Review {
     public void addCustomerReservation(CustomerReservation customerReservation) {
         this.customerReservation = customerReservation;
         customerReservation.addReview(this);
+    }
+
+    @Comment("리뷰 삭제 시 Soft Delete 적용")
+    public void changeIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     /*public ReviewResponse.GetDetail toResponse() {
