@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // 기존 오류 메시지 제거
         const errorContainer = document.getElementById("errorContainer");
-        errorContainer.innerHTML = "";
 
         // URL 수정 (sitterId와 sitterScheduleId 반영)
         const url = logIdNum
