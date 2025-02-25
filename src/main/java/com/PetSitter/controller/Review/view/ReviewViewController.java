@@ -1,7 +1,6 @@
 package com.PetSitter.controller.Review.view;
 
-import com.PetSitter.controller.Review.api.ReviewSearch;
-import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Review.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
