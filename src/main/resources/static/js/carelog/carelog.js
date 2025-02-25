@@ -105,6 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // 기존 오류 메시지 제거
+        const errorContainer = document.getElementById("errorContainer");
+        errorContainer.innerHTML = "";
+
         // URL 수정 (sitterId와 sitterScheduleId 반영)
         const url = logIdNum
             ? `/api/pets-care/members/${sitterId}/care-logs/${logIdNum}`
@@ -124,15 +128,22 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(requestBody),
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.error || "알 수 없는 오류가 발생했습니다.");
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             alert(data.message || "돌봄 기록이 저장되었습니다.");
             closeCareLogModal();
             location.reload(); // 페이지 새로고침 (추가/수정 후)
         })
         .catch(error => {
-            alert("돌봄 기록 저장에 실패했습니다.");
-            console.error(error);
+            alert(error.message);  // 서버에서 받은 오류 메시지 표시
+            console.error("오류 발생:", error);
         });
     });
 
