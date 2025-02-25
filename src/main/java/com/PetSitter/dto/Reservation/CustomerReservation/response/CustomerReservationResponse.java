@@ -87,7 +87,9 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                             careLog.getCreatedAt()
                     ))
                     .toList();
-            this.review = Optional.ofNullable(review) // Optional.of()은 null 허용 X(value가 null이면 NPE 터짐. null이 아닐 때만 사용.)
+            // Optional.of()은 null 허용 X(value가 null이면 NPE 터짐. null이 아닐 때만 사용.)
+            this.review = Optional.ofNullable(review)
+                    .filter(r -> !r.isDeleted())
                     .map(r -> new ReviewResponse.GetDetail(
                             r.getId(), r.getCustomerReservation().getId(), r.getCustomerReservation().getCustomer().getNickName(),
                             r.getCustomerReservation().getSitter().getName(), r.getCustomerReservation().getReservationAt(), r.getRating(), r.getComment(), r.getCreatedAt()
