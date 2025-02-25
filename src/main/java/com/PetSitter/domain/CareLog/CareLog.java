@@ -40,6 +40,9 @@ public class CareLog { // 돌봄 케어 로그
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Comment("삭제 여부(soft delete), True: 삭제, False: 존재")
+    private boolean isDeleted;
+
     @Builder
     public CareLog(SitterSchedule sitterSchedule, String careType, String description, String imgPath) {
         addSitterSchedule(sitterSchedule);
@@ -59,6 +62,11 @@ public class CareLog { // 돌봄 케어 로그
         this.careType = careType;
         this.description = description;
         this.imgPath = imgPath;
+    }
+
+    @Comment("케어 로그 삭제 시 Soft Delete 적용")
+    public void changeIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     /*public CareLogResponse.GetDetail toResponse() {
