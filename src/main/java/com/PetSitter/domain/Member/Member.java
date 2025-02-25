@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -108,6 +109,9 @@ public class Member {
     @Comment("고객 포인트")
     private int amount;
 
+    @Comment("탈퇴 여부(soft delete), True: 탈퇴, False: 존재")
+    private boolean isDeleted;
+
     // CascadeType.REMOVE만 하면 실 데이터는 삭제된 것처럼 숨어있고, orphanRemoval = true이면 연관관계와 실 데이터까지 모두 삭제 (논리적으로 참조를 변경시켜서 무결성 오류를 안 나게 할 뿐, 데이터는 남게 됨)
     // 지금과 같이 회원 - 반려견, 회원 - 자격증과 같이 부모 자식 관계가 뚜렷한 경우에만 cascade 옵션 쓰고,
     // 학생 - 수강 중인 수업과 같은 하나의 자식에 여러 부모가 있는 경우에는 사용 자제
@@ -116,6 +120,7 @@ public class Member {
     // 2. Cascade되는 엔티티가 Cascade를 설정하는 엔티티에서만 사용되어야 한다.
     @Comment("고객이 보유한 반려견 목록")
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
+//    @Where(clause = "is_deleted = false") // isDeleted가 false인 데이터만 조회
     @JsonIgnore // api 조회시 반려견 목록은 빠지고 조회됨
     private List<Pet> pets = new ArrayList<>();
 
@@ -195,6 +200,11 @@ public class Member {
     @Comment("적립금 차감")
     public void subRewardPoints(int amount) {
         this.amount -= amount;
+    }
+
+    @Comment("회원 탈퇴 시 Soft Delete 적용")
+    public void changeIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     // 이러한 상황(Member의 Role)에 따른 로직은 도메인 내부에 있어야 변경사항이 있을 때 도메인만 수정하면 돼서 유지보수가 쉽다.
