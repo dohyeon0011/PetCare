@@ -89,22 +89,37 @@
     </form>
 
     <!-- 후기 리스트 -->
-    <div class="review-list">
-        <div th:each="review : ${reviews}" class="review-card">
-            <h3 th:text="${review.sitterName}">돌봄사 이름</h3><br>
+    <div class="review-container">
+        <div th:if="${#lists.isEmpty(reviews)}" class="no-reviews">
+            아직 후기가 없습니다. 첫 번째 후기를 남겨보세요! 😊
+        </div>
 
-            <!-- 별점 표시 -->
-            <p class="rating">
+        <div th:each="review : ${reviews}" class="review-item">
+            <h3 style="color: #3b82f6;">
+                <span th:text="${review.sitterName}"></span> <span style="font-size: 16px; color: black;">돌봄사</span>
+            </h3><br>
+            <!-- 상단 정보 (별점 + 작성자) -->
+            <div class="review-header">
+                <p>
+                    <strong>작성자:</strong>  <span th:text="${review.customerNickName}"></span>
+                </p>
+                <p class="rating">
                 <span th:each="i : ${#numbers.sequence(1, 5)}">
                     <span th:if="${i <= review.rating}" class="star filled">★</span>
                     <span th:if="${i == (review.rating + 0.5)}" class="star half-filled">★</span>
                     <span th:if="${i > (review.rating + 0.5)}" class="star empty">★</span>
                 </span>
-            </p>
-            <p class="comment" th:text="${review.comment}">후기 내용</p><br>
-            <p class="customer"><strong>작성자:</strong> <span th:text="${review.customerNickName}"></span></p><br>
-            <p class="date"><strong>예약 날짜:</strong> <span th:text="${review.reservationAt}"></span></p>
-            <p class="created"><strong>작성일:</strong> <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></span></p>
+                </p>
+            </div>
+
+            <!-- 후기 내용 -->
+            <p class="review-comment" th:text="${review.comment}">후기 내용</p><br>
+
+            <!-- 예약 날짜 및 작성일 -->
+            <div class="review-meta">
+                <span>📅 예약일: <span th:text="${review.reservationAt}"></span></span>
+                <span>🕒 작성일: <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></span></span>
+            </div>
         </div>
     </div>
 </div>
