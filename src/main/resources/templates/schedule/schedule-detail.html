@@ -11,6 +11,7 @@
 <body>
 <div id="memberData" th:data-member-id="${session.member?.id}"></div>
 <div id="scheduleDetail" th:data-sitter-schedule-id="${schedule.id}"></div>
+<div id="errorContainer"></div> <!-- 여기에 에러 메시지를 표시 -->
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -124,7 +125,7 @@
     </div><br>
 
     <div class="button-group">
-        <button class="btn btn-primary" id="addCareLogBtn" th:if="${schedule.status.name() != 'CANCEL'}">돌봄 기록 추가</button>
+        <button class="btn btn-primary" id="addCareLogBtn">돌봄 기록 추가</button>
         <button id="cancelReservation" class="btn btn-danger" th:data-reservation-id="${schedule.id}"
                 th:if="${schedule.status.name() != 'CANCEL'}">예약 취소</button>
         <button class="btn btn-secondary" onclick="history.back()">뒤로 가기</button>
