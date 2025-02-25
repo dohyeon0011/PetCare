@@ -84,7 +84,19 @@ public class MemberApiController {
 
     @Operation(description = "회원 정보 수정 API")
     @PutMapping("/{memberId}")
-    public ResponseEntity<Object> updateMember(@PathVariable("memberId") Long id, @RequestBody @Valid UpdateMemberRequest request) {
+    public ResponseEntity<?> updateMember(@PathVariable("memberId") Long id, @RequestBody @Valid UpdateMemberRequest request,
+                                               BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+
+            result.getFieldErrors().forEach(error -> {
+                errors.put(error.getField(), error.getDefaultMessage());
+            });
+
+
+            return ResponseEntity.badRequest()
+                    .body(errors);
+        }
         Object updateMember = memberService.update(id, request);
 
         return ResponseEntity.ok()
