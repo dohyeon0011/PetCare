@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Review.api;
 
+import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.dto.Review.request.AddReviewRequest;
 import com.PetSitter.dto.Review.request.UpdateReviewRequest;
 import com.PetSitter.dto.Review.response.ReviewResponse;
