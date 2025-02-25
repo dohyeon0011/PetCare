@@ -52,7 +52,8 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
         List<ReservationSitterResponse.GetList> content = queryFactory
                 .select(new QReservationSitterResponse_GetList(careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction, careAvailableDate.sitter.careerYear)).distinct()
                 .from(careAvailableDate)
-                .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY))
+                .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY)
+                        .and(careAvailableDate.sitter.isDeleted.eq(Boolean.FALSE)))
                 .distinct()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
