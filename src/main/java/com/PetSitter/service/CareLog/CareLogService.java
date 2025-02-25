@@ -114,10 +114,11 @@ public class CareLogService {
         verifyingPermissionsCustomer(sitter);
         authorizationMember(sitter);
 
-        CareLog careLog = careLogRepository.findBySitterScheduleSitterIdAndId(sitter.getId(), careLogId)
+        CareLog careLog = careLogRepository.findBySitterScheduleSitterIdAndIdAndIsDeletedFalse(sitter.getId(), careLogId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 케어 로그가 존재하지 않습니다."));
 
-        careLogRepository.delete(careLog);
+//        careLogRepository.delete(careLog);
+        careLog.changeIsDeleted(true);
     }
 
     @Comment("돌봄사의 특정 돌봄 케어 로그 수정")
@@ -128,7 +129,7 @@ public class CareLogService {
         verifyingPermissionsCustomer(sitter);
         authorizationMember(sitter);
 
-        CareLog careLog = careLogRepository.findBySitterScheduleSitterIdAndId(sitter.getId(), careLogId)
+        CareLog careLog = careLogRepository.findBySitterScheduleSitterIdAndIdAndIsDeletedFalse(sitter.getId(), careLogId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 케어 로그가 존재하지 않습니다."));
 
         careLog.updateCareLog(request.getCareType(), request.getDescription(), request.getImgPath());
