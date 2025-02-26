@@ -60,7 +60,7 @@ function editCareAvailableDate() {
 
     // 오류 메시지 초기화
     resetErrorMessages();
-
+1
     const requestData = {
         availableAt: availableAt,
         price: price,
