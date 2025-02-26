@@ -2,7 +2,7 @@ package com.PetSitter.repository.Member;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.domain.Pet.Pet;
-import com.PetSitter.dto.Member.response.MemberAdminResponse;
+import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,5 +22,5 @@ public interface MemberRepositoryCustom {
     Optional<CareAvailableDate> findCareAvailableDateBySitterIdAndAvailableAt(long sitterId, LocalDate availableDate);
 
     // 관리자 페이지 모든 회원 목록 조회(+페이징)
-    Page<MemberAdminResponse.MemberListResponse> findAllMember(Pageable pageable);
+    Page<AdminMemberResponse.MemberListResponse> findAllMember(Pageable pageable);
 }

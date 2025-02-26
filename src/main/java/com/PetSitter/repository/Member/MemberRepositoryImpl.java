@@ -1,11 +1,10 @@
 package com.PetSitter.repository.Member;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
-import com.PetSitter.domain.Member.QMember;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
-import com.PetSitter.dto.Member.response.MemberAdminResponse;
-import com.PetSitter.dto.Member.response.QMemberAdminResponse_MemberListResponse;
+import com.PetSitter.dto.Member.response.AdminMemberResponse;
+import com.PetSitter.dto.Member.response.QAdminMemberResponse_MemberListResponse;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -62,9 +61,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     // 관리자 페이지 모든 회원 목록 조회(+페이징)
     @Override
-    public Page<MemberAdminResponse.MemberListResponse> findAllMember(Pageable pageable) {
-        List<MemberAdminResponse.MemberListResponse> content = queryFactory
-                .select(new QMemberAdminResponse_MemberListResponse(
+    public Page<AdminMemberResponse.MemberListResponse> findAllMember(Pageable pageable) {
+        List<AdminMemberResponse.MemberListResponse> content = queryFactory
+                .select(new QAdminMemberResponse_MemberListResponse(
                         member.id, member.name, member.nickName, member.email, member.role, member.createdAt, member.isDeleted))
                 .from(member)
                 .where(member.role.ne(Role.ADMIN))
