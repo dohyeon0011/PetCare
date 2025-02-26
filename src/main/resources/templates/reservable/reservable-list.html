@@ -39,7 +39,11 @@
                         안녕하세요, <b th:text="${session.member.name}"></b>님!
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}">마이페이지</a>
+                        <a class="dropdown-item"
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
+                           th:if="${session.member.role.name() != 'ADMIN'}">
+                            마이페이지
+                        </a>
 
                         <!-- PET_SITTER인 경우 -->
                         <div th:if="${session.member.role.name() == 'PET_SITTER'}">
@@ -61,9 +65,11 @@
                         <div th:if="${session.member.role.name() == 'ADMIN'}">
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">관리자 메뉴</h6>
-                            <a class="dropdown-item" th:href="@{/admin/members}">회원 관리</a>
-                            <a class="dropdown-item" th:href="@{/admin/reservations}">예약 관리</a>
-                            <a class="dropdown-item" th:href="@{/admin/schedules}">돌봄 가능 날짜 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/schedules}">돌봄 가능 날짜 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reviews}">리뷰 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/care-logs}">돌봄 케어 로그 관리</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
