@@ -125,13 +125,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         jpql += "order by r.id desc";
 
-        TypedQuery<ReviewResponse.GetDetail> query = em.createQuery(jpql, ReviewResponse.GetDetail.class)
-                .setFirstResult(page * 15)
-                .setMaxResults(15);
+        TypedQuery<ReviewResponse.GetDetail> query = em.createQuery(jpql, ReviewResponse.GetDetail.class);
 
         if (reviewSearch.getSitter() != null && StringUtils.hasText(reviewSearch.getSitter())) {
             query.setParameter("sitterName", reviewSearch.getSitter());
         }
+
+        query.setFirstResult(page * 15);
+        query.setMaxResults(15);
 
         return query.getResultList();
     }
