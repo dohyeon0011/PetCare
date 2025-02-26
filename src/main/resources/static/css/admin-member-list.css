@@ -1,0 +1,56 @@
+/* 관리자 페이지 전체 스타일 */
+.container {
+    max-width: 1200px;
+}
+
+/* 관리자 제목 */
+.admin-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 관리자 테이블 스타일 */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+}
+
+.admin-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.admin-table .clickable-row {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-table .clickable-row:hover {
+    background-color: #f1f1f1;
+}
+
+/* 탈퇴 회원 스타일 */
+.text-danger {
+    font-weight: bold;
+}
+
+.text-success {
+    font-weight: bold;
+}
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.clickable-row:hover {
+    background-color: #f8f9fa;
+}
