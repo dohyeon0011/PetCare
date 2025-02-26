@@ -5,7 +5,7 @@ import com.PetSitter.domain.Certification.Certification;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
-import com.PetSitter.dto.Member.response.MemberAdminResponse;
+import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -222,9 +222,9 @@ public class Member {
     @Comment("관리자 페이지 회원 상세 정보 조회")
     public Object toDetailForAdmin() {
         if (Role.CUSTOMER.equals(this.getRole())) {
-            return new MemberAdminResponse.CustomerDetailResponse(this, this.pets);
+            return new AdminMemberResponse.CustomerDetailResponse(this, this.pets);
         } else if (Role.PET_SITTER.equals(this.getRole())) {
-            return new MemberAdminResponse.SitterDetailResponse(this, this.certifications);
+            return new AdminMemberResponse.SitterDetailResponse(this, this.certifications);
         }
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
