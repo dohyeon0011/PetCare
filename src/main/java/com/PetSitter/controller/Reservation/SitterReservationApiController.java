@@ -59,7 +59,7 @@ public class SitterReservationApiController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("reviews", reviews);
-        response.put("totalReviews", totalReviews);
+        response.put("totalReviews", totalReviews); // (Pageable을 사용하지 않아서 일일이 모델에 담아줘야함.)
 
         return ResponseEntity.ok()
                 .body(response);
