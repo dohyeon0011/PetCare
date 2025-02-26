@@ -5,6 +5,7 @@ import com.PetSitter.domain.Certification.Certification;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
+import com.PetSitter.dto.Member.response.MemberAdminResponse;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -14,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -219,4 +219,13 @@ public class Member {
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
 
+    @Comment("관리자 페이지 회원 상세 정보 조회")
+    public Object toDetailForAdmin() {
+        if (Role.CUSTOMER.equals(this.getRole())) {
+            return new MemberAdminResponse.CustomerDetailResponse(this, this.pets);
+        } else if (Role.PET_SITTER.equals(this.getRole())) {
+            return new MemberAdminResponse.SitterDetailResponse(this, this.certifications);
+        }
+        throw new NoSuchElementException("존재하지 않는 회원입니다.");
+    }
 }
