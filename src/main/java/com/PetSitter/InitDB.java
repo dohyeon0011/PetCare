@@ -27,6 +27,7 @@ public class InitDB {
         initService.dbInit2();
         initService.dbInit3();
         initService.dbInit4();
+        initService.dbInit5();
     }
 
     @Component
@@ -418,6 +419,21 @@ public class InitDB {
             em.persist(careAvailableDate15);
             em.persist(careAvailableDate16);
             em.persist(careAvailableDate17);
+        }
+
+        public void dbInit5() {
+            Member member = Member.builder()
+                    .loginId("super")
+                    .password("super")
+                    .name("Admin")
+                    .nickName("Admin")
+                    .email("Super@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("ADMIN"))
+                    .build();
+
+            em.persist(member);
         }
     }
 }
