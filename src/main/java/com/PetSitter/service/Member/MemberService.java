@@ -4,14 +4,16 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
+import com.PetSitter.dto.Member.response.MemberAdminResponse;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
-import com.PetSitter.repository.Pet.PetRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,15 +30,6 @@ public class MemberService {
         validateDuplicateMember(request);
 
         return memberRepository.save(request.toEntity()).toResponse();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Object> findAll() {
-        List<Member> members = memberRepository.findAll();
-
-        return members.stream()
-                .map(Member::toResponse)
-                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -109,10 +102,34 @@ public class MemberService {
         return member.toResponse();
     }
 
-    /*@Transactional(readOnly = true)
-    public List<MemberResponse.GetSitter> getSitters() {
-        memberRepository.findAllSitter();
-    }*/
+    @Comment("관리자 페이지 모든 회원 목록 조회")
+    @Transactional(readOnly = true)
+    public Page<MemberAdminResponse.MemberListResponse> findAllForAdmin(Member member, Pageable pageable) {
+        verifyingPermissionsAdmin(member);
+
+        return memberRepository.findAllMember(pageable);
+    }
+
+    @Comment("관리자 페이지 회원 상세 정보 조회")
+    @Transactional(readOnly = true)
+    public Object findByIdForAdmin(long id, Member member) {
+        verifyingPermissionsAdmin(member);
+
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+
+        return findMember.toDetailForAdmin();
+    }
+
+    @Comment("관리자 권한 회원 탈퇴")
+    public void deleteForAdmin(long id, Member member) {
+        verifyingPermissionsAdmin(member);
+
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+
+        findMember.changeIsDeleted(true);
+    }
 
     private static void authorizetionMember(Member member) {
 //        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
@@ -127,6 +144,12 @@ public class MemberService {
 
         if (!member.isEmpty()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+        }
+    }
+
+    public static void verifyingPermissionsAdmin(Member member) {
+        if (!member.getRole().equals(Role.ADMIN)) {
+            throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
         }
     }
 
