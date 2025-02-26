@@ -16,7 +16,7 @@ public class UserService {
     public Member authenticate(String loginId, String password) {
         Optional<Member> member = memberRepository.findByLoginId(loginId);
 
-        if (!member.isEmpty() && member.get().getPassword().equals(password)) {
+        if (!member.isEmpty() && member.get().getPassword().equals(password) && !member.get().isDeleted()) {
             return member.get(); // 인증 성공
         }
 
