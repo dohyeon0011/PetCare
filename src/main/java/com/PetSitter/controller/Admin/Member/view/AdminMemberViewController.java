@@ -1,7 +1,7 @@
 package com.PetSitter.controller.Admin.Member.view;
 
 import com.PetSitter.domain.Member.Member;
-import com.PetSitter.dto.Member.response.MemberAdminResponse;
+import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.service.Member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -11,8 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class AdminMemberViewController {
     @Comment("관리자 페이지 모든 회원 목록 조회")
     @GetMapping("/members")
     public String getAllMember(@SessionAttribute("member") Member member, @PageableDefault Pageable pageable, Model model) {
-        Page<MemberAdminResponse.MemberListResponse> members = memberService.findAllForAdmin(member, pageable);
+        Page<AdminMemberResponse.MemberListResponse> members = memberService.findAllForAdmin(member, pageable);
         model.addAttribute("members", members);
 
         return "admin/member/member-list";
