@@ -51,13 +51,6 @@ public class MemberApiController {
                 .body(member);
     }
 
-    @Operation(description = "전체 회원 조회 API")
-    @GetMapping
-    public ResponseEntity<List<?>> findAllMember() {
-        return ResponseEntity.ok()
-                .body(memberService.findAll());
-    }
-
     @Operation(description = "특정 회원 조회 API")
     @GetMapping("/{memberId}/myPage")
     public ResponseEntity<?> findMember(@PathVariable("memberId") long id) {
