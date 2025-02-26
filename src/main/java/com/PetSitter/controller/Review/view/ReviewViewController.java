@@ -82,7 +82,7 @@ public class ReviewViewController {
 
         model.addAttribute("reviews", reviews); // 리뷰 목록
         model.addAttribute("reviewSearch", reviewSearch); // 검색 조건
-        model.addAttribute("totalReviews", totalReviews); // 총 리뷰 개수
+        model.addAttribute("totalReviews", totalReviews); // 총 리뷰 개수 (이런 것들 모두 Pageable을 사용하지 않아서 일일이 모델에 담아줘야함.)
         model.addAttribute("totalPages", totalPages); // 총 페이지 수
         model.addAttribute("currentPage", page); // 현재 페이지
         model.addAttribute("sitters", sitters); // 검색 드롭다운에 전체 돌봄사 목록 전달
