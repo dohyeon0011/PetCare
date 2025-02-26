@@ -4,7 +4,7 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
-import com.PetSitter.dto.Member.response.MemberAdminResponse;
+import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -104,7 +103,7 @@ public class MemberService {
 
     @Comment("관리자 페이지 모든 회원 목록 조회")
     @Transactional(readOnly = true)
-    public Page<MemberAdminResponse.MemberListResponse> findAllForAdmin(Member member, Pageable pageable) {
+    public Page<AdminMemberResponse.MemberListResponse> findAllForAdmin(Member member, Pageable pageable) {
         verifyingPermissionsAdmin(member);
 
         return memberRepository.findAllMember(pageable);
