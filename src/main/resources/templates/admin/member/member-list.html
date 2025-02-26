@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>관리자 페이지 - 회원 전체 목록</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/admin-member-list.css}" rel="stylesheet">
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item"
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
+                           th:if="${session.member.role.name() != 'ADMIN'}">
+                            마이페이지
+                        </a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${session.member.id})}">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/schedules}">돌봄 가능 날짜 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reviews}">리뷰 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/care-logs}">돌봄 케어 로그 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+                <span th:if="${session.member == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 관리자 페이지 제목 -->
+<div class="container mt-5">
+    <h2 class="admin-title text-center">👤 관리자 회원 관리</h2><br>
+
+    <!-- 회원 목록 테이블 -->
+    <div class="table-responsive">
+        <table class="table table-hover admin-table">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>이름</th>
+                <th>닉네임</th>
+                <th>이메일</th>
+                <th>역할</th>
+                <th>가입일</th>
+                <th>탈퇴 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members.content}"
+                th:onclick="|window.location.href='@{/pets-care/admin/members/{id}(id=${member.id})}'|"
+                class="clickable-row">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.name}"></td>
+                <td th:text="${member.nickName}"></td>
+                <td th:text="${member.email}"></td>
+                <td th:text="${member.role.name() == 'CUSTOMER' ? '고객' : member.role.name() == 'PET_SITTER' ? '펫시터' : ''}"></td>
+                <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${member.isDeleted ? '탈퇴' : '활동 중'}"
+                    th:classappend="${member.isDeleted ? 'text-danger' : 'text-success'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 페이지네이션 -->
+<nav th:if="${members.totalPages > 0}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${members.hasPrevious()}">
+            <a class="page-link" th:href="@{/pets-care/admin/members(page=${members.number - 1})}">&laquo;</a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, members.totalPages - 1)}"
+            th:classappend="${i == members.number ? 'active' : ''}">
+            <a class="page-link" th:href="@{/pets-care/admin/members(page=${i})}" th:text="${i + 1}"></a>
+        </li>
+        <li class="page-item" th:if="${members.hasNext()}">
+            <a class="page-link" th:href="@{/pets-care/admin/members(page=${members.number + 1})}">&raquo;</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+</body>
+</html>
