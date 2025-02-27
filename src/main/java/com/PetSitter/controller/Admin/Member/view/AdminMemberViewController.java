@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Admin.Member.view;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.service.Member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,10 @@ public class AdminMemberViewController {
 
     @Comment("관리자 페이지 모든 회원 목록 조회")
     @GetMapping("/members")
-    public String getAllMember(@SessionAttribute("member") Member member, @PageableDefault Pageable pageable, Model model) {
-        Page<AdminMemberResponse.MemberListResponse> members = memberService.findAllForAdmin(member, pageable);
+    public String getAllMember(@SessionAttribute("member") Member member,
+                               @ModelAttribute MemberSearch memberSearch,
+                               @PageableDefault Pageable pageable, Model model) {
+        Page<AdminMemberResponse.MemberListResponse> members = memberService.findAllForAdmin(member, memberSearch, pageable);
         model.addAttribute("members", members);
 
         return "admin/member/member-list";
