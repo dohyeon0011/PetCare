@@ -6,8 +6,10 @@ import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Pet.PetReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
+import com.PetSitter.domain.Reservation.ReservationSearch;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.Reservation.CustomerReservation.request.AddCustomerReservationRequest;
+import com.PetSitter.dto.Reservation.CustomerReservation.response.AdminReservationResponse;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
@@ -154,6 +156,32 @@ public class CustomerReservationService {
 //        customerReservationRepository.delete(customerReservation);
     }
 
+    @Comment("관리자 페이지 모든 예약 목록 조회")
+    @Transactional(readOnly = true)
+    public Page<AdminReservationResponse.ReservationListResponse> findAllForAdmin(ReservationSearch reservationSearch, Pageable pageable) {
+//        verifyingPermissionsAdmin(member);
+
+        return customerReservationRepository.findAllReservation(reservationSearch, pageable);
+    }
+
+//    @Comment("관리자 페이지 예약 상세 정보 조회")
+//    @Transactional(readOnly = true)
+//    public AdminReservationResponse.ReservationDetailResponse findForAdmin(long id) {
+//        verifyingPermissionsAdmin(member);
+//    }
+
+//    @Comment("관리자 권한 예약 취소")
+//    @Transactional
+//    public void deleteForAdmin(long id) {
+//        verifyingPermissionsAdmin(member);
+//    }
+
+//    @Comment("관리자 권한 예약 수정")
+//    @Transactional
+//    public AdminReservationResponse.ReservationDetailResponse updateForAdmin(long id) {
+//        verifyingPermissionsAdmin(member);
+//    }
+
     private static void authorizationMember(Member member) {
 //        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
 //
@@ -171,6 +199,12 @@ public class CustomerReservationService {
     public static void verifyingPermissionsSitter(Member sitter) {
         if (!sitter.getRole().equals(Role.PET_SITTER)) {
             throw new IllegalArgumentException("돌봄 예약 배정,수정 및 삭제는 돌봄사만 가능합니다.");
+        }
+    }
+
+    public static void verifyingPermissionsAdmin(Member member) {
+        if (!member.getRole().equals(Role.ADMIN)) {
+            throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
         }
     }
 
