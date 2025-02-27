@@ -64,7 +64,6 @@
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">관리자 메뉴</h6>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/schedules}">돌봄 가능 날짜 관리</a>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/reviews}">리뷰 관리</a>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/care-logs}">돌봄 케어 로그 관리</a>
@@ -84,7 +83,16 @@
 
 <!-- 관리자 페이지 제목 -->
 <div class="container mt-5">
-    <h2 class="admin-title text-center">👤 관리자 회원 관리</h2><br>
+    <h2 class="admin-title text-center">👤 관리자 회원 관리</h2>
+
+    <!-- 검색 폼 -->
+    <div class="container mt-3">
+        <form th:action="@{/pets-care/admin/members}" method="get" class="d-flex justify-content-end">
+            <input type="text" name="name" class="form-control w-auto mr-2"
+                   placeholder="회원 이름 검색" th:value="${memberSearch.name}" style="max-width: 200px;">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </form>
+    </div>
 
     <!-- 회원 목록 테이블 -->
     <div class="table-responsive">
