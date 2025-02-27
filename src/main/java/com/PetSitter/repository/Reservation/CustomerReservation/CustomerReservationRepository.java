@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface CustomerReservationRepository extends JpaRepository<CustomerReservation, Long> {
+public interface CustomerReservationRepository extends JpaRepository<CustomerReservation, Long>, CustomerReservationRepositoryCustom {
 
     // 특정 고객의 돌봄 예약 내역 전체 조회
     List<CustomerReservation> findByCustomerId(long customerId);
