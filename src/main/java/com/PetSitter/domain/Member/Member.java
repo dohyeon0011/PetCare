@@ -204,6 +204,10 @@ public class Member {
 
     @Comment("회원 탈퇴 시 Soft Delete 적용")
     public void changeIsDeleted(boolean isDeleted) {
+        if (this.isDeleted) {
+            throw new IllegalArgumentException("이미 탈퇴한 사용자입니다.");
+        }
+
         this.isDeleted = isDeleted;
     }
 
@@ -220,7 +224,7 @@ public class Member {
     }
 
     @Comment("관리자 페이지 회원 상세 정보 조회")
-    public Object toDetailForAdmin() {
+    public Object toDetailResponseForAdmin() {
         if (Role.CUSTOMER.equals(this.getRole())) {
             return new AdminMemberResponse.CustomerDetailResponse(this, this.pets);
         } else if (Role.PET_SITTER.equals(this.getRole())) {
