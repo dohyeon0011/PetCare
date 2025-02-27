@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Admin.Member.api;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.service.Member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,8 +21,10 @@ public class AdminMemberApiController {
 
     @Operation(description = "관리자 페이지 모든 회원 목록 조회 API")
     @GetMapping("/members")
-    public ResponseEntity<Page<AdminMemberResponse.MemberListResponse>> getAllMember(@SessionAttribute("member") Member member, @PageableDefault Pageable pageable) {
-        Page<AdminMemberResponse.MemberListResponse> members = memberService.findAllForAdmin(member, pageable);
+    public ResponseEntity<Page<AdminMemberResponse.MemberListResponse>> getAllMember(@SessionAttribute("member") Member member,
+                                                                                     @ModelAttribute MemberSearch memberSearch,
+                                                                                     @PageableDefault Pageable pageable) {
+        Page<AdminMemberResponse.MemberListResponse> members = memberService.findAllForAdmin(member, memberSearch, pageable);
 
         return ResponseEntity.ok()
                 .body(members);
