@@ -1,16 +1,20 @@
 package com.PetSitter.repository.Member;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
+import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.dto.Member.response.QAdminMemberResponse_MemberListResponse;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +24,7 @@ import java.util.Optional;
 import static com.PetSitter.domain.CareAvailableDate.QCareAvailableDate.careAvailableDate;
 import static com.PetSitter.domain.Member.QMember.*;
 import static com.PetSitter.domain.Pet.QPet.pet;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
@@ -61,12 +66,20 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     // 관리자 페이지 모든 회원 목록 조회(+페이징)
     @Override
-    public Page<AdminMemberResponse.MemberListResponse> findAllMember(Pageable pageable) {
+    public Page<AdminMemberResponse.MemberListResponse> findAllMember(MemberSearch memberSearch, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder(); // 다른 메서드에서는 재사용 불가능. 현재 메서드 내에서만 사용 가능.
+
+        if (StringUtils.hasText(memberSearch.getName()) && memberSearch.getName() != null) {
+//            builder.and(member.name.lower().eq(memberSearch.getName().toLowerCase())); // 대소문자 구분 X(완전 일치)
+            builder.and(member.name.containsIgnoreCase(memberSearch.getName())); // 부분 검색(포함 -> 이러면 대소문자도 구분 안하고, 포함된 문자도 검색됨.)
+        }
+
         List<AdminMemberResponse.MemberListResponse> content = queryFactory
                 .select(new QAdminMemberResponse_MemberListResponse(
                         member.id, member.name, member.nickName, member.email, member.role, member.createdAt, member.isDeleted))
                 .from(member)
-                .where(member.role.ne(Role.ADMIN))
+                .where(member.role.ne(Role.ADMIN),
+                        builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(member.id.desc())
@@ -74,8 +87,17 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
         JPAQuery<Long> countQuery = queryFactory
                 .select(member.id)
-                .from(member);
+                .from(member)
+                .where(member.role.ne(Role.ADMIN),
+                        builder);
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount);
+    }
+
+    // BooleanBuilder() 대신 이 방법도 사용 가능. 두 방법 모두 where를 하나로 묶지 않고 and로 연결 가능.(이 방식 경우 다른 곳에서도 사용이 된다는 점이 있음)
+    // StringUtils.hasText()로 해도 됨.
+    // 빈환 타입을 BooleanExpression으로 해두면 and로 where 연결 가능.
+    private BooleanExpression membernameEq(String name) {
+        return isEmpty(name) ? null : member.name.eq(name);
     }
 }
