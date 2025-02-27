@@ -1,6 +1,7 @@
 package com.PetSitter.service.Member;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
@@ -78,10 +79,6 @@ public class MemberService {
 
 //        memberRepository.delete(member);
 
-        if (member.isDeleted()) {
-            throw new IllegalArgumentException("이미 탈퇴 처리된 회원입니다.");
-        }
-
         member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
     }
 
@@ -103,10 +100,10 @@ public class MemberService {
 
     @Comment("관리자 페이지 모든 회원 목록 조회")
     @Transactional(readOnly = true)
-    public Page<AdminMemberResponse.MemberListResponse> findAllForAdmin(Member member, Pageable pageable) {
+    public Page<AdminMemberResponse.MemberListResponse> findAllForAdmin(Member member, MemberSearch memberSearch, Pageable pageable) {
         verifyingPermissionsAdmin(member);
 
-        return memberRepository.findAllMember(pageable);
+        return memberRepository.findAllMember(memberSearch, pageable);
     }
 
     @Comment("관리자 페이지 회원 상세 정보 조회")
@@ -117,10 +114,11 @@ public class MemberService {
         Member findMember = memberRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-        return findMember.toDetailForAdmin();
+        return findMember.toDetailResponseForAdmin();
     }
 
     @Comment("관리자 권한 회원 탈퇴")
+    @Transactional
     public void deleteForAdmin(long id, Member member) {
         verifyingPermissionsAdmin(member);
 
