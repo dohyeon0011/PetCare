@@ -27,10 +27,10 @@ public class AdminReservationApiController {
                 .body(reservations);
     }
 
-//    @Operation(description = "관리자 페이지 예약 상세 정보 조회 API")
-//    @GetMapping("/reservations/{reservationId}")
-//    public ResponseEntity<AdminReservationResponse.ReservationDetailResponse> findForAdmin(@PathVariable("reservationId") long id) {
-//
-//    }
+    @Operation(description = "관리자 페이지 예약 상세 정보 조회 API")
+    @GetMapping("/reservations/{reservationId}")
+    public ResponseEntity<AdminReservationResponse.ReservationDetailResponse> findForAdmin(@PathVariable("reservationId") long id) {
+
+    }
 
 }
