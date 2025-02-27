@@ -1,0 +1,76 @@
+.admin-container {
+    width: 60%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: #343a40;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+.member-info p, .pet-info p, .cert-info p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #495057;
+}
+
+.pet-info ul, .cert-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.pet-info li, .cert-info li {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+.pet-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#deleteMemberBtn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#deleteMemberBtn:hover {
+    background-color: #c0392b;
+}
+
+#backBtn {
+    background-color: #3498db;
+    color: white;
+}
+
+#backBtn:hover {
+    background-color: #2980b9;
+}
