@@ -422,7 +422,7 @@ public class InitDB {
         }
 
         public void dbInit5() {
-            Member member = Member.builder()
+            Member admin = Member.builder()
                     .loginId("super")
                     .password("super")
                     .name("Admin")
@@ -433,7 +433,91 @@ public class InitDB {
                     .role(Role.valueOf("ADMIN"))
                     .build();
 
-            em.persist(member);
+            Member member1 = Member.builder()
+                    .loginId("user6")
+                    .password("user6")
+                    .name("user6")
+                    .nickName("User6")
+                    .email("User6@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("CUSTOMER"))
+                    .build();
+
+            Member member2 = Member.builder()
+                    .loginId("user7")
+                    .password("user7")
+                    .name("user7")
+                    .nickName("User7")
+                    .email("User7@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("PET_SITTER"))
+                    .build();
+
+            Member member3 = Member.builder()
+                    .loginId("user8")
+                    .password("user8")
+                    .name("user8")
+                    .nickName("User8")
+                    .email("User8@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("CUSTOMER"))
+                    .build();
+
+            Member member4 = Member.builder()
+                    .loginId("user9")
+                    .password("user9")
+                    .name("user9")
+                    .nickName("User9")
+                    .email("User9@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("PET_SITTER"))
+                    .build();
+
+            Member member5 = Member.builder()
+                    .loginId("user10")
+                    .password("user10")
+                    .name("user10")
+                    .nickName("User10")
+                    .email("User10@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("CUSTOMER"))
+                    .build();
+
+            Member member6 = Member.builder()
+                    .loginId("user11")
+                    .password("user11")
+                    .name("user11")
+                    .nickName("User11")
+                    .email("User11@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("PET_SITTER"))
+                    .build();
+
+            Member member7 = Member.builder()
+                    .loginId("user12")
+                    .password("user12")
+                    .name("user12")
+                    .nickName("User12")
+                    .email("User12@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("CUSTOMER"))
+                    .build();
+
+            em.persist(admin);
+            em.persist(member1);
+            em.persist(member2);
+            em.persist(member3);
+            em.persist(member4);
+            em.persist(member5);
+            em.persist(member6);
+            em.persist(member7);
         }
     }
 }
