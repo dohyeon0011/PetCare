@@ -98,36 +98,6 @@ public class MemberService {
         return member.toResponse();
     }
 
-    @Comment("관리자 페이지 모든 회원 목록 조회")
-    @Transactional(readOnly = true)
-    public Page<AdminMemberResponse.MemberListResponse> findAllForAdmin(Member member, MemberSearch memberSearch, Pageable pageable) {
-        verifyingPermissionsAdmin(member);
-
-        return memberRepository.findAllMember(memberSearch, pageable);
-    }
-
-    @Comment("관리자 페이지 회원 상세 정보 조회")
-    @Transactional(readOnly = true)
-    public Object findByIdForAdmin(long id, Member member) {
-        verifyingPermissionsAdmin(member);
-
-        Member findMember = memberRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-        return findMember.toDetailResponseForAdmin();
-    }
-
-    @Comment("관리자 권한 회원 탈퇴")
-    @Transactional
-    public void deleteForAdmin(long id, Member member) {
-        verifyingPermissionsAdmin(member);
-
-        Member findMember = memberRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-        findMember.changeIsDeleted(true);
-    }
-
     private static void authorizetionMember(Member member) {
 //        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
 //
@@ -141,12 +111,6 @@ public class MemberService {
 
         if (!member.isEmpty()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
-        }
-    }
-
-    public static void verifyingPermissionsAdmin(Member member) {
-        if (!member.getRole().equals(Role.ADMIN)) {
-            throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
         }
     }
 
