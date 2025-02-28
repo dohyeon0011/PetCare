@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>관리자 페이지 - 돌봄 예약 전체 목록</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/admin-reservation-list.css}" rel="stylesheet">
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <span th:if="${session.member != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <a class="dropdown-item"
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
+                           th:if="${session.member.role.name() != 'ADMIN'}">
+                            마이페이지
+                        </a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${session.member.id})}">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${session.member.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reviews}">리뷰 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/care-logs}">돌봄 케어 로그 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                    </div>
+                </span>
+                <span th:if="${session.member == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 예약 목록 -->
+<div class="container mt-3">
+    <h2 class="text-center">관리자 돌봄 예약 관리</h2>
+
+    <!-- 예약 목록 검색 폼 -->
+    <div class="container mt-2">
+        <form th:action="@{/pets-care/admin/reservations}" method="get" class="d-flex justify-content-end">
+            <input type="text" name="name" class="form-control w-auto mr-2"
+                   placeholder="회원 이름 검색" th:value="${reservationSearch.name}" style="max-width: 200px;">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </form>
+    </div>
+
+    <!-- 예약 목록 테이블 -->
+    <div class="container mt-3">
+        <table class="table table-hover admin-table">
+            <thead class="thead-dark">
+            <tr>
+                <th>예약 ID</th>
+                <th>고객 이름</th>
+                <th>펫시터 이름</th>
+                <th>예약일</th>
+                <th>생성일</th>
+                <th>상태</th>
+                <th>예약 취소</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservation : ${reservations.content}"
+                th:onclick="|window.location.href='@{/pets-care/admin/reservations/{id}(id=${reservation.id})}'|"
+                class="clickable-row">
+                <td th:text="${reservation.id}"></td>
+                <td th:text="${reservation.customerNickName}"></td>
+                <td th:text="${reservation.sitterName}"></td>
+                <td th:text="${#temporals.format(reservation.reservationAt, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td>
+                    <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
+                          th:text="${reservation.status.name() == 'RESERVATION'} ? '예약 완료' : '취소'">
+                    </span>
+                </td>
+                <td>
+                    <form th:action="@{/api/pets-care/admin/reservations/{id}(id=${reservation.id})}" method="post" onsubmit="return confirmDelete(event, this)">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger" onclick="event.stopPropagation();" th:if="${reservation.status.name() != 'CANCEL'}">취소</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 페이지네이션 -->
+<nav th:if="${reservations.totalPages > 0}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:if="${reservations.hasPrevious()}">
+            <a class="page-link" th:href="@{/pets-care/admin/reservations(name=${reservationSearch.name}, page=${reservations.number - 1})}">&laquo;</a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, reservations.totalPages - 1)}"
+            th:classappend="${i == reservations.number ? 'active' : ''}">
+            <a class="page-link" th:href="@{/pets-care/admin/reservations(name=${reservationSearch.name}, page=${i})}" th:text="${i + 1}"></a>
+        </li>
+        <li class="page-item" th:if="${reservations.hasNext()}">
+            <a class="page-link" th:href="@{/pets-care/admin/reservations(name=${reservationSearch.name}, page=${reservations.number + 1})}">&raquo;</a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+<script>
+    function confirmDelete(event, form) {
+        if (confirm("정말로 이 예약을 취소하시겠습니까?")) {
+            event.preventDefault(); // 기본 폼 제출 방지
+
+            fetch(form.action, {
+                method: "POST",
+                body: new FormData(form),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(response => {
+                if (response.ok) {
+                    alert("예약이 취소되었습니다.");
+                    location.reload(); // 페이지 새로고침
+                } else {
+                    alert("예약 취소에 실패했습니다.");
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+                alert("오류가 발생했습니다.");
+            });
+
+            return false; // 폼 기본 제출 방지
+        }
+        return false; // 사용자가 취소한 경우 폼 제출 방지
+    }
+</script>
+</body>
+</html>
