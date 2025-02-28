@@ -120,13 +120,13 @@
         <h4>📖 돌봄 기록</h4>
         <div class="care-log-list">
             <div th:each="log : ${reservation.careLogList}" class="care-log-card">
-                <h5 th:text="${log.sitterName} + '님의 기록'"></h5>
+                <h5 style="color: #3b82f6;" th:text="${log.sitterName} + '님의 기록'"></h5><br>
+                <div th:if="${log.imgPath != null}">
+                    <img th:src="@{${log.imgPath}}" alt="돌봄 이미지" class="care-log-img">
+                </div><br>
                 <p><strong>돌봄 유형:</strong> <span th:text="${log.careType}"></span></p>
                 <p><strong>설명:</strong> <span th:text="${log.description}"></span></p>
                 <p><strong>🕒 작성일:</strong> <span th:text="${#temporals.format(log.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-                <div th:if="${log.imgPath != null}">
-                    <img th:src="@{${log.imgPath}}" alt="돌봄 이미지" class="care-log-img">
-                </div>
             </div>
         </div>
     </div><br>
