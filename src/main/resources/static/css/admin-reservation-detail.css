@@ -1,0 +1,128 @@
+/* Header styles */
+h2.text-center {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3b82f6;
+    margin-bottom: 30px;
+}
+
+/* Card styling for reservation details */
+.card.p-3 {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Section headers */
+h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3b82f6;
+    margin-top: 40px;
+}
+
+/* Reservation details */
+.card p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Bold labels in reservation details */
+.card p strong {
+    color: #3b82f6;
+}
+
+/* Status styling */
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Buttons */
+.btn {
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Styling for cancel and back buttons */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* List styling for pets */
+.list-group-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+}
+
+/* Review delete button */
+#deleteReview {
+    background-color: #f44336;
+    border-color: #f44336;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#deleteReview:hover {
+    background-color: #e53935;
+    border-color: #d32f2f;
+}
+
+/* No review section */
+.no-review {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Care log section */
+.care-log-img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Delete care log button */
+.deleteCareLog {
+    background-color: #f44336;
+    border-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.deleteCareLog:hover {
+    background-color: #e53935;
+    border-color: #d32f2f;
+}
