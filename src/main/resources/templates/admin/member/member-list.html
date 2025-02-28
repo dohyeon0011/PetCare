@@ -130,14 +130,14 @@
 <nav th:if="${members.totalPages > 0}">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:if="${members.hasPrevious()}">
-            <a class="page-link" th:href="@{/pets-care/admin/members(page=${members.number - 1})}">&laquo;</a>
+            <a class="page-link" th:href="@{/pets-care/admin/members(name=${memberSearch.name}, page=${members.number - 1})}">&laquo;</a>
         </li>
         <li class="page-item" th:each="i : ${#numbers.sequence(0, members.totalPages - 1)}"
             th:classappend="${i == members.number ? 'active' : ''}">
-            <a class="page-link" th:href="@{/pets-care/admin/members(page=${i})}" th:text="${i + 1}"></a>
+            <a class="page-link" th:href="@{/pets-care/admin/members(name=${memberSearch.name}, page=${i})}" th:text="${i + 1}"></a>
         </li>
         <li class="page-item" th:if="${members.hasNext()}">
-            <a class="page-link" th:href="@{/pets-care/admin/members(page=${members.number + 1})}">&raquo;</a>
+            <a class="page-link" th:href="@{/pets-care/admin/members(name=${memberSearch.name}, page=${members.number + 1})}">&raquo;</a>
         </li>
     </ul>
 </nav>
