@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,8 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                     .toList();*/
             this.careLogList = careLogList
                     .stream()
+                    .filter(careLog -> !careLog.isDeleted())
+                    .sorted(Comparator.comparing(CareLog::getId).reversed())
                     .map(careLog -> new CareLogResponse.GetDetail(
                             careLog.getId(),
                             careLog.getSitterSchedule().getSitter().getName(),
