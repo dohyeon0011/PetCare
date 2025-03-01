@@ -156,7 +156,7 @@ ERD 상세 설명
 <img width="1142" alt="image" src="https://github.com/user-attachments/assets/91be6d86-8767-4a2b-bfd2-5e582e122c38" />
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/a1dd792b-b0a7-4da6-90fc-9f2e5aacfe73" />
 <img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />    
-(선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개  조회 후, 이후 비동기로 5개 씩 페이징))<br><br><br>
+(선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개   조회 후, 이후 비동기로 5개 씩 페이징))<br><br><br>
 
 사용자 시점 돌봄 예약 페이지(1)
 <img width="1242" alt="image" src="https://github.com/user-attachments/assets/7787b71b-2259-4316-828b-162c5f248943" />  
