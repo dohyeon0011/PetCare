@@ -85,13 +85,13 @@
 
 Spring Boot
 
-Spring Security
-
 JPA & Spring Data JPA - ORM 및 데이터 관리
 
 QueryDSL & JPQL - 동적 쿼리 처리
 
-MySQL - 데이터베이스  
+Spring Security
+
+MySQL - 데이터베이스
 
 <br>
 
@@ -101,7 +101,7 @@ Thymeleaf - 서버 사이드 렌더링(SSR)
 
 HTML, CSS, JavaScript
 
-Bootstrap - 반응형 디자인 적용  
+Bootstrap
 
 <br>
 
