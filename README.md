@@ -17,9 +17,9 @@
 
 <ol>시큐리티 로그인: 자체 회원가입과 로그인 Spring Security 기능 제공</ol>
 
-<ol>소셜 로그인: Google OAuth 2.0 지원</ol>
+<ol>소셜 로그인: Google OAuth 2.0 지원(예정)</ol>
 
-<ol>JWT 기반 인증: Access & Refresh Token을 활용한 보안 관리</ol>  
+<ol>JWT 기반 인증: Access & Refresh Token을 활용한 보안 관리(예정)</ol>  
 
 <br>
 
