@@ -30,12 +30,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetch(`/api/pets-care/admin/care-logs/${careLogId}`, {
                     method: "DELETE",
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert("돌봄 기록이 삭제되었습니다.");
-                        location.reload();
+                    .then(response => {
+                        if (response.ok) {
+                            alert("돌봄 기록이 삭제되었습니다.");
+                            location.reload();
+                        } else {
+                            return response.json().then(data => {
+                                throw new Error(data.message || "돌봄 기록 삭제 중 오류가 발생했습니다.");
+                            });
+                        }
                     })
-                    .catch(error => alert("돌봄 기록 삭제 중 오류가 발생했습니다."));
+                    .catch(error => alert(error.message));
             }
         });
     });
@@ -48,12 +53,17 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch(`/api/pets-care/admin/reviews/${reviewId}`, {
                 method: "DELETE",
             })
-                .then(response => response.json())
-                .then(data => {
-                    alert("이용 후기가 삭제되었습니다.");
-                    location.reload();
+                .then(response => {
+                    if (response.ok) {
+                        alert("이용 후기가 삭제되었습니다.");
+                        location.reload();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || "이용 후기 삭제 중 오류가 발생했습니다.");
+                        });
+                    }
                 })
-                .catch(error => alert("이용 후기 삭제 중 오류가 발생했습니다."));
+                .catch(error => alert(error.message));
         }
     });
 
