@@ -57,17 +57,6 @@
                            th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
                             나의 예약 현황
                         </a>
-
-                        <!-- ADMIN(관리자)인 경우 -->
-                        <div th:if="${session.member.role.name() == 'ADMIN'}">
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">관리자 메뉴</h6>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/schedules}">돌봄 가능 날짜 관리</a>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/reviews}">리뷰 관리</a>
-                            <a class="dropdown-item" th:href="@{/pets-care/admin/care-logs}">돌봄 케어 로그 관리</a>
-                        </div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
                     </div>
