@@ -122,11 +122,11 @@ MySQL
 ---  
 
 # 메인 페이지(1)
-<img width="1211" alt="image" src="https://github.com/user-attachments/assets/86bc431d-9aad-4c29-aaa5-7e32c7384a29" />
+<img width="1096" alt="image" src="https://github.com/user-attachments/assets/7ea3ccf6-b0af-4d7e-9cda-4df118d372d0" />  
 <br><br><br>
 
 # 메인 페이지(2)
-<img width="1185" alt="image" src="https://github.com/user-attachments/assets/26feac60-4afb-45d0-95a1-4b722af4ea20" />
+<img width="998" alt="image" src="https://github.com/user-attachments/assets/cabc3260-a45f-4d26-9c43-fcb6968e9c80" />  
 (돌봄 리뷰는 가장 최근에 작성된 리뷰 6개만 조회(+페이징))
 
 <br><br><br>
@@ -136,14 +136,14 @@ MySQL
 <img width="1018" alt="image" src="https://github.com/user-attachments/assets/3143ee69-955d-465b-a63d-c7e6e8302d78" />
 <img width="1059" alt="image" src="https://github.com/user-attachments/assets/b1bb5988-1b07-4c8d-a62c-a7185987119b" />
 (한 번에 여러 마리의 반려견 정보 수정, 등록 가능)<br><br>
-<img width="975" alt="image" src="https://github.com/user-attachments/assets/5e6bbd1c-a9ad-4ed4-9fe9-46802b3380f7" />
+<img width="1176" alt="image" src="https://github.com/user-attachments/assets/d8de057e-b7b6-4f6b-93cb-bdd61992f249" />  
 (자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징))<br><br><br>
 
 # 회원 정보 페이지 - 돌봄사 시점(2)
 <img width="1113" alt="image" src="https://github.com/user-attachments/assets/7b981e37-fb47-4170-a7a2-60400ce27dc9" />
-<img width="995" alt="image" src="https://github.com/user-attachments/assets/e0c666ec-b8bc-4cc8-be03-7824d3a5cb4b" />
+<img width="1165" alt="image" src="https://github.com/user-attachments/assets/0bfab71d-e282-436e-9ba5-b7c53c9ae2f3" />    
 (자신에게 등록된 모든 돌봄 리뷰 목록 조회 페이지((+페이징), 돌봄사도 한 번에 여러 개의 자격증 정보 수정, 등록 가능))<br><br>
-<img width="1061" alt="image" src="https://github.com/user-attachments/assets/fa273643-7902-464f-8296-17b20df250a5" />
+<img width="1061" alt="image" src="https://github.com/user-attachments/assets/fa273643-7902-464f-8296-17b20df250a5" />  
 (자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
@@ -153,7 +153,8 @@ MySQL
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
 <img width="1168" alt="image" src="https://github.com/user-attachments/assets/ac6d969c-c2a6-41fa-8873-d2e937eacd61" />  
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/a1dd792b-b0a7-4da6-90fc-9f2e5aacfe73" />  
-<img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />      
+<img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />  
+
 (선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개  
 조회 후, 이후 비동기로 5개 씩 페이징))<br><br><br>
 
@@ -162,7 +163,7 @@ MySQL
 (해당 돌봄사가 등록한 돌봄 예약 가능한 날짜를 예약 가능한 날짜에 반환, 맡길 반려견을 선택)<br><br><br>
 
 # 사용자 시점 돌봄 예약 페이지(2)
-<img width="1209" alt="image" src="https://github.com/user-attachments/assets/befd81c8-dedb-4dc8-b209-4b01178b50ab" />
+<img width="1209" alt="image" src="https://github.com/user-attachments/assets/befd81c8-dedb-4dc8-b209-4b01178b50ab" />  
 (선택한 날짜의 돌봄 가격과 회원이 보유중인 적립금을 조회하여 적립금 사용 입력란에 숫자를 입력하면 비동기로 최종 결제 금액이 자동으로 산정)<br><br><br>
 
 # 사용자 시점 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
@@ -174,7 +175,7 @@ MySQL
 (돌봄사는 취소된 예약에는 돌봄 케어 로그 작성 불가능)<br><br><br>
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
-<img width="1215" alt="image" src="https://github.com/user-attachments/assets/aa99ef23-5602-482c-a4f1-e83035044cb2" />
+<img width="1002" alt="image" src="https://github.com/user-attachments/assets/3f553ffb-da35-4f55-a0b5-33f9bef0feeb" />  
 (별점 리뷰는 0.5 단위로도 가능(취소된 예약에는 리뷰 작성 불가능)<br><br><br>
 
 # 펫시터 시점 돌봄 예약 가능한 날짜 목록 페이지
@@ -191,8 +192,8 @@ MySQL
 (취소된 예약에는 돌봄 케어 로그 작성 불가능)<br><br><br>
 
 # 돌봄 이용 후기 페이지
-<img width="1022" alt="image" src="https://github.com/user-attachments/assets/51d0a617-8c02-4941-b4b9-04f16701e396" />
-<img width="1035" alt="image" src="https://github.com/user-attachments/assets/44d30005-8540-48f5-8d30-6cfa64cce55e" />
+<img width="1163" alt="image" src="https://github.com/user-attachments/assets/23f9cd3e-4d0c-4911-804a-3e50e2daa7c3" />
+<img width="1158" alt="image" src="https://github.com/user-attachments/assets/8a557488-4c5b-4f6b-9127-077063ceac57" />  
 (돌봄 이용 후기 페이지에서 돌봄 리뷰가 존재하는 돌봄사만 검색 리스트에 반환해서 원하는 돌봄사의 리뷰만 조건 검색 가능(+페이징))<br><br><br>
 
 # 관리자 페이지 - 회원 관리
