@@ -21,19 +21,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 돌봄 기록 수정 버튼 클릭 시 팝업 열기
-    const editButtons = document.querySelectorAll(".care-log-card .btn-warning");
+    const editButtons = document.querySelectorAll(".edit-care-log-btn");
     editButtons.forEach(button => {
         button.addEventListener("click", function () {
-            const logIdStr = button.closest('.care-log-card').getAttribute("data-log-id");
-            console.log('logIdStr:', logIdStr);  // logId 확인
-            const logId = Number(logIdStr);  // 값을 숫자로 변환
-            console.log('logId:', logId);  // 변환된 logId 확인
+            const careLogCard = button.closest('.care-log-card');
+
+            if (!careLogCard) {
+                console.error("care-log-card 요소를 찾을 수 없습니다.");
+                return;
+            }
+
+            const logIdStr = careLogCard.getAttribute("data-log-id");
+            console.log('logIdStr:', logIdStr);
+            const logId = Number(logIdStr);
+            console.log('logId:', logId);
+
             if (isNaN(logId)) {
                 alert("잘못된 돌봄 기록 ID입니다.");
                 return;
             }
-            const careType = button.closest('.care-log-card').querySelector("p:nth-child(2) span").textContent;
-            const description = button.closest('.care-log-card').querySelector("p:nth-child(3) span").textContent;
+
+            // 올바른 p 태그 찾기 (nth-of-type 사용)
+            const careTypeElem = careLogCard.querySelector("p:nth-of-type(1) span");
+            const descriptionElem = careLogCard.querySelector("p:nth-of-type(2) span");
+
+            if (!careTypeElem || !descriptionElem) {
+                console.error("careType 또는 description을 찾을 수 없습니다.");
+                return;
+            }
+
+            const careType = careTypeElem.textContent.trim();
+            const description = descriptionElem.textContent.trim();
+
             openCareLogModal("edit", logId, careType, description);
         });
     });
