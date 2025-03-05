@@ -5,6 +5,8 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Pet.PetReservation;
+import com.PetSitter.domain.PointHistory.PointsHistory;
+import com.PetSitter.domain.PointHistory.PointsStatus;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.ReservationSearch;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
@@ -14,8 +16,10 @@ import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReserv
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Pet.PetRepository;
+import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
+import com.PetSitter.service.Reservation.Reward.RewardService;
 import com.PetSitter.service.Reservation.Reward.RewardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -27,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +42,8 @@ public class CustomerReservationService {
     private final CustomerReservationRepository customerReservationRepository;
     private final SitterScheduleRepository sitterScheduleRepository;
     private final CareAvailableDateRepository careAvailableDateRepository;
-    private final RewardServiceImpl rewardService;
+    private final RewardService rewardService;
+    private final PointHistoryRepository pointHistoryRepository;
 
     @Transactional
     public CustomerReservationResponse.GetDetail save(AddCustomerReservationRequest request) {
@@ -75,6 +81,14 @@ public class CustomerReservationService {
             resultPrice = careAvailableDate.getPrice() - request.getAmount(); // 원래 돌봄 비용 - 적립금 사용 금액
 
             customerReservation = CustomerReservation.createCustomerReservation(customer, sitter, resultPrice, request.getRequests(), petReservations.toArray(new PetReservation[0])); // 차감한 적립금 만큼 결제 금액 산정
+
+            PointsHistory.builder() // CustomerReservaiton에 CascadeType.PERSIST 옵션 줘서 repository save()로 영속화 안해줘도 됨.(적립금 사용 내역)
+                    .customerReservation(customerReservation)
+                    .customer(customer)
+                    .points(request.getAmount())
+                    .pointsStatus(PointsStatus.USING)
+                    .build();
+
             customer.subRewardPoints(request.getAmount()); // 사용한 적립금 차감
         } else { // 적립금을 사용하지 않는 경우
             resultPrice = careAvailableDate.getPrice();
@@ -88,7 +102,14 @@ public class CustomerReservationService {
         SitterSchedule sitterReservation = SitterSchedule.createSitterReservation(customerReservation);
         sitterReservation.changeReservationAt(careAvailableDate.getAvailableAt());
         careAvailableDate.reservation();
-        rewardService.addReward(customer.getId(), resultPrice);
+        rewardService.addReward(customer.getId(), resultPrice); // 적립금을 사용 유무에 상관 없이 무조건 결제 금액 만큼 적립
+
+        PointsHistory.builder() // 적립금 적립 내역
+                .customerReservation(customerReservation)
+                .customer(customer)
+                .points(rewardService.calculatorReward(resultPrice))
+                .pointsStatus(PointsStatus.SAVING)
+                .build();
 
         customerReservationRepository.save(customerReservation);
 
@@ -148,6 +169,16 @@ public class CustomerReservationService {
 
         SitterSchedule sitterSchedule = sitterScheduleRepository.findByCustomerReservation(customerReservation)
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 돌봄사에게 해당 예약이 존재하지 않습니다."));
+
+        Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
+        Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
+
+        if (usingPoints.isPresent()) { // 해당 예약 건에 적립금을 사용한 경우
+            customer.addRewardPoints(usingPoints.get().getPoints()); // 사용한 적립금 반환
+            customer.subRewardPoints(savingPoints.get().getPoints()); // 적립된 적립금 회수
+        } else { // 해당 예약 건에 적립금을 사용하지 않은 경우(적립된 적립금 회수)
+            customer.subRewardPoints(savingPoints.get().getPoints());
+        }
 
         careAvailableDate.cancel();
         customerReservation.cancel();
