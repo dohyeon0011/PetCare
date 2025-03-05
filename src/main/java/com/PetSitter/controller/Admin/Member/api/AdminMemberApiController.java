@@ -3,7 +3,7 @@ package com.PetSitter.controller.Admin.Member.api;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
-import com.PetSitter.service.Member.AdminMemberService;
+import com.PetSitter.service.Admin.Member.AdminMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
