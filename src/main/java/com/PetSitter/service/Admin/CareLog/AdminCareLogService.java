@@ -33,4 +33,5 @@ public class AdminCareLogService {
             throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
         }
     }
+
 }
