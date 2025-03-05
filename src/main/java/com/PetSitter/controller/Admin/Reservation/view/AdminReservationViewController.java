@@ -3,7 +3,7 @@ package com.PetSitter.controller.Admin.Reservation.view;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Reservation.ReservationSearch;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.AdminReservationResponse;
-import com.PetSitter.service.Reservation.CustomerReservation.AdminReservationService;
+import com.PetSitter.service.Admin.Reservation.AdminReservationService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
