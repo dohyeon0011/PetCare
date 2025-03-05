@@ -3,6 +3,7 @@ package com.PetSitter.domain.Reservation.CustomerReservation;
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Pet.PetReservation;
+import com.PetSitter.domain.PointHistory.PointsHistory;
 import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import jakarta.persistence.*;
@@ -74,6 +75,9 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "customerReservation", orphanRemoval = true)
     private Review review;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customerReservation", cascade = CascadeType.PERSIST)
+    private List<PointsHistory> pointsHistory = new ArrayList<>();
+
     public static CustomerReservation createCustomerReservation(Member customer, Member sitter, int price, String requests, PetReservation... petReservations) {
         CustomerReservation customerReservation = new CustomerReservation();
         customerReservation.addCustomer(customer);
@@ -114,6 +118,10 @@ public class CustomerReservation { // 돌봄 예약(고객 시점)
 
     public void addReview(Review review) {
         this.review = review;
+    }
+
+    public void addPointsHistory(PointsHistory pointsHistory) {
+        this.pointsHistory.add(pointsHistory);
     }
 
     // 고객이 예약한 날짜 설정
