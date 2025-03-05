@@ -1,4 +1,4 @@
-package com.PetSitter.service.Review;
+package com.PetSitter.service.Admin.Review;
 
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
