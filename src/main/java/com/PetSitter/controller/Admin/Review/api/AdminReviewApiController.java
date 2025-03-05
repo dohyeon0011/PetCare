@@ -1,7 +1,7 @@
 package com.PetSitter.controller.Admin.Review.api;
 
 import com.PetSitter.domain.Member.Member;
-import com.PetSitter.service.Review.AdminReviewService;
+import com.PetSitter.service.Admin.Review.AdminReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
