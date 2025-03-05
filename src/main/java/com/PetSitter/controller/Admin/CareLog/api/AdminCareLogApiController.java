@@ -1,7 +1,7 @@
 package com.PetSitter.controller.Admin.CareLog.api;
 
 import com.PetSitter.domain.Member.Member;
-import com.PetSitter.service.CareLog.AdminCareLogService;
+import com.PetSitter.service.Admin.CareLog.AdminCareLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
