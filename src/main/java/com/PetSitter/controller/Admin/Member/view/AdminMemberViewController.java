@@ -3,7 +3,7 @@ package com.PetSitter.controller.Admin.Member.view;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
-import com.PetSitter.service.Member.AdminMemberService;
+import com.PetSitter.service.Admin.Member.AdminMemberService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
