@@ -1,4 +1,4 @@
-package com.PetSitter.service.CareLog;
+package com.PetSitter.service.Admin.CareLog;
 
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
