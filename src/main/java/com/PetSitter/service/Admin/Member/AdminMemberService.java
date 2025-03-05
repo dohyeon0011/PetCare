@@ -1,4 +1,4 @@
-package com.PetSitter.service.Member;
+package com.PetSitter.service.Admin.Member;
 
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberSearch;
