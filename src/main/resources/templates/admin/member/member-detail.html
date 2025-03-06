@@ -90,11 +90,15 @@
         <p><strong>전화번호:</strong> <span th:text="${member.phoneNumber}"></span></p>
         <p><strong>우편번호:</strong> <span th:text="${member.zipcode}"></span></p>
         <p><strong>주소:</strong> <span th:text="${member.address}"></span><br></p>
+        <p th:if="${member.role.name() == 'PET_SITTER'}">
+            <strong>경력:</strong> <span th:text="${member.careerYear}"></span>년
+        </p>
         <p><strong>가입 유형:</strong><span th:switch="${member.role.name()}">
                             <span th:case="'CUSTOMER'">고객</span>
                             <span th:case="'PET_SITTER'">돌봄사</span>
                             <span th:case="*">알 수 없음</span>
                         </span></p>
+        <p><strong>소개:</strong> <span th:utext="${member.introduction}"></span></p>
         <p><strong>소셜 로그인:</strong> <span th:text="${member.socialProvider}"></span></p>
         <p><strong>회원 상태:</strong>
             <span th:text="${member.isDeleted ? '탈퇴' : '활동 중'}"
