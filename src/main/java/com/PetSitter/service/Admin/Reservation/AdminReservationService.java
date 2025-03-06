@@ -84,10 +84,10 @@ public class AdminReservationService {
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
 
         if (usingPoints.isPresent()) {
-            customerReservation.getCustomer().addRewardPoints(usingPoints.get().getPoints());
-            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoints());
+            customerReservation.getCustomer().addRewardPoints(usingPoints.get().getPoint());
+            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoint());
         } else {
-            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoints());
+            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoint());
         }
 
         customerReservation.cancel();
