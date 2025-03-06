@@ -117,7 +117,7 @@ MySQL
 
 <br>
 
-<img width="1267" alt="image" src="https://github.com/user-attachments/assets/9e39df10-f474-4ae7-9145-f1c45e63c1a0" />
+<img width="1235" alt="image" src="https://github.com/user-attachments/assets/775eb724-d469-4bc7-a74d-bb16eea7d8ef" />
 
 ---  
 
