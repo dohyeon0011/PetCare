@@ -8,10 +8,8 @@ import com.PetSitter.domain.Pet.PetReservation;
 import com.PetSitter.domain.PointHistory.PointsHistory;
 import com.PetSitter.domain.PointHistory.PointsStatus;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
-import com.PetSitter.domain.Reservation.ReservationSearch;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.Reservation.CustomerReservation.request.AddCustomerReservationRequest;
-import com.PetSitter.dto.Reservation.CustomerReservation.response.AdminReservationResponse;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
@@ -20,7 +18,6 @@ import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import com.PetSitter.service.Reservation.Reward.RewardService;
-import com.PetSitter.service.Reservation.Reward.RewardServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
@@ -85,7 +82,7 @@ public class CustomerReservationService {
             PointsHistory.builder() // CustomerReservaiton에 CascadeType.PERSIST 옵션 줘서 repository save()로 영속화 안해줘도 됨.(적립금 사용 내역)
                     .customerReservation(customerReservation)
                     .customer(customer)
-                    .points(request.getAmount())
+                    .point(request.getAmount())
                     .pointsStatus(PointsStatus.USING)
                     .build();
 
@@ -107,7 +104,7 @@ public class CustomerReservationService {
         PointsHistory.builder() // 적립금 적립 내역
                 .customerReservation(customerReservation)
                 .customer(customer)
-                .points(rewardService.calculatorReward(resultPrice))
+                .point(rewardService.calculatorReward(resultPrice))
                 .pointsStatus(PointsStatus.SAVING)
                 .build();
 
@@ -174,10 +171,10 @@ public class CustomerReservationService {
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
 
         if (usingPoints.isPresent()) { // 해당 예약 건에 적립금을 사용한 경우
-            customer.addRewardPoints(usingPoints.get().getPoints()); // 사용한 적립금 반환
-            customer.subRewardPoints(savingPoints.get().getPoints()); // 적립된 적립금 회수
+            customer.addRewardPoints(usingPoints.get().getPoint()); // 사용한 적립금 반환
+            customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
         } else { // 해당 예약 건에 적립금을 사용하지 않은 경우(적립된 적립금 회수)
-            customer.subRewardPoints(savingPoints.get().getPoints());
+            customer.subRewardPoints(savingPoints.get().getPoint());
         }
 
         careAvailableDate.cancel();
