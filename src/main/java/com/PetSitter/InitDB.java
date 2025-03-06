@@ -82,7 +82,7 @@ public class InitDB {
             Member member = Member.builder()
                     .loginId("user2")
                     .password("blackrose12")
-                    .name("윤진영")
+                    .name("박종우")
                     .nickName("애쉬아일랜드")
                     .email("ashisland@naver.com")
                     .phoneNumber("010-1234-5678")
@@ -90,18 +90,28 @@ public class InitDB {
                     .address("서울")
                     .role(Role.valueOf("PET_SITTER"))
                     .socialProvider(SocialProvider.valueOf("KAKAO"))
-                    .introduction("섬세한 돌봄사 입니다.")
+                    .introduction("🐾 안녕하세요! 믿음직한 반려동물 돌봄사 박종우입니다! 🐾" + System.lineSeparator() +
+                            System.lineSeparator() +
+                            "반려동물을 가족처럼 아끼고 사랑하는 전문 돌봄사입니다. 🐶🐱" + System.lineSeparator() +
+                            "저는 반려동물의 성향과 필요에 맞춘 세심한 케어를 제공합니다." + System.lineSeparator() +
+                            System.lineSeparator() +
+                            "✔ 산책, 식사, 놀이, 기본 훈련까지!" + System.lineSeparator() +
+                            "✔ 안심할 수 있는 돌봄 서비스!" + System.lineSeparator() +
+                            "✔ 아이들에게 맞춘 따뜻한 보살핌!" + System.lineSeparator() +
+                            System.lineSeparator() +
+                            "소중한 반려동물이 안전하고 행복한 시간을 보낼 수 있도록 정성을 다해 돌봐드릴게요! 😊" + System.lineSeparator() +
+                            "궁금한 점이 있다면 언제든지 문의해주세요! 💕")
                     .careerYear(5)
                     .build();
 
             em.persist(member);
 
             Certification certification1 = Certification.builder()
-                    .name("돌봄1급")
+                    .name("펫 에듀케어 전문지도사 1급")
                     .build();
 
             Certification certification2 = Certification.builder()
-                    .name("돌봄2급")
+                    .name("KKC 인증 3급 반려견 지도사")
                     .build();
 
             CareAvailableDate careAvailableDate1 = CareAvailableDate.builder()
@@ -278,7 +288,11 @@ public class InitDB {
                     .address("서울")
                     .role(Role.valueOf("PET_SITTER"))
                     .socialProvider(SocialProvider.valueOf("NAVER"))
-                    .introduction("POP STAR")
+                    .introduction("🐾 사랑과 책임감으로 최선을 다하는 펫시터입니다!" + "\n" +
+                            "🌟 강아지와 교감하는 전문가! 믿고 맡겨주세요." + "\n" +
+                            "💖 세심한 케어로 반려동물과 가족처럼 지내요." + "\n" +
+                            "🏅 돌봄 경험 풍부! 우리 아이를 안전하게 보살펴 드려요." + "\n" +
+                            "🐕 강아지의 성향을 이해하고 맞춤 돌봄을 제공합니다.")
                     .careerYear(2)
                     .build();
 
