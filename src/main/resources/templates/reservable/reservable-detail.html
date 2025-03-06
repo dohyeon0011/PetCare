@@ -84,8 +84,8 @@
     <!-- 펫시터 기본 정보 -->
     <div class="sitter-info">
         <h2 th:text="${reservableSitter.sitterName}"></h2><br>
-        <p th:text="${reservableSitter.introduction}"></p><br><br>
-        <p class="career" th:text="|경력: ${reservableSitter.careerYear}년|"></p>
+        <p th:utext="${#strings.replace(reservableSitter.introduction, '\n', '<br>')}"></p><br><br>
+        <p class="career" th:text="|🏆 경력: ${reservableSitter.careerYear}년|"></p>
         <div class="address">
             <p><strong>우편번호:</strong> <span th:text="${reservableSitter.zipcode}"></span></p>
             <p><strong>상세주소:</strong> <span th:text="${reservableSitter.address}"></span></p>
