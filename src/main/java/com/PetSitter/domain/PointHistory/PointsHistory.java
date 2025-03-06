@@ -35,13 +35,13 @@ public class PointsHistory { // 고객의 포인트 내역(적립, 사용)
     @JoinColumn(name = "customer_id", nullable = false)
     private Member customer;
 
-    @Comment("사용한 포인트")
-    private int points;
+    @Comment("적립/사용 포인트")
+    private int point;
 
-    @Comment("포인트 사용 시간")
+    @Comment("포인트 적립 or 사용 시간")
     @CreatedDate
-    @Column(name = "used_at")
-    private LocalDateTime usedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Comment("포인트 적립 or 사용")
     @Enumerated(EnumType.STRING)
@@ -49,10 +49,10 @@ public class PointsHistory { // 고객의 포인트 내역(적립, 사용)
     private PointsStatus pointsStatus;
 
     @Builder
-    public PointsHistory(CustomerReservation customerReservation, Member customer, int points, PointsStatus pointsStatus) {
+    public PointsHistory(CustomerReservation customerReservation, Member customer, int point, PointsStatus pointsStatus) {
         addCustomerReservation(customerReservation);
         addCustomer(customer);
-        this.points = points;
+        this.point = point;
         this.pointsStatus = pointsStatus;
     }
 
