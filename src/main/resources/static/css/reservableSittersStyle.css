@@ -57,3 +57,12 @@
 .sitter-card .btn-primary:hover {
     background-color: #0056b3;
 }
+
+.sitter-card .card-text {
+    white-space: nowrap; /* 한 줄로 표시 */
+    overflow: hidden; /* 넘치는 부분 숨김 */
+    text-overflow: ellipsis; /* '...'으로 표시 */
+    width: 100%; /* 부모 요소 크기에 맞춤 */
+    display: block; /* 블록 요소로 설정 */
+}
+
