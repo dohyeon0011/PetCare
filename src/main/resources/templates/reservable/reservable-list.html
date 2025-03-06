@@ -92,7 +92,7 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${sitter.sitterName}"></h5>
                         <p class="card-text">
-                            경력: <span th:text="${sitter.careerYear}"></span>년
+                           🏆 경력: <span th:text="${sitter.careerYear}"></span>년
                         </p>
                         <p class="card-text" th:text="${sitter.introduction}"></p>
                         <a th:href="@{/pets-care/reservable/members/{sitterId}(sitterId=${sitter.sitterId})}" class="btn btn-primary">자세히 보기</a>
