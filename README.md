@@ -147,11 +147,11 @@ MySQL
 (자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
-<img width="1263" alt="image" src="https://github.com/user-attachments/assets/0577f002-c1c0-4aa2-8761-2c5eec87d823" />  
+<img width="1273" alt="image" src="https://github.com/user-attachments/assets/69abb663-9e52-4731-8dbd-1d084bc8016f" />    
 (돌봄 예약 가능 날짜를 등록한 펫시터 중 현재 예약이 가능한 펫시터만 조회(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
-<img width="1168" alt="image" src="https://github.com/user-attachments/assets/ac6d969c-c2a6-41fa-8873-d2e937eacd61" />  
+<img width="806" alt="image" src="https://github.com/user-attachments/assets/04683e69-548a-45a5-9b1c-17cde7374a89" />    
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/a1dd792b-b0a7-4da6-90fc-9f2e5aacfe73" />  
 <img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />  
 
@@ -198,8 +198,8 @@ MySQL
 
 # 관리자 페이지 - 회원 관리
 <img width="1226" alt="image" src="https://github.com/user-attachments/assets/9fab9497-09be-4658-a5d4-a4218fb7e28a" />
-<img width="1024" alt="image" src="https://github.com/user-attachments/assets/84c4563f-8425-4317-b5fb-32f9db9c281c" />
-<img width="1021" alt="image" src="https://github.com/user-attachments/assets/181ef7de-d84b-438f-8701-0f396bf35e85" />
+<img width="823" alt="image" src="https://github.com/user-attachments/assets/0b5160d4-1a42-435c-ba98-a7ded84298eb" />  
+<img width="829" alt="image" src="https://github.com/user-attachments/assets/68cfd5cd-2659-4329-a159-5acf3e62383e" />  
 <img width="1214" alt="image" src="https://github.com/user-attachments/assets/f87a13f9-ae23-4624-839e-e71a9bc846c9" />
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능(+페이징), 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
