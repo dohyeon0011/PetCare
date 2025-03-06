@@ -209,6 +209,10 @@ MySQL
 <img width="1156" alt="image" src="https://github.com/user-attachments/assets/c18b1428-7cf6-4b88-8182-3eef2f6d8f82" />  
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
 
+# 관리자 페이지 - 회원 포인트 내역 관리(적립, 사용)
+<img width="1243" alt="image" src="https://github.com/user-attachments/assets/0349f07c-56a4-413f-be90-9e61c176d3da" />    
+<img width="1232" alt="image" src="https://github.com/user-attachments/assets/bca1c35f-cda7-401f-a0a6-22f7dabd0fae" />  
+(고객의 이름을 조건으로 검색해서 원하는 회원만 내역 검색 가능(+페이징))<br><br><br>
 
 ---
 
