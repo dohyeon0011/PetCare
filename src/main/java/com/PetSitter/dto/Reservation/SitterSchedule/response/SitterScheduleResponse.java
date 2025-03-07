@@ -54,7 +54,7 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private String requests;
         private LocalDateTime createdAt;
         private ReservationStatus status;
-        private List<PetReservationResponse> pets;
+        private List<PetReservationResponse.PetDetailResponse> pets;
         private List<CareLogResponse.GetDetail> careLogList;
         private ReviewResponse.GetDetail review;
 
@@ -72,7 +72,7 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
             this.status = sitterSchedule.getStatus();
             this.pets = pets
                     .stream()
-                    .map(PetReservationResponse::new)
+                    .map(PetReservationResponse.PetDetailResponse::new)
                     .toList();
             this.careLogList = careLogList.stream()
                     .filter(c -> !c.isDeleted())
