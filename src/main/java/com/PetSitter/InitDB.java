@@ -10,6 +10,7 @@ import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +37,12 @@ public class InitDB {
     static class InitService {
 
         private final EntityManager em;
+        private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
         public void dbInit1() {
             Member member = Member.builder()
                     .loginId("user1")
-                    .password("aaw131aaw131")
+                    .password(bCryptPasswordEncoder.encode("aaw131aaw131"))
                     .name("구창모")
                     .nickName("창모")
                     .email("changmo@naver.com")
@@ -81,7 +83,7 @@ public class InitDB {
         public void dbInit2() {
             Member member = Member.builder()
                     .loginId("user2")
-                    .password("blackrose12")
+                    .password(bCryptPasswordEncoder.encode("blackrose12"))
                     .name("박종우")
                     .nickName("애쉬아일랜드")
                     .email("ashisland@naver.com")
@@ -238,7 +240,7 @@ public class InitDB {
         public void dbInit3() {
             Member member = Member.builder()
                     .loginId("user3")
-                    .password("aaw131aaw131")
+                    .password(bCryptPasswordEncoder.encode("aaw131aaw131"))
                     .name("김훈기")
                     .nickName("훈기")
                     .email("originalgimchi@naver.com")
@@ -279,7 +281,7 @@ public class InitDB {
         public void dbInit4() {
             Member member = Member.builder()
                     .loginId("user4")
-                    .password("akffhs123!")
+                    .password(bCryptPasswordEncoder.encode("akffhs123!"))
                     .name("Post Malone")
                     .nickName("포스트 말론")
                     .email("postmalone@gmail.com")
@@ -438,7 +440,7 @@ public class InitDB {
         public void dbInit5() {
             Member admin = Member.builder()
                     .loginId("super")
-                    .password("super")
+                    .password(bCryptPasswordEncoder.encode("super"))
                     .name("Admin")
                     .nickName("Admin")
                     .email("Super@gmail.com")
@@ -449,7 +451,7 @@ public class InitDB {
 
             Member member1 = Member.builder()
                     .loginId("user6")
-                    .password("user6")
+                    .password(bCryptPasswordEncoder.encode("user6"))
                     .name("user6")
                     .nickName("User6")
                     .email("User6@gmail.com")
@@ -460,7 +462,7 @@ public class InitDB {
 
             Member member2 = Member.builder()
                     .loginId("user7")
-                    .password("user7")
+                    .password(bCryptPasswordEncoder.encode("user7"))
                     .name("user7")
                     .nickName("User7")
                     .email("User7@gmail.com")
@@ -471,7 +473,7 @@ public class InitDB {
 
             Member member3 = Member.builder()
                     .loginId("user8")
-                    .password("user8")
+                    .password(bCryptPasswordEncoder.encode("user8"))
                     .name("user8")
                     .nickName("User8")
                     .email("User8@gmail.com")
@@ -482,7 +484,7 @@ public class InitDB {
 
             Member member4 = Member.builder()
                     .loginId("user9")
-                    .password("user9")
+                    .password(bCryptPasswordEncoder.encode("user9"))
                     .name("user9")
                     .nickName("User9")
                     .email("User9@gmail.com")
@@ -493,7 +495,7 @@ public class InitDB {
 
             Member member5 = Member.builder()
                     .loginId("user10")
-                    .password("user10")
+                    .password(bCryptPasswordEncoder.encode("user10"))
                     .name("user10")
                     .nickName("User10")
                     .email("User10@gmail.com")
@@ -504,7 +506,7 @@ public class InitDB {
 
             Member member6 = Member.builder()
                     .loginId("user11")
-                    .password("user11")
+                    .password(bCryptPasswordEncoder.encode("user11"))
                     .name("user11")
                     .nickName("User11")
                     .email("User11@gmail.com")
@@ -515,7 +517,7 @@ public class InitDB {
 
             Member member7 = Member.builder()
                     .loginId("user12")
-                    .password("user12")
+                    .password(bCryptPasswordEncoder.encode("user12"))
                     .name("user12")
                     .nickName("User12")
                     .email("User12@gmail.com")
