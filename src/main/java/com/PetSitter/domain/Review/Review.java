@@ -50,6 +50,9 @@ public class Review {
 
     @Comment("리뷰 수정")
     public void updateReview(Double rating, String comment) {
+        if (this.createdAt.plusDays(3).isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("작성한 지 3일이 지난 경우 수정이 불가합니다.");
+        }
         this.rating = rating;
         this.comment = comment;
     }
