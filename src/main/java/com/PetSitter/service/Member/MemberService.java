@@ -10,8 +10,10 @@ import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +26,15 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public Object save(AddMemberRequest request) {
         validateDuplicateMember(request);
 
-        return memberRepository.save(request.toEntity()).toResponse();
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
+
+        return memberRepository.save(request.toEntity(encodedPassword)).toResponse();
     }
 
     @Transactional(readOnly = true)
