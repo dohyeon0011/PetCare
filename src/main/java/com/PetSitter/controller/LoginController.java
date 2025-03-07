@@ -58,7 +58,7 @@ public class LoginController {
      * 장점: 코드 가독성이 좋고 타입 안정성이 높음
      * 단점: DTO 클래스를 따로 만들어야 함
      */
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
         String loginId = request.getLoginId();
@@ -74,13 +74,13 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message", "아이디 또는 비밀번호가 잘못되었습니다.")); // 로그인 실패
         }
-    }
+    }*/
 
-    @GetMapping("/logout")
+    /*@GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
 
         return "redirect:/pets-care/main";
-    }
+    }*/
 
 }
