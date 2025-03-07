@@ -59,6 +59,9 @@ public class CareLog { // 돌봄 케어 로그
 
     @Comment("케어 로그 내용 수정")
     public void updateCareLog(String careType, String description, String imgPath) {
+        if (this.createdAt.plusDays(3).isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("작성한 지 3일이 지난 경우 수정이 불가합니다.");
+        }
         this.careType = careType;
         this.description = description;
         this.imgPath = imgPath;
