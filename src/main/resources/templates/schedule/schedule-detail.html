@@ -96,7 +96,8 @@
         <ul class="list-group">
             <li th:each="pet : ${schedule.pets}" class="list-group-item">
                 <strong th:text="${pet.name}"></strong>
-                (나이: <span th:text="${pet.age}"></span>세, 품종: <span th:text="${pet.breed}"></span>)
+                (나이: <span th:text="${pet.age}"></span>세, 품종: <span th:text="${pet.breed}"></span>)<br>
+                <strong>건강 상태 및 특이사항:</strong> <span th:text="${pet.medicalConditions} ?: '없음'"></span>
             </li>
         </ul>
     </div><br>
