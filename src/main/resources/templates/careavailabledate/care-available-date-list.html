@@ -11,7 +11,7 @@
 </head>
 <body>
 <!-- data-member-id 설정 -->
-<div id="memberData" th:data-member-id="${session.member?.id}"></div>
+<div id="memberData" th:data-member-id="${currentUser?.id}"></div>
 <!-- Navigation Bar (공통) -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -33,36 +33,60 @@
                 </li>
             </ul>
             <div class="navbar-buttons">
-                <span th:if="${session.member != null}" class="dropdown">
+                <!-- 인증된 사용자가 있을 때만 -->
+                <span th:if="${currentUser != null}" class="dropdown">
                     <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                        안녕하세요,
+                        <b th:text="${currentUser.name}"></b>님!
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
-                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
-                           th:if="${session.member.role.name() != 'ADMIN'}">
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}"
+                           th:if="${currentUser != null and currentUser.role.name() != 'ADMIN'}">
                             마이페이지
                         </a>
 
                         <!-- PET_SITTER인 경우 -->
-                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}">
                                 등록한 돌봄 가능 일정
                             </a>
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${session.member.id})}">
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${currentUser.id})}">
                                 나의 돌봄 일정
                             </a>
                         </div>
 
                         <!-- CUSTOMER인 경우 -->
-                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
-                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
+                        <a class="dropdown-item" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${currentUser.id})}">
                             나의 예약 현황
                         </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                        </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                        <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+
+                        <form id="logoutForm" action="/logout" method="post" style="display: none;">
+                            <!-- CSRF 토큰을 포함하도록 설정 -->
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
                     </div>
+                </span>
+
+                <!-- 로그인하지 않은 사용자에 대한 메뉴 -->
+                <span th:if="${currentUser == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
                 </span>
             </div>
         </div>
@@ -81,7 +105,7 @@
     <div class="row">
         <!-- careAvailableDates 리스트가 모델에 담겨 있다고 가정 -->
         <div class="col-md-4 mb-4" th:each="careAvailableDate : ${careAvailableDates}">
-            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}(sitterId=${session.member.id}, careAvailableDateId=${careAvailableDate.id})}"
+            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}(sitterId=${currentUser.id}, careAvailableDateId=${careAvailableDate.id})}"
                class="text-decoration-none text-dark">
             <div class="card h-100">
                     <div class="card-body">
@@ -95,7 +119,7 @@
                     <div class="card-footer">
                         <div class="btn-group" role="group">
                             <!-- 수정 버튼 -->
-                            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}/edit(careAvailableDateId=${careAvailableDate.id}, sitterId=${session.member.id})}" class="btn btn-sm btn-outline-secondary">수정</a>
+                            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}/edit(careAvailableDateId=${careAvailableDate.id}, sitterId=${currentUser.id})}" class="btn btn-sm btn-outline-secondary">수정</a>
                             <!-- 삭제 버튼 -->
                             <a href="javascript:void(0);" th:attr="onclick='deleteCareAvailableDate(' + ${careAvailableDate.id} + ')'" class="btn btn-sm btn-outline-danger">삭제</a>
                         </div>
@@ -117,7 +141,7 @@
     <ul class="pagination justify-content-center">
         <!-- 이전 버튼 -->
         <li class="page-item" th:if="${careAvailableDates.hasPrevious()}" th:classappend="${careAvailableDates.number == 0 ? 'disabled' : ''}">
-            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number - 1}, size=9)}" aria-label="Previous">
+            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${currentUser.id}, page=${careAvailableDates.number - 1}, size=9)}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
@@ -125,13 +149,13 @@
         <!-- 페이지 번호 버튼 -->
         <li class="page-item" th:each="i : ${#numbers.sequence(0, careAvailableDates.totalPages - 1)}"
             th:classappend="${i == careAvailableDates.number ? 'active' : ''}">
-            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${i}, size=9)}"
+            <a th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${currentUser.id}, page=${i}, size=9)}"
                th:text="${i + 1}" class="page-link"></a>
         </li>
 
         <!-- 다음 버튼 -->
         <li class="page-item" th:if="${careAvailableDates.hasNext()}" th:classappend="${careAvailableDates.number == careAvailableDates.totalPages - 1 ? 'disabled' : ''}">
-            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${session.member.id}, page=${careAvailableDates.number + 1}, size=9)}" aria-label="Next">
+            <a class="page-link" th:href="@{/pets-care/members/{sitterId}/care-available-dates(sitterId=${currentUser.id}, page=${careAvailableDates.number + 1}, size=9)}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
