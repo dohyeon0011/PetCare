@@ -95,7 +95,7 @@ public class MemberService {
         authorizetionMember(member);
 
         member.update(
-                request.getPassword(), request.getName(), request.getNickName(), request.getEmail(),
+                bCryptPasswordEncoder.encode(request.getPassword()), request.getName(), request.getNickName(), request.getEmail(),
                 request.getPhoneNumber(), request.getZipcode(), request.getAddress(),
                 request.getProfileImgPath(), request.getIntroduction(), request.getCareerYear()
         );
