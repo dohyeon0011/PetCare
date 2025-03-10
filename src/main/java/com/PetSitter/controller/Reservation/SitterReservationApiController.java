@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Reservation;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Reservation.ReservationResponse;
 import com.PetSitter.dto.Reservation.ReservationSitterResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -43,7 +45,12 @@ public class SitterReservationApiController {
 
     @Operation(description = "고객이 예약할 때 보여줄 정보 API")
     @GetMapping("/members/{customerId}/sitters/{sitterId}/reservations")
-    public ResponseEntity<ReservationResponse> getReservationInfo(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId) {
+    public ResponseEntity<ReservationResponse> getReservationInfo(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != customerId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         ReservationResponse reservationDetails = sitterReservationService.getReservationDetails(customerId, sitterId);
 
         return ResponseEntity.ok()
