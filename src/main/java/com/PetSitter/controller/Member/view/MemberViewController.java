@@ -1,11 +1,13 @@
 package com.PetSitter.controller.Member.view;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Member.MemberService;
 import com.PetSitter.service.Review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,20 +31,35 @@ public class MemberViewController {
         return "member/signup";
     }
 
-    @Comment("특정 회원 조회")
+    /*@Comment("특정 회원 조회")
     @GetMapping("/members/{memberId}/myPage")
     public String getMember(@PathVariable("memberId") Long id, Model model) {
         Object member = memberService.findById(id);
         model.addAttribute("member", member);
 
         return "member/mypage";
+    }*/
+
+    @Comment("특정 회원 조회")
+    @GetMapping("/members/{memberId}/myPage")
+    public String getMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == id) {
+            Object member = memberService.findById(id);
+            model.addAttribute("member", member);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
+
+        return "member/mypage";
     }
 
     @Comment("회원 정보 수정")
     @GetMapping("/members/{memberId}/edit")
-    public String editMember(@PathVariable("memberId") long id, Model model) {
-        Object member = memberService.findById(id);
-        model.addAttribute("member", member);
+    public String editMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if(memberDetails.getMember().getId() == id) {
+            Object member = memberService.findById(id);
+            model.addAttribute("member", member);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "member/edit-member";
     }
