@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Admin.PointHistory.api;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.PointHistory.PointSearch;
 import com.PetSitter.dto.PointHistory.response.AdminPointHistoryResponse;
 import com.PetSitter.service.Admin.PointHistory.AdminPointHistoryService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,8 +23,8 @@ public class AdminPointHistoryApiController {
 
     @Operation(description = "관리자 페이지 - 회원 포인트 내역 전체 조회 API")
     @GetMapping("/amounts")
-    public ResponseEntity<Page<AdminPointHistoryResponse.PointListResponse>> findAllForAdmin(@ModelAttribute PointSearch pointSearch, @SessionAttribute("member") Member member, @PageableDefault Pageable pageable) {
-        Page<AdminPointHistoryResponse.PointListResponse> pointsHistory = adminPointHistoryService.findAllForAdmin(pointSearch, member, pageable);
+    public ResponseEntity<Page<AdminPointHistoryResponse.PointListResponse>> findAllForAdmin(@ModelAttribute PointSearch pointSearch, @AuthenticationPrincipal MemberDetails memberDetails, @PageableDefault Pageable pageable) {
+        Page<AdminPointHistoryResponse.PointListResponse> pointsHistory = adminPointHistoryService.findAllForAdmin(pointSearch, memberDetails.getMember(), pageable);
 
         return ResponseEntity.ok()
                 .body(pointsHistory);
