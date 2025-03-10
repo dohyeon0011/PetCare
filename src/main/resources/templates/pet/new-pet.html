@@ -7,7 +7,9 @@
     <link th:href="@{/css/profileStyle.css}" rel="stylesheet">
 </head>
 <body>
-<div id="memberData" th:data-member-id="${session.member?.id}"></div>
+<!-- data-member-id 설정 -->
+<div id="memberData" th:data-member-id="${currentUser?.id}"></div>
+<!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
         <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
@@ -28,33 +30,60 @@
                 </li>
             </ul>
             <div class="navbar-buttons">
-                <span th:if="${session.member != null}" class="dropdown">
+                <!-- 인증된 사용자가 있을 때만 -->
+                <span th:if="${currentUser != null}" class="dropdown">
                     <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                        안녕하세요,
+                        <b th:text="${currentUser.name}"></b>님!
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
-                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
-                           th:if="${session.member.role.name() != 'ADMIN'}">
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}"
+                           th:if="${currentUser != null and currentUser.role.name() != 'ADMIN'}">
                             마이페이지
                         </a>
-                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}">
                                 등록한 돌봄 가능 일정
                             </a>
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${session.member.id})}">
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${currentUser.id})}">
                                 나의 돌봄 일정
                             </a>
                         </div>
 
-                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
-                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${currentUser.id})}">
                             나의 예약 현황
                         </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                        </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                        <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+
+                        <form id="logoutForm" action="/logout" method="post" style="display: none;">
+                            <!-- CSRF 토큰을 포함하도록 설정 -->
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
                     </div>
+                </span>
+
+                <!-- 로그인하지 않은 사용자에 대한 메뉴 -->
+                <span th:if="${currentUser == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
                 </span>
             </div>
         </div>
@@ -90,7 +119,7 @@
         <div class="button-group">
             <button type="button" id="addMorePets" class="btn btn-green">+ 추가 반려견</button>
             <button type="submit" class="btn btn-primary">등록하기</button>
-            <a th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}" class="btn btn-secondary">취소</a>
+            <a th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}" class="btn btn-secondary">취소</a>
         </div>
     </form>
 </div>
