@@ -3,10 +3,15 @@ package com.PetSitter.controller;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.dto.LoginRequest;
 import com.PetSitter.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,9 +81,27 @@ public class LoginController {
         }
     }*/
 
-    /*@GetMapping("/logout")
+    /*@PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
+
+        return "redirect:/pets-care/main";
+    }*/
+
+    /*@PostMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        // 현재 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // SecurityContextLogoutHandler를 사용하여 로그아웃 수행
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        // 세션 무효화
+        if (session != null) {
+            session.invalidate();
+        }
 
         return "redirect:/pets-care/main";
     }*/
