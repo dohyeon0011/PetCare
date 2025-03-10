@@ -1,12 +1,15 @@
 package com.PetSitter.controller.Review.view;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Review.ReviewSearch;
+import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Review.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,43 +23,57 @@ public class ReviewViewController {
 
     private final ReviewService reviewService;
 
-    @Operation(description = "리뷰 작성")
+    /*@Operation(description = "리뷰 작성")
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}/reviews/new")
     public String newReview(@PathVariable("customerId") long customerId,
-                            @PathVariable("customerReservationId") long customerReservationId, Model model) {
-        ReviewResponse.GetNewReview response = reviewService.getNewReview(customerId, customerReservationId);
-        model.addAttribute("response", response);
+                            @PathVariable("customerReservationId") long customerReservationId,
+                            @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == customerId) {
+            ReviewResponse.GetNewReview response = reviewService.getNewReview(customerId, customerReservationId);
+            model.addAttribute("response", response);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "review/new-review";
-    }
+    }*/
 
     @Operation(description = "특정 회원의 모든 리뷰 조회")
     @GetMapping("/members/{customerId}/reviews")
-    public String getAllReview(@PathVariable("customerId") long customerId, Pageable pageable, Model model) {
+    public String getAllReview(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
 //        List<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId);
-        Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
-        model.addAttribute("reviews", reviews);
+
+        if (memberDetails.getMember().getId() == customerId) {
+            Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
+            model.addAttribute("reviews", reviews);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "review/review-my-list";
     }
 
-    @Operation(description = "특정 리뷰 조회")
+    /*@Operation(description = "특정 리뷰 조회")
     @GetMapping("/reviews/{reviewId}")
-    public String getReview(@PathVariable("reviewId") long reviewId, Model model) {
-        ReviewResponse.GetDetail review = reviewService.findById(reviewId);
-        model.addAttribute("review", review);
+    public String getReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == customerId) {
+            ReviewResponse.GetDetail review = reviewService.findById(reviewId);
+            model.addAttribute("review", review);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "review/review-detail";
-    }
+    }*/
 
-    @Operation(description = "리뷰 수정")
+    /*@Operation(description = "리뷰 수정")
     @GetMapping("/reviews/{reviewId}/edit")
-    public String editReview(@PathVariable("reviewId") long reviewId, Model model) {
-        ReviewResponse.GetDetail review = reviewService.findById(reviewId);
-        model.addAttribute("review", review);
+    public String editReview(@PathVariable("reviewId") long reviewId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == customerId) {
+            ReviewResponse.GetDetail review = reviewService.findById(reviewId);
+            model.addAttribute("review", review);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "review/edit-review";
-    }
+    }*/
 
     /**
      * API V2로 통합
@@ -72,7 +89,11 @@ public class ReviewViewController {
 
     @Operation(description = "이용 후기 페이지에서 전체 리뷰 및 특정 돌봄사의 리뷰 조회")
     @GetMapping("/reviews")
-    public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, Model model) {
+    public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember() != null) {
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
+
         List<ReviewResponse.GetDetail> reviews = reviewService.getAllReviewsBySitterV2(reviewSearch, page);
         List<String> sitters = reviewService.getAllSitters();
 
