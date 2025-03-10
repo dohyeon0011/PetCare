@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Admin.Member.api;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.service.Admin.Member.AdminMemberService;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,10 +23,10 @@ public class AdminMemberApiController {
 
     @Operation(description = "관리자 페이지 모든 회원 목록 조회 API")
     @GetMapping("/members")
-    public ResponseEntity<Page<AdminMemberResponse.MemberListResponse>> getAllMember(@SessionAttribute("member") Member member,
+    public ResponseEntity<Page<AdminMemberResponse.MemberListResponse>> getAllMember(@AuthenticationPrincipal MemberDetails memberDetails,
                                                                                      @ModelAttribute MemberSearch memberSearch,
                                                                                      @PageableDefault Pageable pageable) {
-        Page<AdminMemberResponse.MemberListResponse> members = adminMemberService.findAllForAdmin(member, memberSearch, pageable);
+        Page<AdminMemberResponse.MemberListResponse> members = adminMemberService.findAllForAdmin(memberDetails.getMember(), memberSearch, pageable);
 
         return ResponseEntity.ok()
                 .body(members);
@@ -32,8 +34,8 @@ public class AdminMemberApiController {
 
     @Operation(description = "관리자 페이지 회원 상세 정보 조회 API")
     @GetMapping("/members/{memberId}")
-    public ResponseEntity<?> getMemberDetail(@PathVariable("memberId") long id, @SessionAttribute("member") Member member) {
-        Object findMember = adminMemberService.findByIdForAdmin(id, member);
+    public ResponseEntity<?> getMemberDetail(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+        Object findMember = adminMemberService.findByIdForAdmin(id, memberDetails.getMember());
 
         return ResponseEntity.ok()
                 .body(findMember);
@@ -41,8 +43,8 @@ public class AdminMemberApiController {
 
     @Operation(description = "관리자 권한 회원 탈퇴 API")
     @DeleteMapping("/members/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") long id, @SessionAttribute("member") Member member) {
-        adminMemberService.deleteForAdmin(id, member);
+    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+        adminMemberService.deleteForAdmin(id, memberDetails.getMember());
 
         return ResponseEntity.noContent()
                 .build();
