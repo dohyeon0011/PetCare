@@ -36,8 +36,6 @@ public class CareAvailableDateApiController {
                                                   @RequestBody @Valid AddCareAvailableDateRequest request,
                                                   @AuthenticationPrincipal MemberDetails memberDetails,
                                                   BindingResult result) {
-//        CareAvailableDate careAvailableDate = careAvailableDateService.save(id, request);
-
         // 검증 오류가 있을 경우 에러 메시지를 리턴
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
