@@ -16,7 +16,6 @@ public class CustomLogoutFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-        // 로그아웃 URI 확인
         if (httpServletRequest.getRequestURI().equals("/logout")) {
             // 로컬 개발 환경에서는 secure=false로 설정
             httpServletResponse.setHeader("Set-Cookie", "JSESSIONID=; Path=/; HttpOnly; Secure=false; Max-Age=0; SameSite=None");
