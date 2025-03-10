@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Pet.api;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.dto.Pet.request.AddPetRequest;
 import com.PetSitter.dto.Pet.request.UpdatePetRequest;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +25,12 @@ public class PetApiController {
 
     @Operation(description = "반려견 등록 API")
     @PostMapping("/{customerId}/pets/new")
-    public ResponseEntity<List<Pet>> addPet(@PathVariable("customerId") long id, @RequestBody @Valid List<AddPetRequest> requests) {
+    public ResponseEntity<List<Pet>> addPet(@PathVariable("customerId") long id, @RequestBody @Valid List<AddPetRequest> requests, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         List<Pet> pets = petService.save(id, requests);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -32,7 +39,12 @@ public class PetApiController {
 
     @Operation(description = "특정 회원의 모든 반려견 조회 API")
     @GetMapping("/{customerId}/pets")
-    public ResponseEntity<List<PetResponse.GetList>> findAllPet(@PathVariable("customerId") long id) {
+    public ResponseEntity<List<PetResponse.GetList>> findAllPet(@PathVariable("customerId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         List<PetResponse.GetList> pets = petService.findById(id);
 
         return ResponseEntity.ok()
@@ -41,7 +53,12 @@ public class PetApiController {
 
     @Operation(description = "회원의 특정 반려견 삭제 API")
     @DeleteMapping("{customerId}/pets/{petId}")
-    public ResponseEntity<Void> deletePet(@PathVariable("customerId") long id, @PathVariable("petId") long petId) {
+    public ResponseEntity<Void> deletePet(@PathVariable("customerId") long id, @PathVariable("petId") long petId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         petService.delete(id, petId);
 
         return ResponseEntity.ok()
@@ -50,7 +67,12 @@ public class PetApiController {
 
     @Operation(description = "회원의 반려견 정보 수정 API")
     @PutMapping("{customerId}/pets")
-    public ResponseEntity<List<PetResponse.GetList>> updatePet(@PathVariable("customerId") long id, @RequestBody @Valid List<UpdatePetRequest> requests) {
+    public ResponseEntity<List<PetResponse.GetList>> updatePet(@PathVariable("customerId") long id, @RequestBody @Valid List<UpdatePetRequest> requests, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         List<PetResponse.GetList> updatePets = petService.update(id, requests);
 
         return ResponseEntity.ok()
