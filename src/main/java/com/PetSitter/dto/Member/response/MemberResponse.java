@@ -43,7 +43,9 @@ public class MemberResponse {
             this.address = member.getAddress();
             this.role = member.getRole();
             this.socialProvider = member.getSocialProvider();
-            this.introduction = member.getIntroduction();
+            this.introduction = (member.getIntroduction() != null) ?
+                    member.getIntroduction().replace("\n", "<br>")
+                    : "";
             this.amount = member.getAmount();
             this.pets = pets.stream()
                     .map(PetResponse.GetList::new)
@@ -77,7 +79,9 @@ public class MemberResponse {
             this.address = member.getAddress();
             this.role = member.getRole();
             this.socialProvider = member.getSocialProvider();
-            this.introduction = member.getIntroduction();
+            this.introduction = (member.getIntroduction() != null) ?
+                    member.getIntroduction().replace("\n", "<br>")
+                    : "";
             this.careerYear = member.getCareerYear();
             this.certifications = certifications.stream()
                     .map(CertificationResponse.GetList::new)
