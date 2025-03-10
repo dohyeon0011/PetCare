@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Certification.api;
 
 import com.PetSitter.domain.Certification.Certification;
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Certification.request.AddCertificationRequest;
 import com.PetSitter.dto.Certification.request.UpdateCertificationRequest;
 import com.PetSitter.dto.Certification.response.CertificationResponse;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +31,7 @@ public class CertificationApiController {
     @Operation(description = "회원의 자격증 추가 API")
     @PostMapping("/{sitterId}/certifications/new")
     public ResponseEntity<?> addCertification(@PathVariable("sitterId") long id, @RequestBody @Valid List<AddCertificationRequest> request,
-                                                                BindingResult result) {
+                                                                @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -42,6 +44,11 @@ public class CertificationApiController {
                     .body(errors);
         }
 
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         List<Certification> certifications = certificationService.save(id, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -50,7 +57,12 @@ public class CertificationApiController {
 
     @Operation(description = "회원의 모든 자격증 조회 API")
     @GetMapping("/{sitterId}/certifications")
-    public ResponseEntity<List<CertificationResponse.GetList>> findCertifications(@PathVariable("sitterId") long id) {
+    public ResponseEntity<List<CertificationResponse.GetList>> findCertifications(@PathVariable("sitterId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         List<CertificationResponse.GetList> certifications = certificationService.findById(id);
 
         return ResponseEntity.ok()
@@ -59,7 +71,12 @@ public class CertificationApiController {
 
     @Operation(description = "회원의 특정 자격증 삭제 API")
     @DeleteMapping("/{sitterId}/certifications/{certificationId}")
-    public ResponseEntity<Void> deleteCertification(@PathVariable("sitterId") long id, @PathVariable("certificationId") long certificationId) {
+    public ResponseEntity<Void> deleteCertification(@PathVariable("sitterId") long id, @PathVariable("certificationId") long certificationId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         certificationService.delete(id, certificationId);
 
         return ResponseEntity.noContent()
@@ -69,7 +86,7 @@ public class CertificationApiController {
     @Operation(description = "회원의 자격증 정보 수정 API")
     @PutMapping("/{sitterId}/certifications")
     public ResponseEntity<?> updateCertification(@PathVariable("sitterId") long id, @RequestBody @Valid List<UpdateCertificationRequest> requests,
-                                                                                   BindingResult result) {
+                                                                                   @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -80,6 +97,11 @@ public class CertificationApiController {
 
             return ResponseEntity.badRequest()
                     .body(errors);
+        }
+
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
         }
 
         List<CertificationResponse.GetList> updateCertifications = certificationService.update(id, requests);
