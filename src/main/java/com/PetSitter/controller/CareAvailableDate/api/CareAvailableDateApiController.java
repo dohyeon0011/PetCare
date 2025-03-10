@@ -1,5 +1,6 @@
 package com.PetSitter.controller.CareAvailableDate.api;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.CareAvailableDate.request.AddCareAvailableDateRequest;
 import com.PetSitter.dto.CareAvailableDate.request.UpdateCareAvailableDateRequest;
 import com.PetSitter.dto.CareAvailableDate.response.CareAvailableDateResponse;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,7 @@ public class CareAvailableDateApiController {
     @PostMapping("/{sitterId}/care-available-dates/new")
     public ResponseEntity<?> saveCareAvailability(@PathVariable("sitterId") long id,
                                                   @RequestBody @Valid AddCareAvailableDateRequest request,
+                                                  @AuthenticationPrincipal MemberDetails memberDetails,
                                                   BindingResult result) {
 //        CareAvailableDate careAvailableDate = careAvailableDateService.save(id, request);
 
@@ -45,6 +48,11 @@ public class CareAvailableDateApiController {
 
             return ResponseEntity.badRequest()
                     .body(errors);
+        }
+
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
         }
 
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.save(id, request);
@@ -64,7 +72,12 @@ public class CareAvailableDateApiController {
 
     @Operation(description = "회원의 등록한 모든 돌봄 일정 조회 API")
     @GetMapping("/{sitterId}/care-available-dates")
-    public ResponseEntity<Page<CareAvailableDateResponse.GetList>> findCareAvailableDateList(@PathVariable("sitterId") long id, Pageable pageable) {
+    public ResponseEntity<Page<CareAvailableDateResponse.GetList>> findCareAvailableDateList(@PathVariable("sitterId") long id, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         Page<CareAvailableDateResponse.GetList> sitterAvailableDateList = careAvailableDateService.findAllById(id, pageable);
 
         return ResponseEntity.ok()
@@ -74,7 +87,13 @@ public class CareAvailableDateApiController {
     @Operation(description = "회원의 등록한 돌봄 일정 상세 조회 API")
     @GetMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
     public ResponseEntity<CareAvailableDateResponse.GetDetail> findCareAvailableDateOne(@PathVariable("sitterId") long id,
-                                                                             @PathVariable("careAvailableDateId") long careAvailableDateId) {
+                                                                             @PathVariable("careAvailableDateId") long careAvailableDateId,
+                                                                                        @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         CareAvailableDateResponse.GetDetail sitterAvailableDate = careAvailableDateService.findById(id, careAvailableDateId);
 
         return ResponseEntity.ok()
@@ -84,7 +103,13 @@ public class CareAvailableDateApiController {
     @Operation(description = "회원의 등록한 특정 돌봄 일정 삭제 API")
     @DeleteMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
     public ResponseEntity<Void> deleteCareAvailableDate(@PathVariable("sitterId") long id,
-                                                       @PathVariable("careAvailableDateId") long careAvailableDateId) {
+                                                       @PathVariable("careAvailableDateId") long careAvailableDateId,
+                                                        @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         careAvailableDateService.delete(id, careAvailableDateId);
 
         return ResponseEntity.ok()
@@ -96,6 +121,7 @@ public class CareAvailableDateApiController {
     public ResponseEntity<?> updateCareAvailableDate(@PathVariable("sitterId") long id,
                                                                             @PathVariable("careAvailableDateId") long careAvailableDateId,
                                                                             @RequestBody @Valid UpdateCareAvailableDateRequest request,
+                                                                            @AuthenticationPrincipal MemberDetails memberDetails,
                                                                             BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errorMessages = new HashMap<>();
@@ -106,6 +132,11 @@ public class CareAvailableDateApiController {
 
             return ResponseEntity.badRequest()
                     .body(errorMessages);
+        }
+
+        if (memberDetails.getMember().getId() != id) {
+            return ResponseEntity.badRequest()
+                    .build();
         }
 
         CareAvailableDateResponse.GetDetail updateSitterAvailableDate = careAvailableDateService.update(id, careAvailableDateId, request);
