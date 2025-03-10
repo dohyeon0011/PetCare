@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Review.api;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.dto.Review.request.AddReviewRequest;
 import com.PetSitter.dto.Review.request.UpdateReviewRequest;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +29,12 @@ public class ReviewApiController {
     @PostMapping("/members/{customerId}/reservations/{customerReservationId}/reviews/new")
     public ResponseEntity<ReviewResponse.GetDetail> saveReview(@PathVariable("customerId") long customerId,
                                                                @PathVariable("customerReservationId") long reservationId,
-                                                               @RequestBody @Valid AddReviewRequest request) {
+                                                               @RequestBody @Valid AddReviewRequest request, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != customerId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         ReviewResponse.GetDetail review = reviewService.save(customerId, reservationId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -36,8 +43,14 @@ public class ReviewApiController {
 
     @Operation(description = "특정 회원의 모든 리뷰 조회 API")
     @GetMapping("/members/{memberId}/reviews")
-    public ResponseEntity<Page<ReviewResponse.GetList>> findAllReview(@PathVariable("memberId") long memberId, Pageable pageable) {
+    public ResponseEntity<Page<ReviewResponse.GetList>> findAllReview(@PathVariable("memberId") long memberId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
 //        List<ReviewResponse.GetList> reviews = reviewService.findAllById(memberId);
+
+        if (memberDetails.getMember().getId() != memberId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         Page<ReviewResponse.GetList> reviews = reviewService.findAllById(memberId, pageable);
 
         return ResponseEntity.ok()
@@ -55,7 +68,12 @@ public class ReviewApiController {
 
     @Operation(description = "특정 리뷰 삭제 API")
     @DeleteMapping("/members/{customerId}/reviews/{reviewId}")
-    public ResponseEntity<Void> deleteReview(@PathVariable("customerId") long customerId, @PathVariable("reviewId") long reviewId) {
+    public ResponseEntity<Void> deleteReview(@PathVariable("customerId") long customerId, @PathVariable("reviewId") long reviewId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != customerId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         reviewService.delete(customerId, reviewId);
 
         return ResponseEntity.noContent()
@@ -66,7 +84,13 @@ public class ReviewApiController {
     @PutMapping("/members/{customerId}/reviews/{reviewId}")
     public ResponseEntity<ReviewResponse.GetDetail> updateReview(@PathVariable("customerId") long customerId,
                                                                  @PathVariable("reviewId") long reviewId,
-                                                                 @RequestBody @Valid UpdateReviewRequest request) {
+                                                                 @RequestBody @Valid UpdateReviewRequest request,
+                                                                 @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != customerId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         ReviewResponse.GetDetail updateReview = reviewService.update(customerId, reviewId, request);
 
         return ResponseEntity.ok()
@@ -76,7 +100,13 @@ public class ReviewApiController {
     @Operation(description = "리뷰 작성 시 보여질 폼 데이터")
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}/reviews/new")
     public ResponseEntity<ReviewResponse.GetNewReview> getReview(@PathVariable("customerId") long customerId,
-                                                                 @PathVariable("customerReservationId") long customerReservationId) {
+                                                                 @PathVariable("customerReservationId") long customerReservationId,
+                                                                 @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails.getMember().getId() != customerId) {
+            return ResponseEntity.badRequest()
+                    .build();
+        }
+
         ReviewResponse.GetNewReview newReview = reviewService.getNewReview(customerId, customerReservationId);
 
         return ResponseEntity.ok()
