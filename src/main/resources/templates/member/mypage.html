@@ -9,7 +9,7 @@
 </head>
 <body>
 <!-- data-member-id 설정 -->
-<div id="memberData" th:data-member-id="${session.member?.id}"></div>
+<div id="memberData" th:data-member-id="${currentUser?.id}"></div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -31,38 +31,58 @@
                 </li>
             </ul>
             <div class="navbar-buttons">
-                <span th:if="${session.member != null}" class="dropdown">
+                <!-- 인증된 사용자가 있을 때만 -->
+                <span th:if="${currentUser != null}" class="dropdown">
                     <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        안녕하세요, <b th:text="${session.member.name}"></b>님!
+                        안녕하세요,
+                        <b th:text="${currentUser.name}"></b>님!
                     </a>
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
-                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${session.member.id})}"
-                           th:if="${session.member.role.name() != 'ADMIN'}">
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}"
+                           th:if="${currentUser != null and currentUser.role.name() != 'ADMIN'}">
                             마이페이지
                         </a>
 
                         <!-- PET_SITTER인 경우 -->
-                        <div th:if="${session.member.role.name() == 'PET_SITTER'}">
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${session.member.id})}">
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}">
                                 등록한 돌봄 가능 일정
                             </a>
-                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${session.member.id})}">
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${currentUser.id})}">
                                 나의 돌봄 일정
                             </a>
                         </div>
 
                         <!-- CUSTOMER인 경우 -->
-                        <a class="dropdown-item" th:if="${session.member.role.name() == 'CUSTOMER'}"
-                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${session.member.id})}">
+                        <a class="dropdown-item" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${currentUser.id})}">
                             나의 예약 현황
                         </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                        </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger" th:href="@{/pets-care/logout}">로그아웃</a>
+                        <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+
+                        <form id="logoutForm" action="/logout" method="post" style="display: none;">
+                            <!-- CSRF 토큰을 포함하도록 설정 -->
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
                     </div>
                 </span>
-                <span th:if="${session.member == null}">
+
+                <!-- 로그인하지 않은 사용자에 대한 메뉴 -->
+                <span th:if="${currentUser == null}">
                     <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
                     <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
                 </span>
@@ -97,7 +117,7 @@
                         </span>
                         <br>
                         <strong>소셜 제공자:</strong> <span th:text="${member.socialProvider ?: '소셜 제공자 정보가 없습니다.'}"></span><br>
-                        <strong>소개:</strong> <span th:text="${member.introduction}"></span><br>
+                        <strong>소개:</strong> <span th:utext="${member.introduction}"></span><br>
                     </p>
 
                     <div th:if="${member.role.name() == 'CUSTOMER'}">
@@ -135,7 +155,7 @@
                     </ul>
                     <!-- 반려견이 등록된 경우, 반려견 목록 수정 버튼과 등록 버튼 모두 보이게 함 -->
                     <div th:if="${member.pets != null and not #lists.isEmpty(member.pets)}">
-                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{customerId}/pets/edit(customerId=${session.member.id})}">반려견 목록 수정</a>
+                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{customerId}/pets/edit(customerId=${member.id})}">반려견 목록 수정</a>
                         <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/pets/new}">반려견 등록</a>
                     </div>
 
@@ -159,7 +179,7 @@
                     </ul>
                     <!-- 자격증이 등록된 경우, 자격증 목록 수정 버튼과 등록 버튼 모두 보여짐 -->
                     <div th:if="${member.certifications != null and not #lists.isEmpty(member.certifications)}">
-                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/edit(sitterId=${session.member.id})}">자격증 목록 수정</a>
+                        <a class="btn btn-edit mt-3" th:href="@{/pets-care/members/{sitterId}/certifications/edit(sitterId=${member.id})}">자격증 목록 수정</a>
                         <a class="btn custom-blue-btn mt-3" th:href="@{/pets-care/certifications/new}">자격증 등록</a>
                     </div>
 
@@ -190,17 +210,17 @@
             </p>
             <a th:if="${member.role.name() == 'CUSTOMER'}"
                class="btn btn-outline-primary"
-               th:href="@{/pets-care/members/{customerId}/reviews?page=0&size=10(customerId=${session.member.id})}">
+               th:href="@{/pets-care/members/{customerId}/reviews?page=0&size=10(customerId=${member.id})}">
                 작성한 리뷰 보기
             </a>
             <a th:if="${member.role.name() == 'PET_SITTER'}"
                class="btn btn-outline-primary"
-               th:href="@{/pets-care/members/{sitterId}/reviews?page=0&size=10(sitterId=${session.member.id})}">
+               th:href="@{/pets-care/members/{sitterId}/reviews?page=0&size=10(sitterId=${member.id})}">
                 받은 리뷰 보기
             </a>
             <a th:if="${member.role.name() == 'PET_SITTER'}"
                class="btn btn-outline-primary"
-               th:href="@{/pets-care/members/{sitterId}/care-logs?page=0&size=10(sitterId=${session.member.id})}">
+               th:href="@{/pets-care/members/{sitterId}/care-logs?page=0&size=10(sitterId=${member.id})}">
                 작성한 돌봄 케어 로그 보기
             </a>
         </div>
