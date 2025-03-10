@@ -26,11 +26,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // 로그인 시 세션 생성
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/pets-care/login", "/pets-care/signup", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/pets-care/main", "/pets-care/login", "/pets-care/signup",
+                                "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -41,10 +42,11 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")   // 로그아웃 URL
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/pets-care/main")
-                        .invalidateHttpSession(true)   // 세션 무효화
-                        .deleteCookies("JSESSIONID")   // 쿠키 삭제
+                        .invalidateHttpSession(true)  // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .clearAuthentication(true)
                         .permitAll()
                 );
 
