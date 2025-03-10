@@ -1,11 +1,13 @@
 package com.PetSitter.controller.CareLog.view;
 
+import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.service.CareLog.CareLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,47 +25,64 @@ public class CareLogViewController {
 
     @Operation(description = "돌봄 케어 로그 작성")
     @GetMapping("/schedules/{sitterScheduleId}/care-logs/new")
-    public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, Model model) {
-        CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
-        model.addAttribute("careLog", careLog);
+    public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember() != null) {
+            CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
+            model.addAttribute("careLog", careLog);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "carelog/new-carelog";
     }
 
     @Operation(description = "돌봄사가 작성한 모든 돌봄 케어 로그 조회")
     @GetMapping("/members/{sitterId}/care-logs")
-    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, Model model) {
-        Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
-        model.addAttribute("careLogs", careLogs);
+    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == sitterId) {
+            Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
+            model.addAttribute("careLogs", careLogs);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "carelog/carelog-list";
     }
 
-    @Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 돌봄 케어 로그 전체 조회")
+    /*@Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 돌봄 케어 로그 전체 조회")
     @GetMapping("/members/{sitterId}/schedule/{sitterScheduleId}/care-logs")
     public String getCareLogList(@PathVariable("sitterId") long sitterId,
-                                 @PathVariable("sitterScheduleId") long sitterScheduleId, Model model) {
-        List<CareLogResponse.GetDetail> careLogs = careLogService.findAllById(sitterId, sitterScheduleId);
-        model.addAttribute("careLogs", careLogs);
+                                 @PathVariable("sitterScheduleId") long sitterScheduleId,
+                                 @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == sitterId) {
+            List<CareLogResponse.GetDetail> careLogs = careLogService.findAllById(sitterId, sitterScheduleId);
+            model.addAttribute("careLogs", careLogs);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "carelog/carelog";
-    }
+    }*/
 
-    @Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 상세 조회")
+    /*@Operation(description = "돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 상세 조회")
     @GetMapping("/members/{sitterId}/care-logs/{careLogId}")
-    public String getCareLog(@PathVariable("sitterId") long sitterId, @PathVariable("careLogId") long careLogId, Model model) {
-        CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
-        model.addAttribute("careLog", careLog);
+    public String getCareLog(@PathVariable("sitterId") long sitterId, @PathVariable("careLogId") long careLogId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == sitterId) {
+            CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
+            model.addAttribute("careLog", careLog);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "carelog/carelog-detail";
-    }
+    }*/
 
-    @Operation(description = "돌봄사의 특정 돌봄 케어 로그 수정")
+    /*@Operation(description = "돌봄사의 특정 돌봄 케어 로그 수정")
     @GetMapping("/members/{sitterId}/care-logs/{careLogId}/edit")
-    public String editCareLog(@PathVariable("sitterId") long sitterId, @PathVariable("careLogId") long careLogId, Model model) {
-        CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
-        model.addAttribute("careLog", careLog);
+    public String editCareLog(@PathVariable("sitterId") long sitterId, @PathVariable("careLogId") long careLogId,
+                              @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        if (memberDetails.getMember().getId() == sitterId) {
+            CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
+            model.addAttribute("careLog", careLog);
+            model.addAttribute("currentUser", memberDetails.getMember());
+        }
 
         return "carelog/edit-carelog";
-    }
+    }*/
 }
