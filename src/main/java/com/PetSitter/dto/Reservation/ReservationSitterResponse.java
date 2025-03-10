@@ -50,7 +50,9 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         public GetDetail(Member sitter, List<Review> reviews) {
             this.sitterId = sitter.getId();
             this.sitterName = sitter.getName();
-            this.introduction = sitter.getIntroduction().replace("\n", "<br>");
+            this.introduction = (sitter.getIntroduction() != null) ?
+                    sitter.getIntroduction().replace("\n", "<br>")
+                    : "";
             this.careerYear = sitter.getCareerYear();
             this.certifications = sitter.getCertifications()
                     .stream()
