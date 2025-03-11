@@ -40,4 +40,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR) // 500 에러랑 같이 JSON 형식의 오류 메시지 응답
                 .body(errorResponse);
     }
+
+    @ExceptionHandler(BadRequestCustom.class)
+    public ResponseEntity<Map<String, String>> badRequestException(BadRequestCustom badRequest) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "잘못된 요청입니다.");
+        errorResponse.put("details", badRequest.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
 }
