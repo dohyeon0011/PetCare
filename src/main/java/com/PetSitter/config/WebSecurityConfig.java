@@ -2,9 +2,11 @@ package com.PetSitter.config;
 
 import com.PetSitter.service.Member.MemberDetailsService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,14 +32,27 @@ public class WebSecurityConfig {
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/pets-care/main", "/pets-care/login", "/pets-care/signup",
-                                "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")  // Swagger 관련 경로 허용
+                        .permitAll()  // 모든 사용자가 접근 가능하게 허용
+                        .requestMatchers("/pets-care/main", "/pets-care/login", "/pets-care/signup",
+                                "/pets-care/sitter", "/pets-care/trainer", "/pets-care/sitters-information",
+                                "/pets-care/pet-sitter/information", "/pets-care/reservable-list",
+                                "/pets-care/reservable/members/**", "/pets-care/reviews",
+                                "/css/**", "/js/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pets-care/members/new").permitAll() // 회원가입 API 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/pets-care/login")
                         .loginProcessingUrl("/login")
+                        .failureHandler(((request, response, exception) -> { // 로그인 정보 불일치 시
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"message\": \"아이디 또는 비밀번호가 잘못되었습니다.\"}");
+                        }))
                         .defaultSuccessUrl("/pets-care/main", true)
                         .permitAll()
                 )
