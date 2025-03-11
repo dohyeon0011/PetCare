@@ -26,7 +26,7 @@ public class SitterScheduleViewController {
     @GetMapping("/members/{sitterId}/schedules")
     public String getAllSitterSchedule(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
 //        List<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId);
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             Page<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId, pageable);
             model.addAttribute("schedules", schedules);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -40,7 +40,7 @@ public class SitterScheduleViewController {
     public String getSitterSchedule(@PathVariable("sitterId") long sitterId,
                                     @PathVariable("sitterScheduleId") long sitterScheduleId,
                                     @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             SitterScheduleResponse.GetDetail schedule = sitterScheduleService.findById(sitterId, sitterScheduleId);
             model.addAttribute("schedule", schedule);
             model.addAttribute("currentUser", memberDetails.getMember());
