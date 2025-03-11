@@ -90,7 +90,7 @@ public class ReviewViewController {
     @Operation(description = "이용 후기 페이지에서 전체 리뷰 및 특정 돌봄사의 리뷰 조회")
     @GetMapping("/reviews")
     public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             model.addAttribute("currentUser", memberDetails.getMember());
         }
 
