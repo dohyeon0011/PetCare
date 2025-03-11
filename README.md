@@ -171,8 +171,8 @@ MySQL
 (돌봄 예약 내역 전체 조회(+페이징))<br><br><br>
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="1214" alt="image" src="https://github.com/user-attachments/assets/24148692-684d-421e-96e8-c180ceccb07d" />
-(돌봄사는 취소된 예약에는 돌봄 케어 로그 작성 불가능)<br><br><br>
+<img width="1194" alt="image" src="https://github.com/user-attachments/assets/5bb403a1-cca9-4dfb-b527-02fe90b88531" />    
+<br><br><br>
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
 <img width="1002" alt="image" src="https://github.com/user-attachments/assets/3f553ffb-da35-4f55-a0b5-33f9bef0feeb" />  
@@ -205,7 +205,7 @@ MySQL
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
 <img width="1253" alt="image" src="https://github.com/user-attachments/assets/a28643cb-20d7-4f68-9b60-4e1cf738cfb2" />
-<img width="1164" alt="image" src="https://github.com/user-attachments/assets/1cc53742-020a-4c92-96cd-1bf2dfe2aa66" />
+<img width="1155" alt="image" src="https://github.com/user-attachments/assets/9d55be4c-4de1-4f4c-82f4-b130a0fc0def" />
 <img width="1156" alt="image" src="https://github.com/user-attachments/assets/c18b1428-7cf6-4b88-8182-3eef2f6d8f82" />  
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
 
