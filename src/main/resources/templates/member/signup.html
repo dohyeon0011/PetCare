@@ -44,7 +44,8 @@
                 </div>
                 <div class="card-body">
                     <form th:action="@{/api/pets-care/members/new}" method="post">
-                    <!-- 기본 정보 입력 -->
+                        <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        <!-- 기본 정보 입력 -->
                         <div class="form-group">
                             <label for="loginId">아이디</label>
                             <input type="text" class="form-control" id="loginId" name="loginId"
