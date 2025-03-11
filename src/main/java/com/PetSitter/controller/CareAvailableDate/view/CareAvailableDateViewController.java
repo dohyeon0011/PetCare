@@ -26,7 +26,7 @@ public class CareAvailableDateViewController {
     @Comment("돌봄 가능 일정 등록")
     @GetMapping("/care-available-dates/new")
     public String newCareAvailableDate(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             model.addAttribute("currentUser", memberDetails.getMember());
         }
 
@@ -35,19 +35,10 @@ public class CareAvailableDateViewController {
         return "careavailabledate/new-care-available-date";
     }
 
-    @Comment("모든 회원의 등록한 돌봄 일정 상세 조회")
-    @GetMapping("/members/care-available-dates")
-    public String getAllCareAvailableDate(Model model) {
-        List<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAll();
-        model.addAttribute("careAvailableDates", careAvailableDates);
-
-        return "admin/careavailabledate/care-available-date-list";
-    }
-
     @Comment("회원의 등록한 모든 돌봄 일정 조회")
     @GetMapping("/members/{sitterId}/care-available-dates")
     public String getCareAvailableDateList(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             Page<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAllById(sitterId, pageable);
             model.addAttribute("careAvailableDates", careAvailableDates);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -61,7 +52,7 @@ public class CareAvailableDateViewController {
     public String getCareAvailableDate(@PathVariable("sitterId") long sitterId,
                                        @PathVariable("careAvailableDateId") long careAvailableDateId,
                                        @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
             model.addAttribute("careAvailableDate", careAvailableDate);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -74,7 +65,7 @@ public class CareAvailableDateViewController {
     @GetMapping("/members/{sitterId}/care-available-dates/{careAvailableDateId}/edit")
     public String editCareAvailableDate(@PathVariable("sitterId") long sitterId, @PathVariable("careAvailableDateId") long careAvailableDateId,
                                         @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
             model.addAttribute("careAvailableDate", careAvailableDate);
             model.addAttribute("currentUser", memberDetails.getMember());
