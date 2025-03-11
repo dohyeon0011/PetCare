@@ -176,7 +176,7 @@ MySQL
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
 <img width="1002" alt="image" src="https://github.com/user-attachments/assets/3f553ffb-da35-4f55-a0b5-33f9bef0feeb" />  
-(별점 리뷰는 0.5 단위로도 가능(취소된 예약에는 리뷰 작성 불가능)<br><br><br>
+(별점 리뷰는 0.5 단위로도 가능(취소된 예약에는 리뷰 작성 불가능))<br><br><br>
 
 # 펫시터 시점 돌봄 예약 가능한 날짜 목록 페이지
 <img width="1245" alt="image" src="https://github.com/user-attachments/assets/1c08059f-228f-4c38-9e46-77e09863eecc" />
