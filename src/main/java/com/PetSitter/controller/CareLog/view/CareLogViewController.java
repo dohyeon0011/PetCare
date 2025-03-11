@@ -26,7 +26,7 @@ public class CareLogViewController {
     @Operation(description = "돌봄 케어 로그 작성")
     @GetMapping("/schedules/{sitterScheduleId}/care-logs/new")
     public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
             model.addAttribute("careLog", careLog);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -38,7 +38,7 @@ public class CareLogViewController {
     @Operation(description = "돌봄사가 작성한 모든 돌봄 케어 로그 조회")
     @GetMapping("/members/{sitterId}/care-logs")
     public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == sitterId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
             model.addAttribute("careLogs", careLogs);
             model.addAttribute("currentUser", memberDetails.getMember());
