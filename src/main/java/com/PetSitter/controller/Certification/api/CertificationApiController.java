@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Certification.api;
 
+import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Certification.Certification;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Certification.request.AddCertificationRequest;
@@ -7,6 +8,7 @@ import com.PetSitter.dto.Certification.request.UpdateCertificationRequest;
 import com.PetSitter.dto.Certification.response.CertificationResponse;
 import com.PetSitter.service.Certification.CertificationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +30,11 @@ public class CertificationApiController {
 
     private final CertificationService certificationService;
 
-    @Operation(description = "회원의 자격증 추가 API")
+    @Operation(summary = "돌봄사 - 자격증 추가", description = "자격증 추가 API")
     @PostMapping("/{sitterId}/certifications/new")
-    public ResponseEntity<?> addCertification(@PathVariable("sitterId") long id, @RequestBody @Valid List<AddCertificationRequest> request,
-                                                                @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
+    public ResponseEntity<?> addCertification(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                              @RequestBody @Valid List<AddCertificationRequest> request,
+                                              @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -44,9 +47,8 @@ public class CertificationApiController {
                     .body(errors);
         }
 
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<Certification> certifications = certificationService.save(id, request);
@@ -55,12 +57,12 @@ public class CertificationApiController {
                 .body(certifications);
     }
 
-    @Operation(description = "회원의 모든 자격증 조회 API")
+    @Operation(summary = "돌봄사 - 모든 자격증 조회", description = "모든 자격증 조회 API")
     @GetMapping("/{sitterId}/certifications")
-    public ResponseEntity<List<CertificationResponse.GetList>> findCertifications(@PathVariable("sitterId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<List<CertificationResponse.GetList>> findCertifications(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                                                  @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<CertificationResponse.GetList> certifications = certificationService.findById(id);
@@ -69,12 +71,12 @@ public class CertificationApiController {
                 .body(certifications);
     }
 
-    @Operation(description = "회원의 특정 자격증 삭제 API")
+    @Operation(summary = "돌봄사 - 특정 자격증 삭제", description = "특정 자격증 삭제 API")
     @DeleteMapping("/{sitterId}/certifications/{certificationId}")
-    public ResponseEntity<Void> deleteCertification(@PathVariable("sitterId") long id, @PathVariable("certificationId") long certificationId, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<Void> deleteCertification(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                    @PathVariable("certificationId") @Parameter(required = true, description = "자격증 고유 번호") long certificationId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         certificationService.delete(id, certificationId);
@@ -83,9 +85,9 @@ public class CertificationApiController {
                 .build();
     }
 
-    @Operation(description = "회원의 자격증 정보 수정 API")
+    @Operation(summary = "돌봄사 - 자격증 정보 수정", description = "자격증 정보 수정 API")
     @PutMapping("/{sitterId}/certifications")
-    public ResponseEntity<?> updateCertification(@PathVariable("sitterId") long id, @RequestBody @Valid List<UpdateCertificationRequest> requests,
+    public ResponseEntity<?> updateCertification(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id, @RequestBody @Valid List<UpdateCertificationRequest> requests,
                                                                                    @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -99,9 +101,8 @@ public class CertificationApiController {
                     .body(errors);
         }
 
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<CertificationResponse.GetList> updateCertifications = certificationService.update(id, requests);
