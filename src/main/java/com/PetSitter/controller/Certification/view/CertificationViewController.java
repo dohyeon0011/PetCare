@@ -24,7 +24,7 @@ public class CertificationViewController {
     @Comment("회원의 자격증 추가")
     @GetMapping("/certifications/new")
     public String newCertification(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             model.addAttribute("currentUser", memberDetails.getMember());
         }
 
@@ -34,7 +34,7 @@ public class CertificationViewController {
     @Comment("회원의 자격증 수정")
     @GetMapping("/members/{sitterId}/certifications/edit")
     public String editCertification(@PathVariable("sitterId") long sitterId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if(memberDetails.getMember().getId() == sitterId) {
+        if(memberDetails != null && memberDetails.getMember().getId() == sitterId) {
             List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
             model.addAttribute("certifications", certifications);
             model.addAttribute("currentUser", memberDetails.getMember());
