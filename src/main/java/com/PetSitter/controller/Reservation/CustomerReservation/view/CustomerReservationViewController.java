@@ -27,7 +27,7 @@ public class CustomerReservationViewController {
     @Operation(description = "회원 돌봄 예약 생성")
     @GetMapping("/members/{customerId}/sitters/{sitterId}/reservations/new")
     public String newReservation(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId, Model model, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() == customerId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
             ReservationResponse reservationInfo = sitterReservationService.getReservationDetails(customerId, sitterId);
             model.addAttribute("reservationInfo", reservationInfo);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -41,7 +41,7 @@ public class CustomerReservationViewController {
     public String getAllReservation(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
 //        List<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId);
 
-        if (memberDetails.getMember().getId() == customerId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
             Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
             model.addAttribute("reservations", reservations);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -55,7 +55,7 @@ public class CustomerReservationViewController {
     public String getReservation(@PathVariable("customerId") long customerId,
                                  @PathVariable("customerReservationId") long customerReservationId,
                                  @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == customerId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
             CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
             model.addAttribute("reservation", reservation);
             model.addAttribute("currentUser", memberDetails.getMember());
