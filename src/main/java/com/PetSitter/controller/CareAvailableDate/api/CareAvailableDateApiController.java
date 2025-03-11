@@ -1,11 +1,13 @@
 package com.PetSitter.controller.CareAvailableDate.api;
 
+import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.CareAvailableDate.request.AddCareAvailableDateRequest;
 import com.PetSitter.dto.CareAvailableDate.request.UpdateCareAvailableDateRequest;
 import com.PetSitter.dto.CareAvailableDate.response.CareAvailableDateResponse;
 import com.PetSitter.service.CareAvailableDate.CareAvailableDateService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,14 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.ObjectError;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +28,9 @@ public class CareAvailableDateApiController {
 
     private final CareAvailableDateService careAvailableDateService;
 
-    @Operation(description = "돌봄 가능 일정 등록 API")
+    @Operation(summary = "돌봄사 - 돌봄 가능 일정 등록", description = "돌봄 가능 일정 등록 API")
     @PostMapping("/{sitterId}/care-available-dates/new")
-    public ResponseEntity<?> saveCareAvailability(@PathVariable("sitterId") long id,
+    public ResponseEntity<?> saveCareAvailability(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
                                                   @RequestBody @Valid AddCareAvailableDateRequest request,
                                                   @AuthenticationPrincipal MemberDetails memberDetails,
                                                   BindingResult result) {
@@ -48,9 +46,8 @@ public class CareAvailableDateApiController {
                     .body(errors);
         }
 
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.save(id, request);
@@ -59,21 +56,21 @@ public class CareAvailableDateApiController {
                 .body(careAvailableDate);
     }
 
-    @Operation(description = "모든 회원의 등록한 모든 돌봄 일정 조회 API")
+    /*@Operation(summary = "모든 회원의 등록한 모든 돌봄 일정 조회", description = "모든 회원의 등록한 모든 돌봄 일정 조회 API")
     @GetMapping("/care-available-dates")
     public ResponseEntity<List<CareAvailableDateResponse.GetList>> findAllCareAvailableDate() {
         List<CareAvailableDateResponse.GetList> careAvailableDateAll = careAvailableDateService.findAll();
 
         return ResponseEntity.ok()
                 .body(careAvailableDateAll);
-    }
+    }*/
 
-    @Operation(description = "회원의 등록한 모든 돌봄 일정 조회 API")
+    @Operation(summary = "돌봄사 - 등록한 모든 돌봄 일정 조회", description = "등록한 모든 돌봄 일정 조회 API")
     @GetMapping("/{sitterId}/care-available-dates")
-    public ResponseEntity<Page<CareAvailableDateResponse.GetList>> findCareAvailableDateList(@PathVariable("sitterId") long id, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<Page<CareAvailableDateResponse.GetList>> findCareAvailableDateList(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                                                             @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         Page<CareAvailableDateResponse.GetList> sitterAvailableDateList = careAvailableDateService.findAllById(id, pageable);
@@ -82,14 +79,13 @@ public class CareAvailableDateApiController {
                 .body(sitterAvailableDateList);
     }
 
-    @Operation(description = "회원의 등록한 돌봄 일정 상세 조회 API")
+    @Operation(summary = "돌봄사 - 등록한 돌봄 일정 정보 상세 조회", description = "등록한 돌봄 일정 정보 상세 조회 API")
     @GetMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
-    public ResponseEntity<CareAvailableDateResponse.GetDetail> findCareAvailableDateOne(@PathVariable("sitterId") long id,
-                                                                             @PathVariable("careAvailableDateId") long careAvailableDateId,
+    public ResponseEntity<CareAvailableDateResponse.GetDetail> findCareAvailableDateOne(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                                                        @PathVariable("careAvailableDateId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long careAvailableDateId,
                                                                                         @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         CareAvailableDateResponse.GetDetail sitterAvailableDate = careAvailableDateService.findById(id, careAvailableDateId);
@@ -98,14 +94,13 @@ public class CareAvailableDateApiController {
                 .body(sitterAvailableDate);
     }
 
-    @Operation(description = "회원의 등록한 특정 돌봄 일정 삭제 API")
+    @Operation(summary = "돌봄사 - 등록한 특정 돌봄 일정 삭제", description = "등록한 특정 돌봄 일정 삭제 API")
     @DeleteMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
-    public ResponseEntity<Void> deleteCareAvailableDate(@PathVariable("sitterId") long id,
-                                                       @PathVariable("careAvailableDateId") long careAvailableDateId,
+    public ResponseEntity<Void> deleteCareAvailableDate(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                       @PathVariable("careAvailableDateId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long careAvailableDateId,
                                                         @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         careAvailableDateService.delete(id, careAvailableDateId);
@@ -114,10 +109,10 @@ public class CareAvailableDateApiController {
                 .build();
     }
 
-    @Operation(description = "회원의 등록한 특정 돌봄 일정 수정 API")
+    @Operation(summary = "돌봄사 - 등록한 특정 돌봄 일정 수정", description = "등록한 특정 돌봄 일정 수정 API")
     @PutMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
-    public ResponseEntity<?> updateCareAvailableDate(@PathVariable("sitterId") long id,
-                                                                            @PathVariable("careAvailableDateId") long careAvailableDateId,
+    public ResponseEntity<?> updateCareAvailableDate(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
+                                                                            @PathVariable("careAvailableDateId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long careAvailableDateId,
                                                                             @RequestBody @Valid UpdateCareAvailableDateRequest request,
                                                                             @AuthenticationPrincipal MemberDetails memberDetails,
                                                                             BindingResult result) {
@@ -132,9 +127,8 @@ public class CareAvailableDateApiController {
                     .body(errorMessages);
         }
 
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         CareAvailableDateResponse.GetDetail updateSitterAvailableDate = careAvailableDateService.update(id, careAvailableDateId, request);
