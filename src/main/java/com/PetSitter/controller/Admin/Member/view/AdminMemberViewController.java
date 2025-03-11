@@ -27,7 +27,7 @@ public class AdminMemberViewController {
     @GetMapping("/members")
     public String getAllMember(@AuthenticationPrincipal MemberDetails memberDetails, @ModelAttribute MemberSearch memberSearch,
                                @PageableDefault Pageable pageable, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             Page<AdminMemberResponse.MemberListResponse> members = adminMemberService.findAllForAdmin(memberDetails.getMember(), memberSearch, pageable);
             model.addAttribute("members", members);
             model.addAttribute("currentUser", memberDetails.getMember());
@@ -39,7 +39,7 @@ public class AdminMemberViewController {
     @Comment("관리자 페이지 회원 상세 정보 조회")
     @GetMapping("/members/{memberId}")
     public String getMemberDetail(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             Object findMember = adminMemberService.findByIdForAdmin(id, memberDetails.getMember());
             model.addAttribute("member", findMember);
             model.addAttribute("currentUser", memberDetails.getMember());
