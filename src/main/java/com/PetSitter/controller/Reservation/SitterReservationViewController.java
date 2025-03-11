@@ -26,11 +26,13 @@ public class SitterReservationViewController {
     @GetMapping("/reservable-list")
     public String getAllReservable(@AuthenticationPrincipal MemberDetails memberDetails, Pageable pageable, Model model) {
 //        List<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters();
+
         if (memberDetails != null) {
-            Page<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters(pageable);
-            model.addAttribute("reservableSitters", reservableSitters);
             model.addAttribute("currentUser", memberDetails.getMember());
         }
+
+        Page<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters(pageable);
+        model.addAttribute("reservableSitters", reservableSitters);
 
         return "reservable/reservable-list";
     }
@@ -39,10 +41,11 @@ public class SitterReservationViewController {
     @GetMapping("/reservable/members/{sitterId}")
     public String getReservableSitter(@PathVariable("sitterId") long sitterId, @RequestParam(defaultValue = "0") int page, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         if (memberDetails != null) {
-            ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
-            model.addAttribute("reservableSitter", reservableSitter);
             model.addAttribute("currentUser", memberDetails.getMember());
         }
+
+        ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
+        model.addAttribute("reservableSitter", reservableSitter);
 
         return "reservable/reservable-detail";
     }
