@@ -24,7 +24,7 @@ public class PetViewController {
     @Comment("반려견 등록")
     @GetMapping("/pets/new")
     public String newPet(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             model.addAttribute("currentUser", memberDetails.getMember());
         }
 
@@ -34,7 +34,7 @@ public class PetViewController {
     @Comment("반려견 수정")
     @GetMapping("/members/{customerId}/pets/edit")
     public String editPet(@PathVariable("customerId") long customerId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == customerId) {
+        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
             List<PetResponse.GetList> pets = petService.findById(customerId);
             model.addAttribute("pets", pets);
             model.addAttribute("currentUser", memberDetails.getMember());
