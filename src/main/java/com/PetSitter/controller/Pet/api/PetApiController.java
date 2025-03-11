@@ -1,5 +1,6 @@
 package com.PetSitter.controller.Pet.api;
 
+import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.dto.Pet.request.AddPetRequest;
@@ -7,6 +8,7 @@ import com.PetSitter.dto.Pet.request.UpdatePetRequest;
 import com.PetSitter.dto.Pet.response.PetResponse;
 import com.PetSitter.service.Pet.PetService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,12 +25,12 @@ public class PetApiController {
 
     private final PetService petService;
 
-    @Operation(description = "반려견 등록 API")
+    @Operation(summary = "고객 - 반려견 등록", description = "반려견 등록 API")
     @PostMapping("/{customerId}/pets/new")
-    public ResponseEntity<List<Pet>> addPet(@PathVariable("customerId") long id, @RequestBody @Valid List<AddPetRequest> requests, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<List<Pet>> addPet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id, @RequestBody @Valid List<AddPetRequest> requests,
+                                            @AuthenticationPrincipal MemberDetails memberDetails) {
         if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<Pet> pets = petService.save(id, requests);
@@ -37,12 +39,11 @@ public class PetApiController {
                 .body(pets);
     }
 
-    @Operation(description = "특정 회원의 모든 반려견 조회 API")
+    @Operation(summary = "고객 - 모든 반려견 조회", description = "특정 고객의 모든 반려견 조회 API")
     @GetMapping("/{customerId}/pets")
-    public ResponseEntity<List<PetResponse.GetList>> findAllPet(@PathVariable("customerId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<List<PetResponse.GetList>> findAllPet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<PetResponse.GetList> pets = petService.findById(id);
@@ -51,12 +52,11 @@ public class PetApiController {
                 .body(pets);
     }
 
-    @Operation(description = "회원의 특정 반려견 삭제 API")
+    @Operation(summary = "고객 - 특정 반려견 삭제", description = "특정 반려견 삭제 API")
     @DeleteMapping("{customerId}/pets/{petId}")
-    public ResponseEntity<Void> deletePet(@PathVariable("customerId") long id, @PathVariable("petId") long petId, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<Void> deletePet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id, @PathVariable("petId") long petId, @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         petService.delete(id, petId);
@@ -65,12 +65,12 @@ public class PetApiController {
                 .build();
     }
 
-    @Operation(description = "회원의 반려견 정보 수정 API")
+    @Operation(summary = "고객 - 반려견 정보 수정", description = "반려견 정보 수정 API")
     @PutMapping("{customerId}/pets")
-    public ResponseEntity<List<PetResponse.GetList>> updatePet(@PathVariable("customerId") long id, @RequestBody @Valid List<UpdatePetRequest> requests, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+    public ResponseEntity<List<PetResponse.GetList>> updatePet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id, @RequestBody @Valid List<UpdatePetRequest> requests,
+                                                               @AuthenticationPrincipal MemberDetails memberDetails) {
+        if (memberDetails != null && memberDetails.getMember().getId() != id) {
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         List<PetResponse.GetList> updatePets = petService.update(id, requests);
