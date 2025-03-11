@@ -1,3 +1,4 @@
+/*
 function login() {
     const loginId = document.getElementById('loginId').value;
     const password = document.getElementById('password').value;
@@ -28,3 +29,33 @@ function login() {
             alert(error.message || '로그인 요청 중 문제가 발생했습니다.');
         });
 }
+*/
+
+// 시큐리티 로그인 커스텀 설정 -> application/x-www-form-urlencoded 요청으로 변환(Spring Security 기본 로그인 필터 (UsernamePasswordAuthenticationFilter)는 JSON 요청을 처리하지 않음)
+$(document).ready(function () {
+    $("#loginForm").on("submit", function (event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        $.ajax({
+            type: "POST",
+            url: "/login",
+            data: $("#loginForm").serialize(), // 폼 데이터를 URL-encoded 형식으로 변환
+            headers: {
+                "X-CSRF-TOKEN": $("#csrfToken").val() // CSRF 토큰 추가
+            },
+            success: function () {
+                window.location.href = "/pets-care/main"; // 로그인 성공 시 홈으로 이동
+            },
+            error: function (xhr) {
+                try {
+                    const errorMessage = JSON.parse(xhr.responseText).message;
+                    alert(errorMessage); // 로그인 실패 시 alert 출력
+                } catch (e) {
+                    alert("로그인 중 문제가 발생했습니다."); // JSON 파싱 실패 시 기본 메시지 출력
+                }
+            }
+        });
+    });
+});
+
+
