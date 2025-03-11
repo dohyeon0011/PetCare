@@ -22,7 +22,7 @@ public class SitterReservationViewController {
 
     private final SitterReservationService sitterReservationService;
 
-    @Operation(description = "고객에게 돌봄 예약 가능한 돌봄사들의 정보 조회")
+    @Operation(description = "돌봄 예약 가능한 돌봄사들의 정보 조회")
     @GetMapping("/reservable-list")
     public String getAllReservable(@AuthenticationPrincipal MemberDetails memberDetails, Pageable pageable, Model model) {
 //        List<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters();
