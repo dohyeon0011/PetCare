@@ -1,10 +1,12 @@
 package com.PetSitter.controller.Member.api;
 
+import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
 import com.PetSitter.service.Member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -27,7 +28,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @Operation(description = "회원가입 API")
+    @Operation(summary = "회원가입", description = "회원가입 API")
     @PostMapping("/new")
     public ResponseEntity<?> saveMember(@RequestBody @Valid AddMemberRequest request, BindingResult result) {
         if (result.hasErrors()) {
@@ -53,12 +54,11 @@ public class MemberApiController {
                 .body(member);
     }
 
-    @Operation(description = "특정 회원 조회 API")
+    @Operation(summary = "특정 회원 정보 조회", description = "특정 회원 정보 조회 API")
     @GetMapping("/{memberId}/myPage")
-    public ResponseEntity<?> findMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> findMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
         if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
         Object member = memberService.findById(id);
 
@@ -72,12 +72,11 @@ public class MemberApiController {
         memberService.
     }*/
 
-    @Operation(description = "회원 탈퇴 API")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 API")
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
         if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
         memberService.delete(id);
 
@@ -85,9 +84,9 @@ public class MemberApiController {
                 .build();
     }
 
-    @Operation(description = "회원 정보 수정 API")
+    @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 API")
     @PutMapping("/{memberId}")
-    public ResponseEntity<?> updateMember(@PathVariable("memberId") Long id, @RequestBody @Valid UpdateMemberRequest request,
+    public ResponseEntity<?> updateMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") Long id, @RequestBody @Valid UpdateMemberRequest request,
                                                @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -102,8 +101,7 @@ public class MemberApiController {
         }
 
         if (memberDetails.getMember().getId() != id) {
-            return ResponseEntity.badRequest()
-                    .build();
+            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
         Object updateMember = memberService.update(id, request);
