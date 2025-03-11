@@ -28,7 +28,7 @@ public class AdminPointHistoryViewController {
     @Comment("관리자 페이지 - 회원 포인트 내역 전체 조회")
     @GetMapping("/amounts")
     public String findAllForAdmin(@ModelAttribute PointSearch pointSearch, @AuthenticationPrincipal MemberDetails memberDetails, @PageableDefault Pageable pageable, Model model) {
-        if (memberDetails.getMember() != null) {
+        if (memberDetails != null && memberDetails.getMember() != null) {
             Page<AdminPointHistoryResponse.PointListResponse> pointsHistory = adminPointHistoryService.findAllForAdmin(pointSearch, memberDetails.getMember(), pageable);
             model.addAttribute("pointsHistory", pointsHistory);
             model.addAttribute("currentUser", memberDetails.getMember());
