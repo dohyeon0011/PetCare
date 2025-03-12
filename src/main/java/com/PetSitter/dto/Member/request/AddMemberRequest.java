@@ -49,8 +49,6 @@ public class AddMemberRequest {
     @NotNull
     private String role; // DTO에서는 문자열로 Role 값 받고 난 뒤에 enum 타입으로 변환
 
-//    private String profileImgPath;
-
     private String socialProvider;
 
     private String introduction;
@@ -72,7 +70,6 @@ public class AddMemberRequest {
                 .zipcode(zipcode)
                 .address(address)
                 .role(Role.valueOf(role))  // Role을 Enum으로 변환
-//                .profileImgPath(profileImgPath)
                 .socialProvider(provider)  // SocialProvider 처리
                 .introduction(introduction)
                 .careerYear(Role.valueOf(role).equals(Role.CUSTOMER) ? null : careerYear)
