@@ -80,7 +80,7 @@ public class Member {
     private Role role;
 
     @Comment("프로필 사진")
-    private String profileImgPath;
+    private String profileImg;
 
     // 사용자 가입 날짜 확인 : 사용자가 언제 가입했는지 추적할 수 있다
     // 리프레시 토큰 발급 시간 확인 : 리프레시 토큰이 언제 생성되었는지 확인하여 비정상적인 패턴(예: 짧은 시간 내 다중 발급)을 탐지할 수 있다
@@ -167,11 +167,9 @@ public class Member {
         this.zipcode = zipcode;
         this.address = address;
         this.role = role;
-//        this.profileImgPath = profileImgPath;
         this.socialProvider = socialProvider;
         this.introduction = introduction;
         this.careerYear = careerYear;
-//        this.certifications.get().addPetSitter(this);
     }
 
     @Comment("회원정보 수정")
@@ -183,8 +181,7 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.zipcode = zipcode;
         this.address = address;
-//        this.role = Role.valueOf(role);
-        this.profileImgPath = profileImgPath;
+        this.profileImg = profileImgPath;
         this.introduction = introduction;
 
         if (Role.PET_SITTER.equals(this.getRole())) {
@@ -209,6 +206,11 @@ public class Member {
         }
 
         this.isDeleted = isDeleted;
+    }
+
+    @Comment("회원 프로필 사진 경로 설정")
+    public void changeProfileImgPath(String profileImgPath) {
+        this.profileImg = profileImgPath;
     }
 
     // 이러한 상황(Member의 Role)에 따른 로직은 도메인 내부에 있어야 변경사항이 있을 때 도메인만 수정하면 돼서 유지보수가 쉽다.
