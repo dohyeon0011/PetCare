@@ -3,6 +3,7 @@ package com.PetSitter.service.Member;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.domain.Member.Role;
+import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
@@ -29,12 +30,18 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public Object save(AddMemberRequest request) {
+    public Object save(AddMemberRequest request, UploadFile uploadFile) {
         validateDuplicateMember(request);
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
-        return memberRepository.save(request.toEntity(encodedPassword)).toResponse();
+        Member member = request.toEntity(encodedPassword);
+
+        if (uploadFile != null) {
+            member.changeProfileImgPath(uploadFile.getServerFileName());
+        }
+
+        return memberRepository.save(member).toResponse();
     }
 
     @Transactional(readOnly = true)
