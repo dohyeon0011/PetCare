@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +43,22 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestCustom.class)
-    public ResponseEntity<Map<String, String>> badRequestException(BadRequestCustom badRequest) {
+    public ResponseEntity<Map<String, String>> handleBadRequestException(BadRequestCustom badRequest) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "잘못된 요청입니다.");
         errorResponse.put("details", badRequest.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Map<String, String>> handleMaxSizeException(MaxUploadSizeExceededException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "파일 크기가 너무 큽니다. 10MB 이하의 크기로 업로드 해주세요.");
+        errorResponse.put("details", ex.getMessage());
+
+        return ResponseEntity.badRequest()
                 .body(errorResponse);
     }
 }
