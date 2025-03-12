@@ -40,9 +40,9 @@ spring:
 
   servlet:
     multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 20MB
+      enabled: true # 멀티파트 파일 업로드 허용
+      max-file-size: 10MB # 업로드 가능한 최대 파일 크기
+      max-request-size: 20MB # 요청 크기 제한
 
   jpa:
     hibernate:
@@ -71,4 +71,13 @@ springdoc:
     enabled: true
     path: /swagger-ui.html
   paths-to-match: /api/**
+
+profileUpload:
+  path: /Users/idohyeon/petcare-uploads/profile/
+
+petsUpload:
+  path: /Users/idohyeon/petcare-uploads/pets/
+
+carelogsUpload:
+  path: /Users/idohyeon/petcare-uploads/carelogs/
 
