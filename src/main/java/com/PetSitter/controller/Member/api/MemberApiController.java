@@ -2,21 +2,28 @@ package com.PetSitter.controller.Member.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
+import com.PetSitter.service.FileUploadService;
 import com.PetSitter.service.Member.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,10 +34,12 @@ import java.util.Map;
 public class MemberApiController {
 
     private final MemberService memberService;
+    private final FileUploadService fileUploadService;
 
     @Operation(summary = "회원가입", description = "회원가입 API")
-    @PostMapping("/new")
-    public ResponseEntity<?> saveMember(@RequestBody @Valid AddMemberRequest request, BindingResult result) {
+    @PostMapping(value = "/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveMember(@RequestPart(value = "profileImage", required = false) @Parameter(description = "업로드 할 프로필 사진", content = @Content(mediaType = "multipart/form-data")) MultipartFile profileImage,
+                                        @RequestPart(value = "request") @Valid AddMemberRequest request, BindingResult result) {
         if (result.hasErrors()) {
             // 오류 메시지를 담아 반환
             Map<String, String> errorMessages = new HashMap<>();
@@ -48,7 +57,21 @@ public class MemberApiController {
                     .body(errorMessages);
         }
 
-        Object member = memberService.save(request);
+        UploadFile uploadFile = null;
+
+        // 프로필 이미지를 등록 했다면 파일 업로드 처리
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                uploadFile = fileUploadService.uploadFile(profileImage, "profile");
+            } catch (IOException e) {
+                log.error("프로필 이미지 파일 업로드 실패: {}", e.getMessage());
+
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("프로필 이미지 파일 업로드에 실패했습니다.");
+            }
+        }
+
+        Object member = memberService.save(request, uploadFile);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(member);
