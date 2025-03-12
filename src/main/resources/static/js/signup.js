@@ -72,7 +72,6 @@ function displayValidationErrors(errors) {
 
 // 시큐리티 회원가입(+csrf 토큰 추가해서 요청)
 document.addEventListener("DOMContentLoaded", () => {
-    // 경력 입력 필드 토글 처리
     const roleSelect = document.getElementById("role");
     const careerField = document.getElementById("careerField");
     const careerInput = document.getElementById("careerYear");
@@ -84,44 +83,52 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             careerField.style.display = "none";
             careerInput.required = false;
-            careerInput.value = ""; // 값 초기화
+            careerInput.value = "";
         }
     });
 
     // 회원가입 폼 전송 처리
     const signupForm = document.querySelector("form");
     signupForm.addEventListener("submit", async (event) => {
-        event.preventDefault(); // 기본 폼 제출 방지
+        event.preventDefault();
 
-        // 기존 오류 메시지 초기화
         clearValidationErrors();
 
-        // CSRF 토큰 가져오기
         const csrfToken = document.querySelector("input[name='_csrf']").value;
 
-        // 폼 데이터를 JSON으로 변환
-        const formData = new FormData(signupForm);
-        const formObject = {};
-        formData.forEach((value, key) => {
-            formObject[key] = value;
+        // FormData 객체 생성
+        const formData = new FormData();
+
+        // 1. 회원 정보 데이터를 객체로 변환 후 JSON 문자열로 변환
+        const memberData = {};
+        new FormData(signupForm).forEach((value, key) => {
+            memberData[key] = value;
         });
+
+        // JSON 데이터를 'request'라는 key로 추가해야 @RequestPart(value = "request")로 받을 수 있음.
+        formData.append("request", new Blob([JSON.stringify(memberData)], { type: "application/json" }));
+
+        // 2. 파일 추가
+        const profileImgInput = document.getElementById("profileImage");
+        if (profileImgInput.files.length > 0) {
+            formData.append("profileImage", profileImgInput.files[0]);
+        }
 
         try {
             const response = await fetch("/api/pets-care/members/new", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
                     "X-CSRF-TOKEN": csrfToken, // CSRF 토큰 추가
                 },
-                body: JSON.stringify(formObject),
+                body: formData, // multipart/form-data 자동 처리
             });
 
             if (response.ok) {
                 alert("회원가입이 완료되었습니다!");
-                window.location.href = "/pets-care/login"; // 회원가입 완료 후 로그인 페이지로 이동
+                window.location.href = "/pets-care/login";
             } else {
                 const errorData = await response.json();
-                displayValidationErrors(errorData); // 오류 메시지 표시
+                displayValidationErrors(errorData);
             }
         } catch (error) {
             console.error("회원가입 요청 중 오류 발생:", error);
@@ -133,24 +140,28 @@ document.addEventListener("DOMContentLoaded", () => {
 // 기존 오류 메시지 초기화 함수
 function clearValidationErrors() {
     document.querySelectorAll(".error-message").forEach((errorElement) => {
-        errorElement.textContent = ""; // 오류 메시지 제거
+        errorElement.textContent = "";
     });
     document.querySelectorAll(".error").forEach((inputElement) => {
-        inputElement.classList.remove("error"); // 입력 필드의 오류 스타일 제거
+        inputElement.classList.remove("error");
     });
 }
 
 // 서버에서 받은 오류 메시지를 화면에 표시하는 함수
 function displayValidationErrors(errors) {
+    console.log("디스플레이 오류 메시지:", errors); // 오류 데이터 확인
+
     Object.keys(errors).forEach((field) => {
-        const errorElement = document.getElementById(field + "Error");
+        const cleanField = field.replace("request.", ""); // 필드명 정리
+        const errorElement = document.getElementById(cleanField + "Error");
+
         if (errorElement) {
-            errorElement.textContent = errors[field]; // 서버에서 받은 메시지 표시
+            errorElement.textContent = errors[field];
         }
-        const inputElement = document.getElementById(field);
+
+        const inputElement = document.getElementById(cleanField);
         if (inputElement) {
-            inputElement.classList.add("error"); // 오류가 있는 필드에 스타일 추가
+            inputElement.classList.add("error");
         }
     });
 }
-
