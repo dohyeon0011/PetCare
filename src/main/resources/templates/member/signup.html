@@ -43,7 +43,7 @@
                     <h4>회원가입</h4>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/api/pets-care/members/new}" method="post">
+                    <form id="signupForm" th:action="@{/api/pets-care/members/new}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_csrf" value="${_csrf.token}">
                         <!-- 기본 정보 입력 -->
                         <div class="form-group">
@@ -108,10 +108,10 @@
                         </div>
 
                         <!-- 프로필 사진 업로드 -->
-                        <!--<div class="form-group">
-                            <label for="profileImgPath">프로필 사진</label>
-                            <input type="file" class="form-control-file" id="profileImgPath" name="profileImgPath" accept="image/*">
-                        </div>-->
+                        <div class="form-group">
+                            <label for="profileImage">프로필 사진</label>
+                            <input type="file" class="form-control-file" id="profileImage" name="profileImage" accept="image/*">
+                        </div>
 
                         <!-- 자기소개 -->
                         <div class="form-group">
