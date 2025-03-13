@@ -6,7 +6,7 @@ if (memberId === null) {
     console.error("회원 정보를 찾을 수 없습니다.");
 }
 
-// **폼 변경 감지 & 페이지 이탈 방지**
+// 폼 변경 감지 & 페이지 이탈 방지
 document.addEventListener("DOMContentLoaded", function () {
     let isFormDirty = false;
     const formInputs = document.querySelectorAll("#editProfileForm input, #editProfileForm textarea");
@@ -28,20 +28,20 @@ document.addEventListener("DOMContentLoaded", function () {
         window.removeEventListener("beforeunload", arguments.callee);
     });
 
-    // **회원 탈퇴 버튼 이벤트 리스너 등록**
+    // 회원 탈퇴 버튼 이벤트 리스너 등록
     const deleteMemberBtn = document.getElementById("deleteMemberBtn");
     if (deleteMemberBtn) {
         deleteMemberBtn.addEventListener("click", deleteMember);
     }
 
-    // **회원 정보 수정 폼 이벤트 리스너 등록**
+    // 회원 정보 수정 폼 이벤트 리스너 등록
     const editProfileForm = document.getElementById("editProfileForm");
     if (editProfileForm) {
         editProfileForm.addEventListener("submit", updateMember);
     }
 });
 
-// **회원 정보 수정 요청**
+// 회원 정보 수정 요청
 let isFetching = false;
 
 async function updateMember(event) {
@@ -109,7 +109,7 @@ async function updateMember(event) {
     }
 }
 
-// **회원 탈퇴 요청**
+// 회원 탈퇴 요청
 async function deleteMember() {
     if (!memberId) {
         alert("회원 정보를 찾을 수 없습니다.");
