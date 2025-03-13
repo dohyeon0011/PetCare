@@ -1,19 +1,14 @@
 package com.PetSitter.service.Member;
 
 import com.PetSitter.domain.Member.Member;
-import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
-import com.PetSitter.dto.Member.response.AdminMemberResponse;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +30,12 @@ public class MemberService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
-        Member member = request.toEntity(encodedPassword);
+        Member member;
 
-        if (uploadFile != null) {
-            member.changeProfileImgPath(uploadFile.getServerFileName());
+        if (uploadFile != null) { // 프로필 이미지를 등록 했을 때
+            member = request.toEntity(encodedPassword, uploadFile.getServerFileName());
+        } else {
+            member = request.toEntity(encodedPassword, null); // 프로필 이미지를 등록하지 않았을 때
         }
 
         return memberRepository.save(member).toResponse();
@@ -89,13 +86,11 @@ public class MemberService {
 
         authorizetionMember(member);
 
-//        memberRepository.delete(member);
-
         member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
     }
 
     @Transactional
-    public Object update(long id, UpdateMemberRequest request) {
+    public Object update(long id, UpdateMemberRequest request, UploadFile uploadFile) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
@@ -104,18 +99,19 @@ public class MemberService {
         member.update(
                 bCryptPasswordEncoder.encode(request.getPassword()), request.getName(), request.getNickName(), request.getEmail(),
                 request.getPhoneNumber(), request.getZipcode(), request.getAddress(),
-                request.getProfileImgPath(), request.getIntroduction(), request.getCareerYear()
+                uploadFile != null ? uploadFile.getServerFileName() : null,
+                request.getIntroduction(), request.getCareerYear()
         );
 
         return member.toResponse();
     }
 
     private static void authorizetionMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 탈퇴 오류: 회원 본인만 가능합니다.");
+        }
     }
 
     private void validateDuplicateMember(AddMemberRequest request) {
