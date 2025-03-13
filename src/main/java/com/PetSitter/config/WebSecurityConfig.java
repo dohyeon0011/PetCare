@@ -51,7 +51,14 @@ public class WebSecurityConfig {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
                             response.setContentType("application/json");
                             response.setCharacterEncoding("UTF-8");
-                            response.getWriter().write("{\"message\": \"아이디 또는 비밀번호가 잘못되었습니다.\"}");
+
+                            String message = "아이디 또는 비밀번호가 잘못되었습니다.";
+
+                            if (exception instanceof org.springframework.security.authentication.DisabledException) {
+                                message = "회원 탈퇴한 계정입니다.";
+                            }
+
+                            response.getWriter().write("{\"message\": \"" + message + "\"}");
                         }))
                         .defaultSuccessUrl("/pets-care/main", true)
                         .permitAll()
