@@ -128,7 +128,7 @@ async function deleteMember() {
         if (!response.ok && response.status !== 204) throw new Error("회원 탈퇴 실패");
 
         alert("회원 탈퇴가 완료되었습니다.");
-        window.location.href = "/pets-care/logout";
+        window.location.href = "/logout";
     } catch (error) {
         alert("오류 발생: " + error.message);
     }
