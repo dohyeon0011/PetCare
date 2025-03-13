@@ -36,8 +36,6 @@ public class UpdateMemberRequest {
     @NotEmpty(message = "상세주소는 필수입니다.")
     private String address;
 
-    private String profileImgPath;
-
     private String introduction;
 
     private Integer careerYear;
