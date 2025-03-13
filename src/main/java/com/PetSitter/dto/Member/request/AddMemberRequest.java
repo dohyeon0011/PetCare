@@ -46,6 +46,8 @@ public class AddMemberRequest {
     @NotEmpty(message = "상세주소는 필수입니다.")
     private String address;
 
+    private String profileImg;
+
     @NotNull
     private String role; // DTO에서는 문자열로 Role 값 받고 난 뒤에 enum 타입으로 변환
 
@@ -56,7 +58,7 @@ public class AddMemberRequest {
     private Integer careerYear;
 
     // DTO에서 엔티티 객체로 변환하는 메서드
-    public Member toEntity(String encodedPassword) {
+    public Member toEntity(String encodedPassword, String profileImage) {
         // socialProvider가 null이면 기본값을 설정
         SocialProvider provider = (socialProvider != null) ? SocialProvider.valueOf(socialProvider) : SocialProvider.NONE;
 
@@ -69,6 +71,7 @@ public class AddMemberRequest {
                 .phoneNumber(phoneNumber)
                 .zipcode(zipcode)
                 .address(address)
+                .profileImage(profileImage)
                 .role(Role.valueOf(role))  // Role을 Enum으로 변환
                 .socialProvider(provider)  // SocialProvider 처리
                 .introduction(introduction)
