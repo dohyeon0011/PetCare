@@ -80,7 +80,7 @@ public class Member {
     private Role role;
 
     @Comment("프로필 사진")
-    private String profileImg;
+    private String profileImage;
 
     // 사용자 가입 날짜 확인 : 사용자가 언제 가입했는지 추적할 수 있다
     // 리프레시 토큰 발급 시간 확인 : 리프레시 토큰이 언제 생성되었는지 확인하여 비정상적인 패턴(예: 짧은 시간 내 다중 발급)을 탐지할 수 있다
@@ -157,7 +157,7 @@ public class Member {
 //    private List<String> certifications;
 
     @Builder
-    public Member(String loginId, String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, Role role, SocialProvider socialProvider, String introduction, Integer careerYear) {
+    public Member(String loginId, String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, String profileImage, Role role, SocialProvider socialProvider, String introduction, Integer careerYear) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
@@ -166,6 +166,7 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.zipcode = zipcode;
         this.address = address;
+        this.profileImage = profileImage;
         this.role = role;
         this.socialProvider = socialProvider;
         this.introduction = introduction;
@@ -173,7 +174,7 @@ public class Member {
     }
 
     @Comment("회원정보 수정")
-    public void update(String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, String profileImgPath, String introduction, Integer careerYear) {
+    public void update(String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, String profileImage, String introduction, Integer careerYear) {
         this.password = password;
         this.name = name;
         this.nickName = nickName;
@@ -181,7 +182,7 @@ public class Member {
         this.phoneNumber = phoneNumber;
         this.zipcode = zipcode;
         this.address = address;
-        this.profileImg = profileImgPath;
+        changeProfileImage(profileImage);
         this.introduction = introduction;
 
         if (Role.PET_SITTER.equals(this.getRole())) {
@@ -208,9 +209,9 @@ public class Member {
         this.isDeleted = isDeleted;
     }
 
-    @Comment("회원 프로필 사진 경로 설정")
-    public void changeProfileImgPath(String profileImgPath) {
-        this.profileImg = profileImgPath;
+    @Comment("회원 프로필 사진 변경")
+    public void changeProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     // 이러한 상황(Member의 Role)에 따른 로직은 도메인 내부에 있어야 변경사항이 있을 때 도메인만 수정하면 돼서 유지보수가 쉽다.
