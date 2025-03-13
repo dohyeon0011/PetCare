@@ -57,12 +57,14 @@ public class MemberApiController {
                     .body(errorMessages);
         }
 
-        UploadFile uploadFile = null;
-
         // 프로필 이미지를 등록 했다면 파일 업로드 처리
         if (profileImage != null && !profileImage.isEmpty()) {
             try {
-                uploadFile = fileUploadService.uploadFile(profileImage, "profile");
+                UploadFile uploadFile = fileUploadService.uploadFile(profileImage, "profile");
+                Object member = memberService.save(request, uploadFile);
+
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(member);
             } catch (IOException e) {
                 log.error("프로필 이미지 파일 업로드 실패: {}", e.getMessage());
 
@@ -71,7 +73,8 @@ public class MemberApiController {
             }
         }
 
-        Object member = memberService.save(request, uploadFile);
+        // 프로필 이미지를 등록하지 않았을 때
+        Object member = memberService.save(request, null);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(member);
@@ -108,9 +111,11 @@ public class MemberApiController {
     }
 
     @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 API")
-    @PutMapping("/{memberId}")
-    public ResponseEntity<?> updateMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") Long id, @RequestBody @Valid UpdateMemberRequest request,
-                                               @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
+    @PutMapping(value = "/{memberId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") Long id,
+                                          @RequestPart(value = "profileImage", required = false) @Parameter(description = "업로드 할 프로필 사진", content = @Content(mediaType = "multipart/form-data")) MultipartFile profileImage,
+                                          @RequestPart(value = "request") @Valid UpdateMemberRequest request, BindingResult result,
+                                          @AuthenticationPrincipal MemberDetails memberDetails) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -127,7 +132,24 @@ public class MemberApiController {
             throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
-        Object updateMember = memberService.update(id, request);
+        // 프로필 이미지 파일을 등록 했다면
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                UploadFile uploadFile = fileUploadService.uploadFile(profileImage, "profile");
+                Object updateMember = memberService.update(id, request, uploadFile);
+
+                return ResponseEntity.ok()
+                        .body(updateMember);
+            } catch (IOException e) {
+                log.error("프로필 이미지 파일 업로드 실패: {}", e.getMessage());
+
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("프로필 이미지 파일 업로드에 실패했습니다.");
+            }
+        }
+
+        // 프로필 이미지를 등록하지 않았을 때
+        Object updateMember = memberService.update(id, request, null);
 
         return ResponseEntity.ok()
                 .body(updateMember);
