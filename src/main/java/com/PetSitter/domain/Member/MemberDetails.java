@@ -47,6 +47,6 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return !member.isDeleted(); // 회원이 탈퇴 상태라면 false 반환 -> 로그인 차단
     }
 }
