@@ -39,7 +39,7 @@ public class SitterReservationApiController {
     @Operation(summary = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회", description = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회 API")
     @GetMapping("/reservable/members/{sitterId}")
     public ResponseEntity<ReservationSitterResponse.GetDetail> findReservationSitter(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
-                                                                                     @RequestParam(defaultValue = "0") @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작") int page) {
+                                                                                     @RequestParam(required = false, defaultValue = "0") @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작") int page) {
         ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
 
         return ResponseEntity.ok()
