@@ -95,7 +95,20 @@
 <div class="reservable-container">
     <!-- 펫시터 기본 정보 -->
     <div class="sitter-info">
+        <!-- 프로필 이미지 -->
         <h2 th:text="${reservableSitter.sitterName}"></h2><br>
+        <div class="text-center mb-3">
+            <img th:if="${reservableSitter.profileImage != null and reservableSitter.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${reservableSitter.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <img th:if="${reservableSitter.profileImage == null or reservableSitter.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        </div><br>
         <p th:utext="${#strings.replace(reservableSitter.introduction, '\n', '<br>')}"></p><br><br>
         <p class="career" th:text="|🏆 경력: ${reservableSitter.careerYear}년|"></p>
         <div class="address">
