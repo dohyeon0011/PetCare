@@ -130,6 +130,27 @@
             <input type="text" id="address" name="address" class="form-control" th:value="${member.address}">
         </div>
 
+        <!-- 프로필 사진 업로드 -->
+        <div class="form-group text-center">
+            <label for="profileImage" class="text-left d-block">프로필 사진</label>
+            <br>
+            <!-- 기존 프로필 이미지 표시 -->
+            <img id="profilePreview"
+                 th:src="${member.profileImage != null and member.profileImage != '' ? '/uploads/profile/' + member.profileImage : '/images/default-profile.png'}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover; display: block; margin: auto;">
+
+            <!-- 파일 선택 input (숨겨짐) -->
+            <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
+
+            <!-- 프로필 이미지 삭제 버튼 -->
+            <button id="deleteProfileImageBtn" class="btn btn-danger btn-sm mt-2"
+                    th:if="${member.profileImage != null and member.profileImage != ''}">
+                기본 이미지로 변경
+            </button>
+        </div>
+
         <div class="form-group">
             <label for="introduction">소개</label>
             <textarea id="introduction" name="introduction" class="form-control" rows="3" th:text="${member.introduction}"></textarea>
