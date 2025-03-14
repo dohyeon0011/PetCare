@@ -38,7 +38,8 @@ public class WebSecurityConfig {
                                 "/pets-care/sitter", "/pets-care/trainer", "/pets-care/sitters-information",
                                 "/pets-care/pet-sitter/information", "/pets-care/reservable-list",
                                 "/pets-care/reservable/members/**", "/pets-care/reviews",
-                                "/css/**", "/js/**")
+                                "/css/**", "/js/**", "/images/**", "/uploads/profile/**",
+                                "/uploads/pets/**", "/uploads/carelogs/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pets-care/members/new").permitAll() // 회원가입 API 허용
                         .requestMatchers("/admin/**").hasRole("ADMIN")
