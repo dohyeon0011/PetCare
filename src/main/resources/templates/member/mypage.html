@@ -102,6 +102,21 @@
             <div class="card profile-card">
                 <div class="card-body">
                     <h4 class="card-title">👤 회원 공통 정보</h4>
+
+                    <!-- 프로필 이미지 -->
+                    <div class="text-center mb-3">
+                        <img th:if="${member.profileImage != null and member.profileImage != ''}"
+                             th:src="@{'/uploads/profile/' + ${member.profileImage}}"
+                             alt="프로필 이미지"
+                             class="img-fluid rounded-circle"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                        <img th:if="${member.profileImage == null or member.profileImage == ''}"
+                             src="/images/default-profile.png"
+                             alt="기본 프로필 이미지"
+                             class="img-fluid rounded-circle"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+
                     <p class="card-text">
                         <strong>이름:</strong> <span th:text="${member.name}"></span><br>
                         <strong>닉네임:</strong> <span th:text="${member.nickName}"></span><br>
@@ -116,8 +131,8 @@
                             <span th:case="*">알 수 없음</span>
                         </span>
                         <br>
-                        <strong>소셜 제공자:</strong> <span th:text="${member.socialProvider ?: '소셜 제공자 정보가 없습니다.'}"></span><br>
-                        <strong>소개:</strong> <span th:utext="${member.introduction}"></span><br>
+                        <strong>소셜 제공자:</strong> <span th:text="${member.socialProvider ?: '소셜 제공자 정보가 없습니다.'}"></span><br><br>
+                        <strong>소개:</strong> <span th:utext="${member.introduction}"></span><br><br>
                     </p>
 
                     <div th:if="${member.role.name() == 'CUSTOMER'}">
