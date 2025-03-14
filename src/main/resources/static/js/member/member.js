@@ -6,11 +6,11 @@ if (memberId === null) {
     console.error("회원 정보를 찾을 수 없습니다.");
 }
 
-// 폼 변경 감지 & 페이지 이탈 방지
 document.addEventListener("DOMContentLoaded", function () {
     let isFormDirty = false;
     const formInputs = document.querySelectorAll("#editProfileForm input, #editProfileForm textarea");
 
+    // 폼 변경 감지 (페이지 이탈 방지)
     formInputs.forEach(input => {
         input.addEventListener("input", () => isFormDirty = true);
         input.addEventListener("change", () => isFormDirty = true);
@@ -28,16 +28,50 @@ document.addEventListener("DOMContentLoaded", function () {
         window.removeEventListener("beforeunload", arguments.callee);
     });
 
-    // 회원 탈퇴 버튼 이벤트 리스너 등록
-    const deleteMemberBtn = document.getElementById("deleteMemberBtn");
-    if (deleteMemberBtn) {
-        deleteMemberBtn.addEventListener("click", deleteMember);
+    // 프로필 이미지 미리보기 기능 추가
+    const profileImageInput = document.getElementById("profileImage");
+    const profilePreview = document.getElementById("profilePreview");
+    const deleteProfileImageBtn = document.getElementById("deleteProfileImageBtn");
+
+    // 파일 선택 시 미리보기 업데이트
+    if (profileImageInput && profilePreview) {
+        profileImageInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profilePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     }
 
-    // 회원 정보 수정 폼 이벤트 리스너 등록
-    const editProfileForm = document.getElementById("editProfileForm");
-    if (editProfileForm) {
-        editProfileForm.addEventListener("submit", updateMember);
+    // 프로필 이미지 삭제 버튼 클릭 시 기본 이미지로 변경
+    if (deleteProfileImageBtn) {
+        deleteProfileImageBtn.addEventListener("click", function (event) {
+            event.preventDefault(); // 폼 제출을 방지
+
+            if (!confirm("프로필 이미지를 기본 이미지로 변경하시겠습니까?")) {
+                return;
+            }
+
+            // 프로필 이미지를 기본 이미지로 변경 (클라이언트 측에서만 처리)
+            profilePreview.src = "/images/default-profile.png";  // 기본 이미지로 설정
+
+            // 파일 선택 필드 초기화
+            profileImageInput.value = "";
+
+            // 삭제 버튼 숨기기
+            deleteProfileImageBtn.style.display = "none";
+        });
+    }
+
+    // 프로필 이미지 미리보기 클릭 시 파일 선택
+    if (profilePreview) {
+        profilePreview.addEventListener("click", function () {
+            profileImageInput.click();  // 파일 input을 클릭하는 효과
+        });
     }
 });
 
@@ -49,12 +83,13 @@ async function updateMember(event) {
     if (isFetching) return;
     isFetching = true;
 
-    // 기존 오류 메시지 제거
     document.querySelectorAll(".error-message").forEach(el => el.remove());
     document.querySelectorAll(".error").forEach(el => el.classList.remove("error"));
 
     try {
-        const formData = {
+        const formData = new FormData();
+
+        formData.append("request", new Blob([JSON.stringify({
             password: document.getElementById("password")?.value,
             name: document.getElementById("name")?.value,
             nickName: document.getElementById("nickName")?.value,
@@ -63,35 +98,33 @@ async function updateMember(event) {
             zipcode: document.getElementById("zipcode")?.value,
             address: document.getElementById("address")?.value,
             introduction: document.getElementById("introduction")?.value,
-        };
+            careerYear: document.getElementById("careerYear")?.value || null
+        })], { type: "application/json" }));
 
-        const careerYearInput = document.getElementById("careerYear");
-        if (careerYearInput) {
-            formData.careerYear = careerYearInput.value;
+        // 프로필 이미지 추가
+        const profileImage = document.getElementById("profileImage").files[0];
+        if (profileImage) {
+            formData.append("profileImage", profileImage);
         }
 
         const response = await fetch(`/api/pets-care/members/${memberId}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
+            body: formData
         });
 
         if (!response.ok) {
             if (response.status === 400) {
-                // 유효성 검사 오류 처리
                 const errors = await response.json();
                 Object.keys(errors).forEach(field => {
                     const inputField = document.getElementById(field);
                     if (inputField) {
-                        inputField.classList.add("error"); // 입력 필드 테두리 강조
+                        inputField.classList.add("error");
 
                         const errorMessage = document.createElement("div");
                         errorMessage.classList.add("error-message");
                         errorMessage.textContent = errors[field];
 
-                        inputField.insertAdjacentElement("afterend", errorMessage); // 필드 아래 오류 메시지 추가
+                        inputField.insertAdjacentElement("afterend", errorMessage);
                     }
                 });
                 throw new Error("입력 값을 확인하세요.");
