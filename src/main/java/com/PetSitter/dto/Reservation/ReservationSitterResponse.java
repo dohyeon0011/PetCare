@@ -7,6 +7,7 @@ import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         private String sitterName;
         private String introduction;
         private Integer careerYear;
+        private String profileImage;
 
         /*public GetList(Member sitter) {
             this.sitterId = sitter.getId();
@@ -27,11 +29,12 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         }*/
 
         @QueryProjection
-        public GetList(long sitterId, String sitterName, String introduction, Integer careerYear) {
+        public GetList(long sitterId, String sitterName, String introduction, Integer careerYear, String profileImage) {
             this.sitterId = sitterId;
             this.sitterName = sitterName;
             this.introduction = introduction;
             this.careerYear = careerYear;
+            this.profileImage = profileImage;
         }
     }
 
@@ -45,6 +48,7 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         private List<CertificationResponse.GetReservation> certifications;
         private String zipcode;
         private String address;
+        private String profileImage;
         private List<ReviewResponse.GetDetail> reviews;
 
         public GetDetail(Member sitter, List<Review> reviews) {
@@ -60,6 +64,7 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
                     .toList();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.profileImage = sitter.getProfileImage();
             /*this.reviews = reviews
                     .stream()
                     .map(ReviewResponse.GetDetail::new)
