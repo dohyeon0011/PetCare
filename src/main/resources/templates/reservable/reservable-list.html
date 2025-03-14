@@ -100,6 +100,22 @@
                 <input type="hidden" class="sitter-id" th:value="${sitter.sitterId}">
                 <div class="card">
                     <div class="card-body">
+                        <div class="text-center mb-3">
+                            <!-- 프로필 이미지가 있을 경우 -->
+                            <img th:if="${sitter.profileImage != null and sitter.profileImage != ''}"
+                                 th:src="@{'/uploads/profile/' + ${sitter.profileImage}}"
+                                 alt="프로필 이미지"
+                                 class="img-fluid rounded-circle"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+
+                            <!-- 프로필 이미지가 없을 경우 기본 이미지 -->
+                            <img th:if="${sitter.profileImage == null or sitter.profileImage == ''}"
+                                 src="/images/default-profile.png"
+                                 alt="기본 프로필 이미지"
+                                 class="img-fluid rounded-circle"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+
                         <h5 class="card-title" th:text="${sitter.sitterName}"></h5>
                         <p class="card-text">
                            🏆 경력: <span th:text="${sitter.careerYear}"></span>년
