@@ -50,7 +50,10 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
     @Override
     public Page<ReservationSitterResponse.GetList> findDistinctSitterDetail(Pageable pageable) {
         List<ReservationSitterResponse.GetList> content = queryFactory
-                .select(new QReservationSitterResponse_GetList(careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction, careAvailableDate.sitter.careerYear)).distinct()
+                .select(
+                        new QReservationSitterResponse_GetList(
+                                careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction,
+                                careAvailableDate.sitter.careerYear, careAvailableDate.sitter.profileImage)).distinct()
                 .from(careAvailableDate)
                 .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY)
                         .and(careAvailableDate.sitter.isDeleted.eq(Boolean.FALSE))
