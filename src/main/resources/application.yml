@@ -31,12 +31,15 @@ spring:
   logging:
     level:
       com:
-        PetCare: DEBUG  # 해당 패키지 내에서 모든 로그가 DEBUG 레벨로 출력됩니다.
+        PetSitter: DEBUG  # 해당 패키지 내에서 모든 로그가 DEBUG 레벨로 출력됩니다.
       org:
         springframework:
           web: DEBUG  # Spring 웹 관련 로그도 DEBUG 레벨로 출력됩니다.
     pattern:
       console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # 로그 출력 형식 설정
+  output:
+    ansi:
+      enabled: always
 
   servlet:
     multipart:
