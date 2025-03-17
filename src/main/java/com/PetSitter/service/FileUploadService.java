@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,34 @@ public class FileUploadService {
     @Value("${carelogsUpload.path}")
     private String carelogsUploadPath;
 
+    @Comment("여러 개의 파일 업로드 처리 메서드")
+    public List<UploadFile> uploadFiles(List<MultipartFile> multipartFiles, String uploadType) throws IOException {
+        if (multipartFiles == null || multipartFiles.isEmpty()) {
+            throw new IOException("파일이 비었습니다.");
+        }
+
+        List<UploadFile> uploadFiles = new ArrayList<>();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (multipartFile == null || multipartFile.isEmpty()) {
+                throw new IOException("빈 파일은 업로드할 수 없습니다.");
+            }
+
+            String originalFilename = multipartFile.getOriginalFilename();
+
+            if (originalFilename == null || originalFilename.isEmpty()) {
+                throw new IOException("파일 이름이 비어있습니다.");
+            }
+
+            String serverFileName = createServerFileName(originalFilename);
+            multipartFile.transferTo(new File(getFullPath(serverFileName, uploadType)));
+
+            uploadFiles.add(new UploadFile(originalFilename, serverFileName));
+        }
+
+        return uploadFiles;
+    }
+
     @Comment("단일 파일 업로드 처리 메서드")
     public UploadFile uploadFile(MultipartFile multipartFile, String uploadType) throws IOException {
         if (multipartFile == null || multipartFile.isEmpty()) {
@@ -31,6 +60,7 @@ public class FileUploadService {
 
         // 파일 이름 가져오기
         String originalFilename = multipartFile.getOriginalFilename();
+
         if (originalFilename == null || originalFilename.isEmpty()) {
             throw new IOException("파일 이름이 비어있습니다.");
         }
