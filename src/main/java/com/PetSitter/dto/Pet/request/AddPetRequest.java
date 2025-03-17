@@ -21,15 +21,15 @@ public class AddPetRequest {
 
     private String medicalConditions;
 
-//    private String profileImgPath;
+    private String profileImage;
 
-    public Pet toEntity() {
+    public Pet toEntity(String profileImage) {
         return Pet.builder()
                 .name(name)
                 .age(age)
                 .breed(breed)
                 .medicalConditions(medicalConditions)
-//                .profileImgPath(profileImgPath)
+                .profileImage(profileImage)
                 .build();
     }
 
