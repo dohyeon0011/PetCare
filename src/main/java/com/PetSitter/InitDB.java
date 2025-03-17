@@ -62,7 +62,7 @@ public class InitDB {
                     .age(5)
                     .breed("비숑")
                     .medicalConditions("특정 사료만 먹음")
-                    .profileImgPath("https://cafe24.poxo.com/ec01/ejvpt/HOvhRhvOk+Cp2KY4JuusAg5T53na+Q88SEWskSb9Ko/8BAzWksUIq5Cxa0iMqHXD5IlcFun8qoZd+P4AUmvlyQ==/_/web/product/medium/202407/367bd9188f2f35d58c2c8be59c6196d5.jpg")
+                    .profileImage("https://cafe24.poxo.com/ec01/ejvpt/HOvhRhvOk+Cp2KY4JuusAg5T53na+Q88SEWskSb9Ko/8BAzWksUIq5Cxa0iMqHXD5IlcFun8qoZd+P4AUmvlyQ==/_/web/product/medium/202407/367bd9188f2f35d58c2c8be59c6196d5.jpg")
                     .build();
 
             Pet pet2 = Pet.builder()
@@ -70,7 +70,7 @@ public class InitDB {
                     .age(2)
                     .breed("포메라니안")
                     .medicalConditions("간식 주면 안됨")
-                    .profileImgPath("https://cdn.crowdpic.net/detail-thumb/thumb_d_C1A78936BB1B43554DE572091820B23F.jpg")
+                    .profileImage("https://cdn.crowdpic.net/detail-thumb/thumb_d_C1A78936BB1B43554DE572091820B23F.jpg")
                     .build();
 
             pet1.addCustomer(member);
@@ -260,7 +260,7 @@ public class InitDB {
                     .age(5)
                     .breed("골든 리트리버")
                     .medicalConditions("멍청함")
-                    .profileImgPath("https://cafe24.poxo.com/ec01/ejvpt/HOvhRhvOk+Cp2KY4JuusAg5T53na+Q88SEWskSb9Ko/8BAzWksUIq5Cxa0iMqHXD5IlcFun8qoZd+P4AUmvlyQ==/_/web/product/medium/202407/367bd9188f2f35d58c2c8be59c6196d5.jpg")
+                    .profileImage("https://cafe24.poxo.com/ec01/ejvpt/HOvhRhvOk+Cp2KY4JuusAg5T53na+Q88SEWskSb9Ko/8BAzWksUIq5Cxa0iMqHXD5IlcFun8qoZd+P4AUmvlyQ==/_/web/product/medium/202407/367bd9188f2f35d58c2c8be59c6196d5.jpg")
                     .build();
 
             Pet pet2 = Pet.builder()
@@ -268,7 +268,7 @@ public class InitDB {
                     .age(2)
                     .breed("포메라니안")
                     .medicalConditions("산책에 미쳐있음")
-                    .profileImgPath("https://cdn.crowdpic.net/detail-thumb/thumb_d_C1A78936BB1B43554DE572091820B23F.jpg")
+                    .profileImage("https://cdn.crowdpic.net/detail-thumb/thumb_d_C1A78936BB1B43554DE572091820B23F.jpg")
                     .build();
 
             pet1.addCustomer(member);
