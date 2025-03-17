@@ -36,7 +36,7 @@ public class Pet {
     private String medicalConditions;
 
     @Comment("반려견 프로필 사진")
-    private String profileImgPath;
+    private String profileImage;
 
     @Comment("삭제 여부(soft delete), True: 삭제, False: 존재")
     private boolean isDeleted;
@@ -47,21 +47,26 @@ public class Pet {
         customer.getPets().add(this);
     }
 
-    @Builder
-    public Pet(String name, int age, String breed, String medicalConditions, String profileImgPath) {
-        this.name = name;
-        this.age = age;
-        this.breed = breed;
-        this.medicalConditions = medicalConditions;
-//        this.profileImgPath = profileImgPath;
+    @Comment("반려견 프로필 사진 변경")
+    public void changeProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
-    public void update(String name, int age, String breed, String medicalConditions, String profileImgPath) {
+    @Builder
+    public Pet(String name, int age, String breed, String medicalConditions, String profileImage) {
         this.name = name;
         this.age = age;
         this.breed = breed;
         this.medicalConditions = medicalConditions;
-        this.profileImgPath = profileImgPath;
+        this.profileImage = profileImage;
+    }
+
+    public void update(String name, int age, String breed, String medicalConditions, String profileImage) {
+        this.name = name;
+        this.age = age;
+        this.breed = breed;
+        this.medicalConditions = medicalConditions;
+        changeProfileImage(profileImage);
     }
 
     @Comment("반려견 삭제 시 Soft Delete 적용")
