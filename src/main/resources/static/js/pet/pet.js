@@ -32,6 +32,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <label for="medicalConditions">건강 상태 및 특이사항</label>
                 <textarea name="pets[${petCount}].medicalConditions" class="form-control" rows="2"></textarea>
             </div>
+            <div class="form-group">
+                <label for="profileImage${petCount}">프로필 이미지</label>
+                <input type="file" name="petImages[${petCount}]" class="form-control-file" accept="image/*">
+            </div>
         `;
 
         petFormSections.appendChild(newPetForm);
@@ -91,20 +95,47 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 반려견 정보 제출 (추가 및 수정)
     function submitPetData(method, url, successMessage) {
-        const petData = [];
-        document.querySelectorAll(".pet-section").forEach(section => {
-            const petId = section.querySelector('input[name$=".id"]')?.value || null;
-            const name = section.querySelector('input[name$=".name"]').value;
-            const age = section.querySelector('input[name$=".age"]').value;
-            const breed = section.querySelector('input[name$=".breed"]').value;
-            const medicalConditions = section.querySelector('textarea[name$=".medicalConditions"]').value;
+        const formData = new FormData();
 
-            petData.push({ id: petId, name, age, breed, medicalConditions });
+        // 반려견 정보 추가
+        const petData = [];
+        document.querySelectorAll(".pet-section").forEach((section, index) => {
+            const petInfo = {
+                id: section.querySelector('input[name$=".id"]')?.value || null,
+                name: section.querySelector('input[name$=".name"]').value,
+                age: section.querySelector('input[name$=".age"]').value,
+                breed: section.querySelector('input[name$=".breed"]').value,
+                medicalConditions: section.querySelector('textarea[name$=".medicalConditions"]').value
+            };
+            petData.push(petInfo);
+
+            // 반려견 사진 추가
+            const fileInput = section.querySelector('input[type="file"]');
+//            console.log(`fileInput for pet ${index + 1}:`, fileInput);
+            if (fileInput && fileInput.files.length > 0) {
+//                console.log(`Pet ${index + 1} has files:`, fileInput.files);
+                Array.from(fileInput.files).forEach(file => {
+//                    console.log(`Adding file to formData:`, file);
+                    formData.append("petImages[]", file); // 여러 파일을 배열로 추가
+                });
+            }
         });
 
-        httpRequest(method, url, JSON.stringify(petData), () => {
+        // JSON 데이터를 Blob으로 변환하여 FormData에 추가
+        const petDataBlob = new Blob([JSON.stringify(petData)], { type: "application/json" });
+        formData.append("request", petDataBlob); // request 파라미터 추가
+
+        // FormData 내용 로그
+        console.log("FormData contents:", formData);
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+        }
+
+
+        // 요청 보내기
+        httpRequest(method, url, formData, () => {
             alert(successMessage);
             window.location.href = `/pets-care/members/${memberId}/myPage`;
         }, () => {
@@ -120,12 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // HTTP 요청 함수
+    // HTTP 요청 함수 수정 (FormData 지원)
     function httpRequest(method, url, body, success, fail) {
         fetch(url, {
             method: method,
-            headers: { "Content-Type": "application/json" },
-            body: body,
+            body: body, // FormData 전송
         }).then(response => {
             if (response.ok) {
                 success();
