@@ -15,7 +15,7 @@ public class PetResponse {
         private int age;
         private String breed;
         private String medicalConditions;
-        private String profileImgUrl;
+        private String profileImage;
 
         public GetList(Pet pet) {
             this.id = pet.getId();
@@ -23,7 +23,7 @@ public class PetResponse {
             this.age = pet.getAge();
             this.breed = pet.getBreed();
             this.medicalConditions = pet.getMedicalConditions();
-            this.profileImgUrl = pet.getProfileImgPath();
+            this.profileImage = pet.getProfileImage();
         }
     }
 
