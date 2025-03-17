@@ -132,26 +132,26 @@ MySQL
 <br><br><br>
 
 # 회원 정보 페이지 - 고객 시점(1)
-<img width="1216" alt="image" src="https://github.com/user-attachments/assets/a6d6bc0e-3762-406f-8111-0028698fddb8" />
+<img width="1291" alt="image" src="https://github.com/user-attachments/assets/86a70705-5690-494b-a6d0-3af2f2efc403" />
 <img width="1018" alt="image" src="https://github.com/user-attachments/assets/3143ee69-955d-465b-a63d-c7e6e8302d78" />
-<img width="1059" alt="image" src="https://github.com/user-attachments/assets/b1bb5988-1b07-4c8d-a62c-a7185987119b" />
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/5b2f0ece-22ee-41c2-808a-67cbdaff9625" />
 (한 번에 여러 마리의 반려견 정보 수정, 등록 가능)<br><br>
 <img width="1176" alt="image" src="https://github.com/user-attachments/assets/d8de057e-b7b6-4f6b-93cb-bdd61992f249" />  
 (자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징))<br><br><br>
 
 # 회원 정보 페이지 - 돌봄사 시점(2)
-<img width="1113" alt="image" src="https://github.com/user-attachments/assets/7b981e37-fb47-4170-a7a2-60400ce27dc9" />
+<img width="1184" alt="image" src="https://github.com/user-attachments/assets/f6b0c6ed-6c72-4d3e-b9bd-b006c8c01912" />  
 <img width="1165" alt="image" src="https://github.com/user-attachments/assets/0bfab71d-e282-436e-9ba5-b7c53c9ae2f3" />    
 (자신에게 등록된 모든 돌봄 리뷰 목록 조회 페이지((+페이징), 돌봄사도 한 번에 여러 개의 자격증 정보 수정, 등록 가능))<br><br>
 <img width="1061" alt="image" src="https://github.com/user-attachments/assets/fa273643-7902-464f-8296-17b20df250a5" />  
 (자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
-<img width="1273" alt="image" src="https://github.com/user-attachments/assets/69abb663-9e52-4731-8dbd-1d084bc8016f" />    
+<img width="1189" alt="image" src="https://github.com/user-attachments/assets/238016e4-4890-49bf-aac6-607abc5ac23e" />      
 (돌봄 예약 가능 날짜를 등록한 펫시터 중 현재 예약이 가능한 펫시터만 조회(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
-<img width="806" alt="image" src="https://github.com/user-attachments/assets/04683e69-548a-45a5-9b1c-17cde7374a89" />    
+<img width="741" alt="image" src="https://github.com/user-attachments/assets/f3ad6be6-681e-42e2-b63a-ff709f9d501b" />    
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/a1dd792b-b0a7-4da6-90fc-9f2e5aacfe73" />  
 <img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />  
 
