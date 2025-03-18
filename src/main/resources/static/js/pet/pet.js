@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="form-group">
                 <label for="profileImage${petCount}">프로필 이미지</label>
-                <input type="file" name="petImages[${petCount}]" class="form-control-file" accept="image/*">
+                <input type="file" name="pets[${petCount}].profileImage" class="form-control-file" accept="image/*">
             </div>
         `;
 
@@ -102,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const petData = [];
         document.querySelectorAll(".pet-section").forEach((section, index) => {
             const petInfo = {
-                id: section.querySelector('input[name$=".id"]')?.value || null,
                 name: section.querySelector('input[name$=".name"]').value,
                 age: section.querySelector('input[name$=".age"]').value,
                 breed: section.querySelector('input[name$=".breed"]').value,
@@ -112,27 +111,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // 반려견 사진 추가
             const fileInput = section.querySelector('input[type="file"]');
-//            console.log(`fileInput for pet ${index + 1}:`, fileInput);
             if (fileInput && fileInput.files.length > 0) {
-//                console.log(`Pet ${index + 1} has files:`, fileInput.files);
                 Array.from(fileInput.files).forEach(file => {
-//                    console.log(`Adding file to formData:`, file);
-                    formData.append("petImages[]", file); // 여러 파일을 배열로 추가
+                    formData.append(`requests[${index}].profileImage`, file);   // 파일 순서를 맞추어 전송
                 });
             }
         });
 
-        // JSON 데이터를 Blob으로 변환하여 FormData에 추가
-        const petDataBlob = new Blob([JSON.stringify(petData)], { type: "application/json" });
-        formData.append("request", petDataBlob); // request 파라미터 추가
+        // 반려견 정보를 JSON 형태로 변환하여 FormData에 추가
+        petData.forEach((pet, index) => {
+            formData.append(`requests[${index}].name`, pet.name);
+            formData.append(`requests[${index}].age`, pet.age);
+            formData.append(`requests[${index}].breed`, pet.breed);
+            formData.append(`requests[${index}].medicalConditions`, pet.medicalConditions);
+        });
 
-        // FormData 내용 로그
-        console.log("FormData contents:", formData);
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
-
+        // 콘솔 로그로 FormData 내용을 출력
+        formData.forEach((value, key) => {
+            console.log(key, value);
+        });
 
         // 요청 보내기
         httpRequest(method, url, formData, () => {
