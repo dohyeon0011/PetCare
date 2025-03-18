@@ -3,29 +3,36 @@ package com.PetSitter.service.Pet;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
+import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Pet.request.AddPetRequest;
 import com.PetSitter.dto.Pet.request.UpdatePetRequest;
 import com.PetSitter.dto.Pet.response.PetResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Pet.PetRepository;
+import com.PetSitter.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PetService {
 
     private final PetRepository petRepository;
+    private final FileUploadService fileUploadService;
     private final MemberRepository memberRepository;
 
     @Transactional
-    public List<Pet> save(long customerId, List<AddPetRequest> request) {
+    public List<Pet> save(long customerId, List<AddPetRequest> requests) throws FileUploadException {
         Member customer = memberRepository.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException("반려견 등록 오류: 현재 회원은 존재하지 않는 회원입니다."));
 
@@ -33,9 +40,19 @@ public class PetService {
 
         List<Pet> pets = new ArrayList<>();
 
-        for (AddPetRequest addPetRequest : request) { // 각 PetDTO별 Member와 연관관계 편의 메서드 설정
-            Pet pet = addPetRequest.toEntity();
-            pet.addCustomer(customer); // Member와 연관관계 설정
+        for (AddPetRequest request : requests) {
+            UploadFile uploadFile = null;
+
+            if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
+                try {
+                    uploadFile = fileUploadService.uploadFile(request.getProfileImage(), "pets");
+                } catch (IOException e) {
+                    throw new FileUploadException("반려견 프로필 이미지 업로드에 실패했습니다.", e);
+                }
+            }
+
+            Pet pet = request.toEntity(uploadFile != null ? uploadFile.getServerFileName() : null);
+            pet.addCustomer(customer);
             pets.add(pet);
         }
 
@@ -77,7 +94,7 @@ public class PetService {
 
     @Comment("특정 회원의 반려견 수정")
     @Transactional
-    public List<PetResponse.GetList> update(long customerId, List<UpdatePetRequest> requests) {
+    public List<PetResponse.GetList> update(long customerId, List<UpdatePetRequest> requests) throws FileUploadException {
         Member customer = memberRepository.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
@@ -93,9 +110,19 @@ public class PetService {
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("반려견 조회에 실패했습니다."));
 
+            UploadFile uploadFile = null;
+
+            if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) { // 해당 반려견에 수정되는 프로필 이미지 사진이 있다면
+                try {
+                    uploadFile = fileUploadService.updateFile(request.getProfileImage(), "pets", pet.getProfileImage());
+                } catch (IOException e) {
+                    throw new FileUploadException("반려견 프로필 이미지 수정에 실패했습니다.", e);
+                }
+            }
+
             pet.update(
                     request.getName(), request.getAge(), request.getBreed(),
-                    request.getMedicalConditions(), request.getProfileImgUrl()
+                    request.getMedicalConditions(), uploadFile != null ? uploadFile.getServerFileName() : null
             );
         }
 
