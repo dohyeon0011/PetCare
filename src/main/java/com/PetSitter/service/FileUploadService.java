@@ -71,6 +71,21 @@ public class FileUploadService {
         return new UploadFile(originalFilename, serverFileName);
     }
 
+    @Comment("단일 파일 수정 업로드 처리 메서드")
+    public UploadFile updateFile(MultipartFile multipartFile, String uploadType, String currentProfileImage) throws IOException {
+        // 기존 파일 삭제
+        if (currentProfileImage != null) {
+            File currentFile = new File(getFullPath(currentProfileImage, uploadType));
+
+            if (currentFile.exists()) {
+                currentFile.delete();
+            }
+        }
+
+        // 새 파일 업로드
+        return uploadFile(multipartFile, uploadType);
+    }
+
     @Comment("파일명 UUID로 바꾸기")
     public String createServerFileName(String originalFilename) throws IOException {
         String uuid = UUID.randomUUID().toString();
