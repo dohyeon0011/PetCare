@@ -163,7 +163,7 @@
                         <li th:each="pet : ${member.pets}">
                             <!-- 반려견 프로필 이미지 -->
                             <div th:if="${pet.profileImage != null}">
-                                <img th:src="${pet.profileImage}" alt="반려견 프로필 사진" class="pet-profile-img">
+                                <img th:src="@{'/uploads/pets/' + ${pet.profileImage}}" alt="반려견 프로필 사진" class="pet-profile-img">
                             </div>
                             <br>
 
