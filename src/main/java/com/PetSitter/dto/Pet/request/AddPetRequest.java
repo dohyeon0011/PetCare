@@ -3,13 +3,14 @@ package com.PetSitter.dto.Pet.request;
 import com.PetSitter.domain.Pet.Pet;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
 public class AddPetRequest {
     private String name;
 
@@ -21,7 +22,7 @@ public class AddPetRequest {
 
     private String medicalConditions;
 
-    private String profileImage;
+    private MultipartFile profileImage;
 
     public Pet toEntity(String profileImage) {
         return Pet.builder()
