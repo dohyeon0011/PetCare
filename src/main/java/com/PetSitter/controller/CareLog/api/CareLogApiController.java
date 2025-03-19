@@ -6,17 +6,22 @@ import com.PetSitter.dto.CareLog.request.AddCareLogRequest;
 import com.PetSitter.dto.CareLog.request.UpdateCareLogRequest;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.service.CareLog.CareLogService;
+import com.PetSitter.service.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +35,19 @@ public class CareLogApiController {
     private final CareLogService careLogService;
 
     @Operation(summary = "돌봄사 - 돌봄 케어 로그 작성", description = "돌봄 케어 로그 작성 API")
-    @PostMapping("/members/{sitterId}/schedules/{sitterScheduleId}/care-logs/new")
+    @PostMapping(value = "/members/{sitterId}/schedules/{sitterScheduleId}/care-logs/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> saveCareLog(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                                                  @PathVariable("sitterScheduleId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long sitterScheduleId,
-                                                                 @RequestBody @Valid AddCareLogRequest request,
-                                                                 @AuthenticationPrincipal MemberDetails memberDetails,
-                                                                 BindingResult result) {
+                                                                 @RequestPart(value = "request") @Valid AddCareLogRequest request, BindingResult result,
+                                                                 @RequestPart(value = "careLogImage", required = false) @Parameter(description = "등록할 케어 로그 이미지 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile careLogImage,
+                                                                 @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
+        // 로그 추가 (파라미터 값 확인)
+        System.out.println("sitterId: " + sitterId);
+        System.out.println("sitterScheduleId: " + sitterScheduleId);
+        if (careLogImage != null) {
+            System.out.println("Uploaded file name: " + careLogImage.getOriginalFilename());
+        }
+
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -51,7 +63,7 @@ public class CareLogApiController {
             throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
-        CareLogResponse.GetDetail careLog = careLogService.save(sitterId, sitterScheduleId, request);
+        CareLogResponse.GetDetail careLog = careLogService.save(sitterId, sitterScheduleId, request, careLogImage);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(careLog);
@@ -118,16 +130,17 @@ public class CareLogApiController {
     }
 
     @Operation(summary = "돌봄사 - 특정 돌봄 케어 로그 수정", description = "특정 돌봄 케어 로그 수정 API")
-    @PutMapping("/members/{sitterId}/care-logs/{careLogId}")
+    @PutMapping(value = "/members/{sitterId}/care-logs/{careLogId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<CareLogResponse.GetDetail> updateCareLog(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                                                    @PathVariable("careLogId") @Parameter(required = true, description = "돌봄 케어 로그 고유 번호") long careLogId,
-                                                                   @RequestBody @Valid UpdateCareLogRequest request,
-                                                                   @AuthenticationPrincipal MemberDetails memberDetails) {
+                                                                   @RequestPart(value = "request") @Valid UpdateCareLogRequest request,
+                                                                   @RequestPart(value = "careLogImage", required = false) @Parameter(description = "등록할 케어 로그 이미지 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile careLogImage,
+                                                                   @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
         if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
             throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
-        CareLogResponse.GetDetail careLog = careLogService.update(sitterId, careLogId, request);
+        CareLogResponse.GetDetail careLog = careLogService.update(sitterId, careLogId, request, careLogImage);
 
         return ResponseEntity.ok()
                 .body(careLog);
