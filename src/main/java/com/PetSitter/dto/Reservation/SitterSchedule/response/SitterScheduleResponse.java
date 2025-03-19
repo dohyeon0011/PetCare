@@ -79,7 +79,7 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
                     .sorted(Comparator.comparing(CareLog::getId).reversed()) // CareLog ID 기준 내림차순 정렬
                     .map(c -> {
                         return new CareLogResponse.GetDetail(c.getId(), c.getSitterSchedule().getSitter().getName(), c.getCareType(),
-                                c.getDescription(), c.getImgPath(), c.getCreatedAt());
+                                c.getDescription(), c.getImage(), c.getCreatedAt());
                     }).toList();
             this.review = Optional.ofNullable(sitterSchedule.getCustomerReservation().getReview())
                     .filter(r -> !r.isDeleted())
