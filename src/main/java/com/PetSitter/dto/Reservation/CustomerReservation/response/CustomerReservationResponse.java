@@ -86,7 +86,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                             careLog.getSitterSchedule().getSitter().getName(),
                             careLog.getCareType(),
                             careLog.getDescription(),
-                            careLog.getImgPath(),
+                            careLog.getImage(),
                             careLog.getCreatedAt()
                     ))
                     .toList();
