@@ -14,12 +14,14 @@ public class PetReservationResponse { // 고객 시점 예약 엔티티 - 반려
         private int age;
         private String breed;
         private String medicalConditions;
+        private String profileImage;
 
         public PetDetailResponse(PetReservation petReservation) {
             this.name = petReservation.getPet().getName();
             this.age = petReservation.getPet().getAge();
             this.breed = petReservation.getPet().getBreed();
             this.medicalConditions = petReservation.getPet().getMedicalConditions();
+            this.profileImage = petReservation.getPet().getProfileImage();
         }
     }
 }
