@@ -34,13 +34,14 @@ h4 {
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 100%;
+    align-items: center; /* 이미지 가운데 정렬 */
 }
 
 .care-log-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-top: 10px;
+    width: 250px !important;
+    height: auto !important;
+    border-radius: 5px !important;
+    margin-top: 12px !important;
 }
 
 .button-group {
@@ -121,3 +122,10 @@ h4 {
     background-color: #0056b3;
 }
 
+.pet-profile-img {
+    width: 100px; /* 원하는 크기로 조정 */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%; /* 원형 이미지 */
+    margin-bottom: 10px;
+}
