@@ -12,6 +12,6 @@ import java.util.List;
 @Getter
 public class UpdatePetRequests {
 
-    private List<UpdatePetRequest> updatePetRequests = new ArrayList<>();
+    private List<UpdatePetRequest> requests = new ArrayList<>();
 
 }
