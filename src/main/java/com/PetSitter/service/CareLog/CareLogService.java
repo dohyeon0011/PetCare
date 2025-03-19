@@ -5,19 +5,24 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
+import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.CareLog.request.AddCareLogRequest;
 import com.PetSitter.dto.CareLog.request.UpdateCareLogRequest;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.repository.CareLog.CareLogRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
+import com.PetSitter.service.FileUploadService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -29,9 +34,10 @@ public class CareLogService {
     private final MemberRepository memberRepository;
     private final SitterScheduleRepository sitterScheduleRepository;
     private final CareLogRepository careLogRepository;
+    private final FileUploadService fileUploadService;
 
     @Comment("케어 로그 작성")
-    public CareLogResponse.GetDetail save(long sitterId, long sitterScheduleId, AddCareLogRequest request) {
+    public CareLogResponse.GetDetail save(long sitterId, long sitterScheduleId, AddCareLogRequest request, MultipartFile uploadFile) throws FileUploadException {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("로그인한 회원을 찾을 수 없습니다."));
 
@@ -45,15 +51,23 @@ public class CareLogService {
             throw new IllegalArgumentException("취소된 예약에는 케어 로그 작성이 불가능합니다.");
         }
 
-        CareLog careLog = request.toEntity(sitterSchedule);
+        UploadFile careLogImage = null;
+
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            try {
+                careLogImage = fileUploadService.uploadFile(uploadFile, "carelogs");
+            } catch (IOException e) {
+                throw new FileUploadException("케어 로그 이미지 파일 업로드 중에 실패했습니다.", e);
+            }
+        }
+
+        CareLog careLog = request.toEntity(sitterSchedule, careLogImage != null ? careLogImage.getServerFileName() : null);
         careLogRepository.save(careLog);
 
 //        return careLog.toResponse();
 
-        CareLogResponse.GetDetail careLogResponse = careLogRepository.findCareLogDetail(careLog.getId(), sitterId)
+        return careLogRepository.findCareLogDetail(careLog.getId(), sitterId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 케어 로그를 불러오는데 실패했습니다."));
-
-        return careLogResponse;
     }
 
     @Comment("돌봄사가 작성한 모든 돌봄 케어 로그 조회")
@@ -122,7 +136,7 @@ public class CareLogService {
     }
 
     @Comment("돌봄사의 특정 돌봄 케어 로그 수정")
-    public CareLogResponse.GetDetail update(long sitterId, long careLogId, UpdateCareLogRequest request) {
+    public CareLogResponse.GetDetail update(long sitterId, long careLogId, UpdateCareLogRequest request, MultipartFile uploadFile) throws FileUploadException {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("로그인한 회원을 찾을 수 없습니다."));
 
@@ -132,14 +146,20 @@ public class CareLogService {
         CareLog careLog = careLogRepository.findBySitterScheduleSitterIdAndIdAndIsDeletedFalse(sitter.getId(), careLogId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 케어 로그가 존재하지 않습니다."));
 
-        careLog.updateCareLog(request.getCareType(), request.getDescription(), request.getImgPath());
+        UploadFile updateCareLogImage = null;
 
-//        return careLog.toResponse();
+        if (uploadFile != null && !uploadFile.isEmpty()) {
+            try {
+                updateCareLogImage = fileUploadService.updateFile(uploadFile, "carelogs", careLog.getImage());
+            } catch (IOException e) {
+                throw new FileUploadException("케어 로그 이미지 파일 업로드 중에 실패했습니다.", e);
+            }
+        }
 
-        CareLogResponse.GetDetail updateCareLog = careLogRepository.findCareLogDetail(careLog.getId(), sitterId)
+        careLog.updateCareLog(request.getCareType(), request.getDescription(), updateCareLogImage != null ? updateCareLogImage.getServerFileName() : null);
+
+        return careLogRepository.findCareLogDetail(careLog.getId(), sitterId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 케어 로그가 존재하지 않습니다."));
-
-        return updateCareLog;
     }
 
     @Comment("돌봄 케어 로그 작성할 때 보여줄 정보")
