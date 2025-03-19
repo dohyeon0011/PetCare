@@ -115,6 +115,11 @@
         <h4>🐾 예약된 반려동물</h4>
         <ul class="list-group">
             <li th:each="pet : ${schedule.pets}" class="list-group-item">
+                <!-- 반려견 프로필 이미지 -->
+                <div th:if="${pet.profileImage != null}">
+                    <img th:src="@{'/uploads/pets/' + ${pet.profileImage}}" alt="반려견 프로필 사진" class="pet-profile-img">
+                </div>
+
                 <strong th:text="${pet.name}"></strong>
                 (나이: <span th:text="${pet.age}"></span>세, 품종: <span th:text="${pet.breed}"></span>)<br>
                 <strong>건강 상태 및 특이사항:</strong> <span th:text="${pet.medicalConditions} ?: '없음'"></span>
@@ -127,8 +132,8 @@
         <div class="care-log-list">
             <div th:each="log : ${schedule.careLogList}" class="care-log-card" th:attr="data-log-id=${log.id}">
                 <h5 style="color: #3b82f6;" th:text="${log.sitterName} + '님의 기록'"></h5><br>
-                <div th:if="${log.imgPath != null}">
-                    <img th:src="@{${log.imgPath}}" alt="돌봄 이미지" class="care-log-img">
+                <div th:if="${log.image != null}">
+                    <img th:src="@{'/uploads/carelogs/' + ${log.image}}" alt="돌봄 이미지" class="care-log-img">
                 </div><br>
                 <p><strong>돌봄 유형:</strong> <span th:text="${log.careType}"></span></p>
                 <p><strong>설명:</strong> <span th:text="${log.description}"></span></p>
@@ -182,7 +187,7 @@
 <div id="careLogModal" class="modal" style="display: none;">
     <div class="modal-content">
         <h5 id="modalTitle" class="modal-title">돌봄 기록 추가</h5><br>
-        <form id="careLogForm">
+        <form id="careLogForm" enctype="multipart/form-data">
             <input type="hidden" id="logId">
             <div class="form-group">
                 <label for="careType">돌봄 유형</label>
@@ -192,10 +197,12 @@
                 <label for="description">설명</label>
                 <textarea id="description" class="form-control"></textarea>
             </div>
-<!--            <div class="form-group">-->
-<!--                <label for="imgPath">이미지</label>-->
-<!--                <input type="file" id="imgPath" class="form-control">-->
-<!--            </div>-->
+            <div class="form-group">
+                <label for="image">이미지</label>
+                <input type="file" id="image" class="form-control">
+                <!-- 이미지 미리보기 -->
+                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width: 100px; height: 100px; margin-top: 10px;">
+            </div>
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">저장</button>
                 <button type="button" class="btn btn-secondary" id="closeModal">닫기</button>
