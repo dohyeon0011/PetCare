@@ -82,7 +82,7 @@ public class AdminReservationResponse {
                             careLog.getSitterSchedule().getSitter().getName(),
                             careLog.getCareType(),
                             careLog.getDescription(),
-                            careLog.getImgPath(),
+                            careLog.getImage(),
                             careLog.getCreatedAt()
                     ))
                     .toList();
