@@ -33,7 +33,7 @@ public class CareLog { // 돌봄 케어 로그
     private String description;
 
     @Comment("케어 상세 사진")
-    private String imgPath;
+    private String image;
 
     @Comment("로그 작성 시간")
     @CreatedDate
@@ -44,11 +44,11 @@ public class CareLog { // 돌봄 케어 로그
     private boolean isDeleted;
 
     @Builder
-    public CareLog(SitterSchedule sitterSchedule, String careType, String description, String imgPath) {
+    public CareLog(SitterSchedule sitterSchedule, String careType, String description, String image) {
         addSitterSchedule(sitterSchedule);
         this.careType = careType;
         this.description = description;
-        this.imgPath = imgPath;
+        this.image = image;
     }
 
     // 돌봄사 시점 돌봄 배정 - 돌봄 케어 로그 연관관계 편의 메서드
@@ -58,18 +58,23 @@ public class CareLog { // 돌봄 케어 로그
     }
 
     @Comment("케어 로그 내용 수정")
-    public void updateCareLog(String careType, String description, String imgPath) {
+    public void updateCareLog(String careType, String description, String image) {
         if (this.createdAt.plusDays(3).isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("작성한 지 3일이 지난 경우 수정이 불가합니다.");
         }
         this.careType = careType;
         this.description = description;
-        this.imgPath = imgPath;
+        changeImage(image);
     }
 
     @Comment("케어 로그 삭제 시 Soft Delete 적용")
     public void changeIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    @Comment("케어 로그 사진 수정")
+    public void changeImage(String image) {
+        this.image = image;
     }
 
     /*public CareLogResponse.GetDetail toResponse() {
