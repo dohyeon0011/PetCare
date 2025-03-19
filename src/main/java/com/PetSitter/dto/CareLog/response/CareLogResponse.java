@@ -36,7 +36,7 @@ public class CareLogResponse {
         private String sitterName; // 케어 로그 작성 돌봄자
         private String careType;
         private String description;
-        private String imgPath;
+        private String image;
         private LocalDateTime createdAt;
 
         /*public GetDetail(CareLog careLog) {
@@ -48,12 +48,12 @@ public class CareLogResponse {
             this.createdAt = careLog.getCreatedAt();
         }*/
 
-        public GetDetail(long id, String sitterName, String careType, String description, String imgPath, LocalDateTime createdAt) {
+        public GetDetail(long id, String sitterName, String careType, String description, String image, LocalDateTime createdAt) {
             this.id = id;
             this.sitterName = sitterName;
             this.careType = careType;
             this.description = description;
-            this.imgPath = imgPath;
+            this.image = image;
             this.createdAt = createdAt;
         }
     }
