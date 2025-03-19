@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // memberId 가져오기
     const sessionMemberId = document.getElementById("memberData")?.getAttribute("data-member-id");
     const sitterId = sessionMemberId && !isNaN(Number(sessionMemberId)) ? Number(sessionMemberId) : null;
 
-    // sitterScheduleId 가져오기
     const scheduleDetailElement = document.getElementById("scheduleDetail");
     const sitterScheduleId = scheduleDetailElement ? parseInt(scheduleDetailElement.getAttribute("data-sitter-schedule-id"), 10) : null;
 
@@ -32,28 +30,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const logIdStr = careLogCard.getAttribute("data-log-id");
-            console.log('logIdStr:', logIdStr);
             const logId = Number(logIdStr);
-            console.log('logId:', logId);
-
             if (isNaN(logId)) {
                 alert("잘못된 돌봄 기록 ID입니다.");
                 return;
             }
 
-            // 올바른 p 태그 찾기 (nth-of-type 사용)
             const careTypeElem = careLogCard.querySelector("p:nth-of-type(1) span");
             const descriptionElem = careLogCard.querySelector("p:nth-of-type(2) span");
-
-            if (!careTypeElem || !descriptionElem) {
-                console.error("careType 또는 description을 찾을 수 없습니다.");
-                return;
-            }
 
             const careType = careTypeElem.textContent.trim();
             const description = descriptionElem.textContent.trim();
 
-            openCareLogModal("edit", logId, careType, description);
+            // 이미지 URL 찾기
+            const imageElem = careLogCard.querySelector("image"); // 이미지 요소가 존재한다고 가정
+            const image = imageElem ? imageElem.src : ""; // 이미지가 없으면 빈 문자열로 설정
+
+            // openCareLogModal 함수 호출, image URL도 전달
+            openCareLogModal("edit", logId, careType, description, image);
         });
     });
 
@@ -84,21 +78,41 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 돌봄 기록 추가 또는 수정 팝업 열기
-    function openCareLogModal(action, logId = "", careType = "", description = "", imgPath = "") {
+    function openCareLogModal(action, logId = "", careType = "", description = "", image = "") {
         document.getElementById("careLogModal").style.display = "flex";
         if (action === "edit") {
             document.getElementById("modalTitle").textContent = "돌봄 기록 수정";
             document.getElementById("logId").value = logId;
             document.getElementById("careType").value = careType;
             document.getElementById("description").value = description;
-            if (imgPath) {
-                document.getElementById("imgPath").value = imgPath;
+            // 이미지 표시 (만약 이미지 URL이 있다면)
+            if (image) {
+                const imageElement = document.getElementById("image");
+                imageElement.value = ""; // 기존 입력값 초기화
+                const imagePreview = document.getElementById("imagePreview");
+                imagePreview.src = imageUrl; // 이미지 미리보기 URL 설정
+                imagePreview.style.display = "block"; // 미리보기 이미지 표시
             }
         } else {
             document.getElementById("modalTitle").textContent = "돌봄 기록 추가";
             document.getElementById("careLogForm").reset();  // 폼 초기화
+            document.getElementById("imagePreview").style.display = "none"; // 이미지 미리보기 숨기기
         }
     }
+
+    // 이미지 미리보기 업데이트 (파일 업로드 시)
+    document.getElementById("image").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById("imagePreview");
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block"; // 이미지 미리보기 표시
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     // 팝업 닫기
     function closeCareLogModal() {
@@ -112,39 +126,38 @@ document.addEventListener("DOMContentLoaded", function () {
         const logId = document.getElementById("logId").value;
         const careType = document.getElementById("careType").value;
         const description = document.getElementById("description").value;
+        const careLogImage = document.getElementById("image").files[0];  // 이미지 파일
 
         if (!careType || !description) {
             alert("모든 필드를 채워주세요.");
             return;
         }
 
-        const logIdNum = Number(logId);  // 값을 숫자로 변환
+        const logIdNum = Number(logId);
         if (isNaN(logIdNum)) {
             alert("잘못된 돌봄 기록 ID입니다.");
             return;
         }
 
-        // 기존 오류 메시지 제거
-        const errorContainer = document.getElementById("errorContainer");
+        const formData = new FormData();
+        formData.append("request", new Blob([JSON.stringify({
+            careType: careType,
+            description: description
+        })], { type: "application/json" }));
 
-        // URL 수정 (sitterId와 sitterScheduleId 반영)
+        if (careLogImage) {
+            formData.append("careLogImage", careLogImage);
+        }
+
         const url = logIdNum
             ? `/api/pets-care/members/${sitterId}/care-logs/${logIdNum}`
             : `/api/pets-care/members/${sitterId}/schedules/${sitterScheduleId}/care-logs/new`;
 
         const method = logIdNum ? "PUT" : "POST";
 
-        const requestBody = {
-            careType: careType,
-            description: description,
-        };
-
         fetch(url, {
             method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody),
+            body: formData,
         })
         .then(response => {
             if (!response.ok) {
@@ -157,10 +170,10 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             alert(data.message || "돌봄 기록이 저장되었습니다.");
             closeCareLogModal();
-            location.reload(); // 페이지 새로고침 (추가/수정 후)
+            location.reload();
         })
         .catch(error => {
-            alert(error.message);  // 서버에서 받은 오류 메시지 표시
+            alert(error.message);
             console.error("오류 발생:", error);
         });
     });
