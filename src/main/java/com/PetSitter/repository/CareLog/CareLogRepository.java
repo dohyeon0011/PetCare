@@ -30,7 +30,7 @@ public interface CareLogRepository extends JpaRepository<CareLog, Long> {
     List<CareLog> findAllBySitterScheduleSitterIdAndSitterScheduleId(long sitterId, long sitterScheduleId);
 
     // 돌봄사가 특정 돌봄에 대해 작성한 돌봄 케어 로그 전체 조회(엔티티로 조회 후 DTO로 변환)
-    @Query("select new com.PetSitter.dto.CareLog.response.CareLogResponse$GetDetail(c.id, s.name, c.careType, c.description, c.imgPath, c.createdAt) " +
+    @Query("select new com.PetSitter.dto.CareLog.response.CareLogResponse$GetDetail(c.id, s.name, c.careType, c.description, c.image, c.createdAt) " +
             "from CareLog c " +
             "join c.sitterSchedule ss " +
             "join ss.sitter s " +
@@ -40,7 +40,7 @@ public interface CareLogRepository extends JpaRepository<CareLog, Long> {
     List<CareLogResponse.GetDetail> findAllCareLogDetail(@Param("sitterId") long sitterId, @Param("sitterScheduleId") long sitterScheduleId);
 
     // 돌봄사가 특정 돌봄에 대해 작성한 특정 돌봄 케어 로그 조회(DTO로 조회)
-    @Query("select new com.PetSitter.dto.CareLog.response.CareLogResponse$GetDetail(c.id, s.name, c.careType, c.description, c.imgPath, c.createdAt) " +
+    @Query("select new com.PetSitter.dto.CareLog.response.CareLogResponse$GetDetail(c.id, s.name, c.careType, c.description, c.image, c.createdAt) " +
             "from CareLog c " +
             "join c.sitterSchedule ss " +
             "join ss.sitter s " +
