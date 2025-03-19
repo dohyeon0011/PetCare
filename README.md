@@ -133,8 +133,9 @@ MySQL
 
 # 회원 정보 페이지 - 고객 시점(1)
 <img width="1291" alt="image" src="https://github.com/user-attachments/assets/86a70705-5690-494b-a6d0-3af2f2efc403" />
-<img width="1018" alt="image" src="https://github.com/user-attachments/assets/3143ee69-955d-465b-a63d-c7e6e8302d78" />
-<img width="959" alt="image" src="https://github.com/user-attachments/assets/5b2f0ece-22ee-41c2-808a-67cbdaff9625" />
+<img width="934" alt="image" src="https://github.com/user-attachments/assets/4959f461-1413-4672-be81-47f6d7214f9c" />  
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/5b2f0ece-22ee-41c2-808a-67cbdaff9625" />  
+
 (한 번에 여러 마리의 반려견 정보 수정, 등록 가능)<br><br>
 <img width="1176" alt="image" src="https://github.com/user-attachments/assets/d8de057e-b7b6-4f6b-93cb-bdd61992f249" />  
 (자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징))<br><br><br>
@@ -158,37 +159,37 @@ MySQL
 (선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개  
 조회 후, 이후 비동기로 5개씩 페이징))<br><br><br>
 
-# 사용자 시점 돌봄 예약 페이지(1)
+# 고객 시점: 돌봄 예약 페이지(1)
 <img width="1242" alt="image" src="https://github.com/user-attachments/assets/7787b71b-2259-4316-828b-162c5f248943" />  
 (해당 돌봄사가 등록한 돌봄 예약 가능한 날짜를 예약 가능한 날짜에 반환, 맡길 반려견을 선택)<br><br><br>
 
-# 사용자 시점 돌봄 예약 페이지(2)
+# 고객 시점: 돌봄 예약 페이지(2)
 <img width="1209" alt="image" src="https://github.com/user-attachments/assets/befd81c8-dedb-4dc8-b209-4b01178b50ab" />  
 (선택한 날짜의 돌봄 가격과 회원이 보유중인 적립금을 조회하여 적립금 사용 입력란에 숫자를 입력하면 비동기로 최종 결제 금액이 자동으로 산정)<br><br><br>
 
-# 사용자 시점 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
+# 고객 시점: 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
 <img width="1216" alt="image" src="https://github.com/user-attachments/assets/7d8893d9-c123-47c4-a1e1-1c62979a2513" />
 (돌봄 예약 내역 전체 조회(+페이징))<br><br><br>
 
-# 사용자 시점 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
+# 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
 <img width="1033" alt="image" src="https://github.com/user-attachments/assets/1ea4f260-b0b4-442d-9e80-8d0df63075af" />      
 <br><br><br>
 
-# 사용자 시점 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
+# 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
 <img width="584" alt="image" src="https://github.com/user-attachments/assets/8ff1213b-0c3b-4676-b846-6c1c6db11599" />  
 
 (별점 리뷰는 0.5 단위로도 가능(취소된 예약에는 리뷰 작성 불가능))<br><br><br>
 
-# 펫시터 시점 돌봄 예약 가능한 날짜 목록 페이지
+# 펫시터 시점: 돌봄 예약 가능한 날짜 목록 페이지
 <img width="1245" alt="image" src="https://github.com/user-attachments/assets/1c08059f-228f-4c38-9e46-77e09863eecc" />
 (돌봄사가 등록한 돌봄 예약 가능 날짜만 예약이 가능(+페이징))<br><br><br>
 
-# 펫시터 시점 등록한 돌봄 예약 가능한 날짜 수정
+# 펫시터 시점: 등록한 돌봄 예약 가능한 날짜 수정
 <img width="1251" alt="image" src="https://github.com/user-attachments/assets/e6930642-cbb1-487a-99c2-8efd559123db" />
 <img width="1281" alt="image" src="https://github.com/user-attachments/assets/b1ed7b42-976d-437d-8737-9a673d5834ec" />
 <br><br><br>
 
-# 펫시터 시점 특정 돌봄 예약에 대한 돌봄 케어 로그 페이지
+# 펫시터 시점: 특정 돌봄 예약 상세 조회 페이지 - 돌봄 케어 로그 작성 부분
 <img width="1057" alt="image" src="https://github.com/user-attachments/assets/31cec61d-1eb9-46d3-876c-486e7cc90620" />  
 (취소된 예약에는 돌봄 케어 로그 작성 불가능)<br><br><br>
 
