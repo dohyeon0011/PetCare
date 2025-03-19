@@ -41,7 +41,7 @@ public class PetApiController {
     @Operation(summary = "고객 - 반려견 등록", description = "반려견 등록 API")
     @PostMapping(value = "/{customerId}/pets/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addPet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
-                                            @ModelAttribute(value = "request") @Parameter(required = true, description = "등록할 반려견 정보") @Valid AddPetRequests requests,
+                                            @ModelAttribute @Parameter(required = true, description = "등록할 반려견 정보") @Valid AddPetRequests requests,
                                             @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
         if (memberDetails.getMember().getId() != id) {
             throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
@@ -82,13 +82,13 @@ public class PetApiController {
     @Operation(summary = "고객 - 반려견 정보 수정", description = "반려견 정보 수정 API")
     @PutMapping(value = "{customerId}/pets", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<PetResponse.GetList>> updatePet(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
-                                                               @ModelAttribute(value = "request") @Parameter(required = true, description = "수정할 반려견의 정보") @Valid UpdatePetRequests requests,
+                                                               @ModelAttribute @Parameter(required = true, description = "수정할 반려견의 정보") @Valid UpdatePetRequests requests,
                                                                @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
         if (memberDetails != null && memberDetails.getMember().getId() != id) {
             throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
         }
 
-        List<PetResponse.GetList> updatePets = petService.update(id, requests.getUpdatePetRequests());
+        List<PetResponse.GetList> updatePets = petService.update(id, requests.getRequests());
 
         return ResponseEntity.ok()
                 .body(updatePets);
