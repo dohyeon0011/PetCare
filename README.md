@@ -171,11 +171,12 @@ MySQL
 (돌봄 예약 내역 전체 조회(+페이징))<br><br><br>
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="1194" alt="image" src="https://github.com/user-attachments/assets/5bb403a1-cca9-4dfb-b527-02fe90b88531" />    
+<img width="1033" alt="image" src="https://github.com/user-attachments/assets/1ea4f260-b0b4-442d-9e80-8d0df63075af" />      
 <br><br><br>
 
 # 사용자 시점 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
-<img width="1002" alt="image" src="https://github.com/user-attachments/assets/3f553ffb-da35-4f55-a0b5-33f9bef0feeb" />  
+<img width="584" alt="image" src="https://github.com/user-attachments/assets/8ff1213b-0c3b-4676-b846-6c1c6db11599" />  
+
 (별점 리뷰는 0.5 단위로도 가능(취소된 예약에는 리뷰 작성 불가능))<br><br><br>
 
 # 펫시터 시점 돌봄 예약 가능한 날짜 목록 페이지
@@ -188,7 +189,7 @@ MySQL
 <br><br><br>
 
 # 펫시터 시점 특정 돌봄 예약에 대한 돌봄 케어 로그 페이지
-<img width="1239" alt="image" src="https://github.com/user-attachments/assets/fa15bdfa-d713-466d-8a28-73348ff03af7" />
+<img width="1057" alt="image" src="https://github.com/user-attachments/assets/31cec61d-1eb9-46d3-876c-486e7cc90620" />  
 (취소된 예약에는 돌봄 케어 로그 작성 불가능)<br><br><br>
 
 # 돌봄 이용 후기 페이지
