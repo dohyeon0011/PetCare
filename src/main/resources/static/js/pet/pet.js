@@ -101,6 +101,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // 반려견 정보 추가
         const petData = [];
         document.querySelectorAll(".pet-section").forEach((section, index) => {
+            // 반려견 ID 추가 (기존 반려견 수정 시 필요)
+            const petIdInput = section.querySelector('input[name$=".id"]');
+
+            if (petIdInput) {
+                formData.append(`requests[${index}].id`, petIdInput.value);
+            }
+
             const petInfo = {
                 name: section.querySelector('input[name$=".name"]').value,
                 age: section.querySelector('input[name$=".age"]').value,
