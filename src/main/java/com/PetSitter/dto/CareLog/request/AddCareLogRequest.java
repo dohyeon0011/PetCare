@@ -18,14 +18,14 @@ public class AddCareLogRequest {
     @NotBlank(message = "해당 돌봄 케어에 대한 상세 설명을 필수로 적어야 합니다.")
     private String description;
 
-    private String imgPath;
+    private String image;
 
-    public CareLog toEntity(SitterSchedule sitterSchedule) {
+    public CareLog toEntity(SitterSchedule sitterSchedule, String image) {
         return CareLog.builder()
                 .sitterSchedule(sitterSchedule)
                 .careType(careType)
                 .description(description)
-                .imgPath(imgPath)
+                .image(image)
                 .build();
     }
 
