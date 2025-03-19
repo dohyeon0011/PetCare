@@ -101,7 +101,6 @@ public class PetService {
         verifyingPermissions(customer);
         authorizetionMember(customer);
 
-//        List<Pet> pets = petRepository.findByMemberId(customer.getId());
         List<Pet> pets = customer.getPets();
 
         for (UpdatePetRequest request : requests) {
