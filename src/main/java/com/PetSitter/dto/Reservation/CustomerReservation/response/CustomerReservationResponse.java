@@ -30,6 +30,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private LocalDateTime createdAt;
         private ReservationStatus status;
 
+        // 예약 목록 조회
         public GetList(long id, String sitterName, LocalDate reservationAt, LocalDateTime createdAt, ReservationStatus status) {
             this.id = id;
             this.sitterName = sitterName;
@@ -57,6 +58,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private List<CareLogResponse.GetDetail> careLogList;
         private ReviewResponse.GetDetail review;
 
+        // 예약 상세 조회
         public GetDetail(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review) {
             this.id = customerReservation.getId();
             this.customerId = customer.getId();
