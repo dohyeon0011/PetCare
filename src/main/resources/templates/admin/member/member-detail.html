@@ -92,6 +92,20 @@
 <div class="admin-container">
     <h2>👤 회원 상세 정보</h2>
     <div class="member-info">
+        <!-- 프로필 이미지 -->
+        <div class="text-center mb-3">
+            <img th:if="${member.profileImage != null and member.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${member.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <img th:if="${member.profileImage == null or member.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+
         <p><strong>이름:</strong> <span th:text="${member.name}"></span></p>
         <p><strong>닉네임:</strong> <span th:text="${member.nickName}"></span></p>
         <p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
@@ -107,6 +121,7 @@
                             <span th:case="*">알 수 없음</span>
                         </span></p>
         <p><strong>소개:</strong> <span th:utext="${member.introduction}"></span></p>
+        <br>
         <p><strong>소셜 로그인:</strong> <span th:text="${member.socialProvider}"></span></p>
         <p><strong>회원 상태:</strong>
             <span th:text="${member.isDeleted ? '탈퇴' : '활동 중'}"
@@ -120,7 +135,12 @@
         <h3>🐾 등록한 반려동물</h3>
         <ul>
             <li th:each="pet : ${member.pets}">
-                <img th:src="${pet.profileImgUrl}" alt="반려동물 사진" class="pet-img"><br>
+                <!-- 반려견 프로필 이미지 -->
+                <div th:if="${pet.profileImage != null}">
+                    <img th:src="@{'/uploads/pets/' + ${pet.profileImage}}" alt="반려견 프로필 사진" class="pet-profile-img">
+                </div>
+                <br>
+
                 <p><strong>이름:</strong> <span th:text="${pet.name}"></span></p>
                 <p><strong>나이:</strong> <span th:text="${pet.age}"></span>살</p>
                 <p><strong>품종:</strong> <span th:text="${pet.breed}"></span></p>
