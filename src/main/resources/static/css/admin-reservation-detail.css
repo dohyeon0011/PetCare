@@ -108,9 +108,10 @@ h4 {
 
 /* Care log section */
 .care-log-img {
-    max-width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    width: 250px !important;
+    height: auto !important;
+    border-radius: 5px !important;
+    margin-top: 12px !important;
 }
 
 /* Delete care log button */
@@ -125,4 +126,12 @@ h4 {
 .deleteCareLog:hover {
     background-color: #e53935;
     border-color: #d32f2f;
+}
+
+.pet-profile-img {
+    width: 100px; /* 원하는 크기로 조정 */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%; /* 원형 이미지 */
+    margin-bottom: 10px;
 }
