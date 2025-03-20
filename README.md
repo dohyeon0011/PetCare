@@ -138,14 +138,14 @@ MySQL
 
 (한 번에 여러 마리의 반려견 정보 수정, 등록 가능)<br><br>
 <img width="1176" alt="image" src="https://github.com/user-attachments/assets/d8de057e-b7b6-4f6b-93cb-bdd61992f249" />  
-(자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징))<br><br><br>
+(자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징), 클릭 시 리뷰 작성한 해당 예약 페이지로 이동)<br><br><br>
 
 # 회원 정보 페이지 - 돌봄사 시점(2)
 <img width="1184" alt="image" src="https://github.com/user-attachments/assets/f6b0c6ed-6c72-4d3e-b9bd-b006c8c01912" />  
 <img width="1165" alt="image" src="https://github.com/user-attachments/assets/0bfab71d-e282-436e-9ba5-b7c53c9ae2f3" />    
-(자신에게 등록된 모든 돌봄 리뷰 목록 조회 페이지((+페이징), 돌봄사도 한 번에 여러 개의 자격증 정보 수정, 등록 가능))<br><br>
+(자신에게 등록된 모든 돌봄 리뷰 목록 조회 페이지((+페이징), 돌봄사도 한 번에 여러 개의 자격증 정보 수정, 등록 가능), 클릭 시 해당 예약 페이지로 이동)<br><br>
 <img width="1061" alt="image" src="https://github.com/user-attachments/assets/fa273643-7902-464f-8296-17b20df250a5" />  
-(자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징))<br><br><br>
+(자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징), 클릭 시 케어 로그 작성한 해당 예약 페이지로 이동)<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
 <img width="1189" alt="image" src="https://github.com/user-attachments/assets/238016e4-4890-49bf-aac6-607abc5ac23e" />      
@@ -169,7 +169,7 @@ MySQL
 
 # 고객 시점: 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
 <img width="1216" alt="image" src="https://github.com/user-attachments/assets/7d8893d9-c123-47c4-a1e1-1c62979a2513" />
-(돌봄 예약 내역 전체 조회(+페이징))<br><br><br>
+(돌봄 예약 내역 전체 조회(+페이징), 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
 <img width="857" alt="image" src="https://github.com/user-attachments/assets/27471f7d-7d70-4749-9bcc-8cb73449af35" />        
