@@ -97,6 +97,20 @@
     <!-- 예약 정보 -->
     <div class="reservation-info">
         <h4>📋 예약 정보</h4>
+        <!-- 펫시터 프로필 이미지 -->
+        <div class="text-center mb-3">
+            <img th:if="${reservation.profileImage != null and reservation.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${reservation.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <img th:if="${reservation.profileImage == null or reservation.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+
         <p><strong>고객 닉네임:</strong> <span th:text="${reservation.customerNickName}"></span></p>
         <p><strong>펫시터:</strong> <span th:text="${reservation.sitterName}"></span></p>
         <p><strong>📅 예약일자:</strong> <span th:text="${reservation.reservationAt}"></span></p>
