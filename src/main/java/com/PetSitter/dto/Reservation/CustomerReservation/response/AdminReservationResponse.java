@@ -51,6 +51,7 @@ public class AdminReservationResponse {
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
+        private String profileImage; // 펫시터 프로필 이미지
         private String requests;
         private LocalDateTime createdAt;
         private ReservationStatus status;
@@ -66,6 +67,7 @@ public class AdminReservationResponse {
             this.reservationAt = customerReservation.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.profileImage = sitter.getProfileImage();
             this.requests = customerReservation.getRequests();
             this.createdAt = customerReservation.getCreatedAt();
             this.status = customerReservation.getStatus();
