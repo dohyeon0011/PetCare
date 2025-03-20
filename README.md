@@ -172,7 +172,7 @@ MySQL
 (돌봄 예약 내역 전체 조회(+페이징))<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="1033" alt="image" src="https://github.com/user-attachments/assets/1ea4f260-b0b4-442d-9e80-8d0df63075af" />      
+<img width="857" alt="image" src="https://github.com/user-attachments/assets/27471f7d-7d70-4749-9bcc-8cb73449af35" />        
 <br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
@@ -200,15 +200,16 @@ MySQL
 
 # 관리자 페이지 - 회원 관리
 <img width="1226" alt="image" src="https://github.com/user-attachments/assets/9fab9497-09be-4658-a5d4-a4218fb7e28a" />
-<img width="823" alt="image" src="https://github.com/user-attachments/assets/0b5160d4-1a42-435c-ba98-a7ded84298eb" />  
-<img width="829" alt="image" src="https://github.com/user-attachments/assets/68cfd5cd-2659-4329-a159-5acf3e62383e" />  
+<img width="1060" alt="image" src="https://github.com/user-attachments/assets/708d4b65-910a-4980-92c3-ec683d6e43d3" />    
+<img width="1065" alt="image" src="https://github.com/user-attachments/assets/a437a732-9e66-49e3-aedb-137f84a5ad84" />  
 <img width="1214" alt="image" src="https://github.com/user-attachments/assets/f87a13f9-ae23-4624-839e-e71a9bc846c9" />
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능(+페이징), 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
 <img width="1253" alt="image" src="https://github.com/user-attachments/assets/a28643cb-20d7-4f68-9b60-4e1cf738cfb2" />
-<img width="1155" alt="image" src="https://github.com/user-attachments/assets/9d55be4c-4de1-4f4c-82f4-b130a0fc0def" />
-<img width="1156" alt="image" src="https://github.com/user-attachments/assets/c18b1428-7cf6-4b88-8182-3eef2f6d8f82" />  
+<img width="883" alt="image" src="https://github.com/user-attachments/assets/0ec27386-3e2f-4572-b6b9-c452e3427eb8" />
+<img width="591" alt="image" src="https://github.com/user-attachments/assets/cb1f6816-2430-49a7-abea-12356626d75e" />  
+
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
 
 # 관리자 페이지 - 회원 포인트 내역 관리(적립, 사용)
