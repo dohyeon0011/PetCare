@@ -74,3 +74,11 @@ button {
 #backBtn:hover {
     background-color: #2980b9;
 }
+
+.pet-profile-img {
+    width: 100px; /* 원하는 크기로 조정 */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%; /* 원형 이미지 */
+    margin-bottom: 10px;
+}
