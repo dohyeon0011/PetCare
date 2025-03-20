@@ -93,6 +93,20 @@
 <div class="container mt-4">
     <h2 class="text-center">예약 상세 정보</h2><br>
     <div class="card p-3">
+        <!-- 펫시터 프로필 이미지 -->
+        <div class="text-center mb-3">
+            <img th:if="${reservation.profileImage != null and reservation.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${reservation.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <img th:if="${reservation.profileImage == null or reservation.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+
         <p><strong>고객 닉네임:</strong> <span th:text="${reservation.customerNickName}"></span></p>
         <p><strong>펫시터:</strong> <span th:text="${reservation.sitterName}"></span></p>
         <p><strong>📅 예약일자:</strong> <span th:text="${reservation.reservationAt}"></span></p>
@@ -116,6 +130,12 @@
     <h4 class="mt-5">🐾 예약된 반려동물</h4>
     <ul class="list-group" th:each="pet : ${reservation.pets}">
         <li class="list-group-item">
+            <!-- 반려견 프로필 이미지 -->
+            <div th:if="${pet.profileImage != null}">
+                <img th:src="@{'/uploads/pets/' + ${pet.profileImage}}" alt="반려견 프로필 사진" class="pet-profile-img">
+            </div>
+            <br>
+
             <strong th:text="${pet.name}"></strong>
             (나이: <span th:text="${pet.age}"></span>세,
             품종: <span th:text="${pet.breed}"></span>)<br>
@@ -127,9 +147,9 @@
     <ul class="list-group" th:each="careLog : ${reservation.careLogList}">
         <li class="list-group-item">
             <h5 style="color: #3b82f6;" th:text="${careLog.sitterName} + '님의 기록'"></h5><br>
-            <div th:if="${careLog.imgPath != null}">
-                <img th:src="@{${careLog.imgPath}}" alt="돌봄 이미지" class="care-log-img">
-            </div>
+            <div th:if="${careLog.image != null}">
+                <img th:src="@{'/uploads/carelogs/' + ${careLog.image}}" alt="돌봄 이미지" class="care-log-img">
+            </div><br>
             <p><strong>돌봄 유형:</strong> <span th:text="${careLog.careType}"></span></p>
             <p><strong>설명:</strong> <span th:text="${careLog.description}"></span></p>
             <div class="d-flex justify-content-between">
