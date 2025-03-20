@@ -52,6 +52,7 @@ public class AdminMemberResponse {
         private String phoneNumber;
         private String zipcode;
         private String address;
+        private String profileImage;
         private Role role;
         private SocialProvider socialProvider;
         private String introduction;
@@ -67,6 +68,7 @@ public class AdminMemberResponse {
             this.phoneNumber = member.getPhoneNumber();
             this.zipcode = member.getZipcode();
             this.address = member.getAddress();
+            this.profileImage = member.getProfileImage();
             this.role = member.getRole();
             this.socialProvider = member.getSocialProvider();
             this.introduction = (member.getIntroduction() != null) ?
@@ -90,6 +92,7 @@ public class AdminMemberResponse {
         private String phoneNumber;
         private String zipcode;
         private String address;
+        private String profileImage;
         private Role role;
         private SocialProvider socialProvider;
         private String introduction;
@@ -105,6 +108,7 @@ public class AdminMemberResponse {
             this.phoneNumber = member.getPhoneNumber();
             this.zipcode = member.getZipcode();
             this.address = member.getAddress();
+            this.profileImage = member.getProfileImage();
             this.role = member.getRole();
             this.socialProvider = member.getSocialProvider();
             this.introduction = (member.getIntroduction() != null) ?
