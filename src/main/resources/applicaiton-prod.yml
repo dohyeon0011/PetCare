@@ -1,0 +1,87 @@
+server:
+  port: 9090
+
+  servlet:
+    session:
+      cookie:
+        same-site: none  # SameSite 설정
+        secure: false     # 로컬 환경에서는 false로 설정
+        http-only: true
+    timeout: 30m
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/petscare?useSSL=false&serverTimezone=Asia/Seoul
+    username: root
+    password: blackrose12
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #  datasource:
+  #    url: jdbc:h2:tcp://localhost/~/PetCare
+  #    username: sa
+  #    password:
+  #    driver-class-name: org.h2.Driver
+  # Page Reload
+  thymeleaf:
+    prefix: "classpath:/templates/"
+      suffix: ".html"
+      cache: true
+
+  profiles:
+    active: dev
+
+  logging:
+    level:
+      com:
+        PetSitter: DEBUG  # 해당 패키지 내에서 모든 로그가 DEBUG 레벨로 출력됩니다.
+      org:
+        springframework:
+          web: DEBUG  # Spring 웹 관련 로그도 DEBUG 레벨로 출력됩니다.
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # 로그 출력 형식 설정
+  output:
+    ansi:
+      enabled: always
+
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 파일 업로드 허용
+      max-file-size: 10MB # 업로드 가능한 최대 파일 크기
+      max-request-size: 20MB # 요청 크기 제한
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        default_batch_fetch_size: 100 # @BatchSize = 100 한 방에 100개 쫙 뽑아옴. 원래라면 whwer 1:N 관계의 컬렉션 id = ? 이랬을텐데 IN으로 100개 땡김
+    #    show_sql: true # System.out으로 뿌림
+    open-in-view: false # OSIV(Open Session In View)를 끄면 모든 지연로딩을 트랜잭션 안에서 처리해아 한다(한 트랜잭션까지만 디비 커넥터를 들고 있다가 끝나면 커넥터 끊고, 영속성 끝내버려서(준영속)), 뷰 템플릿에서 지연로딩 작동 X
+  mvc:
+    hidden method:
+      filter:
+        enabled: true
+
+logging.level:
+  org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
+  org.hibernate.orm.jdbc.bind: trace
+
+# swagger api
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  paths-to-match: /api/**
+
+profileUpload:
+  path: /Users/idohyeon/petcare-uploads/profile/
+
+petsUpload:
+  path: /Users/idohyeon/petcare-uploads/pets/
+
+carelogsUpload:
+  path: /Users/idohyeon/petcare-uploads/carelogs/
+
