@@ -24,11 +24,12 @@ public class InitDB {
 
     @PostConstruct
     public void init() {
-        initService.dbInit1();
-        initService.dbInit2();
-        initService.dbInit3();
-        initService.dbInit4();
-        initService.dbInit5();
+//        initService.dbInit1();
+//        initService.dbInit2();
+//        initService.dbInit3();
+//        initService.dbInit4();
+//        initService.dbInit5();
+        initService.dbInit6();
     }
 
     @Component
@@ -438,17 +439,6 @@ public class InitDB {
         }
 
         public void dbInit5() {
-            Member admin = Member.builder()
-                    .loginId("super")
-                    .password(bCryptPasswordEncoder.encode("super"))
-                    .name("Admin")
-                    .nickName("Admin")
-                    .email("Super@gmail.com")
-                    .zipcode("00000")
-                    .address("서울특별시 강남구")
-                    .role(Role.valueOf("ADMIN"))
-                    .build();
-
             Member member1 = Member.builder()
                     .loginId("user6")
                     .password(bCryptPasswordEncoder.encode("user6"))
@@ -526,7 +516,6 @@ public class InitDB {
                     .role(Role.valueOf("CUSTOMER"))
                     .build();
 
-            em.persist(admin);
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
@@ -535,5 +524,21 @@ public class InitDB {
             em.persist(member6);
             em.persist(member7);
         }
+
+        public void dbInit6() {
+            Member admin = Member.builder()
+                    .loginId("super")
+                    .password(bCryptPasswordEncoder.encode("super"))
+                    .name("Admin")
+                    .nickName("Admin")
+                    .email("Super@gmail.com")
+                    .zipcode("00000")
+                    .address("서울특별시 강남구")
+                    .role(Role.valueOf("ADMIN"))
+                    .build();
+
+            em.persist(admin);
+        }
+
     }
 }
