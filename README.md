@@ -1,4 +1,4 @@
-# 🐶 반려견 돌봄 서비스
+# [🐶 반려견 돌봄 서비스](http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/pets-care/main)
 
 반려견 돌봄을 위한 펫시터 서비스입니다. 고객은 원하는 펫시터를 선택해서 예약하고, 돌봄 기록을 확인하며, 리뷰를 남길 수 있습니다.  
 펫시터는 자신의 자격을 인증하고, 예약을 관리하며, 돌봄 기록을 작성할 수 있습니다.
@@ -83,15 +83,13 @@
 
 🔹 BE
 
-Spring Boot
+Spring Boot / JAVA
 
 JPA & Spring Data JPA - ORM 및 데이터 관리
 
 QueryDSL & JPQL - 동적 쿼리 처리
 
 Spring Security
-
-MySQL - 데이터베이스
 
 <br>
 
@@ -111,6 +109,14 @@ IntelliJ IDEA
 
 MySQL  
 
+<br>
+
+🔹 배포 환경  
+
+AWS EC2 프리티어
+
+MySQL  
+
 ---
 
 # ERD 상세 설명  
@@ -119,7 +125,13 @@ MySQL
 
 <img width="1235" alt="image" src="https://github.com/user-attachments/assets/775eb724-d469-4bc7-a74d-bb16eea7d8ef" />
 
----  
+---
+
+# [📌 API 명세](http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/swagger-ui/index.html)
+
+API 명세서는 Swagger 문서에서 확인할 수 있습니다.  
+
+---
 
 # 메인 페이지(1)
 <img width="1096" alt="image" src="https://github.com/user-attachments/assets/7ea3ccf6-b0af-4d7e-9cda-4df118d372d0" />  
@@ -216,12 +228,6 @@ MySQL
 <img width="1243" alt="image" src="https://github.com/user-attachments/assets/0349f07c-56a4-413f-be90-9e61c176d3da" />    
 <img width="1232" alt="image" src="https://github.com/user-attachments/assets/bca1c35f-cda7-401f-a0a6-22f7dabd0fae" />  
 (고객의 이름을 조건으로 검색해서 원하는 회원만 내역 검색 가능(+페이징))<br><br><br>
-
----
-
-📌 API 명세
-
-API 명세서는 Swagger 문서에서 확인할 수 있습니다.  
 
 --- 
 💭 프로젝트를 진행하며 느낀 점  
