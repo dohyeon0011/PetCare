@@ -15,11 +15,7 @@ spring:
     username: root
     password: blackrose12
     driver-class-name: com.mysql.cj.jdbc.Driver
-  #  datasource:
-  #    url: jdbc:h2:tcp://localhost/~/PetCare
-  #    username: sa
-  #    password:
-  #    driver-class-name: org.h2.Driver
+
   # Page Reload
   thymeleaf:
     prefix: "file:src/main/resources/templates/"
