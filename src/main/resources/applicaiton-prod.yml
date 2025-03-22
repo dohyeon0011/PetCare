@@ -77,11 +77,12 @@ springdoc:
   paths-to-match: /api/**
 
 profileUpload:
-  path: /Users/idohyeon/petcare-uploads/profile/
+  path: /home/ubuntu/petscare/uploads/profile/
 
 petsUpload:
-  path: /Users/idohyeon/petcare-uploads/pets/
+  path: /home/ubuntu/petscare/uploads/pets/
 
 carelogsUpload:
-  path: /Users/idohyeon/petcare-uploads/carelogs/
+  path: /home/ubuntu/petscare/uploads/carelogs/
+
 
