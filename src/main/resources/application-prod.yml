@@ -5,7 +5,7 @@ server:
     session:
       cookie:
         same-site: none  # SameSite 설정
-        secure: false     # 로컬 환경에서는 false로 설정
+        secure: true  # 로컬 환경에서는 false로 설정
         http-only: true
     timeout: 30m
 
