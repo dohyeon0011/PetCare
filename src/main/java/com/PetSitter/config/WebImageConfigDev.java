@@ -1,3 +1,4 @@
+/*
 package com.PetSitter.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -5,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebImageConfig implements WebMvcConfigurer {
+public class WebImageConfigDev implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -19,3 +20,4 @@ public class WebImageConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:/Users/idohyeon/petcare-uploads/carelogs/");
     }
 }
+*/
