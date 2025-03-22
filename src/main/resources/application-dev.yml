@@ -4,7 +4,7 @@ server:
   servlet:
     session:
       cookie:
-        same-site: none  # SameSite 설정
+        same-site: lax  # SameSite 설정
         secure: false     # 로컬 환경에서는 false로 설정
         http-only: true
     timeout: 30m
@@ -67,6 +67,7 @@ spring:
 logging.level:
   org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
   org.hibernate.orm.jdbc.bind: trace
+
 
 # swagger api
 springdoc:
