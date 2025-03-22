@@ -84,6 +84,10 @@ public class SitterReservationService {
         }
         List<Pet> pets = petRepository.findByCustomerIdAndIsDeletedFalse(customer.getId());
 
+        if (pets.isEmpty()) {
+            throw new IllegalArgumentException("돌봄에 맡길 반려견을 마이페이지에서 등록 후 다시 예약을 진행해주세요.");
+        }
+
         return new ReservationResponse(customer, sitter, careAvailableDates, pets);
     }
 
