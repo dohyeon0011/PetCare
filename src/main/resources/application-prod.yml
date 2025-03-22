@@ -19,8 +19,8 @@ spring:
   # Page Reload
   thymeleaf:
     prefix: "classpath:/templates/"
-      suffix: ".html"
-      cache: true
+    suffix: ".html"
+    cache: true
 
   logging:
     level:
