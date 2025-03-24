@@ -1,6 +1,5 @@
 package com.PetSitter.controller;
 
-import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Review.ReviewService;
@@ -21,6 +20,7 @@ public class MainViewController {
 
     private final ReviewService reviewService;
 
+    @Comment("메인 페이지")
     @GetMapping("/main")
     public String home(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         if (memberDetails != null) {
@@ -33,10 +33,38 @@ public class MainViewController {
         return "main";
     }
 
-    @Comment("로그인")
+    @Comment("로그인 페이지")
     @GetMapping("/login")
-    public String login(Model model) {
+    public String login() {
         return "member/login";
+    }
+
+    @Comment("펫시터 정보 페이지(펫시터 서비스)")
+    @GetMapping("/pet-sitter/information")
+    public String getInfo() {
+        return "intro";
+    }
+
+    @Comment("메인 페이지 - 자세히 보기 1 (펫시터의 집에서 돌봄을!) 안내")
+    @GetMapping("/sitter")
+    public String getSitter(Model model) {
+        List<ReviewResponse.GetDetail> reviews = reviewService.getAllReview();
+
+        model.addAttribute("reviews", reviews);
+
+        return "service-info";
+    }
+
+    @Comment("메인 페이지 - 자세히 보기 2 (고양이 돌봄 서비스) 안내")
+    @GetMapping("/cat-care")
+    public String getTrainer() {
+        return "cat-care-info";
+    }
+
+    @Comment("메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내")
+    @GetMapping("/sitters-information")
+    public String getSittersInfo() {
+        return "sitters-info";
     }
 
 }
