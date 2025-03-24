@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>반려견 돌봄 서비스 - 자세히 보기 1 (펫시터의 집에서 돌봄을!) 안내</title>
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/service-info.css}" rel="stylesheet">
+    <link th:href="@{/css/reviewStyle.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <!-- 인증된 사용자가 있을 때만 -->
+                <span th:if="${currentUser != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요,
+                        <b th:text="${currentUser.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
+                        <a class="dropdown-item"
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}"
+                           th:if="${currentUser != null and currentUser.role.name() != 'ADMIN'}">
+                            마이페이지
+                        </a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${currentUser.id})}">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${currentUser.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+
+                        <form id="logoutForm" action="/logout" method="post" style="display: none;">
+                            <!-- CSRF 토큰을 포함하도록 설정 -->
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
+                    </div>
+                </span>
+
+                <!-- 로그인하지 않은 사용자에 대한 메뉴 -->
+                <span th:if="${currentUser == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="service-info">
+    <h2 class="section-title">프라이버시와 보안, 걱정하지 마세요!</h2>
+    <div class="content">
+        <img th:src="@{/images/secure-petsitting.jpg}" alt="Secure Pet Sitting" class="service-image">
+        <p class="intro-text">
+            반려견 돌봄을 맡길 때, 가장 중요한 것은 바로 프라이버시와 보안입니다.
+            많은 사람들이 자신의 집에서 반려견을 맡기면 불안해할 수 있지만, 걱정하지 마세요!
+            저희 서비스는 펫시터의 집에서 반려견을 돌봄으로써 고객님이 안심할 수 있도록 도와드립니다.
+        </p>
+    </div>
+
+    <div class="feature-section">
+        <h3 class="sub-title">펫시터의 집에서 이루어지는 안전한 돌봄</h3>
+        <div class="content">
+            <img th:src="@{/images/pet-sitter-home.jpg}" alt="Pet Sitter's Home" class="feature-image">
+            <p>
+                저희 펫시터의 집은 반려동물이 편안하고 안전하게 지낼 수 있는 환경으로 꾸며져 있습니다.
+                고객님의 반려견은 펫시터의 따뜻한 집에서 집과 같은 편안함을 느낄 수 있습니다.
+                더 이상 자택에서 맡기는 것에 대한 걱정을 하지 않으셔도 됩니다.
+            </p>
+        </div>
+    </div>
+
+    <div class="testimonial-section">
+        <h3 class="sub-title">고객님의 목소리</h3>
+        <!-- Latest Reviews Section -->
+        <section class="latest-reviews text-center mt-5">
+            <h2>💭 실시간 돌봄 후기</h2>
+            <br>
+            <div class="row">
+                <div class="col-md-4" th:each="review : ${reviews}">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <p th:text="'작성자: ' + ${review.customerNickName}"></p>
+                            <p th:text="'돌봄사: ' + ${review.sitterName}"></p>
+                            <!-- 별 평점 표시 -->
+                            <p class="rating">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <!-- 채워진 별 (filled) -->
+                                <span th:if="${i <= review.rating}" class="star filled">★</span>
+
+                                <!-- 반 채워진 별 (half-filled) -->
+                                <span th:if="${i == (review.rating + 0.5)}" class="star half-filled">★</span>
+
+                                <!-- 비어있는 별 (empty) -->
+                                <span th:if="${i > (review.rating + 0.5)}" class="star empty">★</span>
+                            </span>
+                            </p>
+                            <p class="comment-ellipsis" th:text="${review.comment}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+            <a th:href="@{/pets-care/reviews}" class="btn btn-secondary">후기 더보기</a>
+        </section>
+    </div>
+
+    <div class="assurance-section">
+        <h3 class="sub-title">안전한 돌봄을 보장합니다</h3>
+        <p>저희 서비스는 고객님이 언제든지 반려견의 상태를 확인할 수 있는 서비스를 제공합니다.
+            만약 부적절한 활동을 하는 펫시터를 발견하셨다면,
+            신고를 통해 해당 펫시터의 이용을 제한하거나 탈퇴를 요청할 수 있습니다.
+            저희는 안전과 신뢰를 최우선으로 생각합니다.</p>
+        <img th:src="@{/images/secure-care.jpg}" alt="Secure Care" class="assurance-image">
+    </div>
+</div>
+
+
+<!-- 푸터 -->
+<footer class="text-center py-4">
+    <p>&copy; 2025 반려동물 돌봄 서비스. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+</body>
+</html>
