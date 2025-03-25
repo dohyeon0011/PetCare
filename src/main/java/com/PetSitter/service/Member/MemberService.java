@@ -8,6 +8,9 @@ import com.PetSitter.dto.Member.request.UpdateMemberRequest;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Comment;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -104,6 +107,17 @@ public class MemberService {
         );
 
         return member.toResponse();
+    }
+
+    @Comment("리뷰가 가장 많은 대표 돌봄사 최상위 3명 조회(메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내)")
+    @Transactional(readOnly = true)
+    public Object findBestSitters() {
+        PageRequest pageable = PageRequest.of(0, 3);
+
+        return memberRepository.findBestSitters(pageable)
+                .stream()
+                .map(Member::toResponse)
+                .collect(Collectors.toList());
     }
 
     private static void authorizetionMember(Member member) {
