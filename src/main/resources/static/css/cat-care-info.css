@@ -1,0 +1,115 @@
+/* 메인 컨텐츠 */
+.main-container {
+    max-width: 900px;
+    margin: 50px auto;
+    text-align: center;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.main-container h1 {
+    color: #ff7043;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 강조 텍스트 */
+.highlight-text {
+    color: #ff5722;
+    font-weight: bold;
+}
+
+/* 서비스 설명 */
+.service-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* CTA 버튼 */
+.cta-button {
+    display: inline-block;
+    background-color: #ff7043;
+    color: white;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.cta-button:hover {
+    background-color: #e64a19;
+}
+
+/* 이미지 크기 조절 */
+.cat-image {
+    width: 100%; /* 부모 요소에 맞춤 */
+    max-width: 450px; /* 최대 너비 제한 */
+    max-height: 300px; /* 최대 높이 제한 */
+    object-fit: cover; /* 비율을 유지하면서 높이를 제한 */
+    display: block;
+    margin: 0 auto; /* 중앙 정렬 */
+    border-radius: 12px; /* 둥근 모서리 유지 */
+}
+
+.usage-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.usage-section h2 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #ff7043;
+    margin-bottom: 30px;
+}
+
+/* 카드 스타일 */
+.usage-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.usage-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 아이콘 스타일 */
+.usage-icon {
+    font-size: 40px;
+    color: #ff7043;
+    margin-bottom: 15px;
+}
+
+/* 카드 제목 */
+.usage-card h5 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 카드 텍스트 */
+.usage-card p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .usage-card {
+        margin-bottom: 20px;
+    }
+}
