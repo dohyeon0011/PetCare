@@ -1,0 +1,81 @@
+/* 컨테이너 스타일 */
+.section-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+/* 섹션 타이틀 */
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 펫시터 한 줄 소개 */
+.sitter-description {
+    font-size: 1rem;
+    color: #555;
+    white-space: nowrap; /* 텍스트가 줄바꿈 되지 않도록 설정 */
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis; /* 넘칠 경우 '...' 표시 */
+    width: 100%; /* 텍스트가 넘칠 때의 동작을 위해 width를 100%로 설정 */
+    display: block; /* 블록 요소로 변경하여 전체 공간 차지 */
+}
+
+/* 펫시터 카드 컨테이너 */
+.sitters-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* 개별 카드 스타일 */
+.sitter-card {
+    width: 300px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sitter-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 정보 스타일 */
+.sitter-info {
+    padding: 15px;
+}
+
+.sitter-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.sitter-experience,
+.sitter-certifications,
+.sitter-description {
+    font-size: 1rem;
+    color: #555;
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
