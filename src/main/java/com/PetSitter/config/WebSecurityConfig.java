@@ -35,7 +35,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")  // Swagger 관련 경로 허용
                         .permitAll()  // 모든 사용자가 접근 가능하게 허용
                         .requestMatchers("/pets-care/main", "/pets-care/login", "/pets-care/signup",
-                                "/pets-care/sitter", "/pets-care/trainer", "/pets-care/sitters-information",
+                                "/pets-care/sitter", "/pets-care/cat-care", "/pets-care/sitters-information",
                                 "/pets-care/pet-sitter/information", "/pets-care/reservable-list",
                                 "/pets-care/reservable/members/**", "/pets-care/reviews",
                                 "/css/**", "/js/**", "/images/**", "/uploads/profile/**",
