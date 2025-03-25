@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>반려견 돌봄 서비스 - 자세히 보기 3 (전문 펫시터 소개) 안내</title>
+    <!-- Bootstrap CSS -->
+    <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/sitters-info.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/pets-care/main">🐶 반려견 돌봄</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/pet-sitter/information}">펫시터 서비스</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reservable-list?page=0&size=9}">훈련사 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pets-care/reviews}">이용 후기</a>
+                </li>
+            </ul>
+            <div class="navbar-buttons">
+                <!-- 인증된 사용자가 있을 때만 -->
+                <span th:if="${currentUser != null}" class="dropdown">
+                    <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="userDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        안녕하세요,
+                        <b th:text="${currentUser.name}"></b>님!
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                        <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
+                        <a class="dropdown-item"
+                           th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}"
+                           th:if="${currentUser != null and currentUser.role.name() != 'ADMIN'}">
+                            마이페이지
+                        </a>
+
+                        <!-- PET_SITTER인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'PET_SITTER'}">
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}">
+                                등록한 돌봄 가능 일정
+                            </a>
+
+                            <a class="dropdown-item" th:href="@{/pets-care/members/{sitterId}/schedules?page=0&size=10(sitterId=${currentUser.id})}">
+                                나의 돌봄 일정
+                            </a>
+                        </div>
+
+                        <!-- CUSTOMER인 경우 -->
+                        <a class="dropdown-item" th:if="${currentUser != null and currentUser.role.name() == 'CUSTOMER'}"
+                           th:href="@{/pets-care/members/{customerId}/reservations?page=0&size=10(customerId=${currentUser.id})}">
+                            나의 예약 현황
+                        </a>
+
+                        <!-- ADMIN(관리자)인 경우 -->
+                        <div th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">관리자 메뉴</h6>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+
+                        <form id="logoutForm" action="/logout" method="post" style="display: none;">
+                            <!-- CSRF 토큰을 포함하도록 설정 -->
+                            <input type="hidden" name="_csrf" value="${_csrf.token}">
+                        </form>
+                    </div>
+                </span>
+
+                <!-- 로그인하지 않은 사용자에 대한 메뉴 -->
+                <span th:if="${currentUser == null}">
+                    <a th:href="@{/pets-care/login}" class="btn btn-outline-primary mr-2">로그인</a>
+                    <a th:href="@{/pets-care/signup}" class="btn btn-primary">회원가입</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="section-container">
+    <h2 class="section-title">추천 펫시터</h2>
+    <p class="section-description">반려동물을 사랑하며 전문 지식을 갖춘 <br> 실제 고객이 가장 많이 찾는 펫시터들을 만나보세요!</p>
+    <br>
+
+    <div class="sitters-container">
+        <div th:each="sitter : ${bestSitters}" class="sitter-card">
+            <!-- 프로필 이미지가 있을 경우 -->
+            <img th:if="${sitter.profileImage != null and sitter.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${sitter.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 130px; height: 130px; object-fit: cover;">
+
+            <!-- 프로필 이미지가 없을 경우 기본 이미지 -->
+            <img th:if="${sitter.profileImage == null or sitter.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 130px; height: 130px; object-fit: cover;">
+
+            <div class="sitter-info">
+                <h3 class="sitter-name" th:text="${sitter.name}">이름</h3>
+                <p class="sitter-experience" th:text="'🏆 경력: ' + ${sitter.careerYear} + '년'">경력: 3년</p>
+                <!-- 자격증 목록 -->
+                <div class="certifications" th:if="${#lists.size(sitter.certifications) > 0}">
+                    <h4>📜 보유 자격증 📜</h4>
+                    <ul>
+                        <ol th:each="certification : ${sitter.certifications}" th:text="${certification.name}"></ol>
+                    </ul>
+                </div>
+                <p class="sitter-description" th:text="${sitter.introduction}">한 줄 소개</p>
+                <a th:href="@{/pets-care/reservable/members/{sitterId}(sitterId=${sitter.id})}" class="btn btn-primary">자세히 보기</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer class="text-center py-4">
+    <p>&copy; 2025 반려동물 돌봄 서비스. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+</body>
+</html>
