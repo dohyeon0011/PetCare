@@ -50,4 +50,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return starsHtml;
     }
+
+    // 두 번째 기능 (예약 버튼 클릭)
+    document.getElementById('reservationButton').addEventListener('click', function() {
+        // Thymeleaf 변수를 JavaScript로 직접 전달
+        var customerId = [[${currentUser.id}]];  // Thymeleaf 변수를 JavaScript로 전달
+        var sitterId = [[${reservableSitter.sitterId}]];  // 예약할 돌봄사 ID를 JavaScript로 전달
+
+        // Ajax 요청을 보냄
+        fetch(`/pets-care/members/${customerId}/sitters/${sitterId}/reservations/new?customerId=${customerId}&sitterId=${sitterId}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'  // JSON 형식으로 응답 받기
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    // 서버에서 반환된 에러 메시지를 alert()으로 띄우기
+                    alert(errorData.error);  // 에러 메시지를 alert()로 띄우기
+                    throw new Error(errorData.error);  // 추가적인 예외 처리
+                });
+            }
+            // 성공적으로 처리된 경우 (예: 예약 페이지로 이동)
+            window.location.href = response.url;  // 예약 페이지로 이동
+        })
+        .catch(error => {
+            console.error('Error:', error);  // 발생한 오류 콘솔에 출력
+        });
+    });
 });
