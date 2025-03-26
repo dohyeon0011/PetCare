@@ -31,20 +31,23 @@ document.getElementById("addCareAvailableDateForm")?.addEventListener("submit", 
             if (error.response && error.response.data) {
                 const errorData = error.response.data;
 
-                // DTO 검증 오류 (필드별 에러) 처리
-                if (typeof errorData === 'object' && !errorData.message) {
+                // 필드별 검증 오류 메시지가 있을 경우
+                if (typeof errorData === 'object' && !errorData.error) {
                     console.log("필드별 검증 오류 데이터:", errorData);  // 서버 응답 확인용 로그
 
-                    Object.keys(errorData).forEach(field => {
-                        showError(errorData[field], field + "-error"); // 필드별 에러 메시지 표시
-                    });
+                    // 각 필드에 대한 오류 메시지 처리
+                    for (let field in errorData) {
+                        if (errorData.hasOwnProperty(field)) {
+                            const errorMessage = errorData[field];
 
-                    return;  // 여기서 종료 → alert() 표시 안 함
+                            // showError() 함수를 이용해 오류 메시지 표시
+                            showError(errorMessage, `${field}-error`);
+                        }
+                    }
+                } else if (errorData.error) {
+                    // "error" 필드를 통해 일반적인 오류 메시지 처리
+                    alert(Object.values(errorData)[0]);  // error 메시지에서 "error" 필드 제외하고, 메시지만 표시
                 }
-
-                // 일반적인 서비스 로직 오류 처리 (IllegalArgumentException 등)
-                const errorMessage = extractErrorMessage(error);
-                alert(errorMessage);
             } else {
                 alert("알 수 없는 오류가 발생했습니다.");
             }
@@ -79,7 +82,7 @@ function editCareAvailableDate() {
                 const errorData = error.response.data;
 
                 // DTO 검증 오류 (필드별 에러) 처리
-                if (typeof errorData === 'object' && !errorData.message) {
+                if (typeof errorData === 'object' && !errorData.error) {
                     console.log("필드별 검증 오류 데이터:", errorData);  // 서버 응답 확인용 로그
 
                     Object.keys(errorData).forEach(field => {
@@ -89,9 +92,12 @@ function editCareAvailableDate() {
                     return;  // 여기서 종료 → alert() 표시 안 함
                 }
 
-                // 일반적인 서비스 로직 오류 처리
-                const errorMessage = extractErrorMessage(error);
-                alert(errorMessage);
+                // 일반적인 서비스 로직 오류 처리 (error 필드 처리)
+                if (errorData.error) {
+                    alert(errorData.error);  // 단일 오류 메시지만 alert로 표시
+                } else {
+                    alert("알 수 없는 오류가 발생했습니다.");
+                }
             } else {
                 alert("알 수 없는 오류가 발생했습니다.");
             }
