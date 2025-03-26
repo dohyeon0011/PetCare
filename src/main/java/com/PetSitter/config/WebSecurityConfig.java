@@ -42,6 +42,7 @@ public class WebSecurityConfig {
                                 "/uploads/pets/**", "/uploads/carelogs/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pets-care/members/new").permitAll() // 회원가입 API 허용
+                        .requestMatchers("/api/pets-care/reservable/members/**").permitAll() // 리뷰 API 추가 (비로그인 상태에서도 접근 가능)
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
