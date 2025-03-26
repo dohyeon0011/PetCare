@@ -31,8 +31,8 @@ public class CareAvailableDateApiController {
     @Operation(summary = "돌봄사 - 돌봄 가능 일정 등록", description = "돌봄 가능 일정 등록 API")
     @PostMapping("/{sitterId}/care-available-dates/new")
     public ResponseEntity<?> saveCareAvailability(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
-                                                  @RequestBody @Valid AddCareAvailableDateRequest request,
                                                   @AuthenticationPrincipal MemberDetails memberDetails,
+                                                  @RequestBody @Valid AddCareAvailableDateRequest request,
                                                   BindingResult result) {
         // 검증 오류가 있을 경우 에러 메시지를 리턴
         if (result.hasErrors()) {
@@ -112,10 +112,9 @@ public class CareAvailableDateApiController {
     @Operation(summary = "돌봄사 - 등록한 특정 돌봄 일정 수정", description = "등록한 특정 돌봄 일정 수정 API")
     @PutMapping("/{sitterId}/care-available-dates/{careAvailableDateId}")
     public ResponseEntity<?> updateCareAvailableDate(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
-                                                                            @PathVariable("careAvailableDateId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long careAvailableDateId,
-                                                                            @RequestBody @Valid UpdateCareAvailableDateRequest request,
-                                                                            @AuthenticationPrincipal MemberDetails memberDetails,
-                                                                            BindingResult result) {
+                                                     @PathVariable("careAvailableDateId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long careAvailableDateId,
+                                                     @AuthenticationPrincipal MemberDetails memberDetails,
+                                                     @RequestBody @Valid UpdateCareAvailableDateRequest request, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> errorMessages = new HashMap<>();
 
