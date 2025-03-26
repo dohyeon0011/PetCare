@@ -31,7 +31,7 @@ public class CustomerReservationApiController {
 
     @Operation(summary = "고객 - 돌봄 예약 생성", description = "돌봄 예약 생성 API")
     @PostMapping("/reservations/new")
-    public ResponseEntity<?> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request, @AuthenticationPrincipal MemberDetails memberDetails, BindingResult result) {
+    public ResponseEntity<?> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request, BindingResult result, @AuthenticationPrincipal MemberDetails memberDetails) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
