@@ -129,7 +129,11 @@
     <div class="button-container">
         <!-- 예약하기 버튼 -->
         <div class="reservation-button-container" th:if="${currentUser != null and (currentUser.role.name() == 'CUSTOMER' or currentUser.role.name() == 'ADMIN')}">
-            <a href="javascript:void(0)" class="btn btn-primary" id="reservationButton">예약하기</a>
+            <button type="button" class="btn btn-primary" id="reservationButton"
+                    th:data-current-user-id="${currentUser.id}"
+                    th:data-sitter-id="${reservableSitter.sitterId}">
+                예약하기
+            </button>
         </div>
         <!-- 뒤로가기 버튼 -->
         <div class="back-btn-container">
@@ -166,36 +170,6 @@
 <footer class="text-center py-4">
     <p>&copy; 2025 반려동물 돌봄 서비스. All rights reserved.</p>
 </footer>
-
-<script>
-    document.getElementById('reservationButton').addEventListener('click', function() {
-        // Thymeleaf 변수를 JavaScript로 직접 전달
-        var customerId = [[${currentUser.id}]];  // Thymeleaf 변수를 JavaScript로 전달
-        var sitterId = [[${reservableSitter.sitterId}]];  // 예약할 돌봄사 ID를 JavaScript로 전달
-
-        // Ajax 요청을 보냄
-        fetch(`/pets-care/members/${customerId}/sitters/${sitterId}/reservations/new?customerId=${customerId}&sitterId=${sitterId}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'  // JSON 형식으로 응답 받기
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    // 서버에서 반환된 에러 메시지를 alert()으로 띄우기
-                    alert(errorData.error);  // 에러 메시지를 alert()로 띄우기
-                    throw new Error(errorData.error);  // 추가적인 예외 처리
-                });
-            }
-            // 성공적으로 처리된 경우 (예: 예약 페이지로 이동)
-            window.location.href = response.url;  // 예약 페이지로 이동
-        })
-        .catch(error => {
-            console.error('Error:', error);  // 발생한 오류 콘솔에 출력
-        });
-    });
-</script>
 
 <!-- Bootstrap 및 관련 플러그인 -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
