@@ -25,7 +25,7 @@ public class PointHistoryRepositoryImpl implements PointHistoryRepositoryCustom 
                 "from PointsHistory ph " +
                 "join ph.customer c ";
 
-        String countJpql = "select count(ph) from PointHistory ph " +
+        String countJpql = "select count(ph) from PointsHistory ph " +
                 "join ph.customer c ";
 
         if (StringUtils.hasText(pointSearch.getName())) {
