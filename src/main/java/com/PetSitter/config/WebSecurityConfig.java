@@ -1,7 +1,7 @@
 package com.PetSitter.config;
 
+import com.PetSitter.config.oauth.CustomOAuth2UserService;
 import com.PetSitter.service.Member.MemberDetailsService;
-import com.PetSitter.service.Member.oauth.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
