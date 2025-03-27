@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 /**
  * OAuth2 인증 요청(필요한 정보)을 세션이 아닌 쿠키에 저장하고 로드하는 데 사용되는 구현체(인증 요청과 관련된 상태를 저장할 저장소)
  * OAuth2의 정보를 가져오고 저장하는 로직
  */
+@Component
 public class OAuth2AuthorizationRequestBasedOnCookieRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
     public final static String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
