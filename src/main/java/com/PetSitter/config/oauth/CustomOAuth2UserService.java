@@ -1,4 +1,4 @@
-package com.PetSitter.service.Member.oauth;
+package com.PetSitter.config.oauth;
 
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
