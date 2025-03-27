@@ -1,7 +1,7 @@
 package com.PetSitter.config;
 
 import com.PetSitter.service.Member.MemberDetailsService;
-import jakarta.servlet.http.Cookie;
+import com.PetSitter.service.Member.oauth.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     private final MemberDetailsService memberDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     // 스프링 시큐리티가 활성화된 상태에서는 로그인과 로그아웃 URL에 대한 기본 처리가 자동으로 이루어지므로, 별도로 컨트롤러를 구현하지 않아도 됨.
     // 커스텀 로그인 페이지나 추가적인 로직이 필요한 경우, 그때 추가적인 설정을 하거나 필터를 구현
@@ -64,6 +64,13 @@ public class WebSecurityConfig {
                         }))
                         .defaultSuccessUrl("/pets-care/main", true)
                         .permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/pets-care/login")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .defaultSuccessUrl("/pets-care/main", true)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
