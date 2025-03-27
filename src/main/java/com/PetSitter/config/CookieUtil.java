@@ -9,10 +9,19 @@ public class CookieUtil {
 
     // 쿠키 삭제(쿠키의 이름을 받아 쿠키 삭제)
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
-        Cookie cookie = new Cookie(cookieName, null);
-        cookie.setPath("/");  // 모든 경로에서 쿠키를 삭제
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null) {
+            return;
+        }
+
+        for (Cookie cookie : cookies) {
+            if (cookieName.equals(cookie.getName())) {
+                cookie.setPath("/");  // 모든 경로에서 쿠키를 삭제
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
     }
 
     // 쿠키 추가(요청값(이름, 값, 만료 기간)을 바탕으로 HTTP 응답에 쿠키 추가)
