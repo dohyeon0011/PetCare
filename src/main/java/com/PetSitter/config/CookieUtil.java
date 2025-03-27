@@ -3,6 +3,9 @@ package com.PetSitter.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.util.SerializationUtils;
+
+import java.util.Base64;
 
 // 쿠키 관리 클래스
 public class CookieUtil {
@@ -32,5 +35,20 @@ public class CookieUtil {
         cookie.setSecure(false);    // HTTP에서도 전송 가능(HTTPS 에서만 가능 X)
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
+    }
+
+    // 객체를 직렬화해 쿠키의 값으로 들어갈 값으로 변환
+    public static String serialize(Object obj) {
+        return Base64.getUrlEncoder()
+                .encodeToString(SerializationUtils.serialize(obj));
+    }
+
+    // 쿠키를 역직렬화해 객체로 변환
+    public static <T> T deserialize(Cookie cookie, Class<T> cls) {
+        return cls.cast(
+                SerializationUtils.deserialize(
+                        Base64.getUrlDecoder().decode(cookie.getValue())
+                )
+        );
     }
 }
