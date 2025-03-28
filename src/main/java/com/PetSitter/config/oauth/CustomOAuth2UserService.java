@@ -31,14 +31,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUserNameAttributeName();
 
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, oauth2User.getAttributes());
 
-        Member member = memberRepository.findByLoginId(userInfo.getId())
+        Member member = memberRepository.findByLoginId(userInfo.getId())    // 신규 사용자라면 자동 회원가입을 진행하고, 기존 회원이라면 기존 계정과 매칭해서 로그인
                 .orElseGet(() -> registerNewMember(userInfo, registrationId));
 
         return new CustomOAuth2User(member, oauth2User.getAttributes());
@@ -50,7 +46,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .name(userInfo.getName())   // 사용자 이름
                 .nickName(userInfo.getName()) // 사용자 닉네임
                 .email(userInfo.getEmail()) // 이메일
-                .socialProvider(SocialProvider.valueOf(provider.toUpperCase())) // 제공자 (ex: GOOGLE, NAVER)
+                .socialProvider(SocialProvider.valueOf(provider.toUpperCase())) // 제공자 (GOOGLE, NAVER, KAKAO)
                 .role(Role.CUSTOMER)  // 기본 역할을 CUSTOMER로 설정 (필요시 수정)
                 .build();
 
