@@ -14,9 +14,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- *  Access Token을 재발급 받기 위한 Token
- *  필터는 실제로 각종 요청이 요청을 처리하기 위한 로직으로 전달되기 전후에 URL 패턴에 맞는 모든 요청을 처리하는 기능을 제공.
+ *  Spring Security의 필터 체인 내에서 자동으로 호출되며, 사용자가 인가가 필요한 요청을 보낼 때 자동으로 실행(HTTP 요청에 포함된 JWT 토큰을 자동으로 처리)
  *  요청이 오면 헤더값을 비교해서 토큰이 있는지 확인하고 유효 토큰이라면 시큐리티 콘텍스트 홀더에 인증 정보를 저장.
+ *  필터는 실제로 각종 요청이 요청을 처리하기 위한 로직으로 전달되기 전후에 URL 패턴에 맞는 모든 요청을 처리하는 기능을 제공.
  */
 @Component
 @RequiredArgsConstructor
