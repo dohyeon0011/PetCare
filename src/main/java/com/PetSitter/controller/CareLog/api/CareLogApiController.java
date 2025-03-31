@@ -1,7 +1,9 @@
 package com.PetSitter.controller.CareLog.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.CareLog.request.AddCareLogRequest;
 import com.PetSitter.dto.CareLog.request.UpdateCareLogRequest;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
@@ -40,7 +42,7 @@ public class CareLogApiController {
                                                                  @PathVariable("sitterScheduleId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long sitterScheduleId,
                                                                  @RequestPart(value = "request") @Valid AddCareLogRequest request, BindingResult result,
                                                                  @RequestPart(value = "careLogImage", required = false) @Parameter(description = "등록할 케어 로그 이미지 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile careLogImage,
-                                                                 @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
+                                                                 @AuthenticationPrincipal Object principal) throws FileUploadException {
         // 로그 추가 (파라미터 값 확인)
         System.out.println("sitterId: " + sitterId);
         System.out.println("sitterScheduleId: " + sitterScheduleId);
@@ -59,8 +61,18 @@ public class CareLogApiController {
                     .body(errors);
         }
 
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         CareLogResponse.GetDetail careLog = careLogService.save(sitterId, sitterScheduleId, request, careLogImage);
@@ -73,9 +85,19 @@ public class CareLogApiController {
     @GetMapping("/members/{sitterId}/care-logs")
     public ResponseEntity<Page<CareLogResponse.GetList>> findAllCareLog(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                                                         @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
-                                                                        @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                        @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         Page<CareLogResponse.GetList> careLogList = careLogService.findAll(sitterId, pageable);
@@ -88,9 +110,19 @@ public class CareLogApiController {
     @GetMapping("/members/{sitterId}/schedules/{sitterScheduleId}/care-logs")
     public ResponseEntity<List<CareLogResponse.GetDetail>> findAllCareLogById(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                                                               @PathVariable("sitterScheduleId") @Parameter(required = true, description = "돌봄 일정 고유 번호") long sitterScheduleId,
-                                                                              @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                              @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         List<CareLogResponse.GetDetail> careLogList = careLogService.findAllById(sitterId, sitterScheduleId);
@@ -103,9 +135,19 @@ public class CareLogApiController {
     @GetMapping("/members/{sitterId}/care-logs/{careLogId}")
     public ResponseEntity<CareLogResponse.GetDetail> findCareLog(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                                                  @PathVariable("careLogId") @Parameter(required = true, description = "돌봄 케어 로그 고유 번호") long careLogId,
-                                                                 @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                 @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
@@ -118,9 +160,19 @@ public class CareLogApiController {
     @DeleteMapping("/members/{sitterId}/care-logs/{careLogId}")
     public ResponseEntity<Void> deleteCareLog(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId,
                                               @PathVariable("careLogId") @Parameter(required = true, description = "돌봄 케어 로그 고유 번호") long careLogId,
-                                              @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                              @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         careLogService.delete(sitterId, careLogId);
@@ -135,9 +187,19 @@ public class CareLogApiController {
                                                                    @PathVariable("careLogId") @Parameter(required = true, description = "돌봄 케어 로그 고유 번호") long careLogId,
                                                                    @RequestPart(value = "request") @Valid UpdateCareLogRequest request,
                                                                    @RequestPart(value = "careLogImage", required = false) @Parameter(description = "등록할 케어 로그 이미지 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile careLogImage,
-                                                                   @AuthenticationPrincipal MemberDetails memberDetails) throws FileUploadException {
-        if (memberDetails != null && memberDetails.getMember().getId() != sitterId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                   @AuthenticationPrincipal Object principal) throws FileUploadException {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != sitterId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         CareLogResponse.GetDetail careLog = careLogService.update(sitterId, careLogId, request, careLogImage);
