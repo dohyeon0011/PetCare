@@ -1,7 +1,9 @@
 package com.PetSitter.controller.Member.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
@@ -82,10 +84,21 @@ public class MemberApiController {
 
     @Operation(summary = "특정 회원 정보 조회", description = "특정 회원 정보 조회 API")
     @GetMapping("/{memberId}/myPage")
-    public ResponseEntity<?> findMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+    public ResponseEntity<?> findMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
+
         Object member = memberService.findById(id);
 
         return ResponseEntity.ok()
@@ -100,10 +113,21 @@ public class MemberApiController {
 
     @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 API")
     @DeleteMapping("/{memberId}")
-    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+    public ResponseEntity<Void> deleteMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long id, @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
+
         memberService.delete(id);
 
         return ResponseEntity.ok()
@@ -115,7 +139,7 @@ public class MemberApiController {
     public ResponseEntity<?> updateMember(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") Long id,
                                           @RequestPart(value = "profileImage", required = false) @Parameter(description = "업로드 할 프로필 사진", content = @Content(mediaType = "multipart/form-data")) MultipartFile profileImage,
                                           @RequestPart(value = "request") @Valid UpdateMemberRequest request, BindingResult result,
-                                          @AuthenticationPrincipal MemberDetails memberDetails) {
+                                          @AuthenticationPrincipal Object principal) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -128,8 +152,18 @@ public class MemberApiController {
                     .body(errors);
         }
 
-        if (memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         // 프로필 이미지 파일을 등록 했다면
@@ -154,5 +188,4 @@ public class MemberApiController {
         return ResponseEntity.ok()
                 .body(updateMember);
     }
-
 }
