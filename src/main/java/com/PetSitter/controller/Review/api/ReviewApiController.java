@@ -1,7 +1,9 @@
 package com.PetSitter.controller.Review.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.dto.Review.request.AddReviewRequest;
 import com.PetSitter.dto.Review.request.UpdateReviewRequest;
@@ -31,9 +33,19 @@ public class ReviewApiController {
     @PostMapping("/members/{customerId}/reservations/{customerReservationId}/reviews/new")
     public ResponseEntity<ReviewResponse.GetDetail> saveReview(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long customerId,
                                                                @PathVariable("customerReservationId") @Parameter(required = true, description = "예약 고유 번호") long reservationId,
-                                                               @RequestBody @Valid AddReviewRequest request, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != customerId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                               @RequestBody @Valid AddReviewRequest request, @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         ReviewResponse.GetDetail review = reviewService.save(customerId, reservationId, request);
@@ -45,11 +57,21 @@ public class ReviewApiController {
     @Operation(summary = "모든 리뷰 조회", description = "모든 리뷰 조회 API")
     @GetMapping("/members/{memberId}/reviews")
     public ResponseEntity<Page<ReviewResponse.GetList>> findAllReview(@PathVariable("memberId") @Parameter(required = true, description = "회원 고유 번호") long memberId,
-                                                                      @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails) {
+                                                                      @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable, @AuthenticationPrincipal Object principal) {
 //        List<ReviewResponse.GetList> reviews = reviewService.findAllById(memberId);
 
-        if (memberDetails != null && memberDetails.getMember().getId() != memberId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != memberId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != memberId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         Page<ReviewResponse.GetList> reviews = reviewService.findAllById(memberId, pageable);
@@ -70,9 +92,19 @@ public class ReviewApiController {
     @Operation(summary = "고객 - 특정 리뷰 삭제", description = "특정 리뷰 삭제 API")
     @DeleteMapping("/members/{customerId}/reviews/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long customerId,
-                                             @PathVariable("reviewId") @Parameter(required = true, description = "리뷰 고유 번호") long reviewId, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != customerId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                             @PathVariable("reviewId") @Parameter(required = true, description = "리뷰 고유 번호") long reviewId, @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         reviewService.delete(customerId, reviewId);
@@ -86,9 +118,19 @@ public class ReviewApiController {
     public ResponseEntity<ReviewResponse.GetDetail> updateReview(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long customerId,
                                                                  @PathVariable("reviewId") @Parameter(required = true, description = "리뷰 고유 번호") long reviewId,
                                                                  @RequestBody @Valid UpdateReviewRequest request,
-                                                                 @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != customerId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                 @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         ReviewResponse.GetDetail updateReview = reviewService.update(customerId, reviewId, request);
@@ -101,9 +143,19 @@ public class ReviewApiController {
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}/reviews/new")
     public ResponseEntity<ReviewResponse.GetNewReview> getReview(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long customerId,
                                                                  @PathVariable("customerReservationId") @Parameter(required = true, description = "예약 고유 번호") long customerReservationId,
-                                                                 @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != customerId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                 @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         ReviewResponse.GetNewReview newReview = reviewService.getNewReview(customerId, customerReservationId);
