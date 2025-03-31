@@ -10,6 +10,32 @@ document.addEventListener("DOMContentLoaded", function () {
     let isFormDirty = false;
     const formInputs = document.querySelectorAll("#editProfileForm input, #editProfileForm textarea");
 
+    const roleSelect = document.getElementById("role");
+    const careerField = document.getElementById("careerField");
+    const careerInput = document.getElementById("careerYear");
+
+    // 초기 설정: roleSelect의 값에 따라 careerField 표시 여부 결정
+    if (roleSelect.value == "PET_SITTER") {
+        careerField.style.display = "block";
+        careerInput.required = true;
+    } else {
+        careerField.style.display = "none";
+        careerInput.required = false;
+        careerInput.value = ""; // 초기화
+    }
+
+    // 역할 변경 시 경력 입력 필드 보이기/숨기기
+    roleSelect.addEventListener("change", () => {
+        if (roleSelect.value == "PET_SITTER") {
+            careerField.style.display = "block";
+            careerInput.required = true;
+        } else {
+            careerField.style.display = "none";
+            careerInput.required = false;
+            careerInput.value = ""; // 초기화
+        }
+    });
+
     // 폼 변경 감지 (페이지 이탈 방지)
     formInputs.forEach(input => {
         input.addEventListener("input", () => isFormDirty = true);
@@ -97,6 +123,7 @@ async function updateMember(event) {
             phoneNumber: document.getElementById("phoneNumber")?.value,
             zipcode: document.getElementById("zipcode")?.value,
             address: document.getElementById("address")?.value,
+            role: document.getElementById("role")?.value,
             introduction: document.getElementById("introduction")?.value,
             careerYear: document.getElementById("careerYear")?.value || null
         })], { type: "application/json" }));
@@ -115,16 +142,34 @@ async function updateMember(event) {
         if (!response.ok) {
             if (response.status === 400) {
                 const errors = await response.json();
-                Object.keys(errors).forEach(field => {
-                    const inputField = document.getElementById(field);
-                    if (inputField) {
-                        inputField.classList.add("error");
+
+                // 비밀번호 오류 메시지 처리
+                if (errors.details) {
+                    const passwordField = document.getElementById("password");
+                    if (passwordField) {
+                        passwordField.classList.add("error"); // 비밀번호 필드에 error 클래스 추가
 
                         const errorMessage = document.createElement("div");
                         errorMessage.classList.add("error-message");
-                        errorMessage.textContent = errors[field];
+                        errorMessage.textContent = errors.details;  // error.details를 사용하여 메시지 표시
 
-                        inputField.insertAdjacentElement("afterend", errorMessage);
+                        passwordField.insertAdjacentElement("afterend", errorMessage); // 오류 메시지 삽입
+                    }
+                }
+
+                // 다른 필드에 대한 오류 메시지 처리
+                Object.keys(errors).forEach(field => {
+                    if (field !== "details") {  // 비밀번호 오류는 이미 처리했으므로 제외
+                        const inputField = document.getElementById(field);
+                        if (inputField) {
+                            inputField.classList.add("error");
+
+                            const errorMessage = document.createElement("div");
+                            errorMessage.classList.add("error-message");
+                            errorMessage.textContent = errors[field];
+
+                            inputField.insertAdjacentElement("afterend", errorMessage);
+                        }
                     }
                 });
                 throw new Error("입력 값을 확인하세요.");
