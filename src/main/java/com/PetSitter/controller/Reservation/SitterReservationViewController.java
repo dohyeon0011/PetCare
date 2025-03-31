@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Reservation;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.ReservationSitterResponse;
 import com.PetSitter.service.Reservation.SitterReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,11 +26,17 @@ public class SitterReservationViewController {
 
     @Operation(description = "돌봄 예약 가능한 돌봄사들의 정보 조회")
     @GetMapping("/reservable-list")
-    public String getAllReservable(@AuthenticationPrincipal MemberDetails memberDetails, Pageable pageable, Model model) {
+    public String getAllReservable(@AuthenticationPrincipal Object principal, Pageable pageable, Model model) {
 //        List<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters();
 
-        if (memberDetails != null) {
-            model.addAttribute("currentUser", memberDetails.getMember());
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
 
         Page<ReservationSitterResponse.GetList> reservableSitters = sitterReservationService.findReservableSitters(pageable);
@@ -39,9 +47,15 @@ public class SitterReservationViewController {
 
     @Operation(description = "돌봄 예약 가능 목록 중 선택한 돌봄사의 자세한 정보 조회")
     @GetMapping("/reservable/members/{sitterId}")
-    public String getReservableSitter(@PathVariable("sitterId") long sitterId, @RequestParam(required = false, defaultValue = "0") int page, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null) {
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String getReservableSitter(@PathVariable("sitterId") long sitterId, @RequestParam(required = false, defaultValue = "0") int page, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
 
         ReservationSitterResponse.GetDetail reservableSitter = sitterReservationService.findReservableSitter(sitterId, page);
