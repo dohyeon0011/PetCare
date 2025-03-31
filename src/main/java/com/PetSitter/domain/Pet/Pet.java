@@ -49,7 +49,7 @@ public class Pet {
 
     @Comment("반려견 프로필 사진 변경")
     public void changeProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+        this.profileImage = profileImage != null ? profileImage : this.profileImage;
     }
 
     @Builder
