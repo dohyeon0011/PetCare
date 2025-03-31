@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Certification.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Certification.response.CertificationResponse;
 import com.PetSitter.service.Certification.CertificationService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,15 @@ public class CertificationViewController {
 
     @Comment("회원의 자격증 추가")
     @GetMapping("/certifications/new")
-    public String newCertification(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember() != null) {
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String newCertification(@AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
 
         return "certification/new-certification";
@@ -33,12 +41,19 @@ public class CertificationViewController {
 
     @Comment("회원의 자격증 수정")
     @GetMapping("/members/{sitterId}/certifications/edit")
-    public String editCertification(@PathVariable("sitterId") long sitterId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if(memberDetails != null && memberDetails.getMember().getId() == sitterId) {
-            List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
-            model.addAttribute("certifications", certifications);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String editCertification(@PathVariable("sitterId") long sitterId, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        List<CertificationResponse.GetList> certifications = certificationService.findById(sitterId);
+        model.addAttribute("certifications", certifications);
 
         return "certification/edit-certification";
     }
