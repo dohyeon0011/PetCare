@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Reservation.CustomerReservation.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.dto.Reservation.ReservationResponse;
 import com.PetSitter.service.Reservation.CustomerReservation.CustomerReservationService;
@@ -26,26 +28,40 @@ public class CustomerReservationViewController {
 
     @Operation(description = "회원 돌봄 예약 생성")
     @GetMapping("/members/{customerId}/sitters/{sitterId}/reservations/new")
-    public String newReservation(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId, Model model, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
-            ReservationResponse reservationInfo = sitterReservationService.getReservationDetails(customerId, sitterId);
-            model.addAttribute("reservationInfo", reservationInfo);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String newReservation(@PathVariable("customerId") long customerId, @PathVariable("sitterId") long sitterId, Model model, @AuthenticationPrincipal Object principal) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        ReservationResponse reservationInfo = sitterReservationService.getReservationDetails(customerId, sitterId);
+        model.addAttribute("reservationInfo", reservationInfo);
 
         return "reservation/new-reservation";
     }
 
     @Operation(description = "회원의 모든 돌봄 예약 내역 조회")
     @GetMapping("/members/{customerId}/reservations")
-    public String getAllReservation(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+    public String getAllReservation(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal Object principal, Model model) {
 //        List<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId);
 
-        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
-            Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
-            model.addAttribute("reservations", reservations);
-            model.addAttribute("currentUser", memberDetails.getMember());
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
+        model.addAttribute("reservations", reservations);
 
         return "reservation/reservation-list";
     }
@@ -54,14 +70,20 @@ public class CustomerReservationViewController {
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}")
     public String getReservation(@PathVariable("customerId") long customerId,
                                  @PathVariable("customerReservationId") long customerReservationId,
-                                 @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
-            CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
-            model.addAttribute("reservation", reservation);
-            model.addAttribute("currentUser", memberDetails.getMember());
+                                 @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
+        model.addAttribute("reservation", reservation);
 
         return "reservation/reservation-detail";
     }
-
 }
