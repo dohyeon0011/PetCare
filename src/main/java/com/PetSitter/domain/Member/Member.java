@@ -50,7 +50,6 @@ public class Member {
     private String loginId;
 
     @Comment("비밀번호")
-    @Column(nullable = false)
     private String password;
 
     @Comment("사용자 실제 이름")
@@ -174,7 +173,7 @@ public class Member {
     }
 
     @Comment("회원정보 수정")
-    public void update(String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, String profileImage, String introduction, Integer careerYear) {
+    public void update(String password, String name, String nickName, String email, String phoneNumber, String zipcode, String address, String profileImage, String introduction, Integer careerYear, String role) {
         this.password = password;
         this.name = name;
         this.nickName = nickName;
@@ -184,9 +183,10 @@ public class Member {
         this.address = address;
         changeProfileImage(profileImage);
         this.introduction = introduction;
+        this.role = Role.valueOf(role.toUpperCase());
 
         if (Role.PET_SITTER.equals(this.getRole())) {
-            this.careerYear = careerYear;
+            this.careerYear = careerYear != null ? careerYear : this.careerYear;
         }
     }
 
@@ -211,7 +211,7 @@ public class Member {
 
     @Comment("회원 프로필 사진 변경")
     public void changeProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+        this.profileImage = profileImage != null ? profileImage : this.profileImage;
     }
 
     // 이러한 상황(Member의 Role)에 따른 로직은 도메인 내부에 있어야 변경사항이 있을 때 도메인만 수정하면 돼서 유지보수가 쉽다.
