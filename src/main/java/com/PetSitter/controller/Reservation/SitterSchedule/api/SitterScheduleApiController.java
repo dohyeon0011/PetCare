@@ -1,7 +1,9 @@
 package com.PetSitter.controller.Reservation.SitterSchedule.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.SitterSchedule.response.SitterScheduleResponse;
 import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,11 +26,21 @@ public class SitterScheduleApiController {
     @GetMapping("/members/{sitterId}/schedules")
     public ResponseEntity<Page<SitterScheduleResponse.GetList>> findAllSitterSchedule(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
                                                                                       @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
-                                                                                      @AuthenticationPrincipal MemberDetails memberDetails) {
+                                                                                      @AuthenticationPrincipal Object principal) {
 //        List<SitterScheduleResponse.GetList> sitterScheduleList = sitterScheduleService.findAllById(id);
 
-        if (memberDetails != null && memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         Page<SitterScheduleResponse.GetList> sitterScheduleList = sitterScheduleService.findAllById(id, pageable);
@@ -41,9 +53,19 @@ public class SitterScheduleApiController {
     @GetMapping("/members/{sitterId}/schedules/{sitterScheduleId}")
     public ResponseEntity<SitterScheduleResponse.GetDetail> findSitterSchedule(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
                                                                                @PathVariable("sitterScheduleId") @Parameter (required = true, description = "예약 고유 번호") long sitterScheduleId,
-                                                                               @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                               @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         SitterScheduleResponse.GetDetail sitterSchedule = sitterScheduleService.findById(id, sitterScheduleId);
@@ -56,9 +78,19 @@ public class SitterScheduleApiController {
     @DeleteMapping("/members/{sitterId}/schedules/{sitterScheduleId}")
     public ResponseEntity<Void> deleteSitterSchedule(@PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long id,
                                                      @PathVariable("sitterScheduleId") @Parameter(required = true, description = "예약 고유 번호") long sitterScheduleId,
-                                                     @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                     @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         sitterScheduleService.delete(id, sitterScheduleId);
