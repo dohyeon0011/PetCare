@@ -74,7 +74,7 @@ public class CareLog { // 돌봄 케어 로그
 
     @Comment("케어 로그 사진 수정")
     public void changeImage(String image) {
-        this.image = image;
+        this.image = image != null ? image : this.image;
     }
 
     /*public CareLogResponse.GetDetail toResponse() {
