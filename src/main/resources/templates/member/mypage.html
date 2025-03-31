@@ -131,7 +131,20 @@
                             <span th:case="*">알 수 없음</span>
                         </span>
                         <br>
-                        <strong>소셜 제공자:</strong> <span th:text="${member.socialProvider ?: '소셜 제공자 정보가 없습니다.'}"></span><br><br>
+                        <strong>소셜 제공자:</strong>
+                        <span th:if="${member.socialProvider != null}">
+                            <span th:if="${member.socialProvider.name() == 'KAKAO'}">
+                                카카오
+                            </span>
+                            <span th:if="${member.socialProvider.name() == 'NAVER'}">
+                                네이버
+                            </span>
+                            <span th:if="${member.socialProvider.name() == 'GOOGLE'}">
+                                구글
+                            </span>
+                        </span>
+                        <span th:if="${member.socialProvider == null}">소셜 제공자 정보가 없습니다.</span><br>
+
                         <strong>소개:</strong> <span th:utext="${member.introduction}"></span><br><br>
                     </p>
 
