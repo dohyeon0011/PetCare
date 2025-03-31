@@ -1,6 +1,8 @@
 package com.PetSitter.controller.CareLog.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.service.CareLog.CareLogService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,24 +27,38 @@ public class CareLogViewController {
 
     @Operation(description = "돌봄 케어 로그 작성")
     @GetMapping("/schedules/{sitterScheduleId}/care-logs/new")
-    public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember() != null) {
-            CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
-            model.addAttribute("careLog", careLog);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        CareLogResponse.GetNewCareLog careLog = careLogService.getReservation(sitterScheduleId);
+        model.addAttribute("careLog", careLog);
 
         return "carelog/new-carelog";
     }
 
     @Operation(description = "돌봄사가 작성한 모든 돌봄 케어 로그 조회")
     @GetMapping("/members/{sitterId}/care-logs")
-    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
-            Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
-            model.addAttribute("careLogs", careLogs);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Page<CareLogResponse.GetList> careLogs = careLogService.findAll(sitterId, pageable);
+        model.addAttribute("careLogs", careLogs);
 
         return "carelog/carelog-list";
     }
