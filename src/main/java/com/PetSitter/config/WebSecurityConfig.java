@@ -1,5 +1,6 @@
 package com.PetSitter.config;
 
+import com.PetSitter.config.oauth.CustomOAuth2LogoutSuccessHandler;
 import com.PetSitter.config.oauth.CustomOAuth2UserService;
 import com.PetSitter.config.oauth.OAuth2SuccessHandler;
 import com.PetSitter.service.Member.MemberDetailsService;
@@ -93,6 +94,7 @@ public class WebSecurityConfig {
                         .deleteCookies("JSESSIONID") // 쿠키 삭제
                         .clearAuthentication(true)
                         .permitAll()
+                        .logoutSuccessHandler(new CustomOAuth2LogoutSuccessHandler())  // 커스텀 로그아웃 핸들러 추가
                 );
 
         return http.build();
