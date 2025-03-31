@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Member.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import com.PetSitter.service.Member.MemberService;
@@ -42,24 +44,38 @@ public class MemberViewController {
 
     @Comment("특정 회원 조회")
     @GetMapping("/members/{memberId}/myPage")
-    public String getMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails.getMember().getId() == id) {
-            Object member = memberService.findById(id);
-            model.addAttribute("member", member);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String getMember(@PathVariable("memberId") long id, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Object findMember = memberService.findById(id);
+        model.addAttribute("member", findMember);
 
         return "member/mypage";
     }
 
     @Comment("회원 정보 수정")
     @GetMapping("/members/{memberId}/edit")
-    public String editMember(@PathVariable("memberId") long id, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if(memberDetails.getMember().getId() == id) {
-            Object member = memberService.findById(id);
-            model.addAttribute("member", member);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String editMember(@PathVariable("memberId") long id, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Object findMember = memberService.findById(id);
+        model.addAttribute("member", findMember);
 
         return "member/edit-member";
     }
