@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Pet.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Pet.response.PetResponse;
 import com.PetSitter.service.Pet.PetService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,15 @@ public class PetViewController {
 
     @Comment("반려견 등록")
     @GetMapping("/pets/new")
-    public String newPet(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember() != null) {
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String newPet(@AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
 
         return "pet/new-pet";
@@ -33,12 +41,19 @@ public class PetViewController {
 
     @Comment("반려견 수정")
     @GetMapping("/members/{customerId}/pets/edit")
-    public String editPet(@PathVariable("customerId") long customerId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember().getId() == customerId) {
-            List<PetResponse.GetList> pets = petService.findById(customerId);
-            model.addAttribute("pets", pets);
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String editPet(@PathVariable("customerId") long customerId, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        List<PetResponse.GetList> pets = petService.findById(customerId);
+        model.addAttribute("pets", pets);
 
         return "pet/edit-pet";
     }
