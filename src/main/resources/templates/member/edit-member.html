@@ -95,7 +95,7 @@
     <h2 class="text-center">👤 회원 정보 수정 👤</h2>
     <form th:action="@{/api/pets-care/members/{memberId}(memberId=${currentUser.id})}" method="post" id="editProfileForm" onsubmit="return updateMember(event)">
         <input type="hidden" name="_method" value="PUT">  <!-- 이 부분을 추가 -->
-        <div class="form-group">
+        <div class="form-group" th:if="${currentUser.socialProvider == null}">
             <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="20">
         </div>
@@ -152,14 +152,26 @@
         </div>
 
         <div class="form-group">
+            <label for="role">회원 구분</label>
+            <select id="role" name="role" class="form-control" onchange="toggleCareerYearField()">
+                <option value="CUSTOMER" th:selected="${member.role.name() == 'CUSTOMER'}">고객</option>
+                <option value="PET_SITTER" th:selected="${member.role.name() == 'PET_SITTER'}">펫시터(돌봄사)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="introduction">소개</label>
             <textarea id="introduction" name="introduction" class="form-control" rows="3" th:text="${member.introduction}"></textarea>
         </div>
 
-        <div th:if="${member.role.name() == 'PET_SITTER'}" class="form-group">
-            <label for="careerYear">경력 연차</label>
-            <input type="number" id="careerYear" name="careerYear" class="form-control" th:value="${member.careerYear}" min="0">
+        <!-- 경력 입력 필드 (초기에 숨김 처리) -->
+        <div class="form-group" id="careerField" style="display: none;">
+            <label for="careerYear">경력 (년)</label>
+            <input type="number" class="form-control" id="careerYear" name="careerYear"
+                   th:value="${member.careerYear != null ? member.careerYear : ''}"
+                   min="0" placeholder="경력을 숫자로만 입력하세요 (돌봄사인 경우)">
         </div>
+
         <button type="submit" class="btn btn-primary">수정하기</button>
         <a th:href="@{/pets-care/members/{memberId}/myPage(memberId=${currentUser.id})}" class="btn btn-secondary">취소</a>
     </form>
