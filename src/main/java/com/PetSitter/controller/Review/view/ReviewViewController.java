@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Review.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.domain.Review.ReviewSearch;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
@@ -39,14 +41,21 @@ public class ReviewViewController {
 
     @Operation(description = "특정 회원의 모든 리뷰 조회")
     @GetMapping("/members/{customerId}/reviews")
-    public String getAllReview(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+    public String getAllReview(@PathVariable("customerId") long customerId, Pageable pageable, @AuthenticationPrincipal Object principal, Model model) {
 //        List<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId);
 
-        if (memberDetails.getMember().getId() == customerId) {
-            Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
-            model.addAttribute("reviews", reviews);
-            model.addAttribute("currentUser", memberDetails.getMember());
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Page<ReviewResponse.GetList> reviews = reviewService.findAllById(customerId, pageable);
+        model.addAttribute("reviews", reviews);
 
         return "review/review-my-list";
     }
@@ -89,9 +98,15 @@ public class ReviewViewController {
 
     @Operation(description = "이용 후기 페이지에서 전체 리뷰 및 특정 돌봄사의 리뷰 조회")
     @GetMapping("/reviews")
-    public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember() != null) {
-            model.addAttribute("currentUser", memberDetails.getMember());
+    public String getAllReviewsBySitter(@ModelAttribute ReviewSearch reviewSearch, @RequestParam(defaultValue = "0") int page, @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
 
         List<ReviewResponse.GetDetail> reviews = reviewService.getAllReviewsBySitterV2(reviewSearch, page);
