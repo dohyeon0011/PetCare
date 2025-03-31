@@ -31,6 +31,7 @@ public class MemberResponse {
         private Role role;
         private SocialProvider socialProvider;
         private String introduction;
+        private Integer careerYear;
         private int amount;
         private List<PetResponse.GetList> pets = new ArrayList<>();
 
@@ -48,6 +49,7 @@ public class MemberResponse {
             this.introduction = (member.getIntroduction() != null) ?
                     member.getIntroduction().replace("\n", "<br>")
                     : "";
+            this.careerYear = member.getCareerYear();
             this.amount = member.getAmount();
             this.pets = pets.stream()
                     .map(PetResponse.GetList::new)
