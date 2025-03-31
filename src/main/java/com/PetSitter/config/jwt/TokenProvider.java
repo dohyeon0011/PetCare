@@ -29,6 +29,9 @@ public class TokenProvider {
     public String generateToken(Member member, Duration duration, String oauthProvider) {
         OAuth2Client oauth2Client = getOAuth2Client(oauthProvider);
 
+        // OAuth2 Secret Key를 Base64 인코딩
+        String base64Secret = Base64.getEncoder().encodeToString(oauth2Client.getClientSecret().getBytes());
+
         return Jwts.builder()
                 .setIssuer(oauth2Client.getIssuer())
                 .setIssuedAt(new Date())
@@ -37,7 +40,7 @@ public class TokenProvider {
                 .claim("id", member.getId())  // 클레임 id : 유저 ID
                 .claim("role", member.getRole()) // 클레임 role : 유저 역할
                 .claim("provider", oauthProvider)
-                .signWith(SignatureAlgorithm.HS256, oauth2Client.getClientSecret()) // 해당 oauth2 제공자의 시크릿 키
+                .signWith(SignatureAlgorithm.HS256, base64Secret) // 해당 oauth2 제공자의 시크릿 키
                 .compact();
     }
 
