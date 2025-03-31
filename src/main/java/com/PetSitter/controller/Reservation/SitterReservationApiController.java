@@ -1,7 +1,9 @@
 package com.PetSitter.controller.Reservation;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.ReservationResponse;
 import com.PetSitter.dto.Reservation.ReservationSitterResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
@@ -49,9 +51,19 @@ public class SitterReservationApiController {
     @Operation(summary = "고객이 예약할 때 보여줄 정보", description = "고객이 예약할 때 보여줄 정보 API")
     @GetMapping("/members/{customerId}/sitters/{sitterId}/reservations")
     public ResponseEntity<ReservationResponse> getReservationInfo(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long customerId,
-                                                                  @PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId, @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != customerId) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                  @PathVariable("sitterId") @Parameter(required = true, description = "회원(돌봄사) 고유 번호") long sitterId, @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != customerId) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         ReservationResponse reservationDetails = sitterReservationService.getReservationDetails(customerId, sitterId);
