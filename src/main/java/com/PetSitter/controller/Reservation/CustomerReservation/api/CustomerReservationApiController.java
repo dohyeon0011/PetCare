@@ -1,7 +1,9 @@
 package com.PetSitter.controller.Reservation.CustomerReservation.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.CustomerReservation.request.AddCustomerReservationRequest;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.service.Reservation.CustomerReservation.CustomerReservationService;
@@ -31,7 +33,7 @@ public class CustomerReservationApiController {
 
     @Operation(summary = "고객 - 돌봄 예약 생성", description = "돌봄 예약 생성 API")
     @PostMapping("/reservations/new")
-    public ResponseEntity<?> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request, BindingResult result, @AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> saveReservation(@RequestBody @Valid AddCustomerReservationRequest request, BindingResult result, @AuthenticationPrincipal Object principal) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -44,8 +46,18 @@ public class CustomerReservationApiController {
                     .body(errors);
         }
 
-        if (memberDetails != null && memberDetails.getMember().getId() != request.getCustomerId()) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != request.getCustomerId()) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != request.getCustomerId()) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         CustomerReservationResponse.GetDetail customerReservation = customerReservationService.save(request);
@@ -58,11 +70,21 @@ public class CustomerReservationApiController {
     @GetMapping("/members/{customerId}/reservations")
     public ResponseEntity<Page<CustomerReservationResponse.GetList>> findAllCustomerReservation(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
                                                                                                 @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
-                                                                                                @AuthenticationPrincipal MemberDetails memberDetails) {
+                                                                                                @AuthenticationPrincipal Object principal) {
 //        List<CustomerReservationResponse.GetList> customerReservationList = customerReservationService.findAllById(id, pageable);
 
-        if (memberDetails != null && memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         Page<CustomerReservationResponse.GetList> customerReservationList = customerReservationService.findAllById(id, pageable);
@@ -75,9 +97,19 @@ public class CustomerReservationApiController {
     @GetMapping("/members/{customerId}/reservations/{customerReservationId}")
     public ResponseEntity<CustomerReservationResponse.GetDetail> findCustomerReservation(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
                                                                                          @PathVariable("customerReservationId") @Parameter(required = true, description = "예약 고유 번호") long customerReservationId,
-                                                                                         @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                                                         @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         CustomerReservationResponse.GetDetail customerReservation = customerReservationService.findById(id, customerReservationId);
@@ -90,9 +122,19 @@ public class CustomerReservationApiController {
     @DeleteMapping("/members/{customerId}/reservations/{customerReservationId}")
     public ResponseEntity<Void> deleteCustomerReservation(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
                                                           @PathVariable("customerReservationId") @Parameter(required = true, description = "예약 고유 번호") long customerReservationId,
-                                                          @AuthenticationPrincipal MemberDetails memberDetails) {
-        if (memberDetails != null && memberDetails.getMember().getId() != id) {
-            throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+                                                          @AuthenticationPrincipal Object principal) {
+        if (principal instanceof MemberDetails) {
+            Member member = ((MemberDetails) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
+        } else if (principal instanceof CustomOAuth2User) {
+            Member member = ((CustomOAuth2User) principal).getMember();
+
+            if (member.getId() != id) {
+                throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
+            }
         }
 
         customerReservationService.delete(id, customerReservationId);
