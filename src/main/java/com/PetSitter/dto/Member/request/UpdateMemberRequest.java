@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UpdateMemberRequest {
 
-    @NotBlank(message = "비밀번호는 필수입니다.")
-    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상, 20자 이하로 입력해야 합니다.")
     private String password;
 
     @NotBlank(message = "이름은 필수입니다.")
@@ -39,4 +37,6 @@ public class UpdateMemberRequest {
     private String introduction;
 
     private Integer careerYear;
+
+    private String role;
 }
