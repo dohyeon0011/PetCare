@@ -1,6 +1,8 @@
 package com.PetSitter.controller.Reservation.SitterSchedule.view;
 
+import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.dto.Reservation.SitterSchedule.response.SitterScheduleResponse;
 import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
@@ -24,13 +26,20 @@ public class SitterScheduleViewController {
 
     @Operation(description = "돌봄사의 전체 돌봄 예약 목록 조회")
     @GetMapping("/members/{sitterId}/schedules")
-    public String getAllSitterSchedule(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+    public String getAllSitterSchedule(@PathVariable("sitterId") long sitterId, @AuthenticationPrincipal Object principal, Model model, Pageable pageable) {
 //        List<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId);
-        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
-            Page<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId, pageable);
-            model.addAttribute("schedules", schedules);
-            model.addAttribute("currentUser", memberDetails.getMember());
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        Page<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId, pageable);
+        model.addAttribute("schedules", schedules);
 
         return "schedule/schedule-list";
     }
@@ -39,12 +48,19 @@ public class SitterScheduleViewController {
     @GetMapping("/members/{sitterId}/schedules/{sitterScheduleId}")
     public String getSitterSchedule(@PathVariable("sitterId") long sitterId,
                                     @PathVariable("sitterScheduleId") long sitterScheduleId,
-                                    @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        if (memberDetails != null && memberDetails.getMember().getId() == sitterId) {
-            SitterScheduleResponse.GetDetail schedule = sitterScheduleService.findById(sitterId, sitterScheduleId);
-            model.addAttribute("schedule", schedule);
-            model.addAttribute("currentUser", memberDetails.getMember());
+                                    @AuthenticationPrincipal Object principal, Model model) {
+        Member member;
+
+        if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
+            member = ((MemberDetails) principal).getMember();
+            model.addAttribute("currentUser", member);
+        } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
+            member = ((CustomOAuth2User) principal).getMember();
+            model.addAttribute("currentUser", member);
         }
+
+        SitterScheduleResponse.GetDetail schedule = sitterScheduleService.findById(sitterId, sitterScheduleId);
+        model.addAttribute("schedule", schedule);
 
         return "schedule/schedule-detail";
     }
