@@ -1,5 +1,6 @@
 package com.PetSitter.service.Member;
 
+import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.UploadFile;
@@ -99,11 +100,25 @@ public class MemberService {
 
         authorizetionMember(member);
 
+        // 소셜 로그인 회원이 아닌 경우에만 비밀번호 입력 필수 처리
+        if (member.getSocialProvider() == null && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
+            throw new BadRequestCustom("비밀번호 입력은 필수입니다.(최소 8자 입력 필요)");
+        }
+
+        System.out.println("Social Provider: " + member.getSocialProvider());
+        System.out.println("Password: " + request.getPassword());
+
+
+        String password = null;
+        if (request.getPassword() != null) {
+            password = bCryptPasswordEncoder.encode(request.getPassword());
+        }
+
         member.update(
-                bCryptPasswordEncoder.encode(request.getPassword()), request.getName(), request.getNickName(), request.getEmail(),
+                password, request.getName(), request.getNickName(), request.getEmail(),
                 request.getPhoneNumber(), request.getZipcode(), request.getAddress(),
                 uploadFile != null ? uploadFile.getServerFileName() : null,
-                request.getIntroduction(), request.getCareerYear()
+                request.getIntroduction(), request.getCareerYear(), request.getRole()
         );
 
         return member.toResponse();
