@@ -3,6 +3,7 @@ package com.PetSitter.service.Member;
 import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
+import com.PetSitter.domain.Member.SocialProvider;
 import com.PetSitter.domain.UploadFile;
 import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
@@ -101,7 +102,7 @@ public class MemberService {
         authorizetionMember(member);
 
         // 소셜 로그인 회원이 아닌 경우에만 비밀번호 입력 필수 처리
-        if (member.getSocialProvider() == null && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
+        if ((member.getSocialProvider() == null || member.getSocialProvider().equals(SocialProvider.NONE)) && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
             throw new BadRequestCustom("비밀번호 입력은 필수입니다.(최소 8자 입력 필요)");
         }
 
