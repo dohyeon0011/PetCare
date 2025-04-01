@@ -71,7 +71,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private Member registerNewMember(OAuth2UserInfo userInfo, String provider) {
         Member member = Member.builder()
                 .loginId(userInfo.getId())  // OAuth2 로그인 ID
-                .password("")
+                .password(UUID.randomUUID().toString().substring(0, 18))
                 .name(userInfo.getName())   // 사용자 이름
                 .nickName(userInfo.getName() + "_" + UUID.randomUUID().toString().substring(0, 10)) // 사용자 닉네임
                 .email(userInfo.getEmail()) // 이메일
