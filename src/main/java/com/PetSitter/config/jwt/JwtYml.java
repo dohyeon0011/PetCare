@@ -1,5 +1,6 @@
 package com.PetSitter.config.jwt;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,5 +21,13 @@ public class JwtYml {
         private String clientId;
         private String clientSecret;
         private String issuer;  // 각 OAuth2 제공자에 대한 issuer
+    }
+
+    @PostConstruct
+    public void init() {
+        // 각 소셜 로그인 제공자에 대한 정보를 출력하여 값이 제대로 로딩되었는지 확인
+        System.out.println("Google Client ID: " + google.getClientId());
+        System.out.println("Kakao Client ID: " + kakao.getClientId());
+        System.out.println("Naver Client ID: " + naver.getClientId());
     }
 }
