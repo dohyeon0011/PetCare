@@ -96,7 +96,7 @@
     <form th:action="@{/api/pets-care/members/{memberId}(memberId=${currentUser.id})}" method="post" id="editProfileForm" onsubmit="return updateMember(event)">
         <input type="hidden" name="_method" value="PUT">  <!-- 이 부분을 추가 -->
         <div class="form-group" th:if="${currentUser.socialProvider == null or (currentUser.socialProvider != null and currentUser.socialProvider.name() == 'NONE')}">
-        <label for="password">비밀번호</label>
+            <label for="password">비밀번호</label>
             <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="20">
         </div>
 
