@@ -3,6 +3,7 @@ package com.PetSitter.config.jwt;
 import com.PetSitter.domain.Member.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,11 +31,15 @@ public class TokenProvider {
     private final ObjectMapper objectMapper = new ObjectMapper(); // JSON 변환용
 
     // 액세스 토큰 생성
-    public String generateToken(Member member, Duration duration, String oauthProvider) {
+    public String generateToken(Member member, Duration duration, String oauthProvider) throws NoSuchAlgorithmException {
         OAuth2Client oauth2Client = getOAuth2Client(oauthProvider);
 
-        // OAuth2 Secret Key를 Base64 인코딩
-        String base64Secret = Base64.getEncoder().encodeToString(oauth2Client.getClientSecret().getBytes());
+        // OAuth2 Secret Key를 Base64 인코딩(네이버 로그인 시 키가 80비트 밖에 안돼서 오류가 발생: HS256 알고리즘에 쓰이는 키의 길이가 256비트 이상이어야 함.)
+//        String base64Secret = Base64.getEncoder().encodeToString(oauth2Client.getClientSecret().getBytes());
+
+        // OAuth2 Secret Key를 SHA-256 해싱하여 키 길이 보장(256비트 길이로 변환)
+        byte[] keyBytes = MessageDigest.getInstance("SHA-256").digest(oauth2Client.getClientSecret().getBytes(StandardCharsets.UTF_8));
+        Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .setIssuer(oauth2Client.getIssuer())
@@ -40,7 +49,8 @@ public class TokenProvider {
                 .claim("id", member.getId())  // 클레임 id : 유저 ID
                 .claim("role", member.getRole()) // 클레임 role : 유저 역할
                 .claim("provider", oauthProvider)
-                .signWith(SignatureAlgorithm.HS256, base64Secret) // 해당 oauth2 제공자의 시크릿 키
+                .signWith(key)
+//                .signWith(SignatureAlgorithm.HS256, base64Secret) // 해당 oauth2 제공자의 시크릿 키
                 .compact();
     }
 
