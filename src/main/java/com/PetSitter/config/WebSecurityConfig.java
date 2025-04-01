@@ -60,9 +60,9 @@ public class WebSecurityConfig {
 
                             String message = "아이디 또는 비밀번호가 잘못되었습니다.";
 
-                            if (exception instanceof org.springframework.security.authentication.DisabledException) {
+                            /*if (exception instanceof org.springframework.security.authentication.DisabledException) {
                                 message = "회원 탈퇴한 계정입니다.";
-                            }
+                            }*/
 
                             response.getWriter().write("{\"message\": \"" + message + "\"}");
                         }))
