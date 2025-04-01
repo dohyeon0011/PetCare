@@ -1,0 +1,11 @@
+.social-login {
+    display: flex;
+    justify-content: center;  /* 가운데 정렬 */
+    gap: 20px; /* 아이콘 간 간격 조절 */
+    margin-top: 20px; /* 위쪽 여백 추가 */
+}
+
+.social-login a img {
+    width: 160px; /* 이미지 크기 조정 (원하는 크기로 변경 가능) */
+    height: auto;
+}
