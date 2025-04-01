@@ -106,11 +106,7 @@ public class MemberService {
             throw new BadRequestCustom("비밀번호 입력은 필수입니다.(최소 8자 입력 필요)");
         }
 
-        System.out.println("Social Provider: " + member.getSocialProvider());
-        System.out.println("Password: " + request.getPassword());
-
-
-        String password = null;
+        String password = member.getPassword();
         if (request.getPassword() != null) {
             password = bCryptPasswordEncoder.encode(request.getPassword());
         }
