@@ -5,12 +5,13 @@ import java.util.Map;
 /**
  * 카카오 사용자 정보 제공 데이터 스펙
  * {
- *   "id": 987654321,
- *   "kakao_account": {
- *     "profile": { "nickname": "길동이" },
- *     "email": "gildong@kakao.com"
- *   }
- * }
+ *  *   "id": 987654321,
+ *  *   "kakao_account": {
+ *  *     "profile": { "nickname": "길동이" },
+ *  *     "email": "gildong@kakao.com"
+ *        "phone_number": "+82 10-1234-5678"
+ *  *   }
+ *  * }
  */
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
@@ -36,8 +37,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getImageUrl() {
-        Map<String, Object> profile = (Map<String, Object>) ((Map<String, Object>) attributes.get("kakao_account")).get("profile");
-        return profile != null ? (String) profile.get("profile_image_url") : null;
+    public String getPhoneNumber() {
+        return (String) ((Map<String, Object>) attributes.get("kakao_account")).get("phone_number");
     }
 }
