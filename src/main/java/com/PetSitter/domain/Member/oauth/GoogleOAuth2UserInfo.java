@@ -8,6 +8,7 @@ import java.util.Map;
  *   "sub": "123456789",
  *   "name": "홍길동",
  *   "email": "hong@gmail.com",
+ *   "phone_number": "+82-10-1234-5678",
  *   "picture": "https://lh3.googleusercontent.com/profile.jpg"
  * }
  */
@@ -33,7 +34,7 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getImageUrl() {
-        return (String) attributes.get("picture");
+    public String getPhoneNumber() {
+        return (String) attributes.get("phone_number");
     }
 }
