@@ -5,6 +5,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/login.css}" rel="stylesheet">
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -88,9 +89,15 @@
                         <button type="submit" class="btn btn-primary btn-block">로그인</button>
                     </form>
                 </div>
-                <div style="text-align: center;">
+                <div class="social-login">
+                    <a href="/oauth2/authorization/naver">
+                        <img src="/images/naver-login.png" alt="Naver Login">
+                    </a>
+                    <a href="/oauth2/authorization/kakao">
+                        <img src="/images/kakao_login_medium_narrow.png" alt="Kakao Login">
+                    </a>
                     <a href="/oauth2/authorization/google">
-                        <img src="/images/google-login.png">
+                        <img src="/images/google-login.png" alt="Google Login">
                     </a>
                 </div>
                 <br>
