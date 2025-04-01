@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -63,18 +64,30 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String loginId = getLoginIdFromOAuth2User(provider, oAuth2User); // 리소스 서버에 맞는 LoginId 추출
         log.info("OAuth2 User LOGINID: {}", loginId);
 
-        // 회원 조회
-        Member member = memberRepository.findByLoginId(loginId)
+        // 회원 조회(활동 중인 유저만)
+        Member member = memberRepository.findByLoginIdAndIsDeletedFalse(loginId)
                 .orElseThrow(() -> new NoSuchElementException("Error, onAuthenticationSuccess(): 회원 정보 조회 실패"));
 
         // 리프레시 토큰 생성
-        String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION, provider);
+        String refreshToken = null;
+
+        try {
+            refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION, provider);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("리프레시 토큰 생성 과정 오류 발생: " + e.getMessage());
+        }
 
         // 리프레시 토큰을 쿠키에 저장
         addRefreshTokenToCookie(request, response, refreshToken);
 
         // 액세스 토큰 생성
-        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION, provider);
+        String accessToken = null;
+
+        try {
+            accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION, provider);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("액세스 토큰 생성 과정 오류 발생: " + e.getMessage());
+        }
 
         // 액세스 토큰을 쿠키에 저장
         addAccessTokenToCookie(request, response, accessToken);
