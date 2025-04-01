@@ -60,7 +60,7 @@ public class AddMemberRequest {
     // DTO에서 엔티티 객체로 변환하는 메서드
     public Member toEntity(String encodedPassword, String profileImage) {
         // socialProvider가 null이면 기본값을 설정
-        SocialProvider provider = (socialProvider != null) ? SocialProvider.valueOf(socialProvider) : null;
+        SocialProvider provider = (socialProvider != null) ? SocialProvider.valueOf(socialProvider) : SocialProvider.NONE;
 
         return Member.builder()
                 .loginId(loginId)
