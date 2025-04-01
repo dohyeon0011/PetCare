@@ -50,6 +50,7 @@ public class Member {
     private String loginId;
 
     @Comment("비밀번호")
+    @Column(nullable = false)
     private String password;
 
     @Comment("사용자 실제 이름")
