@@ -126,7 +126,7 @@
             <span th:if="${member.socialProvider.name() == 'NAVER'}">네이버</span>
             <span th:if="${member.socialProvider.name() == 'GOOGLE'}">구글</span>
         </span>
-        <span th:if="${member.socialProvider == null}">소셜 제공자 없음</span>
+        <span th:if="${member.socialProvider == null or member.socialProvider.name() == 'NONE'}">소셜 제공자 없음</span>
         <br>
         <p><strong>소개:</strong> <span th:utext="${member.introduction}"></span></p>
         <br>
