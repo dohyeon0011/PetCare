@@ -65,12 +65,16 @@ spring:
       client:
         registration:
           google:
+            client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+            client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}
             redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/google"
             scope:
               - profile
               - email
             issuer: "https://accounts.google.com"  # 구글 발급자 설정
           kakao:
+            client-id: ${KAKAO_OAUTH_CLIENT_ID}
+            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
             client-authentication-method: client_secret_post
             redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
@@ -79,6 +83,8 @@ spring:
             provider: kakao
             issuer: "https://kauth.kakao.com"  # 카카오 발급자 설정
           naver:
+            client-id: ${NAVER_OAUTH_CLIENT_ID}
+            client-secret: ${NAVER_OAUTH_CLIENT_SECRET}
             redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, mobile
