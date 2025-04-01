@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,13 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, QuerydslPredicateExecutor<Member> {
 
     Optional<Member> findByLoginId(String loginId);
+
+    Optional<Member> findByLoginIdAndIsDeletedFalse(String loginId);
+
+    // OAuth2 소셜 로그인 회원 로그인 아이디 변경
+    @Modifying
+    @Query("update Member m set m.loginId = :newLoginId where m.id = :id")
+    void updateLoginId(@Param("id") long id, @Param("newLoginId") String newLoginId);
 
     /*@Query("select new com.PetCare.dto.Member.response.MemberResponse$GetSitter(" +
             "s.id, s.name, s.careerYear, s.certifications")
