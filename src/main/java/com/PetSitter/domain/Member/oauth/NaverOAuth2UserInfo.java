@@ -11,7 +11,9 @@ import java.util.Map;
  *     "id": "abcdef123456",
  *     "name": "홍길동",
  *     "email": "hong@naver.com",
- *     "profile_image": "https://profile-phinf.pstatic.net/profile.jpg"
+ *     "profile_image": "https://profile-phinf.pstatic.net/profile.jpg",
+ *     "mobile": "010-1234-5678",
+ *     "mobile_e164": "+82-10-1234-5678"
  *   }
  * }
  */
@@ -37,7 +39,7 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getImageUrl() {
-        return (String) attributes.get("profile_image");
+    public String getPhoneNumber() {
+        return (String) attributes.get("mobile");
     }
 }
