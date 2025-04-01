@@ -122,16 +122,12 @@
                         </span></p>
         <strong>소셜 제공자:</strong>
         <span th:if="${member.socialProvider != null}">
-            <span th:if="${member.socialProvider.name() == 'KAKAO'}">
-                카카오
-            </span>
-            <span th:if="${member.socialProvider.name() == 'NAVER'}">
-                네이버
-            </span>
-            <span th:if="${member.socialProvider.name() == 'GOOGLE'}">
-                구글
-            </span>
-        </span><br>
+            <span th:if="${member.socialProvider.name() == 'KAKAO'}">카카오</span>
+            <span th:if="${member.socialProvider.name() == 'NAVER'}">네이버</span>
+            <span th:if="${member.socialProvider.name() == 'GOOGLE'}">구글</span>
+        </span>
+        <span th:if="${member.socialProvider == null}">소셜 제공자 없음</span>
+        <br>
         <p><strong>소개:</strong> <span th:utext="${member.introduction}"></span></p>
         <br>
         <p><strong>회원 상태:</strong>
