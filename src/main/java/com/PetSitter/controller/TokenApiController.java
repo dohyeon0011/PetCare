@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
@@ -21,7 +23,7 @@ public class TokenApiController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/token")
-    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException {
         // 쿠키에서 리프레시 토큰 가져오기
         String refreshToken = CookieUtil.getCookieValue(request, OAuth2SuccessHandler.REFRESH_TOKEN_COOKIE_NAME);
 
