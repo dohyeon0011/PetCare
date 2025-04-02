@@ -3,19 +3,24 @@ package com.PetSitter.service.Reservation.SitterSchedule;
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
+import com.PetSitter.domain.PointHistory.PointsHistory;
+import com.PetSitter.domain.PointHistory.PointsStatus;
 import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.Reservation.SitterSchedule.response.SitterScheduleResponse;
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
+import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +29,7 @@ public class SitterScheduleService {
     private final MemberRepository memberRepository;
     private final SitterScheduleRepository sitterScheduleRepository;
     private final CareAvailableDateRepository careAvailableDateRepository;
+    private final PointHistoryRepository pointHistoryRepository;
 
     @Comment("특정 돌봄사의 전체 돌봄 예약 목록 조회")
     @Transactional(readOnly = true)
@@ -74,17 +80,30 @@ public class SitterScheduleService {
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(sitter.getId(), sitterSchedule.getReservationAt())
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 해당 예약 날짜를 찾을 수 없습니다."));
 
+        Member customer = sitterSchedule.getCustomer();
+
+        Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.USING);
+        Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.SAVING);
+
+        usingPoints.ifPresentOrElse(
+                pointsHistory -> {  // 고객이 적립금을 사용했었을 때
+                    customer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
+                    customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
+                },
+                () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
+        );
+
         sitterSchedule.cancel();
         careAvailableDate.cancel();
         sitterSchedule.getCustomerReservation().cancel();
     }
 
     private static void authorizationMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 본인만 가능합니다.");
+        }
     }
 
     public static void verifyingPermissionsSitter(Member sitter) {
