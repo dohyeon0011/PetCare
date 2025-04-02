@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -167,29 +168,29 @@ public class CustomerReservationService {
         SitterSchedule sitterSchedule = sitterScheduleRepository.findByCustomerReservation(customerReservation)
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 돌봄사에게 해당 예약이 존재하지 않습니다."));
 
+
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
 
-        if (usingPoints.isPresent()) { // 해당 예약 건에 적립금을 사용한 경우
-            customer.addRewardPoints(usingPoints.get().getPoint()); // 사용한 적립금 반환
-            customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
-        } else { // 해당 예약 건에 적립금을 사용하지 않은 경우(적립된 적립금 회수)
-            customer.subRewardPoints(savingPoints.get().getPoint());
-        }
+        usingPoints.ifPresentOrElse( // 해당 예약 건에 적립금을 사용한 경우
+                pointsHistory -> {
+                    customer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
+                    customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
+                },
+                () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립됨 적립금 회수(해당 예약 건에 사용하지 않은 경우)
+        );
 
         careAvailableDate.cancel();
         customerReservation.cancel();
         sitterSchedule.cancel();
-
-//        customerReservationRepository.delete(customerReservation);
     }
 
     private static void authorizationMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 본인만 가능합니다.");
+        }
     }
 
     public static void verifyingPermissionsCustomer(Member customer) {
