@@ -40,7 +40,8 @@ import java.util.NoSuchElementException;
 //@DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
 public class Member {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", updatable = false)
     private long id;
 
