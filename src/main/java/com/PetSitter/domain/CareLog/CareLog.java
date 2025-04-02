@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class CareLog { // 돌봄 케어 로그
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "care_log_id")
     private long id;
 
