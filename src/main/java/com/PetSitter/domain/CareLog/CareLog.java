@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 @Getter
 public class CareLog { // 돌봄 케어 로그
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "care_log_id")
     private long id;
 
