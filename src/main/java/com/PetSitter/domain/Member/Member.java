@@ -225,7 +225,17 @@ public class Member {
         } else if (Role.PET_SITTER.equals(this.getRole())) {
             return new MemberResponse.GetSitter(this, this.certifications);
         }
-        throw new NoSuchElementException("존재하지 않는 회원입니다.");
+        throw new NoSuchElementException("회원 정보 수정 후 조회 에러: 존재하지 않는 회원입니다.");
+    }
+
+    // 회원 정보 수정한 회원만을 위한 정보 조회(role 수정 시 로그아웃 처리해야 되기 때문에 따로 구현함(변경 여부 인자를 memberService.update()에서 boolean 타입으로 받음))
+    public Object toUpdateResponse(boolean roleChanged) {
+        if (Role.CUSTOMER.equals(this.getRole())) {
+            return new MemberResponse.getUpdateCustomer(this, this.pets, roleChanged);
+        } else if (Role.PET_SITTER.equals(this.getRole())) {
+            return new MemberResponse.getUpdateSitter(this, this.certifications, roleChanged);
+        }
+        throw new NoSuchElementException("회원 정보 수정 후 조회 에러: 존재하지 않는 회원입니다.");
     }
 
     @Comment("관리자 페이지 회원 상세 정보 조회")
