@@ -26,7 +26,8 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sitter_schedule_id")
     private long id;
 
