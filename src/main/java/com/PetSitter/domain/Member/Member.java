@@ -41,7 +41,7 @@ import java.util.NoSuchElementException;
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "member_id", updatable = false)
     private long id;
 
