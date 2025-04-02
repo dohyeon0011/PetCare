@@ -27,7 +27,7 @@ import java.util.List;
 public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "sitter_schedule_id")
     private long id;
 
