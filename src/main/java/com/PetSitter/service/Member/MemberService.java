@@ -111,6 +111,8 @@ public class MemberService {
             password = bCryptPasswordEncoder.encode(request.getPassword());
         }
 
+        boolean roleChanged = !member.getRole().equals(Role.valueOf(request.getRole())); // 회원 역할 변경 여부(Role ex) 'CUSTOMER' or 'PET_SITTER')
+
         member.update(
                 password, request.getName(), request.getNickName(), request.getEmail(),
                 request.getPhoneNumber(), request.getZipcode(), request.getAddress(),
@@ -118,7 +120,7 @@ public class MemberService {
                 request.getIntroduction(), request.getCareerYear(), request.getRole()
         );
 
-        return member.toResponse();
+        return member.toUpdateResponse(roleChanged);
     }
 
     @Comment("리뷰가 가장 많은 대표 돌봄사 최상위 3명 조회(메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내)")
