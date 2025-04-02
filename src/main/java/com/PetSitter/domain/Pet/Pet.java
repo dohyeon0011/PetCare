@@ -13,7 +13,8 @@ import org.hibernate.annotations.Comment;
 @Getter
 public class Pet {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_id", updatable = false)
     private long id;
 
