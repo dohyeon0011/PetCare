@@ -16,7 +16,8 @@ import java.time.LocalDate;
 @Getter
 public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "care_available_date_id", updatable = false)
     private long id;
 
