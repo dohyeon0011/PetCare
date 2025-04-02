@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class PointsHistory { // 고객의 포인트 내역(적립, 사용)
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "points_history_id", updatable = false)
     private long id;
 
