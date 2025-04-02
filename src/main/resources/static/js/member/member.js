@@ -178,6 +178,21 @@ async function updateMember(event) {
             }
         }
 
+        const data = await response.json();
+
+        if (data.roleChanged) {
+            alert("회원 역할이 변경되었습니다. 다시 로그인 해주세요.");
+
+            // 로그아웃 폼 자동 제출
+            const logoutForm = document.getElementById("logoutForm");
+            if (logoutForm) {
+                logoutForm.submit();
+            } else {
+                console.error("로그아웃 폼을 찾을 수 없습니다.");
+            }
+            return;
+        }
+
         alert("회원 정보가 수정되었습니다.");
         window.location.href = `/pets-care/members/${memberId}/myPage`;
     } catch (error) {
