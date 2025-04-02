@@ -26,7 +26,7 @@ import java.util.List;
 public class CustomerReservation { // 돌봄 예약(고객 시점)
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "customer_reservation_id", updatable = false)
     private long id;
 
