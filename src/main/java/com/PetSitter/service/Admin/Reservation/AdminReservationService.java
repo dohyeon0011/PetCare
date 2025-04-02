@@ -83,12 +83,15 @@ public class AdminReservationService {
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
 
-        if (usingPoints.isPresent()) {
-            customerReservation.getCustomer().addRewardPoints(usingPoints.get().getPoint());
-            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoint());
-        } else {
-            customerReservation.getCustomer().subRewardPoints(savingPoints.get().getPoint());
-        }
+        Member customer = customerReservation.getCustomer();
+
+        usingPoints.ifPresentOrElse(
+                pointsHistory -> {  // 고객이 적립금을 사용했었을 때
+                    customer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
+                    customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
+                },
+                () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
+        );
 
         customerReservation.cancel();
         sitterSchedule.cancel();
