@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +45,6 @@ public class CareAvailableDateService {
 
         CareAvailableDate careAvailableDate = request.toEntity();
         careAvailableDate.addPetSitter(sitter);
-
-//        return careAvailableDateRepository.save(careAvailableDate);
 
         careAvailableDateRepository.save(careAvailableDate);
 
@@ -100,7 +99,7 @@ public class CareAvailableDateService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(sitter);
-        authorizetionMember(sitter);
+        authorizationMember(sitter);
 
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
@@ -115,7 +114,7 @@ public class CareAvailableDateService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(sitter);
-        authorizetionMember(sitter);
+        authorizationMember(sitter);
 
         if (request.getAvailableAt().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
@@ -153,12 +152,12 @@ public class CareAvailableDateService {
         return updateCareAvailableDate;
     }
 
-    private static void authorizetionMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+    private static void authorizationMember(Member member) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 본인만 가능합니다.");
+        }
     }
 
     public static void verifyingPermissions(Member member) {
