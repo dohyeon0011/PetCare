@@ -119,7 +119,7 @@
         <p>
             <strong>📌 예약 상태:</strong>
             <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
-                  th:text="${reservation.status.name() == 'RESERVATION'} ? '예약 완료' : '취소'"></span>
+                  th:text="${reservation.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
         </p>
         <p><strong>📝 고객 요청사항:</strong> <span th:text="${reservation.requests}"></span></p>
         <div class="d-flex justify-content-center">
