@@ -51,6 +51,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
+        private String phoneNumber; // 돌봄사 전화번호
         private String profileImage; // 펫시터 프로필 이미지
         private String requests;
         private LocalDateTime createdAt;
@@ -69,6 +70,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
             this.reservationAt = customerReservation.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.phoneNumber = sitter.getPhoneNumber();
             this.profileImage = sitter.getProfileImage();
             this.requests = customerReservation.getRequests();
             this.createdAt = customerReservation.getCreatedAt();
@@ -104,5 +106,4 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
                     .orElse(new ReviewResponse.GetDetail());
         }
     }
-
 }
