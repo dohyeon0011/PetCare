@@ -152,7 +152,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 <br><br><br>
 
 # 회원 정보 페이지 - 고객 시점(1)
-<img width="1291" alt="image" src="https://github.com/user-attachments/assets/86a70705-5690-494b-a6d0-3af2f2efc403" />
+<img width="1197" alt="image" src="https://github.com/user-attachments/assets/f89728cb-3905-457a-b3e7-3025c93e39d8" />    
 <img width="934" alt="image" src="https://github.com/user-attachments/assets/4959f461-1413-4672-be81-47f6d7214f9c" />  
 <img width="959" alt="image" src="https://github.com/user-attachments/assets/5b2f0ece-22ee-41c2-808a-67cbdaff9625" />  
 
@@ -161,7 +161,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (자신이 등록한 모든 돌봄 리뷰 목록 조회 페이지(+페이징), 클릭 시 리뷰 작성한 해당 예약 페이지로 이동)<br><br><br>
 
 # 회원 정보 페이지 - 돌봄사 시점(2)
-<img width="1184" alt="image" src="https://github.com/user-attachments/assets/f6b0c6ed-6c72-4d3e-b9bd-b006c8c01912" />  
+<img width="1166" alt="image" src="https://github.com/user-attachments/assets/4c846c32-932f-4bfa-b0f4-1a9735cdcf02" />  
 <img width="1165" alt="image" src="https://github.com/user-attachments/assets/0bfab71d-e282-436e-9ba5-b7c53c9ae2f3" />    
 (자신에게 등록된 모든 돌봄 리뷰 목록 조회 페이지((+페이징), 돌봄사도 한 번에 여러 개의 자격증 정보 수정, 등록 가능), 클릭 시 해당 예약 페이지로 이동)<br><br>
 <img width="1061" alt="image" src="https://github.com/user-attachments/assets/fa273643-7902-464f-8296-17b20df250a5" />  
@@ -172,7 +172,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (돌봄 예약 가능 날짜를 등록한 펫시터 중 현재 예약이 가능한 펫시터만 조회(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
-<img width="741" alt="image" src="https://github.com/user-attachments/assets/f3ad6be6-681e-42e2-b63a-ff709f9d501b" />    
+<img width="834" alt="image" src="https://github.com/user-attachments/assets/cafa1024-d6ca-4f08-bf42-6244e9e91fea" />    
 <img width="760" alt="image" src="https://github.com/user-attachments/assets/a1dd792b-b0a7-4da6-90fc-9f2e5aacfe73" />  
 <img width="766" alt="image" src="https://github.com/user-attachments/assets/4c02e044-d648-49dc-a966-299014af3999" />  
 
@@ -180,11 +180,8 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 조회 후, 이후 비동기로 5개씩 페이징))<br><br><br>
 
 # 고객 시점: 돌봄 예약 페이지(1)
-<img width="1242" alt="image" src="https://github.com/user-attachments/assets/7787b71b-2259-4316-828b-162c5f248943" />  
-(해당 돌봄사가 등록한 돌봄 예약 가능한 날짜를 예약 가능한 날짜에 반환, 맡길 반려견을 선택)<br><br><br>
-
-# 고객 시점: 돌봄 예약 페이지(2)
-<img width="1209" alt="image" src="https://github.com/user-attachments/assets/befd81c8-dedb-4dc8-b209-4b01178b50ab" />  
+<img width="595" alt="image" src="https://github.com/user-attachments/assets/1e9bf987-3562-484c-9358-004f7f0b98f2" /><br>
+(해당 돌봄사가 등록한 돌봄 예약 가능한 날짜를 예약 가능한 날짜에 반환, 맡길 반려견을 선택)  
 (선택한 날짜의 돌봄 가격과 회원이 보유중인 적립금을 조회하여 적립금 사용 입력란에 숫자를 입력하면 비동기로 최종 결제 금액이 자동으로 산정)<br><br><br>
 
 # 고객 시점: 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
@@ -192,7 +189,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (돌봄 예약 내역 전체 조회(+페이징), 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="857" alt="image" src="https://github.com/user-attachments/assets/27471f7d-7d70-4749-9bcc-8cb73449af35" />        
+<img width="879" alt="image" src="https://github.com/user-attachments/assets/3786bab4-2095-40fd-8f60-e71cd51866a2" />          
 <br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
@@ -220,14 +217,14 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 
 # 관리자 페이지 - 회원 관리
 <img width="1226" alt="image" src="https://github.com/user-attachments/assets/9fab9497-09be-4658-a5d4-a4218fb7e28a" />
-<img width="1060" alt="image" src="https://github.com/user-attachments/assets/708d4b65-910a-4980-92c3-ec683d6e43d3" />    
-<img width="1065" alt="image" src="https://github.com/user-attachments/assets/a437a732-9e66-49e3-aedb-137f84a5ad84" />  
+<img width="1035" alt="image" src="https://github.com/user-attachments/assets/8331c9b7-37d4-4701-8644-436089d69b40" />        
+<img width="1047" alt="image" src="https://github.com/user-attachments/assets/d26ea8c3-89e3-4f60-953d-a80358406d2c" />      
 <img width="1214" alt="image" src="https://github.com/user-attachments/assets/f87a13f9-ae23-4624-839e-e71a9bc846c9" />
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능(+페이징), 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
 <img width="1253" alt="image" src="https://github.com/user-attachments/assets/a28643cb-20d7-4f68-9b60-4e1cf738cfb2" />
-<img width="883" alt="image" src="https://github.com/user-attachments/assets/0ec27386-3e2f-4572-b6b9-c452e3427eb8" />
+<img width="858" alt="image" src="https://github.com/user-attachments/assets/d3e7d7f5-2986-4307-92c8-425ec9b4a9b4" />  
 <img width="591" alt="image" src="https://github.com/user-attachments/assets/cb1f6816-2430-49a7-abea-12356626d75e" />  
 
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
