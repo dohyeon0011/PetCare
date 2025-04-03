@@ -121,7 +121,7 @@
         <p>
             <strong>📌 예약 상태:</strong>
             <span th:classappend="${schedule.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
-                  th:text="${schedule.status.name() == 'RESERVATION'} ? '예약 완료' : '취소'"></span>
+                  th:text="${schedule.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
         </p>
         <p><strong>📝 고객 요청사항:</strong> <span th:text="${schedule.requests}"></span></p>
     </div><br>
