@@ -9,6 +9,11 @@ if (memberId === null) {
 document.addEventListener("DOMContentLoaded", function () {
     let isFormDirty = false;
     const formInputs = document.querySelectorAll("#editProfileForm input, #editProfileForm textarea");
+    const deleteMemberBtn = document.getElementById("deleteMemberBtn");
+
+    if (deleteMemberBtn) {
+        deleteMemberBtn.addEventListener("click", deleteMember);
+    }
 
     const roleSelect = document.getElementById("role");
     const careerField = document.getElementById("careerField");
@@ -220,7 +225,7 @@ async function deleteMember() {
 
         if (!response.ok && response.status !== 204) throw new Error("회원 탈퇴 실패");
 
-        alert("회원 탈퇴가 완료되었습니다.");
+        alert("회원 탈퇴가 완료되었습니다. 그동안 저희 서비스를 이용해 주셔서 감사합니다.");
         window.location.href = "/logout";
     } catch (error) {
         alert("오류 발생: " + error.message);
