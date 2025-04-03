@@ -118,7 +118,7 @@
 
         <!-- 자격증 목록 -->
         <div class="certifications" th:if="${#lists.size(reservableSitter.certifications) > 0}">
-            <h4>📜 보유 자격증</h4>
+            <h4>🎖️ 보유 자격증</h4>
             <ul>
                 <li th:each="certification : ${reservableSitter.certifications}" th:text="${certification.name}"></li>
             </ul>
