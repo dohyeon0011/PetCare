@@ -12,7 +12,6 @@ import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,7 +88,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-        authorizetionMember(member);
+        authorizationMember(member);
 
         member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
     }
@@ -99,7 +98,7 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-        authorizetionMember(member);
+        authorizationMember(member);
 
         // 소셜 로그인 회원이 아닌 경우에만 비밀번호 입력 필수 처리
         if ((member.getSocialProvider() == null || member.getSocialProvider().equals(SocialProvider.NONE)) && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
@@ -134,7 +133,7 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    private static void authorizetionMember(Member member) {
+    private static void authorizationMember(Member member) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
 
         if(!member.getLoginId().equals(userName)) {
