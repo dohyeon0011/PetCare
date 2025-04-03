@@ -10,12 +10,11 @@ import com.PetSitter.repository.Certification.CertificationRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +60,7 @@ public class CertificationService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(sitter);
-        authorizetionMember(sitter);
+        authorizationMember(sitter);
 
         Certification certification = certificationRepository.findBySitterIdAndId(sitter.getId(), certificationId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 자격증이 존재하지 않습니다."));
@@ -76,7 +75,7 @@ public class CertificationService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(sitter);
-        authorizetionMember(sitter);
+        authorizationMember(sitter);
 
         List<Certification> certifications = certificationRepository.findBySitterId(sitterId);
 
@@ -101,12 +100,12 @@ public class CertificationService {
                 .toList();
     }
 
-    private static void authorizetionMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+    private static void authorizationMember(Member member) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 본인만 가능합니다.");
+        }
     }
 
     private static void verifyingPermissions(Member member) {
