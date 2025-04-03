@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +78,7 @@ public class PetService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(customer);
-        authorizetionMember(customer);
+        authorizationMember(customer);
 
         Pet pet = petRepository.findByCustomerIdAndId(customer.getId(), petId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 반려견이 존재하지 않습니다."));
@@ -99,7 +100,7 @@ public class PetService {
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
         verifyingPermissions(customer);
-        authorizetionMember(customer);
+        authorizationMember(customer);
 
         List<Pet> pets = customer.getPets();
 
@@ -130,12 +131,12 @@ public class PetService {
                 .toList();
     }
 
-    private static void authorizetionMember(Member member) {
-//        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-//
-//        if(!member.getLoginId().equals(userName)) {
-//            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-//        }
+    private static void authorizationMember(Member member) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
+
+        if(!member.getLoginId().equals(userName)) {
+            throw new IllegalArgumentException("회원 본인만 가능합니다.");
+        }
     }
 
     private static void verifyingPermissions(Member member) {
