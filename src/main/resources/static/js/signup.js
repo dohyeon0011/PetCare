@@ -117,10 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const response = await fetch("/api/pets-care/members/new", {
                 method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken, // CSRF 토큰 추가
-                },
-                body: formData, // multipart/form-data 자동 처리
+                headers: { "X-CSRF-TOKEN": csrfToken },
+                body: formData,
             });
 
             if (response.ok) {
@@ -128,7 +126,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = "/pets-care/login";
             } else {
                 const errorData = await response.json();
-                displayValidationErrors(errorData);
+                // key 값 확인 후 수정
+                if (errorData.error) {
+                    alert(errorData.error);
+                } else if (errorData.message) {  // 혹시 message로 오는지 확인
+                    alert(errorData.message);
+                } else {
+                    displayValidationErrors(errorData);
+                }
             }
         } catch (error) {
             console.error("회원가입 요청 중 오류 발생:", error);
