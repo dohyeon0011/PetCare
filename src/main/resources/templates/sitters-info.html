@@ -115,7 +115,7 @@
                 <p class="sitter-experience" th:text="'🏆 경력: ' + ${sitter.careerYear} + '년'">경력: 3년</p>
                 <!-- 자격증 목록 -->
                 <div class="certifications" th:if="${#lists.size(sitter.certifications) > 0}">
-                    <h4>📜 보유 자격증 📜</h4>
+                    <h4>🎖️ 보유 자격증 🎖️</h4>
                     <ul>
                         <ol th:each="certification : ${sitter.certifications}" th:text="${certification.name}"></ol>
                     </ul>
