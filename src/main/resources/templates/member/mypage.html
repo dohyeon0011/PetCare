@@ -101,7 +101,7 @@
         <div class="col-md-6">
             <div class="card profile-card">
                 <div class="card-body">
-                    <h4 class="card-title">👤 회원 공통 정보</h4>
+<!--                    <h4 class="card-title">👤 회원 공통 정보</h4>-->
 
                     <!-- 프로필 이미지 -->
                     <div class="text-center mb-3">
@@ -118,43 +118,37 @@
                     </div>
 
                     <p class="card-text">
-                        <strong>이름:</strong> <span th:text="${member.name}"></span><br>
-                        <strong>닉네임:</strong> <span th:text="${member.nickName}"></span><br>
-                        <strong>이메일:</strong> <span th:text="${member.email}"></span><br>
-                        <strong>전화번호:</strong> <span th:text="${member.phoneNumber}"></span><br>
-                        <strong>우편번호:</strong> <span th:text="${member.zipcode}"></span><br>
-                        <strong>주소:</strong> <span th:text="${member.address}"></span><br>
-                        <strong>회원 역할:</strong>
+                        <strong>🆔 이름:</strong> <span th:text="${member.name}"></span><br>
+                        <strong>🏷️ 닉네임:</strong> <span th:text="${member.nickName}"></span><br>
+                        <strong>📧 이메일:</strong> <span th:text="${member.email}"></span><br>
+                        <strong>📞 전화번호:</strong> <span th:text="${member.phoneNumber}"></span><br>
+                        <strong>📮 우편번호:</strong> <span th:text="${member.zipcode}"></span><br>
+                        <strong>🏠 주소:</strong> <span th:text="${member.address}"></span><br>
+                        <strong>🛠️ 회원 역할:</strong>
                         <span th:switch="${member.role.name()}">
-                            <span th:case="'CUSTOMER'">고객</span>
-                            <span th:case="'PET_SITTER'">돌봄사</span>
-                            <span th:case="*">알 수 없음</span>
+                            <span th:case="'CUSTOMER'">🛍️ 고객</span>
+                            <span th:case="'PET_SITTER'">🐾 돌봄사</span>
+                            <span th:case="*">❓ 알 수 없음</span>
                         </span>
                         <br>
-                        <strong>소셜 제공자:</strong>
+                        <strong>🔗 소셜 제공자:</strong>
                         <span th:if="${member.socialProvider != null}">
-                            <span th:if="${member.socialProvider.name() == 'KAKAO'}">
-                                카카오
-                            </span>
-                            <span th:if="${member.socialProvider.name() == 'NAVER'}">
-                                네이버
-                            </span>
-                            <span th:if="${member.socialProvider.name() == 'GOOGLE'}">
-                                구글
-                            </span>
+                            <span th:if="${member.socialProvider.name() == 'KAKAO'}">🟡 카카오</span>
+                            <span th:if="${member.socialProvider.name() == 'NAVER'}">🟢 네이버</span>
+                            <span th:if="${member.socialProvider.name() == 'GOOGLE'}">🔵 구글</span>
                         </span>
-                        <span th:if="${member.socialProvider == null}">소셜 제공자 정보가 없습니다.</span><br>
+                        <span th:if="${member.socialProvider == null}">❌ 소셜 제공자 정보 없음</span><br>
 
-                        <strong>소개:</strong> <span th:utext="${member.introduction}"></span><br><br>
+                        <strong>📝 소개:</strong> <span th:utext="${member.introduction}"></span><br><br>
                     </p>
 
                     <div th:if="${member.role.name() == 'CUSTOMER'}">
-                        <strong>적립금:</strong> <span th:text="${member.amount}"></span>원<br>
+                        <strong>💰 적립금:</strong> <span th:text="${member.amount}"></span>원<br>
                     </div>
 
                     <!-- PET_SITTER인 경우에만 경력 연차 표시 -->
                     <div th:if="${member.role.name() == 'PET_SITTER'}">
-                        <strong>경력 연차:</strong> <span th:text="${member.careerYear}"></span>년<br>
+                        <strong>🏆 경력 연차:</strong> <span th:text="${member.careerYear}"></span>년<br>
                     </div>
                     <a class="btn btn-edit mt-3"
                        th:href="@{/pets-care/members/{memberId}/edit(memberId=${member.id})}">
@@ -204,7 +198,7 @@
         <div th:if="${member.role.name() == 'PET_SITTER'}" class="col-md-6">
             <div class="card profile-card">
                 <div class="card-body">
-                    <h4 class="card-title">📜 자격증 목록</h4>
+                    <h4 class="card-title">🎖️ 자격증 목록</h4>
                     <ul>
                         <li th:each="certification : ${member.certifications}">
                             <strong>자격증 이름:</strong> <span th:text="${certification.name}"></span><br>
