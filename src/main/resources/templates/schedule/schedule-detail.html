@@ -93,22 +93,37 @@
 </nav>
 
 <div class="container mt-5">
-    <h2 class="text-center">내 돌봄 예약 상세 정보</h2><br>
+<!--    <h2 class="text-center">내 돌봄 예약 상세 정보</h2><br>-->
 
     <div class="reservation-info">
         <h4>📋 예약 정보</h4>
-        <p><strong>고객 닉네임:</strong> <span th:text="${schedule.customerNickName}"></span></p>
+        <!-- 고객 프로필 이미지 -->
+        <div class="text-center mb-3">
+            <img th:if="${schedule.profileImage != null and schedule.profileImage != ''}"
+                 th:src="@{'/uploads/profile/' + ${schedule.profileImage}}"
+                 alt="프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+            <img th:if="${schedule.profileImage == null or schedule.profileImage == ''}"
+                 src="/images/default-profile.png"
+                 alt="기본 프로필 이미지"
+                 class="img-fluid rounded-circle"
+                 style="width: 150px; height: 150px; object-fit: cover;">
+        </div>
+
+        <p><strong>🏷️ 고객 닉네임:</strong> <span th:text="${schedule.customerNickName}"></span></p>
         <p><strong>📅 예약일자:</strong> <span th:text="${schedule.reservationAt}"></span></p>
-        <p><strong>가격:</strong> <span th:text="${schedule.price}"></span>원</p>
-        <p><strong>우편번호:</strong> <span th:text="${schedule.zipcode}"></span></p>
-        <p><strong>상세주소:</strong> <span th:text="${schedule.address}"></span></p>
-        <p><strong>고객 요청사항:</strong> <span th:text="${schedule.requests}"></span></p>
-        <p><strong>등록일자:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+        <p><strong>💰 가격:</strong> <span th:text="${schedule.price}"></span>원</p>
+        <p><strong>📮 우편번호:</strong> <span th:text="${schedule.zipcode}"></span></p>
+        <p><strong>🏠 상세주소:</strong> <span th:text="${schedule.address}"></span></p>
+        <p><strong>📞 고객 연락처:</strong> <span th:text="${schedule.phoneNumber}"></span></p>
+        <p><strong>️️🗓️ 등록일자:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>
-            <strong>예약 상태:</strong>
+            <strong>📌 예약 상태:</strong>
             <span th:classappend="${schedule.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
                   th:text="${schedule.status.name() == 'RESERVATION'} ? '예약 완료' : '취소'"></span>
         </p>
+        <p><strong>📝 고객 요청사항:</strong> <span th:text="${schedule.requests}"></span></p>
     </div><br>
 
     <div class="pets-info">
