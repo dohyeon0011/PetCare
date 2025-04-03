@@ -51,6 +51,8 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
+        private String phoneNumber; // 고객 전화번호
+        private String profileImage;    // 고객 프로필 이미지
         private String requests;
         private LocalDateTime createdAt;
         private ReservationStatus status;
@@ -67,6 +69,8 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
             this.reservationAt = sitterSchedule.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
+            this.phoneNumber = customer.getPhoneNumber();
+            this.profileImage = customer.getProfileImage();
             this.requests = sitterSchedule.getRequests();
             this.createdAt = sitterSchedule.getCreatedAt();
             this.status = sitterSchedule.getStatus();
