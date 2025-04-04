@@ -119,10 +119,16 @@
             </div>
 
             <div class="form-group">
-                <label for="profileImage0">프로필 이미지</label>
-                <input type="file" name="pets[${iterStat.index}].profileImage" class="form-control-file" accept="image/*">
+                <label for="profileImage">프로필 이미지</label>
+                <div>
+                    <img th:id="'profilePreview' + ${iterStat.index}"
+                         th:src="${pet.profileImage != null ? '/uploads/pets/' + pet.profileImage : ''}"
+                         class="profile-preview"
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;}">
+                </div>
+                <input type="file" name="pets[${iterStat.index}].profileImage" class="form-control-file profile-input"
+                       accept="image/*" th:data-preview-id="'profilePreview' + ${iterStat.index}">
             </div>
-
             <button type="button" class="btn btn-danger btn-sm delete-pet-btn" th:data-pet-id="${pet.id}">삭제</button>
         </div>
         <button th:if="${pets != null && !pets.isEmpty()}" type="submit" class="btn btn-primary">수정하기</button>
