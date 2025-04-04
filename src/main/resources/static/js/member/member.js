@@ -10,6 +10,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let isFormDirty = false;
     const formInputs = document.querySelectorAll("#editProfileForm input, #editProfileForm textarea");
     const deleteMemberBtn = document.getElementById("deleteMemberBtn");
+    const phoneNumberInput = document.getElementById("phoneNumber");
+
+    if (phoneNumberInput) {
+        phoneNumberInput.addEventListener("input", function (event) {
+            let value = event.target.value.replace(/\D/g, ""); // 숫자 이외 문자 제거
+
+            if (value.length > 10) {
+                value = value.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3,4})/, "$1-$2");
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})/, "$1-");
+            }
+
+            event.target.value = value;
+        });
+    }
 
     if (deleteMemberBtn) {
         deleteMemberBtn.addEventListener("click", deleteMember);
