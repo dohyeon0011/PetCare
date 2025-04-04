@@ -100,10 +100,10 @@
         <div class="card-body detail-card-body">
             <h5 class="card-title" th:text="'돌봄 가능 날짜: ' + ${careAvailableDate.availableAt}">돌봄 가능 날짜</h5>
             <p class="card-text detail-card-text">
-                <strong>돌봄 가격:</strong> <span th:text="${careAvailableDate.price}">가격</span>원<br><br>
-                <strong>우편번호:</strong> <span th:text="${careAvailableDate.zipcode}">우편번호</span><br><br>
-                <strong>주소:</strong> <span th:text="${careAvailableDate.address}">주소</span><br><br>
-                <strong>예약 상태:</strong>
+                <strong>💰 돌봄 가격:</strong> <span th:text="${#numbers.formatInteger(careAvailableDate.price, 3, 'COMMA')}">가격</span>원<br><br>
+                <strong>📮 우편번호:</strong> <span th:text="${careAvailableDate.zipcode}">우편번호</span><br><br>
+                <strong>🏠 주소:</strong> <span th:text="${careAvailableDate.address}">주소</span><br><br>
+                <strong>✔️ 예약 상태:</strong>
                 <span th:text="${careAvailableDate.status.name() == 'POSSIBILITY' ? '예약 가능' : (careAvailableDate.status.name() == 'IMPOSSIBILITY' ? '예약됨' : '알 수 없음')}">상태</span><br>
             </p>
             <!-- 수정 버튼 -->
