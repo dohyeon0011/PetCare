@@ -6,28 +6,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const amountText = document.getElementById("amountText");  // amountText 요소를 찾음
     const amountHint = document.getElementById("amountHint");
 
-    // 서버에서 렌더링된 보유 적립금 값을 가져옴
-    const availablePoints = amountText.textContent.replace('₩', '');  // ₩를 제거하고 숫자만 가져오기
-    amountHint.textContent = `현재 보유 적립금: ₩${availablePoints}`;  // amountHint에 보유 적립금 표시
-
-    let selectedPrice = careAvailableId.selectedOptions[0].textContent.split(" - ")[1].replace("원", "");
-
-    // 선택한 날짜 가격 업데이트
-    careAvailableId.addEventListener("change", function () {
-        selectedPrice = careAvailableId.selectedOptions[0].textContent.split(" - ")[1].replace("원", "");
-        priceDisplay.textContent = `${selectedPrice} 원`;  // 가격 표시
-        updateFinalPrice();  // 최종 결제 금액 계산
-    });
-
     // 적립금 사용 시 최종 결제 금액 계산
     const pointsToUseInput = document.getElementById("pointsToUse");
     pointsToUseInput.addEventListener("input", updateFinalPrice);
 
-    function updateFinalPrice() {
-        const pointsToUse = parseInt(pointsToUseInput.value) || 0;
-        const finalPrice = Math.max(selectedPrice - pointsToUse, 0);  // 최종 결제 금액
-        document.getElementById("finalPrice").textContent = `₩${finalPrice}`;
+    const finalPriceDisplay = document.getElementById("finalPrice");
+
+    // 서버에서 렌더링된 보유 적립금 값을 가져옴
+    const availablePoints = amountText.textContent.replace(/[₩,]/g, '');  // ₩, 쉼표 제거
+    amountHint.textContent = `현재 보유 적립금: ₩${parseInt(availablePoints).toLocaleString()}`;  // 쉼표 포함하여 표시
+
+    let selectedPrice = careAvailableId.selectedOptions[0].textContent.split(" - ")[1].replace("원", "");
+
+    // 가격 설정 함수 (select에서 현재 선택된 날짜의 가격 가져오기)
+    function setSelectedPriceFromDropdown() {
+        const priceText = careAvailableId.selectedOptions[0].textContent.split(" - ")[1]
+            .replace("원", "")
+            .replace(/,/g, "");
+        selectedPrice = parseInt(priceText) || 0;
+        priceDisplay.textContent = `₩${selectedPrice.toLocaleString()}`;
     }
+
+    // 선택한 날짜 가격 업데이트
+    careAvailableId.addEventListener("change", function () {
+        setSelectedPriceFromDropdown();
+        updateFinalPrice();
+    });
+
+    // 최종 결제 금액 계산 함수
+    function updateFinalPrice() {
+        const pointsToUse = parseInt(pointsToUseInput.value.replace(/,/g, "")) || 0;
+        const finalPrice = Math.max(selectedPrice - pointsToUse, 0);
+        finalPriceDisplay.textContent = `₩${finalPrice.toLocaleString()} 원`;
+    }
+
+    // 초기 가격 표시 및 결제 금액 계산
+    setSelectedPriceFromDropdown();
+    updateFinalPrice();
 
     reservationForm.addEventListener("submit", function (event) {
         event.preventDefault();
