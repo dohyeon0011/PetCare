@@ -112,17 +112,22 @@
         </div>
 
         <p><strong>🏷️ 고객 닉네임:</strong> <span th:text="${schedule.customerNickName}"></span></p>
-        <p><strong>📅 예약일자:</strong> <span th:text="${schedule.reservationAt}"></span></p>
-        <p><strong>💰 가격:</strong> <span th:text="${schedule.price}"></span>원</p>
-        <p><strong>📮 우편번호:</strong> <span th:text="${schedule.zipcode}"></span></p>
-        <p><strong>🏠 상세주소:</strong> <span th:text="${schedule.address}"></span></p>
+        <p><strong>📅 돌봄 예약일:</strong> <span th:text="${schedule.reservationAt}"></span></p>
+        <div>
+            <p><strong>📍 돌봄 주소</strong></p>
+            <ul style="margin-left: 20px; list-style-type: none; padding-left: 0;">
+                <li>📮 <strong>우편번호:</strong> <span th:text="${schedule.zipcode}"></span></li>
+                <li>🏠 <strong>상세주소:</strong> <span th:text="${schedule.address}"></span></li>
+            </ul>
+        </div>
         <p><strong>📞 고객 연락처:</strong> <span th:text="${schedule.phoneNumber}"></span></p>
-        <p><strong>️️🗓️ 등록일자:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>
             <strong>📌 예약 상태:</strong>
             <span th:classappend="${schedule.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
                   th:text="${schedule.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
         </p>
+        <p><strong>💰 최종 결제 금액:</strong> <span th:text="${#numbers.formatInteger(schedule.price, 3, 'COMMA')}"></span>원</p>
+        <p><strong>️️🗓️ 예약 발생일:</strong> <span th:text="${#temporals.format(schedule.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p><strong>📝 고객 요청사항:</strong> <span th:text="${schedule.requests}"></span></p>
     </div><br>
 
@@ -216,7 +221,7 @@
                 <label for="image">이미지</label>
                 <input type="file" id="image" class="form-control">
                 <!-- 이미지 미리보기 -->
-                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width: 100px; height: 100px; margin-top: 10px;">
+                <img id="imagePreview" src="" alt="이미지 미리보기" style="display:none; width: 135px; height: 135px; border-radius: 8px; margin-top: 10px;">
             </div>
             <div class="button-group">
                 <button type="submit" class="btn btn-primary">저장</button>
