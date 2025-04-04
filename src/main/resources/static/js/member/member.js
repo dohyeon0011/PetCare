@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const profilePreview = document.getElementById("profilePreview");
     const deleteProfileImageBtn = document.getElementById("deleteProfileImageBtn");
 
-    // 파일 선택 시 미리보기 업데이트
+    // 프로필 이미지 파일 선택 시 미리보기 업데이트
     if (profileImageInput && profilePreview) {
         profileImageInput.addEventListener("change", function (event) {
             const file = event.target.files[0];
