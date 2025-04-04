@@ -115,7 +115,15 @@
                 </div>
                 <div class="form-group">
                     <label for="profileImage0">프로필 이미지</label>
-                    <input type="file" name="pets[0].profileImage" class="form-control-file" accept="image/*">
+                    <input type="file" name="pets[0].profileImage" class="form-control-file profile-input"
+                           accept="image/*" data-preview-id="profilePreview0">
+                </div>
+                <!-- 이미지 미리보기 -->
+                <div>
+                    <img id="profilePreview-0"
+                         src=""
+                         class="profile-preview"
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; display: none;">
                 </div>
             </div>
         </div>
