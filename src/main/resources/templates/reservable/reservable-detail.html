@@ -109,13 +109,16 @@
                  class="img-fluid rounded-circle"
                  style="width: 150px; height: 150px; object-fit: cover;">
         </div><br>
-        <p th:utext="${#strings.replace(reservableSitter.introduction, '\n', '<br>')}"></p><br><br>
-        <p class="career" th:text="|🏆 경력: ${reservableSitter.careerYear}년|"></p>
+        <p th:utext="${#strings.replace(reservableSitter.introduction, '\n', '<br>')}"></p><br>
         <div class="address">
-            <p><strong>우편번호:</strong> <span th:text="${reservableSitter.zipcode}"></span></p>
-            <p><strong>상세주소:</strong> <span th:text="${reservableSitter.address}"></span></p>
+            <p><strong>📍 돌봄 주소</strong></p>
+            <ul style="margin-left: 20px; list-style-type: none; padding-left: 0;">
+                <li>📮 <strong>우편번호:</strong> <span th:text="${reservableSitter.zipcode}"></span></li>
+                <li>🏠 <strong>상세주소:</strong> <span th:text="${reservableSitter.address}"></span></li>
+            </ul>
         </div><br>
 
+        <p class="career" th:text="|🏆 경력: ${reservableSitter.careerYear}년|"></p>
         <!-- 자격증 목록 -->
         <div class="certifications" th:if="${#lists.size(reservableSitter.certifications) > 0}">
             <h4>🎖️ 보유 자격증</h4>
