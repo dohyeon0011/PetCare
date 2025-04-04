@@ -124,7 +124,7 @@
                         <strong>📞 전화번호:</strong> <span th:text="${member.phoneNumber}"></span><br>
                         <strong>📮 우편번호:</strong> <span th:text="${member.zipcode}"></span><br>
                         <strong>🏠 주소:</strong> <span th:text="${member.address}"></span><br>
-                        <strong>🛠️ 회원 역할:</strong>
+                        <strong>✔️ 회원 역할:</strong>
                         <span th:switch="${member.role.name()}">
                             <span th:case="'CUSTOMER'">🛍️ 고객</span>
                             <span th:case="'PET_SITTER'">🐾 돌봄사</span>
@@ -143,7 +143,7 @@
                     </p>
 
                     <div th:if="${member.role.name() == 'CUSTOMER'}">
-                        <strong>💰 적립금:</strong> <span th:text="${member.amount}"></span>원<br>
+                        <strong>💰 적립금:</strong> <span th:text="${#numbers.formatInteger(member.amount, 3, 'COMMA')}"></span>원<br>
                     </div>
 
                     <!-- PET_SITTER인 경우에만 경력 연차 표시 -->
