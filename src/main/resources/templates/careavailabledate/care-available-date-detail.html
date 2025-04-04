@@ -99,6 +99,7 @@
     <div class="card mb-4 detail-card">
         <div class="card-body detail-card-body">
             <h5 class="card-title" th:text="'돌봄 가능 날짜: ' + ${careAvailableDate.availableAt}">돌봄 가능 날짜</h5>
+
             <p class="card-text detail-card-text">
                 <strong>💰 돌봄 가격:</strong> <span th:text="${#numbers.formatInteger(careAvailableDate.price, 3, 'COMMA')}">가격</span>원<br><br>
                 <strong>📮 우편번호:</strong> <span th:text="${careAvailableDate.zipcode}">우편번호</span><br><br>
@@ -106,8 +107,10 @@
                 <strong>✔️ 예약 상태:</strong>
                 <span th:text="${careAvailableDate.status.name() == 'POSSIBILITY' ? '예약 가능' : (careAvailableDate.status.name() == 'IMPOSSIBILITY' ? '예약됨' : '알 수 없음')}">상태</span><br>
             </p>
+
             <!-- 수정 버튼 -->
             <a th:href="@{/pets-care/members/{sitterId}/care-available-dates/{careAvailableDateId}/edit(careAvailableDateId=${careAvailableDate.id}, sitterId=${currentUser.id})}" class="btn btn-sm btn-outline-secondary">수정</a>
+
             <!-- 삭제 버튼 -->
             <a href="javascript:void(0);" th:attr="onclick='deleteCareAvailableDate(' + ${careAvailableDate.id} + ')'" class="btn btn-sm btn-outline-danger">삭제</a>
         </div>
