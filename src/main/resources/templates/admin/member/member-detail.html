@@ -115,7 +115,10 @@
         <p th:if="${member.role.name() == 'PET_SITTER'}">
             <strong>🏆 경력 연차:</strong> <span th:text="${member.careerYear}"></span>년
         </p>
-        <p><strong>🛠️ 가입 유형:</strong>
+        <p th:if="${member.role.name() == 'CUSTOMER'}">
+            <strong>💰 보유 적립금:</strong> <span th:text="${#numbers.formatInteger(member.amount, 3, 'COMMA')}"></span>원
+        </p>
+        <p><strong>✔️ 가입 유형:</strong>
             <span th:switch="${member.role.name()}">
                 <span th:case="'CUSTOMER'">🛍 고객</span>
                 <span th:case="'PET_SITTER'">🐾 돌봄사</span>
