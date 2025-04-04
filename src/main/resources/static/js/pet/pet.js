@@ -7,6 +7,43 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // 페이지 로딩 시 기존 프로필 이미지가 있으면 미리보기 표시
+    document.querySelectorAll(".profile-preview").forEach(img => {
+        if (img.getAttribute("src") && img.getAttribute("src").trim() !== "") {
+            img.style.display = "block";
+        }
+    });
+
+    // 파일 입력 필드 변경 감지 함수 (새로 추가된 반려견 폼에도 적용되도록 별도 함수로 분리)
+    function addFileInputEventListeners() {
+        document.querySelectorAll(".profile-input").forEach(input => {
+            input.removeEventListener("change", handleFileChange);
+            input.addEventListener("change", handleFileChange);
+        });
+    }
+
+    // 파일 선택 시 미리보기 업데이트
+    function handleFileChange(event) {
+        const input = event.target;
+        const previewId = input.getAttribute("data-preview-id"); // 연결된 미리보기 ID 가져오기
+        const preview = document.getElementById(previewId); // 해당 미리보기 요소 선택
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = "block"; // 파일이 선택되면 미리보기 표시
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = "";
+            preview.style.display = "none"; // 파일 제거 시 숨김 처리
+        }
+    }
+
+    // 처음 실행 시 모든 파일 입력 필드에 이벤트 리스너 추가
+    addFileInputEventListeners();
+
     document.getElementById("addMorePets")?.addEventListener("click", function () {
         const petFormSections = document.getElementById("petFormSections");
 
@@ -34,11 +71,19 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
             <div class="form-group">
                 <label for="profileImage${petCount}">프로필 이미지</label>
-                <input type="file" name="pets[${petCount}].profileImage" class="form-control-file" accept="image/*">
+                <div>
+                    <img id="profilePreview${petCount}" class="profile-preview"
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px; display: none;">
+                </div>
+                <input type="file" name="pets[${petCount}].profileImage" class="form-control-file profile-input"
+                       accept="image/*" data-preview-id="profilePreview${petCount}">
             </div>
         `;
 
         petFormSections.appendChild(newPetForm);
+
+        // 새로 추가된 입력 필드에도 파일 미리보기 기능 적용
+        addFileInputEventListeners();
 
         // 추가 후 번호 업데이트
         updatePetNumbers();
@@ -92,7 +137,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     input.setAttribute("name", nameAttr.replace(/\[\d+\]/, `[${index}]`));
                 }
             });
+
+            // 미리보기 이미지 ID도 업데이트
+            const previewImg = section.querySelector(".profile-preview");
+            if (previewImg) {
+                previewImg.id = `profilePreview${index}`;
+            }
+
+            const fileInput = section.querySelector(".profile-input");
+            if (fileInput) {
+                fileInput.setAttribute("data-preview-id", `profilePreview${index}`);
+            }
         });
+
+        addFileInputEventListeners(); // 이벤트 리스너 재적용
     }
 
     function submitPetData(method, url, successMessage) {
