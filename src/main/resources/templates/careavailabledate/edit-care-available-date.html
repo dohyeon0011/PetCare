@@ -105,13 +105,13 @@
         </div>
 
         <div class="form-group">
-            <label for="price">가격:</label>
-            <input type="number" id="price" th:value="${careAvailableDate.price}" class="form-control">
+            <label for="price">💰 가격:</label>
+            <input type="text" id="price" th:value="${#numbers.formatInteger(careAvailableDate.price, 3, 'COMMA')}" class="form-control">
             <div id="price-error" class="error-message" style="color:red; display:none;"></div> <!-- 오류 메시지 표시 위치 -->
         </div>
 
         <div class="form-group">
-            <label for="status">예약 상태:</label>
+            <label for="status">✔️ 예약 상태:</label>
             <select id="status" class="form-control">
                 <option value="POSSIBILITY" th:selected="${careAvailableDate.status == 'POSSIBILITY'}">가능</option>
                 <option value="IMPOSSIBILITY" th:selected="${careAvailableDate.status == 'IMPOSSIBILITY'}">불가능</option>
