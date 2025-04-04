@@ -113,7 +113,7 @@
         <tr th:each="point : ${pointsHistory}">
             <td th:text="${point.id}" class="text-center"></td> <!-- 셀 중앙 정렬 -->
             <td th:text="${point.customerName}" class="text-center"></td>
-            <td th:text="${point.point}" class="text-center"></td>
+            <td th:text="${#numbers.formatInteger(point.point, 3, 'COMMA')}" class="text-center"></td>
             <td th:text="${#temporals.format(point.createdAt, 'yyyy-MM-dd HH:mm')}" class="text-center"></td>
             <td class="text-center">
                 <span th:switch="${point.pointsStatus.name()}">
