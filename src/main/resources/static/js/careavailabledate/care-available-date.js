@@ -6,13 +6,38 @@ if (memberId === null) {
     console.error("회원 정보를 찾을 수 없습니다.");
 }
 
+// 가격 입력 필드에서 천 단위마다 쉼표 추가
+const priceInput = document.getElementById("price");
+
+if (priceInput) {
+    priceInput.addEventListener("input", function () {
+        let rawValue = this.value.replace(/,/g, ""); // 기존 쉼표 제거
+        if (!isNaN(rawValue) && rawValue !== "") {
+            this.value = formatNumberWithCommas(rawValue);
+        }
+    });
+
+    priceInput.addEventListener("focus", function () {
+        this.value = this.value.replace(/,/g, ""); // 포커스를 얻으면 순수 숫자로 변경
+    });
+
+    priceInput.addEventListener("blur", function () {
+        this.value = formatNumberWithCommas(this.value); // 포커스를 잃으면 다시 쉼표 추가
+    });
+}
+
+// 숫자를 천 단위마다 쉼표로 포맷하는 함수
+function formatNumberWithCommas(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 // 돌봄 가능 날짜 등록 폼 제출 이벤트
 document.getElementById("addCareAvailableDateForm")?.addEventListener("submit", function (event) {
     event.preventDefault();
     resetErrorMessages(); // 폼 제출 시 기존의 오류 메시지 숨기기
 
     const availableAt = document.getElementById("availableAt").value;
-    const price = document.getElementById("price").value;
+    const price = document.getElementById("price").value.replace(/,/g, ""); // 쉼표 제거 후 숫자로 변환
 
     // 요청 데이터
     const requestData = {
@@ -58,12 +83,12 @@ document.getElementById("addCareAvailableDateForm")?.addEventListener("submit", 
 function editCareAvailableDate() {
     const careAvailableDateId = document.getElementById('careAvailableDateId').value;
     const availableAt = document.getElementById('availableAt').value;
-    const price = document.getElementById('price').value;
+    const price = document.getElementById('price').value.replace(/,/g, ""); // 쉼표 제거 후 숫자로 변환
     const status = document.getElementById('status').value;
 
     // 오류 메시지 초기화
     resetErrorMessages();
-1
+
     const requestData = {
         availableAt: availableAt,
         price: price,
