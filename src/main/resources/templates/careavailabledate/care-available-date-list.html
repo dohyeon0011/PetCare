@@ -111,8 +111,8 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${careAvailableDate.availableAt != null ? careAvailableDate.availableAt.toString() : '날짜 없음'}">날짜 없음</h5>
                         <p class="card-text">
-                            <strong>돌봄 가격:</strong> <span th:text="${careAvailableDate.price}">0</span>원<br>
-                            <strong>예약 상태:</strong>
+                            <strong>💰 돌봄 가격:</strong> <span th:text="${#numbers.formatInteger(careAvailableDate.price, 3, 'COMMA')}">0</span>원<br>
+                            <strong>✔️ 예약 상태:</strong>
                             <span th:text="${careAvailableDate.status.name() == 'POSSIBILITY' ? '예약 가능' : (careAvailableDate.status.name() == 'IMPOSSIBILITY' ? '예약됨' : '알 수 없음')}">상태</span>
                         </p>
                     </div>
