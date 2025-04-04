@@ -113,17 +113,22 @@
 
         <p><strong>🏷️ 고객 닉네임:</strong> <span th:text="${reservation.customerNickName}"></span></p>
         <p><strong>🐶 펫시터:</strong> <span th:text="${reservation.sitterName}"></span></p>
-        <p><strong>📅 예약일자:</strong> <span th:text="${reservation.reservationAt}"></span></p>
-        <p><strong>💰 가격:</strong> <span th:text="${reservation.price}"></span>원</p>
-        <p><strong>📮 우편번호:</strong> <span th:text="${reservation.zipcode}"></span></p>
-        <p><strong>🏠 상세주소:</strong> <span th:text="${reservation.address}"></span></p>
+        <p><strong>📅 돌봄 예약일자:</strong> <span th:text="${reservation.reservationAt}"></span></p>
+        <div>
+            <p><strong>📍 돌봄 주소</strong></p>
+            <ul style="margin-left: 20px; list-style-type: none; padding-left: 0;">
+                <li>📮 <strong>우편번호:</strong> <span th:text="${reservation.zipcode}"></span></li>
+                <li>🏠 <strong>상세주소:</strong> <span th:text="${reservation.address}"></span></li>
+            </ul>
+        </div>
         <p><strong>📞 펫시터 연락처:</strong> <span th:text="${reservation.phoneNumber}"></span></p>
-        <p><strong>🗓️ 등록일자:</strong> <span th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p>
             <strong>📌 예약 상태:</strong>
             <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
                   th:text="${reservation.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
         </p>
+        <p><strong>💰 최종 결제 금액:</strong> <span th:text="${#numbers.formatInteger(reservation.price, 3, 'COMMA')}"></span>원</p>
+        <p><strong>🗓️ 예약 발생일자:</strong> <span th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p><strong>📝 고객 요청사항:</strong> <span th:text="${reservation.requests}"></span></p>
     </div><br>
 
