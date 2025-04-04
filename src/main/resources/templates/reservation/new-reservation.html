@@ -118,7 +118,7 @@
                 <select class="form-control" id="careAvailableId" name="careAvailableId">
                     <option th:each="date : ${reservationInfo.careAvailableDates}"
                             th:value="${date.id}"
-                            th:text="|${date.availableAt} - ${date.price}원|">
+                            th:text="|${date.availableAt} - ${#numbers.formatInteger(date.price, 3, 'COMMA')}원|">
                     </option>
                 </select>
             </div>
