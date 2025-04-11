@@ -104,7 +104,8 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private SocialProvider socialProvider;
 
-    @Comment("사용자 프로필 소개")
+    @Lob
+    @Comment("사용자 자기 소개, LongText 타입")
     private String introduction;
 
     @Comment("고객 포인트")
