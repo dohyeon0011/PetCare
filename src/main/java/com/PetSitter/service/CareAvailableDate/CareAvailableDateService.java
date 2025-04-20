@@ -1,6 +1,7 @@
 package com.PetSitter.service.CareAvailableDate;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
+import com.PetSitter.domain.CareAvailableDate.CareAvailableDateStatus;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.dto.CareAvailableDate.request.AddCareAvailableDateRequest;
@@ -103,6 +104,10 @@ public class CareAvailableDateService {
 
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
+
+        if (!careAvailableDate.getStatus().equals(CareAvailableDateStatus.POSSIBILITY)) {
+            throw new IllegalArgumentException("해당 돌봄 날짜가 현재 예약에 배정된 상태이므로 삭제가 불가합니다. 해당 돌봄 날짜: " + careAvailableDate.getAvailableAt());
+        }
 
         careAvailableDateRepository.delete(careAvailableDate);
     }
