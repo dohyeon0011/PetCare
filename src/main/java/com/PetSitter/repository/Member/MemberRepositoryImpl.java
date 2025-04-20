@@ -10,6 +10,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                         .selectFrom(careAvailableDate)
                         .where(careAvailableDate.sitter.id.eq(sitterId)
                                 .and(careAvailableDate.availableAt.eq(availableDate)))
+                        .setLockMode(LockModeType.PESSIMISTIC_WRITE)    // QueryDSL에서는 쿼리에 직접 락 모드를 지정해줘야 됨.
                         .fetchOne());
     }
 
