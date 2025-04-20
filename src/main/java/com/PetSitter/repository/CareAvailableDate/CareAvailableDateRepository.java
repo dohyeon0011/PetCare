@@ -21,7 +21,7 @@ public interface CareAvailableDateRepository extends JpaRepository<CareAvailable
     List<CareAvailableDate> findBySitterId(long sitterId);
 
     // 특정 회원의 특정 돌봄 가능한 날짜 엔티티로 조회
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)   // 다른 트랜잭션에서 읽기/쓰기 락(단순 select for update 락 없이 조회라면 DB와 격리단계에 따라 읽기까지는 가능할 수도, select for update 락이 서로 걸려 있는 상태라면 읽기/쓰기 락)
     Optional<CareAvailableDate> findBySitterIdAndId(long sitterId, long id);
 
     // 특정 회원의 특정 돌봄 가능한 날짜 DTO로 직접 조회
