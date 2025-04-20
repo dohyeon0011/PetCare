@@ -2,9 +2,11 @@ package com.PetSitter.repository.CareAvailableDate;
 
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.dto.CareAvailableDate.response.CareAvailableDateResponse;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +21,7 @@ public interface CareAvailableDateRepository extends JpaRepository<CareAvailable
     List<CareAvailableDate> findBySitterId(long sitterId);
 
     // 특정 회원의 특정 돌봄 가능한 날짜 엔티티로 조회
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<CareAvailableDate> findBySitterIdAndId(long sitterId, long id);
 
     // 특정 회원의 특정 돌봄 가능한 날짜 DTO로 직접 조회
@@ -30,6 +33,7 @@ public interface CareAvailableDateRepository extends JpaRepository<CareAvailable
     Optional<CareAvailableDateResponse.GetDetail> findBySitterIdAndIdDetail(@Param("sitterId") long sitterId, @Param("id") long id);
 
     // 특정 회원의 특정 날짜 조회
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<CareAvailableDate> findBySitterIdAndAvailableAt(long sitterId, LocalDate availableAt);
 
     // 자신이 등록한 돌봄 가능 날짜 조회 페이징
