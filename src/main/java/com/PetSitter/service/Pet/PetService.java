@@ -108,6 +108,10 @@ public class PetService {
 
         List<Pet> pets = customer.getPets();
 
+        if (requests.isEmpty()) {
+            throw new IllegalArgumentException("반려견 등록 요청 데이터가 잘못 되었습니다.");
+        }
+
         for (UpdatePetRequest request : requests) {
             Pet pet = pets.stream()
                     .filter(p -> p.getId() == request.getId())
