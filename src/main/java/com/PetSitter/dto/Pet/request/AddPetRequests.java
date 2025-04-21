@@ -1,5 +1,6 @@
 package com.PetSitter.dto.Pet.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import java.util.List;
 @Getter
 public class AddPetRequests {
 
+//    @JsonProperty("petReq") 지금처럼 @ModelAttribute로 폼데이터를 받을 때에는 적용이 안됨.(JSON 역직렬화가 아닌, 파라미터 바인딩을 하기 때문에 List<> 클래스 필드명에 맞춰서 매핑되기 때문)
     private List<AddPetRequest> requests = new ArrayList<>();
 
 }
