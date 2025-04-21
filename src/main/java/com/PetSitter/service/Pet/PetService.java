@@ -41,6 +41,10 @@ public class PetService {
 
         List<Pet> pets = new ArrayList<>();
 
+        if (requests.isEmpty()) {
+            throw new IllegalArgumentException("반려견 등록 요청 데이터가 잘못 되었습니다.");
+        }
+
         for (AddPetRequest request : requests) {
             UploadFile uploadFile = null;
 
