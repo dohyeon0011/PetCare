@@ -62,7 +62,7 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
     // 예약 상태
     public void reservation() {
         if (!this.status.equals(CareAvailableDateStatus.POSSIBILITY)) {
-            throw new IllegalArgumentException("요청하신 날짜는 이미 예약된 날짜입니다.");
+            throw new IllegalArgumentException("요청하신 " + this.availableAt + " 이 날짜는 이미 예약된 날짜이거나 돌봄사가 삭제한 날짜입니다.");
         }
         this.status = CareAvailableDateStatus.IMPOSSIBILITY;
     }
@@ -70,7 +70,7 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
     // 예약 취소
     public void cancel() {
         if (!this.status.equals(CareAvailableDateStatus.IMPOSSIBILITY)) {
-            throw new IllegalArgumentException("요청하신 날짜는 이미 취소된 예약입니다.");
+            throw new IllegalArgumentException("요청하신 " + this.availableAt + " 이 날짜는 이미 취소된 예약입니다.");
         }
         this.status = CareAvailableDateStatus.POSSIBILITY;
     }
