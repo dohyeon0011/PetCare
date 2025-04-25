@@ -44,7 +44,7 @@ public class AdminMemberService {
     public void deleteForAdmin(long id, Member member) {
         verifyingPermissionsAdmin(member);
 
-        Member findMember = memberRepository.findById(id)
+        Member findMember = memberRepository.findByIdAndFalseWithLock(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
         findMember.changeIsDeleted(true);
