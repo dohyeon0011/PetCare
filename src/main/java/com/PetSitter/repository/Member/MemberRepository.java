@@ -3,12 +3,10 @@ package com.PetSitter.repository.Member;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Pet.Pet;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
@@ -20,6 +18,10 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     Optional<Member> findByLoginId(String loginId);
 
     Optional<Member> findByLoginIdAndIsDeletedFalse(String loginId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select m from Member m where m.id = :memberId and m.isDeleted = false")
+    Optional<Member> findByIdAndFalseWithLock(@Param("memberId") long memberId);
 
     // OAuth2 소셜 로그인 회원 로그인 아이디 변경
     @Modifying
