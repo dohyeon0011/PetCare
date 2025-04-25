@@ -45,13 +45,13 @@ public class CustomerReservationService {
 
     @Transactional
     public CustomerReservationResponse.GetDetail save(AddCustomerReservationRequest request) {
-        Member customer = memberRepository.findById(request.getCustomerId())
+        Member customer = memberRepository.findByIdAndFalseWithLock(request.getCustomerId())
                 .orElseThrow(() -> new NoSuchElementException("예약 오류: 고객 정보 조회에 실패했습니다."));
 
         verifyingPermissionsCustomer(customer);
 
         // 예약 배정되는 돌봄사 찾고 돌봄사가 등록했던 날짜중 선택된 날짜 찾아서 해당 날짜 예약 상태 바꾸기
-        Member sitter = memberRepository.findById(request.getSitterId())
+        Member sitter = memberRepository.findByIdAndFalseWithLock(request.getSitterId())
                 .orElseThrow(() -> new NoSuchElementException("예약 오류: 돌봄사 정보 조회에 실패했습니다."));
 
         verifyingPermissionsSitter(sitter);
@@ -148,7 +148,7 @@ public class CustomerReservationService {
     @Comment("특정 회원의 특정 돌봄 예약 취소")
     @Transactional
     public void delete(long customerId, long customerReservationId) {
-        Member customer = memberRepository.findById(customerId)
+        Member customer = memberRepository.findByIdAndFalseWithLock(customerId)
                 .orElseThrow(() -> new NoSuchElementException("로그인한 회원 정보를 불러오는데 실패했습니다."));
 
         CustomerReservation customerReservation = customerReservationRepository.findByCustomerIdAndId(customer.getId(), customerReservationId)
@@ -157,7 +157,7 @@ public class CustomerReservationService {
         authorizationMember(customer);
         verifyingPermissionsCustomer(customer);
 
-        Member sitter = memberRepository.findById(customerReservation.getSitter().getId())
+        Member sitter = memberRepository.findByIdAndFalseWithLock(customerReservation.getSitter().getId())
                 .orElseThrow(() -> new NoSuchElementException("돌봄사의 정보를 조회하는데 실패했습니다."));
 
         verifyingPermissionsSitter(sitter);
@@ -167,7 +167,6 @@ public class CustomerReservationService {
 
         SitterSchedule sitterSchedule = sitterScheduleRepository.findByCustomerReservation(customerReservation)
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 돌봄사에게 해당 예약이 존재하지 않습니다."));
-
 
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
