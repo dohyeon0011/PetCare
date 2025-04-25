@@ -85,7 +85,7 @@ public class MemberService {
 
     @Transactional
     public void delete(long id) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndFalseWithLock(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
         authorizationMember(member);
@@ -95,7 +95,7 @@ public class MemberService {
 
     @Transactional
     public Object update(long id, UpdateMemberRequest request, UploadFile uploadFile) {
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findByIdAndFalseWithLock(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
         authorizationMember(member);
