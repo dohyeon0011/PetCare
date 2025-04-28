@@ -154,11 +154,9 @@ class CustomerReservationServiceTest {
 //                try {
 //                    customerReservationService.delete(1, 1);
 ////                    sitterScheduleService.delete(3, 1);
-//                    successCount.incrementAndGet();
 //                    return true;
 //                } catch (Exception e) {
 //                    System.out.println("e.getMessage() = " + e.getMessage());
-//                    failCount.incrementAndGet();
 //                    return false; // 예약 실패
 //                } finally {
 //                    latch.countDown();
@@ -173,11 +171,9 @@ class CustomerReservationServiceTest {
                     customerReservationService.delete(1, 1);
 //                    sitterScheduleService.delete(3, 1);
                     successCount.incrementAndGet();
-                    return true;
                 } catch (Exception e) {
                     System.out.println("e.getMessage() = " + e.getMessage());
                     failCount.incrementAndGet();
-                    return false; // 예약 실패
                 } finally {
                     latch.countDown();
                 }
