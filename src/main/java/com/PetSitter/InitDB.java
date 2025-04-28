@@ -8,6 +8,8 @@ import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Member.SocialProvider;
 import com.PetSitter.domain.Pet.Pet;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
+import com.PetSitter.dto.Reservation.CustomerReservation.request.AddCustomerReservationRequest;
+import com.PetSitter.service.Reservation.CustomerReservation.CustomerReservationService;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -40,9 +43,10 @@ public class InitDB {
 
         private final EntityManager em;
         private final BCryptPasswordEncoder bCryptPasswordEncoder;
+        private final CustomerReservationService customerReservationService;
 
         public void dbInit1() {
-            Member member = Member.builder()
+            Member member1 = Member.builder()
                     .loginId("user1")
                     .password(bCryptPasswordEncoder.encode("aaw131aaw131"))
                     .name("구창모")
@@ -57,7 +61,23 @@ public class InitDB {
                     .careerYear(null)
                     .build();
 
-            em.persist(member);
+            Member member2 = Member.builder()
+                    .loginId("ehgus12")
+                    .password(bCryptPasswordEncoder.encode("aaw131aaw131"))
+                    .name("이도현")
+                    .nickName("이도현_카카오")
+                    .email("ash0811@naver.com")
+                    .phoneNumber("010-5340-4981")
+                    .zipcode("42320")
+                    .address("부산광역시 동래구 사직동")
+                    .role(Role.valueOf("CUSTOMER"))
+                    .socialProvider(SocialProvider.valueOf("KAKAO"))
+                    .introduction("귀여운 아이들 주인입니다.")
+                    .careerYear(null)
+                    .build();
+
+            em.persist(member1);
+            em.persist(member2);
 
             Pet pet1 = Pet.builder()
                     .name("휴지")
@@ -75,11 +95,29 @@ public class InitDB {
                     .profileImage("https://cdn.crowdpic.net/detail-thumb/thumb_d_C1A78936BB1B43554DE572091820B23F.jpg")
                     .build();
 
-            pet1.addCustomer(member);
-            pet2.addCustomer(member);
+            Pet pet3 = Pet.builder()
+                    .name("배추")
+                    .age(5)
+                    .breed("비숑")
+                    .medicalConditions("특정 사료만 먹어요;")
+                    .build();
+
+            Pet pet4 = Pet.builder()
+                    .name("토르")
+                    .age(2)
+                    .breed("포메라니안")
+                    .medicalConditions("간식 주면 배탈이 나요")
+                    .build();
+
+            pet1.addCustomer(member1);
+            pet2.addCustomer(member1);
+            pet3.addCustomer(member2);
+            pet4.addCustomer(member2);
 
             em.persist(pet1);
             em.persist(pet2);
+            em.persist(pet3);
+            em.persist(pet4);
         }
 
         public void dbInit2() {
@@ -87,11 +125,11 @@ public class InitDB {
                     .loginId("user2")
                     .password(bCryptPasswordEncoder.encode("blackrose12"))
                     .name("박종우")
-                    .nickName("애쉬아일랜드")
-                    .email("ashisland@naver.com")
+                    .nickName("종우")
+                    .email("jw@naver.com")
                     .phoneNumber("010-1234-5678")
-                    .zipcode("22222")
-                    .address("서울")
+                    .zipcode("40821")
+                    .address("서울특별시 용산구 한남동")
                     .role(Role.valueOf("PET_SITTER"))
                     .socialProvider(SocialProvider.valueOf("KAKAO"))
                     .introduction("🐾 안녕하세요! 믿음직한 반려동물 돌봄사 박종우입니다! 🐾" + System.lineSeparator() +
@@ -237,6 +275,16 @@ public class InitDB {
             em.persist(careAvailableDate14);
             em.persist(careAvailableDate15);
             em.persist(careAvailableDate16);
+
+            AddCustomerReservationRequest request = new AddCustomerReservationRequest(
+                    1,
+                    3,
+                    16,
+                    List.of(1L, 2L),
+                    "1번",
+                    0
+            );
+            customerReservationService.save(request);
         }
 
         public void dbInit3() {
