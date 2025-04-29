@@ -53,13 +53,14 @@ public class SitterReservationService {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄사 정보가 존재하지 않습니다."));
 
-        List<CareAvailableDate> careAvailableDates = careAvailableDateRepository.findBySitterId(sitter.getId());
+        // sitter.getId() 이렇게 가져오면 Lazy 로딩으로 프록시 -> 실 객체로 가져오면서 다른 트랜잭션에서 락이 걸려있으면 서로 데드락 걸릴 수도 있음.
+        List<CareAvailableDate> careAvailableDates = careAvailableDateRepository.findBySitterId(sitterId);
         if (careAvailableDates.isEmpty()) {
             throw new NoSuchElementException("해당 돌봄사는 돌봄 예약 가능한 날짜가 없습니다.");
         }
 
 //        List<Review> reviews = reviewRepository.findByCustomerReservationSitterId(sitter.getId());
-        List<Review> reviews = reviewRepository.findBySitterId(sitter.getId(), page, 5); // 한 페이지에 항목 수 5개 고정.
+        List<Review> reviews = reviewRepository.findBySitterId(sitterId, page, 5); // 한 페이지에 항목 수 5개 고정.
 
         return new ReservationSitterResponse.GetDetail(sitter, reviews);
     }
@@ -70,19 +71,18 @@ public class SitterReservationService {
         Member customer = memberRepository.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException("현재 회원의 정보 조회에 실패했습니다."));
 
-        verifyingPermissionsCustomer(customer);
-
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄사 정보가 존재하지 않습니다."));
 
+        verifyingPermissionsCustomer(customer);
         verifyingPermissionsSitter(sitter);
 
-        List<CareAvailableDate> careAvailableDates = careAvailableDateRepository.findBySitterIdAndPossibility(sitter.getId());
+        List<CareAvailableDate> careAvailableDates = careAvailableDateRepository.findBySitterIdAndPossibility(sitterId);
 
         if (careAvailableDates.isEmpty()) {
             throw new NoSuchElementException("해당 돌봄사는 돌봄 예약 가능한 날짜가 없습니다.");
         }
-        List<Pet> pets = petRepository.findByCustomerIdAndIsDeletedFalse(customer.getId());
+        List<Pet> pets = petRepository.findByCustomerIdAndIsDeletedFalse(customerId);
 
         if (pets.isEmpty()) {
             throw new IllegalArgumentException("돌봄에 맡길 반려견을 마이페이지에서 등록 후 다시 예약을 진행해주세요.");
