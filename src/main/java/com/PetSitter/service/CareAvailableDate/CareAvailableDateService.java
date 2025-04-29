@@ -40,7 +40,7 @@ public class CareAvailableDateService {
             throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
         }
 
-        if (careAvailableDateRepository.findBySitterId(sitter.getId()).stream().anyMatch(c -> c.getAvailableAt().equals(request.getAvailableAt()))) {
+        if (careAvailableDateRepository.findBySitterId(sitterId).stream().anyMatch(c -> c.getAvailableAt().equals(request.getAvailableAt()))) {
             throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
         }
 
@@ -49,7 +49,7 @@ public class CareAvailableDateService {
 
         careAvailableDateRepository.save(careAvailableDate);
 
-        return careAvailableDateRepository.findBySitterIdAndIdDetail(sitter.getId(), careAvailableDate.getId())
+        return careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDate.getId())
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
     }
 
@@ -102,7 +102,7 @@ public class CareAvailableDateService {
         verifyingPermissions(sitter);
         authorizationMember(sitter);
 
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), careAvailableDateId)
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(memberId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
         if (!careAvailableDate.getStatus().equals(CareAvailableDateStatus.POSSIBILITY)) {
@@ -121,18 +121,18 @@ public class CareAvailableDateService {
         verifyingPermissions(sitter);
         authorizationMember(sitter);
 
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
+                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
+
         if (request.getAvailableAt().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
         }
 
         // 이미 등록된 돌봄 날짜가 현재 수정하려는 날짜와 동일하지 않은지 확인
-        if (careAvailableDateRepository.findBySitterId(sitter.getId()).stream()
+        if (careAvailableDateRepository.findBySitterId(sitterId).stream()
                 .anyMatch(c -> c.getId() != careAvailableDateId && c.getAvailableAt().equals(request.getAvailableAt()))) {
             throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
         }
-
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), careAvailableDateId)
-                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
         careAvailableDate.update(request.getAvailableAt(), request.getPrice(), request.getStatus());
 
@@ -151,7 +151,7 @@ public class CareAvailableDateService {
 
         // 수정된 데이터 다시 조회
         // 새로운 DB 쿼리가 발생하지만 엔티티를 수정한 후, 최신 상태를 DB에서 직접 조회하기 때문에 데이터의 정확성 보장 가능.
-        CareAvailableDateResponse.GetDetail updateCareAvailableDate = careAvailableDateRepository.findBySitterIdAndIdDetail(sitter.getId(), careAvailableDateId)
+        CareAvailableDateResponse.GetDetail updateCareAvailableDate = careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록된 돌봄 날짜가 존재하지 않습니다."));
 
         return updateCareAvailableDate;
