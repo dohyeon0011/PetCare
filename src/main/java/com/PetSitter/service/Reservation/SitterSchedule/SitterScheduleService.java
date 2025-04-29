@@ -68,19 +68,21 @@ public class SitterScheduleService {
     @Comment("특정 돌봄사의 특정 돌봄 예약 취소")
     @Transactional
     public void delete(long sitterId, long sitterScheduleId) {
-        Member sitter = memberRepository.findById(sitterId)
+        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndId(sitterId, sitterScheduleId)
+                .orElseThrow(() -> new NoSuchElementException("해당 돌봄 예약이 존재하지 않습니다."));
+
+        // 순환 대기로 데드락을 방지하기 위해 (고객 시점)예약 취소와 동일하게 고객 -> 돌봄사 순으로 락 획득 조회.
+        Member customer = memberRepository.findByIdAndFalseWithLock(sitterSchedule.getCustomer().getId())
+                .orElseThrow(() -> new NoSuchElementException("로그인한 회원 정보를 불러오는데 실패했습니다."));
+
+        Member sitter = memberRepository.findByIdAndFalseWithLock(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("회원의 정보를 조회에 실패했습니다."));
 
         authorizationMember(sitter);
         verifyingPermissionsSitter(sitter);
 
-        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndId(sitterId, sitterScheduleId)
-                .orElseThrow(() -> new NoSuchElementException("해당 돌봄 예약이 존재하지 않습니다."));
-
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(sitter.getId(), sitterSchedule.getReservationAt())
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 해당 예약 날짜를 찾을 수 없습니다."));
-
-        Member customer = sitterSchedule.getCustomer();
 
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.USING);
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.SAVING);
