@@ -45,16 +45,15 @@ public class CustomerReservationService {
 
     @Transactional
     public CustomerReservationResponse.GetDetail save(AddCustomerReservationRequest request) {
-        Member customer = memberRepository.findByIdAndFalseWithLock(request.getCustomerId())
-                .orElseThrow(() -> new NoSuchElementException("예약 오류: 고객 정보 조회에 실패했습니다."));
-
-        verifyingPermissionsCustomer(customer);
-
-        // 예약 배정되는 돌봄사 찾고 돌봄사가 등록했던 날짜중 선택된 날짜 찾아서 해당 날짜 예약 상태 바꾸기
+        // 데드락을 방지하기 위해 락 획득 순서를 일관되게 돌봄사 먼저 조회(돌봄사의 회원 정보 수정과 고객의 예약이 동시에 발생할 경우를 대비) -> 락 획득 순서가 일관되지 않으면 서로 순환 대기가 발생해서 교착 상태에 빠져 하나는 롤백됨.
         Member sitter = memberRepository.findByIdAndFalseWithLock(request.getSitterId())
                 .orElseThrow(() -> new NoSuchElementException("예약 오류: 돌봄사 정보 조회에 실패했습니다."));
 
+        Member customer = memberRepository.findByIdAndFalseWithLock(request.getCustomerId())
+                .orElseThrow(() -> new NoSuchElementException("예약 오류: 고객 정보 조회에 실패했습니다."));
+
         verifyingPermissionsSitter(sitter);
+        verifyingPermissionsCustomer(customer);
 
         // 예약으로 선택된 날짜 찾기
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitter.getId(), request.getCareAvailableId())
@@ -148,18 +147,18 @@ public class CustomerReservationService {
     @Comment("특정 회원의 특정 돌봄 예약 취소")
     @Transactional
     public void delete(long customerId, long customerReservationId) {
-        Member customer = memberRepository.findByIdAndFalseWithLock(customerId)
-                .orElseThrow(() -> new NoSuchElementException("로그인한 회원 정보를 불러오는데 실패했습니다."));
-
-        CustomerReservation customerReservation = customerReservationRepository.findByCustomerIdAndId(customer.getId(), customerReservationId)
+        CustomerReservation customerReservation = customerReservationRepository.findByCustomerIdAndId(customerId, customerReservationId)
                 .orElseThrow(() -> new NoSuchElementException("회원에게 해당 돌봄 예약 내역이 존재하지 않습니다."));
 
-        authorizationMember(customer);
-        verifyingPermissionsCustomer(customer);
+        // 순환 대기로 데드락을 방지하기 위해 (돌봄사 시점)예약 취소와 동일하게 고객 -> 돌봄사 순으로 락 획득 조회.
+        Member customer = memberRepository.findByIdAndFalseWithLock(customerId)
+                .orElseThrow(() -> new NoSuchElementException("로그인한 회원 정보를 불러오는데 실패했습니다."));
 
         Member sitter = memberRepository.findByIdAndFalseWithLock(customerReservation.getSitter().getId())
                 .orElseThrow(() -> new NoSuchElementException("돌봄사의 정보를 조회하는데 실패했습니다."));
 
+        authorizationMember(customer);
+        verifyingPermissionsCustomer(customer);
         verifyingPermissionsSitter(sitter);
 
         CareAvailableDate careAvailableDate = memberRepository.findCareAvailableDateBySitterIdAndAvailableAt(sitter.getId(), customerReservation.getReservationAt())
