@@ -11,6 +11,7 @@ import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReserv
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
+import com.PetSitter.service.Admin.Member.AdminMemberService;
 import com.PetSitter.service.Admin.Reservation.AdminReservationService;
 import com.PetSitter.service.CareAvailableDate.CareAvailableDateService;
 import com.PetSitter.service.Member.MemberService;
@@ -65,6 +66,9 @@ class CustomerReservationServiceTest {
 
     @Autowired
     private CareAvailableDateService careAvailableDateService;
+
+    @Autowired
+    private AdminMemberService adminMemberService;
 
     @DisplayName("예약 발생_동시성")
     @Test
@@ -432,7 +436,6 @@ class CustomerReservationServiceTest {
                 50000,
                 CareAvailableDateStatus.POSSIBILITY);
 
-
         int threadCount = 200;
         ExecutorService es = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -467,7 +470,6 @@ class CustomerReservationServiceTest {
                 }
             });
         });
-
         latch.await();
         es.shutdown();
 
@@ -477,13 +479,132 @@ class CustomerReservationServiceTest {
     }
 
     @DisplayName("돌봄날짜삭제_예약발생")
-    void 돌봄날짜삭제_예약발생() {
+    @Test
+    void 돌봄날짜삭제_예약발생() throws ExecutionException, InterruptedException {
         // given
+        long customerId = 1;
+        long sitterId = 3;
+        long careAvailableId = 10;
 
+        AddCustomerReservationRequest reservationRequest = new AddCustomerReservationRequest(
+                customerId,
+                sitterId,
+                careAvailableId,
+                List.of(1L, 2L),
+                "돌봄날짜삭제",
+                0
+        );
+
+        int threadCount = 2;
+        ExecutorService es = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        AtomicInteger successCount = new AtomicInteger();
+        AtomicInteger failCount = new AtomicInteger();
 
         // when
+        // 돌봄 날짜 삭제
+        es.execute(() -> {
+            try {
+//                Thread.sleep(100);
+                careAvailableDateService.delete(sitterId, careAvailableId);
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                failCount.incrementAndGet();
+                System.out.println("돌봄 날짜 삭제 실패: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
 
+        // 예약 발생
+        es.execute(() -> {
+            try {
+                customerReservationService.save(reservationRequest);
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                failCount.incrementAndGet();
+                System.out.println("고객 예약 실패: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
+        latch.await();
+        es.shutdown();
 
         // then
+        assertThat(successCount.get()).isEqualTo(1);
+        assertThat(failCount.get()).isEqualTo(1);
+    }
+
+    @DisplayName("돌봄예약_돌봄사탈퇴")
+    @Test
+    void 돌봄예약_돌봄사탈퇴() throws InterruptedException { // +관리자가 탈퇴시킨 경우도 추가
+        // given
+        long customerId = 1;
+        long sitterId = 5;
+        long careAvailableId = 19;
+
+        AddCustomerReservationRequest reservationRequest = new AddCustomerReservationRequest(
+                customerId,
+                sitterId,
+                careAvailableId,
+                List.of(1L, 2L),
+                "돌봄날짜삭제",
+                0
+        );
+
+        int threadCount = 3;
+        ExecutorService es = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+        AtomicInteger successCount = new AtomicInteger();
+        AtomicInteger failCount = new AtomicInteger();
+
+        // when
+        // 돌봄사 개인이 탈퇴
+        es.execute(() -> {
+            try {
+                memberService.delete(sitterId);
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                failCount.incrementAndGet();
+                System.out.println("돌봄사 회원 탈퇴 실패: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        // 돌봄 예약 발생
+        es.execute(() -> {
+            try {
+                customerReservationService.save(reservationRequest);
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                failCount.incrementAndGet();
+                System.out.println("고객 돌봄 예약 실패: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        // 관리자가 돌봄사 탈퇴 처리
+        Member admin = memberRepository.findByLoginId("super").get();
+
+        es.execute(() -> {
+            try {
+                adminMemberService.deleteForAdmin(sitterId, admin);
+                successCount.incrementAndGet();
+            } catch (Exception e) {
+                failCount.incrementAndGet();
+                System.out.println("관리자 권한 회원 탈퇴 실패: " + e.getMessage());
+            } finally {
+                latch.countDown();
+            }
+        });
+        latch.await();
+        es.shutdown();
+
+        // then
+        assertThat(successCount.get()).isEqualTo(1);
+        assertThat(failCount.get()).isEqualTo(2);
     }
 }
