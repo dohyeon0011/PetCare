@@ -9,6 +9,8 @@ import com.PetSitter.dto.Member.request.AddMemberRequest;
 import com.PetSitter.dto.Member.request.UpdateMemberRequest;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
+import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
+import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final SitterScheduleRepository sitterScheduleRepository;
 
     @Transactional
     public Object save(AddMemberRequest request, UploadFile uploadFile) {
@@ -90,6 +93,10 @@ public class MemberService {
 
         authorizationMember(member);
 
+        if (!sitterScheduleRepository.findBySitterId(member.getId()).isEmpty()) {
+            throw new IllegalArgumentException("회원 탈퇴 오류[id=" + id + "]: " + "현재 돌봄이 진행중인 예약이 존재합니다.");
+        }
+
         member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
     }
 
@@ -148,5 +155,4 @@ public class MemberService {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
     }
-
 }
