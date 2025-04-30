@@ -95,9 +95,7 @@ public class SitterScheduleService {
                 () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
         );
 
-        sitterSchedule.cancel();
-        careAvailableDate.cancel();
-        sitterSchedule.getCustomerReservation().cancel();
+        sitterScheduleCancel(sitterSchedule, careAvailableDate);
     }
 
     private static void authorizationMember(Member member) {
@@ -114,4 +112,9 @@ public class SitterScheduleService {
         }
     }
 
+    private static void sitterScheduleCancel(SitterSchedule sitterSchedule, CareAvailableDate careAvailableDate) {
+        sitterSchedule.cancel();
+        careAvailableDate.cancel();
+        sitterSchedule.getCustomerReservation().cancel();
+    }
 }
