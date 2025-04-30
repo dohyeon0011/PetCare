@@ -53,7 +53,7 @@ public class SitterReservationService {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄사 정보가 존재하지 않습니다."));
 
-        // sitter.getId() 이렇게 가져오면 Lazy 로딩으로 프록시 -> 실 객체로 가져오면서 다른 트랜잭션에서 락이 걸려있으면 서로 데드락 걸릴 수도 있음.
+        // sitter.getId() 이렇게 가져오면 Lazy 로딩으로 프록시 -> 실 객체로 가져오면서 다른 트랜잭션에서 락이 걸려있으면 서로 데드락 걸릴 수도 있음.(근데 테스트 해보니 다른 트랜잭션에서 락 걸어도 .get()해도 잘만 조회됨.)
         List<CareAvailableDate> careAvailableDates = careAvailableDateRepository.findBySitterId(sitterId);
         if (careAvailableDates.isEmpty()) {
             throw new NoSuchElementException("해당 돌봄사는 돌봄 예약 가능한 날짜가 없습니다.");
