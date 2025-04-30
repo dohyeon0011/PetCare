@@ -96,9 +96,7 @@ public class CustomerReservationService {
         customerReservation.changeReservationAt(careAvailableDate.getAvailableAt());
 
         // 돌봄사 시점 돌봄 예약 생성
-        SitterSchedule sitterReservation = SitterSchedule.createSitterReservation(customerReservation);
-        sitterReservation.changeReservationAt(careAvailableDate.getAvailableAt());
-        careAvailableDate.reservation();
+        sitterReservation(customerReservation, careAvailableDate);
         rewardService.addReward(customer.getId(), resultPrice); // 적립금을 사용 유무에 상관 없이 무조건 결제 금액 만큼 적립
 
         PointsHistory.builder() // 적립금 적립 내역
@@ -111,6 +109,12 @@ public class CustomerReservationService {
         customerReservationRepository.save(customerReservation);
 
         return customerReservation.toResponse(new ArrayList<>());
+    }
+
+    private static void sitterReservation(CustomerReservation customerReservation, CareAvailableDate careAvailableDate) {
+        SitterSchedule sitterReservation = SitterSchedule.createSitterReservation(customerReservation);
+        sitterReservation.changeReservationAt(careAvailableDate.getAvailableAt());
+        careAvailableDate.reservation();
     }
 
     @Comment("특정 회원의 돌봄 예약 내역 전체 조회")
