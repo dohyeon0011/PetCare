@@ -99,8 +99,8 @@ public class CareAvailableDateService {
         Member sitter = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
-        verifyingPermissions(sitter);
         authorizationMember(sitter);
+        verifyingPermissions(sitter);
 
         CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(memberId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
@@ -118,15 +118,15 @@ public class CareAvailableDateService {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
 
-        verifyingPermissions(sitter);
         authorizationMember(sitter);
-
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
-                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
+        verifyingPermissions(sitter);
 
         if (request.getAvailableAt().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
         }
+
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
+                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
         // 이미 등록된 돌봄 날짜가 현재 수정하려는 날짜와 동일하지 않은지 확인
         if (careAvailableDateRepository.findBySitterId(sitterId).stream()
