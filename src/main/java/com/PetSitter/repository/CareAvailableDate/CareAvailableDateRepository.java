@@ -32,8 +32,12 @@ public interface CareAvailableDateRepository extends JpaRepository<CareAvailable
             "where s.id = :sitterId AND c.id = :id")
     Optional<CareAvailableDateResponse.GetDetail> findBySitterIdAndIdDetail(@Param("sitterId") long sitterId, @Param("id") long id);
 
-    // 특정 회원의 특정 날짜 조회
+    // 특정 회원의 특정 날짜 조회(배타락)
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select c from CareAvailableDate c where c.sitter.id = :sitterId and c.availableAt = :availableAt")
+    Optional<CareAvailableDate> findBySitterIdAndAvailableAtWithLock(@Param("sitterId") long sitterId, @Param("availableAt") LocalDate availableAt);
+
+    // 특정 회원의 특정 날짜 조회(일반 조회)
     Optional<CareAvailableDate> findBySitterIdAndAvailableAt(long sitterId, LocalDate availableAt);
 
     // 자신이 등록한 돌봄 가능 날짜 조회 페이징
