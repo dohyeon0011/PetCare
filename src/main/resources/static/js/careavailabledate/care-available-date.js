@@ -161,9 +161,15 @@ function deleteCareAvailableDate(dateId) {
         .catch(error => {
             console.error("삭제 실패:", error);
             if (error.response && error.response.data) {
-                showError(error.response.data);  // 서버에서 반환된 오류 메시지 표시
+                const errorData = error.response.data;
+
+                if (typeof errorData === 'object' && errorData.error) {
+                    alert(errorData.error); // 전역 ExceptionHandler에서 온 메시지 alert 처리
+                } else {
+                    alert("돌봄 가능 날짜 삭제에 실패했습니다.");
+                }
             } else {
-                showError("돌봄 가능 날짜 삭제에 실패했습니다.");
+                alert("알 수 없는 오류가 발생했습니다.");
             }
         });
 }
