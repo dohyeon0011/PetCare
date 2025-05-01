@@ -190,7 +190,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (돌봄 예약 내역 전체 조회(+페이징), 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="882" alt="image" src="https://github.com/user-attachments/assets/20d57f54-3f08-463f-9bac-32809c0dc2d9" />            
+<img width="850" alt="image" src="https://github.com/user-attachments/assets/9eda025e-9a5f-4522-a4fb-b7abb1944a95" />            
 <br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
@@ -225,7 +225,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
 <img width="1253" alt="image" src="https://github.com/user-attachments/assets/a28643cb-20d7-4f68-9b60-4e1cf738cfb2" />
-<img width="574" alt="image" src="https://github.com/user-attachments/assets/40ee8334-ec8c-4aef-8a91-8225a1218866" />  
+<img width="840" alt="image" src="https://github.com/user-attachments/assets/a96a5387-d439-400e-bf69-d807897a7bb1" />    
 <img width="591" alt="image" src="https://github.com/user-attachments/assets/cb1f6816-2430-49a7-abea-12356626d75e" />  
 
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
