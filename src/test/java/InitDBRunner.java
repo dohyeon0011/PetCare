@@ -1,3 +1,4 @@
+/*
 import com.PetSitter.InitDB;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -19,3 +20,4 @@ public class InitDBRunner implements ApplicationRunner {
         initDB.init();
     }
 }
+*/
