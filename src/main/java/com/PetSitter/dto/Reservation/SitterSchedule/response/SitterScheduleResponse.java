@@ -47,7 +47,9 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private long customerId;
         private String customerNickName;
         private String sitterName;
-        private int price;
+        private Integer usingPoint; // 고객이 사용한 포인트
+        private int originalPrice;  // 원래 돌봄 예약 가격
+        private int resultPrice;    // 최종 가격(원래 돌봄 가격 - 고객 사용 포인트)
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
@@ -60,12 +62,14 @@ public class SitterScheduleResponse { // 돌봄사 시점 예약 조회
         private List<CareLogResponse.GetDetail> careLogList;
         private ReviewResponse.GetDetail review;
 
-        public GetDetail(Member customer, Member sitter, SitterSchedule sitterSchedule, List<PetReservation> pets, List<CareLog> careLogList) {
+        public GetDetail(Member customer, Member sitter, SitterSchedule sitterSchedule, List<PetReservation> pets, List<CareLog> careLogList, Integer usingPoint, int originalPrice) {
             this.id = sitterSchedule.getId();
             this.customerId = customer.getId();
             this.customerNickName = customer.getNickName();
             this.sitterName = sitter.getName();
-            this.price = sitterSchedule.getPrice();
+            this.usingPoint = usingPoint;
+            this.originalPrice = originalPrice;
+            this.resultPrice = sitterSchedule.getPrice();
             this.reservationAt = sitterSchedule.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
