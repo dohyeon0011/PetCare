@@ -18,6 +18,7 @@ import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import com.PetSitter.service.Reservation.Reward.RewardService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
@@ -108,7 +109,7 @@ public class CustomerReservationService {
 
         customerReservationRepository.save(customerReservation);
 
-        return customerReservation.toResponse(new ArrayList<>());
+        return customerReservation.toResponse(new ArrayList<>(), null, careAvailableDate.getPrice());
     }
 
     private static void sitterReservation(CustomerReservation customerReservation, CareAvailableDate careAvailableDate) {
@@ -144,8 +145,18 @@ public class CustomerReservationService {
         SitterSchedule sitterSchedule = sitterScheduleRepository.findByCustomerReservation(customerReservation)
                 .orElseThrow(() -> new NoSuchElementException("돌봄사에게 해당 예약이 존재하지 않습니다."));
 
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(sitterSchedule.getSitter().getId(), sitterSchedule.getReservationAt())
+                .orElseThrow(() -> new EntityNotFoundException("해당 돌봄 예약 날짜가 존재하지 않습니다. (" + sitterSchedule.getReservationAt() + ")"));
+
+        Optional<PointsHistory> usingPointHistory = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
+
+        Integer usingPoint = null;
+        if (usingPointHistory.isPresent()) {    // 고객이 해당 돌봄 예약 건에 사용한 포인트가 있을 경우
+            usingPoint = usingPointHistory.get().getPoint();
+        }
+
         return customerReservation.toResponse(sitterSchedule.getCareLogList().stream()
-                .filter(c -> !c.isDeleted()).toList());
+                .filter(c -> !c.isDeleted()).toList(), usingPoint, careAvailableDate.getPrice());
     }
 
     @Comment("특정 회원의 특정 돌봄 예약 취소")
