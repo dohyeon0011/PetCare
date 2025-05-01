@@ -127,7 +127,9 @@
             <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
                   th:text="${reservation.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
         </p>
-        <p><strong>💰 최종 결제 금액:</strong> <span th:text="${#numbers.formatInteger(reservation.price, 3, 'COMMA')}"></span>원</p>
+        <p><strong>사용된 포인트:</strong> <span th:text="${reservation.usingPoint == null ? '없음' : #numbers.formatInteger(reservation.usingPoint, 3, 'COMMA') + '원'}"></span></p>
+        <p><strong>💲 원래 금액:</strong> <span th:text="${#numbers.formatInteger(reservation.originalPrice, 3, 'COMMA')}"></span>원</p>
+        <p><strong>💰 최종 결제 금액:</strong> <span th:text="${#numbers.formatInteger(reservation.resultPrice, 3, 'COMMA')}"></span>원</p>
         <p><strong>🗓️ 예약 발생일자:</strong> <span th:text="${#temporals.format(reservation.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
         <p><strong>📝 고객 요청사항:</strong> <span th:text="${reservation.requests}"></span></p>
     </div><br>
