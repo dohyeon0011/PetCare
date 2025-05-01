@@ -149,7 +149,7 @@ public class SitterSchedule { // 돌봄 예약(돌봄사 시점)
         this.status = ReservationStatus.CANCEL;
     }
 
-    public SitterScheduleResponse.GetDetail toResponse() {
-        return new SitterScheduleResponse.GetDetail(this.customer, this.sitter, this, this.petReservations, this.careLogList);
+    public SitterScheduleResponse.GetDetail toResponse(Integer usingPoint, int originalPrice) {
+        return new SitterScheduleResponse.GetDetail(this.customer, this.sitter, this, this.petReservations, this.careLogList, usingPoint, originalPrice);
     }
 }
