@@ -47,7 +47,9 @@ public class AdminReservationResponse {
         private long id;
         private String customerNickName;
         private String sitterName;
-        private int price;
+        private Integer usingPoint; // 고객이 사용한 포인트
+        private int originalPrice;  // 원래 돌봄 예약 가격
+        private int resultPrice;    // 최종 가격(원래 돌봄 가격 - 고객 사용 포인트)
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
@@ -61,11 +63,13 @@ public class AdminReservationResponse {
         private List<CareLogResponse.GetDetail> careLogList;
         private ReviewResponse.GetDetail review;
 
-        public ReservationDetailResponse(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review) {
+        public ReservationDetailResponse(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review, Integer usingPoint, int originalPrice) {
             this.id = customerReservation.getId();
             this.customerNickName = customer.getNickName();
             this.sitterName = sitter.getName();
-            this.price = customerReservation.getPrice();
+            this.usingPoint = usingPoint;
+            this.originalPrice = originalPrice;
+            this.resultPrice = customerReservation.getPrice();
             this.reservationAt = customerReservation.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
