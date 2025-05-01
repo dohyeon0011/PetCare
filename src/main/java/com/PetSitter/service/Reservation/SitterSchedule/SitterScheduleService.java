@@ -11,6 +11,7 @@ import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
@@ -62,7 +63,17 @@ public class SitterScheduleService {
         verifyingPermissionsSitter(memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("회원의 정보 조회에 실패했습니다.")));
 
-        return sitterSchedule.toResponse();
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(sitterId, sitterSchedule.getReservationAt())
+                .orElseThrow(() -> new EntityNotFoundException("해당 돌봄 예약 날짜가 존재하지 않습니다. (" + sitterSchedule.getReservationAt() + ")"));
+
+        Optional<PointsHistory> usingPointHistory = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.USING);
+
+        Integer usingPoint = null;
+        if (usingPointHistory.isPresent()) {
+            usingPoint = usingPointHistory.get().getPoint();
+        }
+
+        return sitterSchedule.toResponse(usingPoint, careAvailableDate.getPrice());
     }
 
     @Comment("특정 돌봄사의 특정 돌봄 예약 취소")
@@ -81,7 +92,7 @@ public class SitterScheduleService {
         authorizationMember(sitter);
         verifyingPermissionsSitter(sitter);
 
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(sitter.getId(), sitterSchedule.getReservationAt())
+        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAtWithLock(sitter.getId(), sitterSchedule.getReservationAt())
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 해당 예약 날짜를 찾을 수 없습니다."));
 
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.USING);
