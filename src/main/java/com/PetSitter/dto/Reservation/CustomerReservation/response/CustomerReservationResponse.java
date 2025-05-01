@@ -3,6 +3,8 @@ package com.PetSitter.dto.Reservation.CustomerReservation.response;
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Pet.PetReservation;
+import com.PetSitter.domain.PointHistory.PointsHistory;
+import com.PetSitter.domain.PointHistory.PointsStatus;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Review.Review;
@@ -47,7 +49,9 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private long customerId;
         private String customerNickName;
         private String sitterName;
-        private int price;
+        private Integer usingPoint; // 고객이 사용한 포인트
+        private int originalPrice;  // 원래 돌봄 예약 가격
+        private int resultPrice;    // 최종 가격(원래 돌봄 가격 - 고객 사용 포인트)
         private LocalDate reservationAt;
         private String zipcode;
         private String address;
@@ -61,12 +65,14 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         private ReviewResponse.GetDetail review;
 
         // 예약 상세 조회
-        public GetDetail(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review) {
+        public GetDetail(Member customer, Member sitter, CustomerReservation customerReservation, List<PetReservation> pets, List<CareLog> careLogList, Review review, Integer usingPoint, int originalPrice) {
             this.id = customerReservation.getId();
             this.customerId = customer.getId();
             this.customerNickName = customer.getNickName();
             this.sitterName = sitter.getName();
-            this.price = customerReservation.getPrice();
+            this.usingPoint = usingPoint;
+            this.originalPrice = originalPrice;
+            this.resultPrice = customerReservation.getPrice();
             this.reservationAt = customerReservation.getReservationAt();
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
