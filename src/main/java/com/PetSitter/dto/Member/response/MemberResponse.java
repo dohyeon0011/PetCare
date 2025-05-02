@@ -176,4 +176,78 @@ public class MemberResponse {
             this.roleChanged = roleChanged;
         }
     }
+
+    @NoArgsConstructor
+    @Getter
+    public static class getCustomerUpdateForm { // 고객이 회원 정보 수정 시
+        private long id;
+        private String name;
+        private String nickName;
+        private String email;
+        private String phoneNumber;
+        private String zipcode;
+        private String address;
+        private String profileImage;
+        private Role role;
+        private SocialProvider socialProvider;
+        private String introduction;
+        private Integer careerYear;
+        private int amount;
+        private List<PetResponse.GetList> pets = new ArrayList<>();
+
+        public getCustomerUpdateForm(Member member, List<Pet> pets) {
+            this.id = member.getId();
+            this.name = member.getName();
+            this.nickName = member.getNickName();
+            this.email = member.getEmail();
+            this.phoneNumber = member.getPhoneNumber();
+            this.zipcode = member.getZipcode();
+            this.address = member.getAddress();
+            this.profileImage = member.getProfileImage();
+            this.role = member.getRole();
+            this.socialProvider = member.getSocialProvider();
+            this.introduction = member.getIntroduction();
+            this.careerYear = member.getCareerYear();
+            this.amount = member.getAmount();
+            this.pets = pets.stream()
+                    .map(PetResponse.GetList::new)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    public static class getSitterUpdateForm {   // 돌봄사가 회원 정보 수정 시
+        private long id;
+        private String name;
+        private String nickName;
+        private String email;
+        private String phoneNumber;
+        private String zipcode;
+        private String address;
+        private String profileImage;
+        private Role role;
+        private SocialProvider socialProvider;
+        private String introduction;
+        private Integer careerYear;
+        private List<CertificationResponse.GetList> certifications;
+
+        public getSitterUpdateForm(Member member, List<Certification> certifications) {
+            this.id = member.getId();
+            this.name = member.getName();
+            this.nickName = member.getNickName();
+            this.email = member.getEmail();
+            this.phoneNumber = member.getPhoneNumber();
+            this.zipcode = member.getZipcode();
+            this.address = member.getAddress();
+            this.profileImage = member.getProfileImage();
+            this.role = member.getRole();
+            this.socialProvider = member.getSocialProvider();
+            this.introduction = member.getIntroduction();
+            this.careerYear = member.getCareerYear();
+            this.certifications = certifications.stream()
+                    .map(CertificationResponse.GetList::new)
+                    .collect(Collectors.toList());
+        }
+    }
 }
