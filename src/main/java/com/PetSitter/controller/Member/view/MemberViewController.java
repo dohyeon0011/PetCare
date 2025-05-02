@@ -74,7 +74,7 @@ public class MemberViewController {
             model.addAttribute("currentUser", member);
         }
 
-        Object findMember = memberService.findById(id);
+        Object findMember = memberService.findByIdUpdate(id);
         model.addAttribute("member", findMember);
 
         return "member/edit-member";
