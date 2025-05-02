@@ -1,18 +1,23 @@
 package com.PetSitter.config.jwt;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.Member.MemberDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.MessageDigest;
@@ -25,6 +30,7 @@ import static com.PetSitter.config.jwt.JwtYml.*;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TokenProvider {
 
     private final JwtYml jwtYml;
@@ -84,11 +90,54 @@ public class TokenProvider {
             String secretKey = getSecretKeyByProvider(provider);
 
             // 2. 올바른 secretKey로 JWT 서명 검증
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            byte[] keyBytes = MessageDigest.getInstance("SHA-256").digest(secretKey.getBytes(StandardCharsets.UTF_8));
+            Key key = Keys.hmacShaKeyFor(keyBytes); // HMAC-SHA256 서명용 키로 변환
+
+            // 3. 올바른 secretKey로 JWT 서명 검증(변환된 key를 사용하여 JWT 서명 검증을 진행)
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 
             return true;
         } catch (Exception e) { // 복호화 과정에서 에러가 나면 유효하지 않는 토큰
+            log.error("Token 유효성 검사 중 오류 발생: " + e.getMessage());
             return false;
+        }
+    }
+
+    // 'provider' OAuth2 제공자 추출(서명 검증 없이 provider 추출 (Base64 디코딩 후 JSON 파싱))
+    public String extractProviderWithoutSignature(String token) {
+        try {
+            // JWT의 두 번째 부분 (Payload) 추출
+            String payload = token.split("\\.")[1];
+            log.info("Decoded Payload: " + payload); // 페이로드 값 출력
+
+            // Base64 URL 디코딩
+            String decodedPayload = new String(Base64.getUrlDecoder().decode(payload));
+            log.info("Decoded Payload (After Base64 Decode): " + decodedPayload); // Base64 디코딩 후 값 출력
+
+            // JSON을 Map으로 변환
+            Map<String, Object> claims = objectMapper.readValue(decodedPayload, Map.class);
+            log.info("Decoded Claims: " + claims); // 디코딩된 claims 출력
+            log.info("claims provider=" + claims.get("provider"));
+
+            // provider 값 반환
+            return (String) claims.get("provider");
+        } catch (Exception e) {
+            log.error("Error splitting or decoding token: " + e.getMessage());
+            throw new IllegalArgumentException("Invalid JWT token", e);
+        }
+    }
+
+    // OAuth2 제공자의 시크릿 키를 찾기
+    public String getSecretKeyByProvider(String provider) {
+        switch (provider.toLowerCase()) {
+            case "google":
+                return jwtYml.getGoogle().getClientSecret();
+            case "kakao":
+                return jwtYml.getKakao().getClientSecret();
+            case "naver":
+                return jwtYml.getNaver().getClientSecret();
+            default:
+                throw new IllegalArgumentException("Unknown OAuth2 provider: " + provider);
         }
     }
 
@@ -103,6 +152,7 @@ public class TokenProvider {
 
         SimpleGrantedAuthority authority = getAuthorityFromClaims(claims);
 
+        // org.springframework.security.core.userdetails.User로 반환(여기서 클레임 조회 후 클레임 getSubject() 해서 LoginId 찾고 바로 회원 직빵으로 조회도 가능함.)
         return new UsernamePasswordAuthenticationToken(
                 new User(claims.getSubject(), "", Collections.singleton(authority)),
                 token,
@@ -111,9 +161,19 @@ public class TokenProvider {
     }
 
     // 클레임 조회(토큰과 시크릿 키로)
-    private static Claims getClaims(String token, String secretKey) {
+    private static Claims getClaims(String token, String secretKey){
+        // OAuth2 Secret Key를 SHA-256 해싱하여 키 길이 보장(256비트 길이로 변환)
+        byte[] keyBytes = null;
+        try {
+            keyBytes = MessageDigest.getInstance("SHA-256").digest(secretKey.getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException e) {
+            log.error("OAuth2 Secret Key SHA-256 해싱 과정 오류: " + e.getMessage());
+            throw new RuntimeException(e);
+        }
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
         Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(key)  // 새로 생성한 키를 사용
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -154,40 +214,9 @@ public class TokenProvider {
         String secretKey = getSecretKeyByProvider(provider); // provider에 맞는 secret key 찾기
 
         Claims claims = getClaims(token, secretKey);
+        log.info("클레임 조회 성공: " + claims);
+        log.info("클레임 소셜 제공자 조회: " + claims.get("provider", String.class));
 
         return claims.get("provider", String.class);
-    }
-
-    // 'provider' OAuth2 제공자 추출(서명 검증 없이 provider 추출 (Base64 디코딩 후 JSON 파싱))
-    public String extractProviderWithoutSignature(String token) {
-        try {
-            // JWT의 두 번째 부분 (Payload) 추출
-            String payload = token.split("\\.")[1];
-
-            // Base64 URL 디코딩
-            String decodedPayload = new String(Base64.getUrlDecoder().decode(payload));
-
-            // JSON을 Map으로 변환
-            Map<String, Object> claims = objectMapper.readValue(decodedPayload, Map.class);
-
-            // provider 값 반환
-            return (String) claims.get("provider");
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Invalid JWT token", e);
-        }
-    }
-
-    // OAuth2 제공자의 시크릿 키를 찾기
-    public String getSecretKeyByProvider(String provider) {
-        switch (provider.toLowerCase()) {
-            case "google":
-                return jwtYml.getGoogle().getClientSecret();
-            case "kakao":
-                return jwtYml.getKakao().getClientSecret();
-            case "naver":
-                return jwtYml.getNaver().getClientSecret();
-            default:
-                throw new IllegalArgumentException("Unknown OAuth2 provider: " + provider);
-        }
     }
 }
