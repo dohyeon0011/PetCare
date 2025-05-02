@@ -239,6 +239,16 @@ public class Member {
         throw new NoSuchElementException("회원 정보 수정 후 조회 에러: 존재하지 않는 회원입니다.");
     }
 
+    // 회원 정보 수정 시
+    public Object toUpdateFormResponse() {
+        if (Role.CUSTOMER.equals(this.getRole())) {
+            return new MemberResponse.getCustomerUpdateForm(this, this.pets);
+        } else if (Role.PET_SITTER.equals(this.getRole())) {
+            return new MemberResponse.getSitterUpdateForm(this, this.certifications);
+        }
+        throw new EntityNotFoundException("회원 정보 수정 폼 데이터 조회 오류: 회원 정보 조회에 실패했습니다.(name=" + this.getName() + ")");
+    }
+
     @Comment("관리자 페이지 회원 상세 정보 조회")
     public Object toDetailResponseForAdmin() {
         if (Role.CUSTOMER.equals(this.getRole())) {
