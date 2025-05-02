@@ -11,6 +11,7 @@ import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.PageRequest;
@@ -127,6 +128,14 @@ public class MemberService {
         );
 
         return member.toUpdateResponse(roleChanged);
+    }
+
+    @Transactional(readOnly = true)
+    public Object findByIdUpdate(long memberId) {   // 회원 정보 수정 시 보여질 폼 데이터
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원 정보 수정 폼 데이터 조회 오류: 회원 정보 조회에 실패했습니다.(id=" + memberId + ")"));
+
+        return member.toUpdateFormResponse();
     }
 
     @Comment("리뷰가 가장 많은 대표 돌봄사 최상위 3명 조회(메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내)")
