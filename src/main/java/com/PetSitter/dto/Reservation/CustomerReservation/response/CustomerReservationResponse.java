@@ -11,6 +11,7 @@ import com.PetSitter.domain.Review.Review;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.dto.Pet.response.PetReservationResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,15 +22,26 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Schema(description = "고객 시점 - 돌봄 예약 정보 조회 Response DTO")
 public class CustomerReservationResponse { // 고객 시점 예약 조회
 
     @NoArgsConstructor
     @Getter
+    @Schema(description = "고객 시점 - 돌봄 예약 리스트 조회 Response DTO")
     public static class GetList {
+        @Schema(description = "예약 id")
         private long id;
+
+        @Schema(description = "돌봄사 이름(실명)")
         private String sitterName;
+
+        @Schema(description = "돌봄 예약 날짜", pattern = "yyyy-MM-dd")
         private LocalDate reservationAt;
+
+        @Schema(description = "돌봄 발생 시간", pattern = "yyyy-MM-dd:HH:mm:ss")
         private LocalDateTime createdAt;
+
+        @Schema(description = "예약 상태", pattern = "RESERVATION(예약완료), CANCEL(취소)")
         private ReservationStatus status;
 
         // 예약 목록 조회
@@ -44,24 +56,60 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
 
     @NoArgsConstructor
     @Getter
+    @Schema(description = "고객 시점 - 돌봄 예약 상세 조회 Response DTO")
     public static class GetDetail {
+        @Schema(description = "예약 id")
         private long id;
+
+        @Schema(description = "고객 id")
         private long customerId;
+
+        @Schema(description = "고객 닉네임(활동명)")
         private String customerNickName;
+
+        @Schema(description = "돌봄사 이름(실명)")
         private String sitterName;
+
+        @Schema(description = "고객이 사용한 적립금")
         private Integer usingPoint; // 고객이 사용한 포인트
+
+        @Schema(description = "돌봄 예약 원금")
         private int originalPrice;  // 원래 돌봄 예약 가격
+
+        @Schema(description = "최종 돌봄 예약 가격")
         private int resultPrice;    // 최종 가격(원래 돌봄 가격 - 고객 사용 포인트)
+
+        @Schema(description = "돌봄 예약 날짜", pattern = "yyyy-MM-dd")
         private LocalDate reservationAt;
+
+        @Schema(description = "돌봄 주소(우편번호)", pattern = "12345")
         private String zipcode;
+
+        @Schema(description = "돌봄 주소(상세주소)")
         private String address;
+
+        @Schema(description = "돌봄사 전화번호", pattern = "010-xxxx-xxxx")
         private String phoneNumber; // 돌봄사 전화번호
+
+        @Schema(description = "돌봄사 프로필 이미지")
         private String profileImage; // 펫시터 프로필 이미지
+
+        @Schema(description = "고객 요청사항")
         private String requests;
+
+        @Schema(description = "돌봄 발생 시간", pattern = "yyyy-MM-dd:HH:mm:ss")
         private LocalDateTime createdAt;
+
+        @Schema(description = "예약 상태", pattern = "RESERVATION(예약완료), CANCEL(취소)")
         private ReservationStatus status;
+
+        @Schema(description = "돌봄에 맡겨진 반려견")
         private List<PetReservationResponse.PetDetailResponse> pets;
+
+        @Schema(description = "작성된 돌봄 케어 로그")
         private List<CareLogResponse.GetDetail> careLogList;
+
+        @Schema(description = "작성된 돌봄 리뷰")
         private ReviewResponse.GetDetail review;
 
         // 예약 상세 조회
