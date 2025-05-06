@@ -29,7 +29,6 @@ public class CareLogViewController {
     @GetMapping("/schedules/{sitterScheduleId}/care-logs/new")
     public String newCareLog(@PathVariable("sitterScheduleId") long sitterScheduleId, @AuthenticationPrincipal Object principal, Model model) {
         Member member;
-
         if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
             member = ((MemberDetails) principal).getMember();
             model.addAttribute("currentUser", member);
@@ -49,7 +48,6 @@ public class CareLogViewController {
     @GetMapping("/members/{sitterId}/care-logs")
     public String getAllCareLog(@PathVariable("sitterId") long sitterId, Pageable pageable, @AuthenticationPrincipal Object principal, Model model) {
         Member member;
-
         if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
             member = ((MemberDetails) principal).getMember();
             model.addAttribute("currentUser", member);
