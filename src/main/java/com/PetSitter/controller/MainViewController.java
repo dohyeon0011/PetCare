@@ -36,6 +36,7 @@ public class MainViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         List<ReviewResponse.GetDetail> reviews = reviewService.getAllReview();
@@ -61,6 +62,7 @@ public class MainViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         return "intro";
@@ -77,6 +79,7 @@ public class MainViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         List<ReviewResponse.GetDetail> reviews = reviewService.getAllReview();
@@ -97,6 +100,7 @@ public class MainViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         return "cat-care-info";
@@ -113,6 +117,7 @@ public class MainViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         Object bestSitters = memberService.findBestSitters();
