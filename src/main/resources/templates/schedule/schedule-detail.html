@@ -11,6 +11,8 @@
 <body>
 <div id="memberData" th:data-member-id="${currentUser?.id}"></div>
 <div id="scheduleDetail" th:data-sitter-schedule-id="${schedule.id}"></div>
+<!--회원 로그인 방식 설정 -->
+<meta name="oauth-login" th:content="${isOAuthUser}" />
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -244,5 +246,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/reservation/reservation-sitter-cancel.js"></script>
 <script src="/js/carelog/carelog.js"></script>
+<script src="/js/token/token.js"></script>
 </body>
 </html>
