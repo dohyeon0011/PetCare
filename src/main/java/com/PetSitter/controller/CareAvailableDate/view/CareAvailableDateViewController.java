@@ -36,6 +36,7 @@ public class CareAvailableDateViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         model.addAttribute("careAvailableDate", new CareAvailableDateResponse.GetList());
@@ -54,6 +55,7 @@ public class CareAvailableDateViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         Page<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateService.findAllById(sitterId, pageable);
@@ -75,6 +77,7 @@ public class CareAvailableDateViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
@@ -95,6 +98,7 @@ public class CareAvailableDateViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateService.findById(sitterId, careAvailableDateId);
