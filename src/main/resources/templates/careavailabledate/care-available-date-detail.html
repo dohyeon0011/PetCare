@@ -8,6 +8,8 @@
     <link th:href="@{/css/careAvailableDateStyle.css}" rel="stylesheet">
 </head>
 <body>
+<!--회원 로그인 방식 설정 -->
+<meta name="oauth-login" th:content="${isOAuthUser}" />
 <!-- data-member-id 설정 -->
 <div id="memberData" th:data-member-id="${currentUser?.id}"></div>
 <!-- Navigation Bar (공통) -->
@@ -131,5 +133,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/careavailabledate/care-available-date.js"></script>
+<script src="/js/token/token.js"></script>
 </body>
 </html>
