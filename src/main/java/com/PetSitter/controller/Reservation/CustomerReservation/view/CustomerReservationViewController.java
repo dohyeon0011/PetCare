@@ -37,6 +37,7 @@ public class CustomerReservationViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         ReservationResponse reservationInfo = sitterReservationService.getReservationDetails(customerId, sitterId);
@@ -58,6 +59,7 @@ public class CustomerReservationViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
@@ -79,6 +81,7 @@ public class CustomerReservationViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         CustomerReservationResponse.GetDetail reservation = customerReservationService.findById(customerId, customerReservationId);
