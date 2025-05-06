@@ -34,6 +34,7 @@ public class PetViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         return "pet/new-pet";
@@ -50,6 +51,7 @@ public class PetViewController {
         } else if (principal instanceof CustomOAuth2User && ((CustomOAuth2User) principal).getMember() != null) { // OAuth2 소셜 로그인 사용자의 경우
             member = ((CustomOAuth2User) principal).getMember();
             model.addAttribute("currentUser", member);
+            model.addAttribute("isOAuthUser", true);
         }
 
         List<PetResponse.GetList> pets = petService.findById(customerId);
