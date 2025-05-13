@@ -1,131 +1,173 @@
-.reservation-info, .pets-info, .care-log-section {
-    background: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+/* Dashboard Sections & Reviews Styling */
+:root {
+  --color-bg-light: #f5f7fa;
+  --color-card: #ffffff;
+  --color-primary: #5c6ac4;
+  --color-primary-light: #e0e7ff;
+  --color-accent: #ff6f61;
+  --color-text: #2c3e50;
+  --color-muted: #7f8c8d;
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --color-review-bg: #fbfcfe; /* 밝은 리뷰 배경 */
 }
 
-h4 {
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.list-group-item {
-    background: #f8f9fa;
-    border: none;
-    padding: 10px;
-}
-
+/* Section Containers */
+.reservation-info,
+.pets-info,
 .care-log-section {
-    margin-top: 30px;
+  background: var(--color-card);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 18px var(--shadow-light);
 }
 
+/* Section Titles */
+h4 {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  width: 50px;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* List Group Items */
+.list-group-item {
+  background: var(--color-primary-light);
+  border: none;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Care Log Cards */
 .care-log-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
-
 .care-log-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    align-items: center; /* 이미지 가운데 정렬 */
+  background: var(--color-card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 6px 18px var(--shadow-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-
+.care-log-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px var(--shadow-light);
+}
 .care-log-img {
-    width: 250px !important;
-    height: auto !important;
-    border-radius: 8px !important;
-    margin-top: 12px !important;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
 }
 
+/* Button Group */
 .button-group {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 2rem;
 }
-
 .button-group .btn {
-    margin: 5px;
+  margin: 0.5rem;
+  border-radius: 2rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
 }
 
-/* 전체 리뷰 컨테이너 */
-.review, .no-review {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Review Container */
+.review,
+.no-review {
+  background: var(--color-review-bg);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 18px var(--shadow-light);
 }
 
-/* 리뷰 헤더 (고객 이름) */
 .review-header {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 1rem;
 }
 
-/* 리뷰 내용 */
 .review p {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin-bottom: 1rem;
 }
 
-/* 리뷰 버튼 */
 .review-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 .btn-warning {
-    background-color: #ffcc00;
-    color: #fff;
+  background: #ffcc00;
+  color: #2c3e50;
+  border: none;
+  transition: background 0.3s;
 }
-
 .btn-warning:hover {
-    background-color: #e0b900;
+  background: #e0b900;
 }
 
 .btn-danger {
-    background-color: #f44336;
-    color: #fff;
+  background: #f44336;
+  color: #fff;
+  border: none;
+  transition: background 0.3s;
 }
-
 .btn-danger:hover {
-    background-color: #d32f2f;
+  background: #d32f2f;
 }
 
 .no-review {
-    text-align: center;
-    font-size: 1rem;
-    color: #777;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-muted);
 }
 
-/* "리뷰 작성하기" 버튼 */
 .no-review .btn-primary {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 25px;
-    background-color: #007bff;
-    color: #fff;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 2rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  transition: background 0.3s;
 }
-
 .no-review .btn-primary:hover {
-    background-color: #0056b3;
+  background: #4a56a4;
 }
 
+/* Pet Profile Image */
 .pet-profile-img {
-    width: 100px; /* 원하는 크기로 조정 */
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%; /* 원형 이미지 */
-    margin-bottom: 10px;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px var(--shadow-light);
 }
