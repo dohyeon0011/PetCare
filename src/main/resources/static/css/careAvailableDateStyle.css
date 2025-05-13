@@ -1,118 +1,155 @@
-/* 카드 하단 여백 및 배경 조절 */
-.card-footer {
-    background-color: #fff;
-    border-top: none;
+/* Theme Variables */
+:root {
+  --bg-gradient-start: #eef2f7;
+  --bg-gradient-end:   #d9e4f5;
+  --card-bg:           #ffffffcc;  /* slight transparency */
+  --card-hover-bg:     #ffffff;
+  --border-color:      #e1e4ea;
+  --shadow-light:      rgba(0, 0, 0, 0.04);
+  --shadow-medium:     rgba(0, 0, 0, 0.1);
+  --accent-blue:       #4a90e2;
+  --accent-yellow:     #f5a623;
+  --accent-red:        #e74c3c;
+  --text-default:      #2c3e50;
+  --text-muted:        #7f8c8d;
+  --radius-base:       10px;
+  --spacing-sm:        0.5rem;
+  --spacing-md:        1rem;
+  --spacing-lg:        1.5rem;
 }
 
-/* 버튼 그룹 내부 버튼 간격 조절 */
-.btn-group .btn {
-    margin-right: 5px;
-}
-
-.btn-group .btn:last-child {
-    margin-right: 0;
-}
-
-/* 돌봄 가능 날짜 상세 정보 카드 */
-.card.detail-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.card-body.detail-card-body {
-    padding: 20px;
-}
-
-.card-title.detail-card-title {
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: #007bff;
-}
-
-.card-text.detail-card-text {
-    color: #555;
-    margin-bottom: 15px;
-}
-
-.card-text strong {
-    color: #333;
-}
-
-/* 수정 및 삭제 버튼 */
-.btn-warning.detail-btn-warning {
-    background-color: #ffc107;
-    border-color: #ffc107;
-}
-
-.btn-warning.detail-btn-warning:hover {
-    background-color: #e0a800;
-}
-
-.btn-danger.detail-btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-danger.detail-btn-danger:hover {
-    background-color: #c82333;
-}
-
-/* 돌아가기 버튼 */
-.btn-secondary.detail-btn-secondary {
-    margin-top: 20px;
-}
-
-/* Navigation Bar와 관련된 스타일 (중복 방지) */
-.navbar {
-    background-color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 1rem;
-    padding: 15px 20px;
-}
-
-.navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-    color: #007bff;
-}
-
-.navbar-nav {
-    margin: 0 auto;
-}
-
-.nav-link {
-    color: #555;
-    margin: 0 15px;
-    font-weight: 500;
-}
-
-.navbar-buttons .btn-outline-primary {
-    border-color: #007bff;
-    color: #007bff;
-}
-
-.navbar-buttons .btn-outline-primary:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-/* 카드 hover 효과 */
-.card {
-    background: rgba(255, 255, 255, 0.9); /* 카드 배경에 반투명 흰색 */
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 1); /* 카드 확대 시 배경을 불투명하게 */
-}
-
+/* Body & Global */
 body {
-    background: linear-gradient(to right, #f0f4f8, #d1e3f2); /* 부드러운 파스텔 그라데이션 */
-    font-family: 'Arial', sans-serif;
+  background: linear-gradient(to right, var(--bg-gradient-start), var(--bg-gradient-end));
+  font-family: 'Arial', sans-serif;
+  color: var(--text-default);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar */
+.navbar {
+  background: var(--card-hover-bg);
+  box-shadow: 0 2px 8px var(--shadow-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+.navbar-nav {
+  margin: 0 auto;
+}
+.nav-link {
+  color: var(--text-muted);
+  margin: 0 var(--spacing-md);
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: var(--accent-blue);
+}
+
+/* Card Base & Hover */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-base);
+  box-shadow: 0 2px 6px var(--shadow-light);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 16px var(--shadow-medium);
+  background: var(--card-hover-bg);
+}
+
+/* Card Footer */
+.card-footer {
+  background: var(--card-hover-bg);
+  border-top: none;
+  padding: var(--spacing-md);
+}
+
+/* Button Group */
+.btn-group .btn {
+  margin-right: var(--spacing-sm);
+}
+.btn-group .btn:last-child {
+  margin-right: 0;
+}
+
+/* Detail Card */
+.card.detail-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-base);
+  box-shadow: 0 2px 6px var(--shadow-light);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+.detail-card-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: var(--spacing-sm);
+}
+.detail-card-text {
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-md);
+}
+.detail-card-text strong {
+  color: var(--text-default);
+}
+
+/* Detail Buttons */
+.detail-btn-warning {
+  background: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+  color: #fff;
+  border-radius: 5px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: background 0.2s;
+}
+.detail-btn-warning:hover {
+  background: darken(var(--accent-yellow), 5%);
+}
+.detail-btn-danger {
+  background: var(--accent-red);
+  border-color: var(--accent-red);
+  color: #fff;
+  border-radius: 5px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: background 0.2s;
+}
+.detail-btn-danger:hover {
+  background: darken(var(--accent-red), 5%);
+}
+
+/* Back Button */
+.detail-btn-secondary {
+  margin-top: var(--spacing-lg);
+  background: var(--border-color);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 5px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: background 0.2s;
+}
+.detail-btn-secondary:hover {
+  background: var(--text-muted);
+  color: #fff;
+}
+
+/* Utility */
+.text-accent-blue {
+  color: var(--accent-blue) !important;
+}
+.text-accent-red {
+  color: var(--accent-red) !important;
 }
