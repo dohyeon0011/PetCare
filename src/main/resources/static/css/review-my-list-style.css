@@ -1,59 +1,159 @@
-/* 전체적인 리뷰 목록 스타일 */
+/* 전체적인 리뷰 목록 스타일 - 모던한 디자인 */
 body {
-    background-color: #fff8e7; !important /* 부드러운 파스텔톤 배경 */
-    font-family: 'Arial', sans-serif;
-    color: #5a3e36; /* 따뜻한 브라운 계열 글씨 색 */
+    background-color: #f8f9fa; /* 밝고 깔끔한 배경색 */
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif; /* 세련된 폰트 조합 */
+    color: #212529; /* 어두운 회색 텍스트로 가독성 향상 */
+    line-height: 1.6;
 }
 
 h2 {
     text-align: center;
-    color: #8d5524;
-    font-weight: bold;
-    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    letter-spacing: -0.5px;
 }
 
 .table {
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    background: #fffaf0;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border: none;
+    margin-bottom: 2rem;
 }
 
 .table thead {
-    background: #ffdab9;
+    background: #f1f3f5;
 }
 
-.table th, .table td {
-    text-align: center;
-    padding: 12px;
+.table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    color: #495057;
+    padding: 1rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-color: #e9ecef;
+    font-size: 0.95rem;
 }
 
 .pagination-container {
-    margin-top: 20px;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
 .btn-primary {
-    background: #ff8c42;
-    border-color: #ff8c42;
-    transition: background 0.3s ease;
+    background: #4263eb; /* 현대적인 블루 색상 */
+    border-color: #4263eb;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(66, 99, 235, 0.2);
+    transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-    background: #e07a34;
+    background: #3b5bdb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(66, 99, 235, 0.3);
 }
 
 .review-title {
-    color: #5a5a5a;
-    font-weight: bold;
+    color: #212529;
+    font-weight: 600;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
 }
 
 table.table-striped tbody tr {
-    background-color: white !important;  /* 기본 배경색을 흰색으로 고정 */
-    transition: background-color 0.2s ease-in-out;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+table.table-striped tbody tr:nth-child(odd) {
+    background-color: #f8f9fa; /* 매우 연한 줄무늬 효과 */
 }
 
 table.table-striped tbody tr:hover {
-    background-color: #f8f9fa !important;  /* 마우스 올렸을 때만 연한 회색으로 변경 */
+    background-color: #e7f5ff !important; /* 연한 블루 하이라이트 */
     cursor: pointer;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 추가: 모던한 테이블 스타일링 */
+.table-responsive {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* 추가: 테이블 내 작은 배지 스타일 */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+    border-radius: 6px;
+}
+
+.badge-primary {
+    background-color: #4263eb;
+    color: white;
+}
+
+.badge-success {
+    background-color: #40c057;
+    color: white;
+}
+
+/* 추가: 다크 모드 지원 */
+/*@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #212529;
+        color: #f8f9fa;
+    }
+
+    h2 {
+        color: #f1f3f5;
+    }
+
+    .table {
+        background: #343a40;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .table thead {
+        background: #495057;
+    }
+
+    .table th {
+        color: #dee2e6;
+        border-bottom: 2px solid #495057;
+    }
+
+    .table td {
+        border-color: #495057;
+        color: #e9ecef;
+    }
+
+    table.table-striped tbody tr {
+        background-color: #343a40;
+    }
+
+    table.table-striped tbody tr:nth-child(odd) {
+        background-color: #3b4046;
+    }
+
+    table.table-striped tbody tr:hover {
+        background-color: #495057 !important;
+    }*/
 }
