@@ -7,8 +7,11 @@
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
     <link th:href="@{/css/admin-reservation-list.css}" rel="stylesheet">
     <link th:href="@{/css/pagination.css}" rel="stylesheet">
+    <link th:href="@{/css/chatbot.css}" rel="stylesheet">
 </head>
 <body>
+<!--로그인 여부 확인(챗봇)-->
+<div id="memberData" th:data-member-id="${isLogin}"></div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -104,7 +107,7 @@
     </div>
 
     <!-- 예약 목록 테이블 -->
-    <div class="container mt-3">
+    <div class="container mt-1">
         <table class="table table-hover admin-table">
             <thead class="thead-dark">
             <tr>
@@ -159,10 +162,35 @@
     </ul>
 </nav>
 
+<!-- 챗봇 토글 버튼 -->
+<button id="chatbot-toggle" class="chatbot-float-btn">
+    💬
+</button>
+
+<!-- 챗봇 UI -->
+<div id="chatbot-container" class="chatbot-container d-none">
+    <div class="chat-header">
+        <span class="chat-title">🐶 반려견 챗봇</span>
+        <button id="chatbot-close" class="chat-close-btn">&times;</button>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div id="button-container" class="chat-buttons"></div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요..." />
+        <button id="send-btn">전송</button>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer class="text-center py-4">
+    <p>&copy; 2025 반려동물 돌봄 서비스. All rights reserved.</p>
+</footer>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
+<script src="/js/chatbot/chatbot.js"></script>
 <script>
     function confirmDelete(event, form) {
         if (confirm("정말로 이 예약을 취소하시겠습니까?")) {
