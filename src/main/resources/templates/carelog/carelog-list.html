@@ -12,6 +12,8 @@
 <body>
 <!--회원 로그인 방식 설정 -->
 <meta name="oauth-login" th:content="${isOAuthUser}" />
+<!--로그인 여부 확인(챗봇)-->
+<div id="memberData" th:data-member-id="${isLogin}"></div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
