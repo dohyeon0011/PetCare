@@ -1,60 +1,302 @@
+/* 현대적인 케어로그 테이블 스타일 */
 body {
-    background-color: #fff8e7; !important /* 부드러운 파스텔톤 배경 */
+    background-color: #f9fafb; /* 밝고 현대적인 배경색 */
+    font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #111827;
+    line-height: 1.6;
 }
 
-/* 제목 중앙 정렬 및 스타일 개선 */
+/* 제목 스타일 개선 */
 .carelog-title {
     text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    padding: 20px 0;
-    border-bottom: 2px solid #ddd;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+/* 모던한 언더라인 스타일 */
+.carelog-title:after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #4263eb, #74c0fc);
+    border-radius: 2px;
+    margin: 0.75rem auto 0;
+}
+
+/* 컨테이너 스타일 */
+.carelog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 
 /* 테이블 스타일 */
 .table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
 }
 
 /* 테이블 헤더 스타일 */
 .table thead {
-    background-color: #f8f9fa;
-    font-size: 18px;
-    font-weight: bold;
+    background-color: #f8fafc;
 }
 
 .table thead th {
     text-align: center;
-    padding: 15px;
-    border-bottom: 2px solid #ddd;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    color: #4b5563;
 }
 
 /* 테이블 본문 스타일 */
 .table tbody tr {
-    background-color: white !important;  /* 기본 배경색을 흰색으로 고정 */
-    transition: background-color 0.2s ease-in-out;
+    background-color: white;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
 }
 
 .table tbody tr:hover {
-    background-color: #f8f9fa !important;  /* 마우스 올렸을 때만 연한 회색으로 변경 */
+    background-color: #f0f9ff !important; /* 청량한 하늘색 호버 */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     cursor: pointer;
 }
 
 .table td {
     text-align: center;
-    padding: 12px;
+    padding: 1rem 1.25rem;
+    font-size: 0.95rem;
+    color: #1f2937;
+    vertical-align: middle;
 }
 
+/* 설명 텍스트 스타일 */
 .description {
     display: inline-block;
     max-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 400;
+    color: #4b5563;
+}
+
+/* 상태 배지 스타일 */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+}
+
+.status-completed {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.status-pending {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+.status-cancelled {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+/* 날짜 및 시간 스타일 */
+.date-time {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+/* 테이블 액션 버튼 스타일 */
+.action-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.action-button:hover {
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.action-button.primary {
+    background-color: #4263eb;
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: #3b5bdb;
+}
+
+/* 테이블 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 0.5rem;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4b5563;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.page-link.active {
+    background-color: #4263eb;
+    color: white;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+    .table {
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .table thead th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    .table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .description {
+        max-width: 150px;
+    }
+}
+
+/* 스크롤 가능한 테이블 컨테이너 */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* 다크 모드 지원 */
+/*@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #111827;
+        color: #f9fafb;
+    }
+    
+    .carelog-title {
+        color: #f3f4f6;
+    }
+    
+    .table {
+        background-color: #1f2937;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .table thead {
+        background-color: #374151;
+    }
+    
+    .table thead th {
+        color: #e5e7eb;
+        border-bottom: 1px solid #4b5563;
+    }
+    
+    .table tbody tr {
+        background-color: #1f2937;
+        border-bottom: 1px solid #374151;
+    }
+    
+    .table tbody tr:hover {
+        background-color: #2d3748 !important;
+    }
+    
+    .table td {
+        color: #e5e7eb;
+    }
+    
+    .description {
+        color: #d1d5db;
+    }
+    
+    .status-completed {
+        background-color: rgba(5, 150, 105, 0.2);
+    }
+    
+    .status-pending {
+        background-color: rgba(217, 119, 6, 0.2);
+    }
+    
+    .status-cancelled {
+        background-color: rgba(220, 38, 38, 0.2);
+    }
+    
+    .date-time {
+        color: #9ca3af;
+    }
+    
+    .action-button {
+        background-color: #374151;
+        color: #e5e7eb;
+    }
+    
+    .action-button:hover {
+        background-color: #4b5563;
+        color: #f9fafb;
+    }
+    
+    .page-link {
+        background-color: #1f2937;
+        color: #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+    
+    .page-link:hover {
+        background-color: #374151;
+    }*/
 }
