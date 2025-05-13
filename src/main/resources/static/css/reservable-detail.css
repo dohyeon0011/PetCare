@@ -1,158 +1,214 @@
+/* Theme Variables (if not already defined) */
+:root {
+    --color-bg-start: #e8f4fe;
+    --color-bg-end: #f2fbff;
+    --color-container: #ffffff;
+    --color-accent: #3b8beb;
+    --color-accent-hover: #336fb2;
+    --color-secondary: #f0f4f8;
+    --color-secondary-hover: #e1e7ed;
+    --color-text: #2c3e50;
+    --color-text-light: #555;
+    --font-body: 'Roboto', sans-serif;
+}
+
+/* Page Background */
 body {
-    background: linear-gradient(to right, #f0f8ff, #e0ffff);  /* 파란색 계열 그라디언트 */
-    font-family: 'Arial', sans-serif;
+    background: linear-gradient(120deg, var(--color-bg-start), var(--color-bg-end));
+    font-family: var(--font-body);
+    color: var(--color-text);
 }
 
+/* Main Container */
 .reservable-container {
+    position: relative;
     max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1; /* 네비게이션보다 낮은 값 */
+    margin: 3rem auto;
+    padding: 2rem;
+    background: var(--color-container);
+    border-radius: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    z-index: 1;
 }
 
-/* 전체 스타일 */
+/* Pet Sitter Info Card */
 .sitter-info {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    background: var(--color-secondary);
+    border: none;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease;
+}
+.sitter-info:hover {
+    transform: translateY(-4px);
 }
 
-/* 펫시터 이름 */
+/* Sitter Name */
 .sitter-info h2 {
-    font-size: 1.8rem;
-    color: #333;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    color: var(--color-text);
     text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+}
+.sitter-info h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--color-accent);
+    margin: 0.5rem auto;
+    border-radius: 2px;
 }
 
-/* 소개 */
-.sitter-info p {
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 8px;
-}
-
-/* 주소 */
+/* Paragraph Text */
+.sitter-info p,
 .address p {
     font-size: 1rem;
-    color: #555;
-    margin-bottom: 5px;
+    color: var(--color-text-light);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
 }
-
 .address strong {
-    color: #333;
-    font-weight: bold;
+    color: var(--color-text);
 }
 
-/* 경력 */
+/* Career Badge */
 .sitter-info .career {
-    font-size: 1rem;
-    color: #008080;
-    font-weight: bold;
+    display: inline-block;
+    background: var(--color-accent);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    font-weight: 500;
+    margin-top: 1rem;
 }
 
-/* 자격증 목록 */
+/* Certifications Section */
 .certifications {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
+    background: var(--color-container);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
-
 .certifications h4 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
 }
-
 .certifications ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
-
 .certifications li {
     font-size: 1rem;
-    color: #333;
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    color: var(--color-text-light);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
-
 .certifications li:last-child {
     border-bottom: none;
 }
 
+/* Review Section */
 .review-section {
-    margin-top: 30px;
+    margin-top: 2rem;
 }
-
 .review-section h3 {
-    font-size: 1.8rem;
-    color: #444;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 5px;
+    font-size: 1.75rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    position: relative;
 }
-
+.review-section h3::after {
+    content: '';
+    width: 50px;
+    height: 3px;
+    background: var(--color-accent);
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    border-radius: 2px;
+}
 .review {
-    background: #f9f9f9;
-    padding: 15px;
-    margin-top: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background: var(--color-secondary);
+    padding: 1.5rem;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: background 0.3s;
 }
-
+.review:hover {
+    background: var(--color-container);
+}
 .review strong {
-    font-size: 1.2rem;
-    color: #333;
+    display: block;
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
 }
 
+/* Load More Button */
 #load-more-reviews {
     display: block;
     width: 100%;
-    margin-top: 20px;
-    padding: 10px;
-    background: #007bff;
-    color: white;
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background: var(--color-accent);
+    color: #fff;
     font-size: 1.1rem;
-    border-radius: 5px;
-    text-align: center;
     border: none;
+    border-radius: 2rem;
+    text-align: center;
     cursor: pointer;
-    transition: 0.3s;
+    transition: background 0.3s;
 }
-
 #load-more-reviews:hover {
-    background: #0056b3;
+    background: var(--color-accent-hover);
 }
 
-/* .reservable-container에 relative 추가 */
-.reservable-container {
-    position: relative; /* 부모 컨테이너를 relative로 설정 */
-}
-
-/* 버튼들을 감싸는 부모 컨테이너 */
+/* Buttons Group */
 .button-container {
-    position: relative;
-    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 3rem;
 }
 
-/* 예약하기 버튼 */
-.reservation-button-container {
-    position: absolute;   /* 절대 위치 지정 */
-    bottom: -20px;          /* 화면 아래쪽에 가까운 위치 */
-    right: 110px;          /* 오른쪽에 150px 정도 여백을 두고 */
+/* Primary Action Buttons */
+.reservation-button-container button,
+.back-btn-container a,
+.back-btn-container button {
+    background: var(--color-accent);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    border: none;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.reservation-button-container button:hover,
+.back-btn-container a:hover,
+.back-btn-container button:hover {
+    background: var(--color-accent-hover);
 }
 
-/* 뒤로가기 버튼 */
-.back-btn-container {
-    position: absolute;   /* 절대 위치 지정 */
-    bottom: -20px;          /* 화면 아래쪽에 가까운 위치 */
-    right: 10px;           /* 오른쪽 끝에 배치 */
+/* Secondary Back Button */
+.btn-secondary {
+    background: var(--color-secondary) !important;
+    border: 1px solid var(--color-secondary-hover) !important;
+    color: var(--color-text) !important;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    transition: background 0.3s, color 0.3s;
 }
-
+.btn-secondary:hover {
+    background: var(--color-secondary-hover) !important;
+    color: var(--color-text) !important;
+}
