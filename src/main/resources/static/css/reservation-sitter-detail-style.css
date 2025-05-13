@@ -1,170 +1,210 @@
-#cancelReservationSitter {
-    background-color: #f44336; /* Red color for danger */
-    color: white;
-    border-radius: 5px;
+/* CSS Variables for Theme */
+:root {
+  --bg-light: #f5f6fa;
+  --card-bg: #ffffff;
+  --accent-blue: #4a90e2;
+  --accent-red: #e74c3c;
+  --accent-green: #27ae60;
+  --text-dark: #2c3e50;
+  --text-muted: #7f8c8d;
+  --shadow-light: rgba(0, 0, 0, 0.05);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
 }
 
-#cancelReservationSitter:hover {
-    background-color: #d32f2f;
-}
-
-/* 기본 배경 색상 */
+/* Base Styles */
 body {
-    background-color: #f4f4f9; /* 부드러운 회색 배경 */
+  background-color: var(--bg-light);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-dark);
+  line-height: 1.5;
 }
 
-/* 예약 정보, 반려동물 정보, 돌봄 로그 섹션 */
-.reservation-info, .pets-info, .care-log-section {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 강도 조정 */
-    border-left: 5px solid #007bff; /* 왼쪽에 파란색 테두리 */
-}
-
-/* 제목 스타일 */
-h4 {
-    border-bottom: 3px solid #0056b3; /* 제목 밑줄 색상 더 진하게 */
-    padding-bottom: 12px;
-    margin-bottom: 20px;
-    font-size: 1.2rem; /* 제목 크기 조금 크게 */
-    color: #333; /* 텍스트 색상 어두운 회색 */
-}
-
-/* 리스트 아이템 스타일 */
-.list-group-item {
-    background: #f8f9fa;
-    border: none;
-    padding: 12px;
-    font-size: 1rem;
-    color: #333; /* 글자 색상 어두운 회색 */
-}
-
-/* 돌봄 로그 섹션 */
+/* Section Containers */
+.reservation-info,
+.pets-info,
 .care-log-section {
-    margin-top: 35px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  border-left: 4px solid var(--accent-blue);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.reservation-info:hover,
+.pets-info:hover,
+.care-log-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px var(--shadow-medium);
 }
 
+/* Section Headers */
+h4 {
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--accent-blue);
+}
+
+/* List Group Items */
+.list-group-item {
+  background: var(--bg-light);
+  border: none;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  color: var(--text-dark);
+  transition: background 0.2s;
+}
+.list-group-item:hover {
+  background: #eef3f8;
+}
+
+/* Care Log Grid */
 .care-log-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
+/* Care Log Cards */
 .care-log-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 300px; /* 카드 크기 제한 */
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.care-log-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px var(--shadow-medium);
 }
 
+/* Care Log Images */
 .care-log-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-top: 12px;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 0.75rem;
+  object-fit: cover;
 }
 
-/* 버튼 그룹 */
+/* Button Group */
 .button-group {
-    text-align: center;
-    margin-top: 25px;
+  text-align: center;
+  margin-top: 2rem;
 }
-
 .button-group .btn {
-    margin: 8px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 8px;
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.2s;
+}
+.button-group .btn:hover {
+  transform: translateY(-2px);
 }
 
-/* 돌봄사 버튼 스타일 */
+/* Danger & Confirm Buttons */
 .button-group .btn-cancel {
-    background-color: #f44336; /* 빨간색 버튼 */
-    color: white;
-    border: none;
+  background-color: var(--accent-red);
+  color: #fff;
+  border: none;
 }
-
 .button-group .btn-cancel:hover {
-    background-color: #d32f2f; /* 호버 시 색상 변화 */
+  background-color: darken(var(--accent-red), 5%);
 }
 
 .button-group .btn-confirm {
-    background-color: #4caf50; /* 초록색 버튼 */
-    color: white;
-    border: none;
+  background-color: var(--accent-green);
+  color: #fff;
+  border: none;
 }
-
 .button-group .btn-confirm:hover {
-    background-color: #388e3c; /* 호버 시 색상 변화 */
+  background-color: darken(var(--accent-green), 5%);
 }
 
-/* 모달 배경 */
+/* Modal Overlay & Content */
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-/* 모달 콘텐츠 */
 .modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 20px var(--shadow-medium);
 }
 
-/* 모달 제목 */
+/* Modal Title */
 .modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
 }
 
-/* 입력 필드 */
+/* Form Groups */
 .form-group {
-    margin-bottom: 15px;
+  margin-bottom: 1.25rem;
 }
-
 .form-group label {
-    font-size: 1rem;
-    font-weight: 600;
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
 }
-
 .form-control {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
 }
 
+/* No-Review State */
 .no-review {
-    text-align: center;
-    font-size: 16px;
-    color: #888;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-top: 20px;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-muted);
+  background-color: #fafafa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #ececec;
+  margin-top: 1.5rem;
+}
+.no-review .btn-primary {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  background-color: var(--accent-blue);
+  border: none;
+  color: #fff;
+  transition: background 0.2s;
+}
+.no-review .btn-primary:hover {
+  background-color: var(--accent-blue-hover, #3a78c2);
 }
 
+/* Pet Profile Image */
 .pet-profile-img {
-    width: 100px; /* 원하는 크기로 조정 */
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%; /* 원형 이미지 */
-    margin-bottom: 10px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
 }
