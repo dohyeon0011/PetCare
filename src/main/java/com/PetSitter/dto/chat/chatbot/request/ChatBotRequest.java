@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Schema(description = "챗봇 채팅 Req DTO")
 public class ChatBotRequest {
-    @Schema(description = "게스트 식별 UUID")
-    @NotBlank(message = "게스트 식별 UUID 값은 필수입니다.")
+    @Schema(description = "게스트인 경우 식별 UUID")
     private String guestUUID;
 
     @Schema(description = "전송할 메시지")
