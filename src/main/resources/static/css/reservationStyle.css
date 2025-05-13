@@ -1,152 +1,178 @@
+/* Reservation Form Page Styling */
+:root {
+    --color-bg-light: #f4f6f8;
+    --color-card: #ffffff;
+    --color-accent: #3b8beb;
+    --color-accent-hover: #336fb2;
+    --color-muted: #95a5a6;
+    --color-muted-light: #e9ecef;
+    --color-text: #2c3e50;
+    --color-danger: #e74c3c;
+    --color-success: #2ecc71;
+    --font-body: 'Roboto', sans-serif;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    background: var(--color-bg-light);
+    font-family: var(--font-body);
+    color: var(--color-text);
+    padding: 2rem 1rem;
 }
 
 h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #333;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--color-text);
 }
 
-/* 예약 정보 영역 */
 .form-section {
-    border-bottom: 2px solid #f1f1f1;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
-
-.form-group label {
-    font-weight: bold;
+    background: var(--color-card);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
-
-label {
-    font-weight: bold;
-    color: #555;
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
 }
-
 .form-control {
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    padding: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #dce1e7;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    background: var(--color-bg-light);
+    transition: border-color 0.2s;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(59,139,235,0.2);
 }
 
+/* Pet Selection Styles */
 .pet-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 1rem;
 }
-
 .form-check {
-    background: #f1f1f1;
-    padding: 10px;
-    border-radius: 5px;
-    flex: 1 1 48%;
-    min-width: 150px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background: var(--color-muted-light);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    flex: 1 1 calc(48% - 1rem);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: background 0.2s;
+}
+.form-check:hover {
+    background: var(--color-card);
+}
+.form-check-input {
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+.form-check-label {
+    font-size: 0.95rem;
+    color: var(--color-text);
 }
 
-/* 결제 정보 및 적립금 영역 */
+/* Payment Section */
 .payment-section {
-    border-top: 2px solid #f1f1f1;
-    padding-top: 20px;
-    margin-top: 30px;
+    background: var(--color-card);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--color-accent);
 }
-
 .payment-section .form-group {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
     align-items: center;
 }
-
 .payment-section .form-group label {
-    flex: 1;
+    margin: 0;
+    font-weight: 600;
+}
+.payment-section .form-group div,
+.payment-section .form-group input {
+    background: var(--color-bg-light);
+    border: 1px solid #dce1e7;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    text-align: right;
 }
 
-.payment-section .form-group input, .payment-section .form-group div {
-    width: 48%;
+#priceDisplay,
+#finalPrice {
+    font-size: 1.25rem;
+    color: var(--color-danger);
+}
+#finalPrice {
+    background: var(--color-bg-light);
+    border: 1px solid #dce1e7;
 }
 
-/* 버튼 컨테이너 */
+#availablePoints {
+    font-size: 1rem;
+    color: var(--color-success);
+}
+
 .btn-container {
     display: flex;
-    justify-content: flex-end;  /* 버튼을 오른쪽 끝에 배치 */
-    margin-top: 30px;
-}
-
-/* 가격 및 결제 금액 영역 */
-#priceDisplay, #finalPrice {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #e74c3c;
-}
-
-#finalPrice {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-/* 사용 가능한 적립금 */
-#availablePoints {
-    font-weight: bold;
-    color: #2ecc71;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
 .btn {
-    padding: 10px 15px;
-    min-width: 120px;
-    border-radius: 5px;
-    transition: 0.2s;
+    padding: 0.75rem 1.5rem;
+    min-width: 140px;
+    border-radius: 2rem;
+    font-weight: 600;
+    transition: background 0.3s;
 }
-
 .btn-primary {
-    background-color: #007bff;
+    background: var(--color-accent);
+    color: #fff;
     border: none;
 }
-
 .btn-primary:hover {
-    background-color: #0056b3;
+    background: var(--color-accent-hover);
 }
-
 .btn-secondary {
-    background-color: #6c757d;
-    border: none;
+    background: var(--color-muted-light);
+    color: var(--color-text);
+    border: 1px solid var(--color-muted);
 }
-
 .btn-secondary:hover {
-    background-color: #545b62;
-}
-
-#submitReservation {
-    margin-right: 10px;  /* 버튼 사이에 간격 추가 */
+    background: var(--color-muted);
+    color: #fff;
 }
 
 .error-message {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    color: var(--color-danger);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
 }
 
-.amount-text {
-    font-size: 14px;
-    color: gray;
-}
-
+.amount-text,
 #amountText {
-    font-size: 17px;  /* 원하는 크기로 조정 */
-    font-weight: bold; /* 글씨 굵게 */
-    color: gray; /* 강조 효과 */
+    font-size: 1rem;
+    color: var(--color-muted);
 }
-
-
-
-
-
-
-
+#amountText {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
