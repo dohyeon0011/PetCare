@@ -5,211 +5,296 @@
     box-sizing: border-box;
 }
 
-/* Background with Subtle Texture */
+/* CSS Variables for Theme Colors & Fonts */
+:root {
+    --color-bg: #f9f9fb;
+    --color-primary: #5c6ac4;
+    --color-primary-hover: #4a56a4;
+    --color-accent: #ff6f61;
+    --color-text: #333;
+    --color-text-light: #666;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Roboto', sans-serif;
+}
+
+/* Background and Body */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #fff5ee !important;
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-    background-size: 20px 20px;
-    color: #333;
+    font-family: var(--font-body);
+    background-color: var(--color-bg) !important;
+    color: var(--color-text);
+    line-height: 1.6;
 }
 
 /* Navigation Bar Styling */
 .navbar {
-    background-color: rgba(255, 255, 255, 0.1) !important;/* 반투명 흰색 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important; /* 그림자는 유지 */
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
     font-size: 1rem;
-    padding: 15px 20px;
-    backdrop-filter: blur(10px) !important; /* 배경 흐림 효과 */
-    position: relative; /* 네비게이션을 상대 위치로 설정 */
-    z-index: 1050; /* 높은 z-index 값 설정 */
+    padding: 0.75rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+    transition: background-color 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(255,255,255,0.95) !important;
 }
 
 .dropdown-menu {
-    z-index: 1100 !important; /* 네비게이션보다 더 높은 값 설정 */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+    z-index: 1100 !important;
 }
 
 .navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem; /* Larger brand text */
-    color: #007bff; /* Primary color */
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.75rem !important;
+    color: var(--color-primary) !important;
+    transition: color 0.2s;
 }
 
 .navbar-brand:hover {
-    color: #0056b3;
+    color: var(--color-primary-hover) !important;
     text-decoration: none;
 }
 
 .navbar-nav {
-    margin: 0 auto; /* Center-align navigation menu */
+    margin: 0 auto;
 }
 
 .nav-link {
-    color: #555;
-    margin: 0 15px; /* Add space between nav items */
+    color: var(--color-text-light) !important;
+    margin: 0 1rem;
     font-weight: 500;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.nav-link::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width .3s;
+    position: absolute;
+    bottom: -4px;
+    left: 0;
 }
 
 .nav-link:hover {
-    color: #007bff;
-    text-decoration: underline;
+    color: var(--color-primary) !important;
+}
+
+.nav-link:hover::after {
+    width: 100%;
 }
 
 /* Buttons in Navbar */
 .navbar-buttons .btn {
-    font-size: 0.9rem; /* Slightly smaller button text */
-    padding: 5px 15px;
-    border-radius: 20px; /* Rounded buttons */
+    font-size: 0.9rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    transition: background 0.3s, color 0.3s;
 }
 
 .navbar-buttons .btn-outline-primary {
-    border-color: #007bff;
-    color: #007bff;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
 }
 
 .navbar-buttons .btn-outline-primary:hover {
-    background-color: #007bff;
-    color: #fff;
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
 }
 
 .navbar-buttons .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
 }
 
 .navbar-buttons .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
+    background-color: var(--color-primary-hover) !important;
+    border-color: var(--color-primary-hover) !important;
 }
 
-/* Main Content */
+/* Main Container */
 .container {
-    max-width: 1200px;
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 2rem 1rem;
 }
 
 /* Introduction Section */
-section.text-center {
-    margin-bottom: 30px;
+.hero-section {
+    background: linear-gradient(120deg, #e0e7ff, #f0faff);
+    color: var(--color-text);
+    padding: 4rem 1rem;
+    border-radius: 12px;
+    margin-bottom: 3rem;
+    text-align: center;
 }
 
-h1 {
-    font-size: 2.5rem;
-    color: #333;
+.hero-section h1 {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    margin-bottom: 1rem;
 }
 
-p.lead {
+.hero-section p.lead {
     font-size: 1.25rem;
-    color: #555;
+    color: var(--color-text-light);
 }
 
 /* Services Overview Section */
-.card {
-    background-color: #fff;
-    border: 1px solid #ddd; /* Light gray border */
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.row.text-center {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 3rem;
 }
 
-.card-body {
-    padding: 20px;
+.row.text-center .col-md-4 {
+    flex: 1 1 300px;
 }
 
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
+.row.text-center .card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.card-text {
-    color: #555;
-    margin-bottom: 15px;
+.row.text-center .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+.row.text-center .card-body a.btn-primary {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #004085;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #545b62;
+.row.text-center .card-body a.btn-primary:hover {
+    background-color: #e55b50 !important;
+    border-color: #e55b50 !important;
 }
 
 /* Latest Reviews Section */
 .latest-reviews h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.card.mb-4 {
-    background-color: #fafafa; /* Light gray background for cards */
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.card-body p {
-    margin-bottom: 10px;
-}
-
-.card-body p:last-child {
-    margin-bottom: 0;
+    font-size: 2.25rem;
+    font-family: var(--font-heading);
+    color: var(--color-text);
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .latest-reviews .row {
     display: flex;
-    justify-content: flex-start; /* 좌측 정렬로 변경 */
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 20px; /* 카드 사이에 일정 간격 추가 */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .latest-reviews .col-md-4 {
-    flex: 1 1 calc(33% - 20px); /* 3개 카드가 한 줄에 배치되도록 설정 */
-    margin-bottom: 20px;
+    flex: 1 1 calc(33% - 1.5rem);
 }
 
-/* Footer (Optional) */
+.latest-reviews .card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.3s;
+}
+
+.latest-reviews .card:hover {
+    transform: translateY(-6px);
+}
+
+.latest-reviews .card-body {
+    padding: 1.25rem;
+}
+
+/* 별점 반별 & 빈별 처리 */
+.latest-reviews .rating .star {
+    font-size: 1.1rem;
+    margin-right: 2px;
+    position: relative;
+    display: inline-block;
+    color: #ddd; /* 빈별 기본 색 */
+}
+
+/* 채워진 별 */
+.latest-reviews .rating .star.filled {
+    color: var(--color-accent);
+}
+
+/* 반 채워진 별: before로 왼쪽 절반만 색칠 */
+.latest-reviews .rating .star.half-filled::before {
+    content: '★';
+    position: absolute;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+    color: var(--color-accent);
+}
+
+/* 빈별(half-filled 자체의 색은 유지) */
+.latest-reviews .rating .star.half-filled {
+    color: #ddd;
+}
+
+/* 빈별 */
+.latest-reviews .rating .star.empty {
+    color: #ddd;
+}
+
+.latest-reviews .comment-ellipsis {
+    display: block;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin: 0.5rem auto;
+}
+
+.latest-reviews a.btn-secondary {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+.latest-reviews a.btn-secondary:hover {
+    background-color: var(--color-primary-hover) !important;
+    border-color: var(--color-primary-hover) !important;
+}
+
+/* Footer */
 footer {
-    background-color: #333;
+    background-color: var(--color-primary);
     color: #fff;
     text-align: center;
-    padding: 10px;
-    margin-top: 30px;
-}
-
-/* Hero Section Background */
-.hero-section {
-    background: linear-gradient(135deg, #ffecd2, #fcb69f);
-    color: #333;
-    padding: 50px 20px;
-    border-radius: 10px;
+    padding: 1rem 0;
+    margin-top: 4rem;
+    font-size: 0.9rem;
 }
 
 /* styles.css */
 .error {
-    border: 1px solid red;
+    border: 1px solid var(--color-accent);
 }
 
 .error-message {
-    color: red;
-    font-size: 12px;
+    color: var(--color-accent);
+    font-size: 0.85rem;
 }
 
 .comment-ellipsis {
@@ -221,4 +306,3 @@ footer {
     text-align: center;
     margin: 0 auto;
 }
-
