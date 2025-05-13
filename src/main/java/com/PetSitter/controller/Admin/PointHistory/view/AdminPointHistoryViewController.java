@@ -32,6 +32,7 @@ public class AdminPointHistoryViewController {
             Page<AdminPointHistoryResponse.PointListResponse> pointsHistory = adminPointHistoryService.findAllForAdmin(pointSearch, memberDetails.getMember(), pageable);
             model.addAttribute("pointsHistory", pointsHistory);
             model.addAttribute("currentUser", memberDetails.getMember());
+            model.addAttribute("isLogin", memberDetails.getMember().getId());
         }
 
         return "admin/point-history/point-history-list";
