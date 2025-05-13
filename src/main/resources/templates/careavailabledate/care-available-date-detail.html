@@ -6,6 +6,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
     <link th:href="@{/css/careAvailableDateStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/chatbot.css}" rel="stylesheet">
 </head>
 <body>
 <!--회원 로그인 방식 설정 -->
@@ -122,6 +123,25 @@
     <a th:href="@{/pets-care/members/{sitterId}/care-available-dates?page=0&size=9(sitterId=${currentUser.id})}" class="btn btn-secondary detail-btn-secondary">돌아가기</a>
 </div>
 
+<!-- 챗봇 토글 버튼 -->
+<button id="chatbot-toggle" class="chatbot-float-btn">
+    💬
+</button>
+
+<!-- 챗봇 UI -->
+<div id="chatbot-container" class="chatbot-container d-none">
+    <div class="chat-header">
+        <span class="chat-title">🐶 반려견 챗봇</span>
+        <button id="chatbot-close" class="chat-close-btn">&times;</button>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div id="button-container" class="chat-buttons"></div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요..." />
+        <button id="send-btn">전송</button>
+    </div>
+</div>
+
 <!-- 푸터 -->
 <footer class="text-center py-4">
     <p>&copy; 2025 반려동물 돌봄 서비스. All rights reserved.</p>
@@ -134,5 +154,6 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/careavailabledate/care-available-date.js"></script>
 <script src="/js/token/token.js"></script>
+<script src="/js/chatbot/chatbot.js"></script>
 </body>
 </html>
