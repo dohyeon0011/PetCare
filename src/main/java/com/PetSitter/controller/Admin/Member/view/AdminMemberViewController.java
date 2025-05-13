@@ -31,6 +31,7 @@ public class AdminMemberViewController {
             Page<AdminMemberResponse.MemberListResponse> members = adminMemberService.findAllForAdmin(memberDetails.getMember(), memberSearch, pageable);
             model.addAttribute("members", members);
             model.addAttribute("currentUser", memberDetails.getMember());
+            model.addAttribute("isLogin", memberDetails.getMember().getId());
         }
 
         return "admin/member/member-list";
@@ -43,6 +44,7 @@ public class AdminMemberViewController {
             Object findMember = adminMemberService.findByIdForAdmin(id, memberDetails.getMember());
             model.addAttribute("member", findMember);
             model.addAttribute("currentUser", memberDetails.getMember());
+            model.addAttribute("isLogin", memberDetails.getMember().getId());
         }
 
         return "admin/member/member-detail";
