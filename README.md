@@ -191,7 +191,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (돌봄 예약 내역 전체 조회(+페이징), 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="585" alt="image" src="https://github.com/user-attachments/assets/0d88eaaa-941d-4ca9-a6ef-8af023b8d0e5" />              
+<img width="659" alt="image" src="https://github.com/user-attachments/assets/1872adcf-2d2a-4c39-a8b7-6a04c11b2d1b" />                
 <br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
