@@ -34,12 +34,11 @@ public class MemberService {
 
     @Transactional
     public Object save(AddMemberRequest request, UploadFile uploadFile) {
-        validateDuplicateMember(request);
+        validateDuplicateMember(request.getLoginId());
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPassword());
 
         Member member;
-
         if (uploadFile != null) { // 프로필 이미지를 등록 했을 때
             member = request.toEntity(encodedPassword, uploadFile.getServerFileName());
         } else {
@@ -164,8 +163,8 @@ public class MemberService {
         }
     }
 
-    private void validateDuplicateMember(AddMemberRequest request) {
-        Optional<Member> member = memberRepository.findByLoginId(request.getLoginId());
+    private void validateDuplicateMember(String loginId) {
+        Optional<Member> member = memberRepository.findByLoginId(loginId);
 
         if (!member.isEmpty()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
