@@ -23,10 +23,25 @@ async function sendMessage(message) {
 function getOrCreateGuestUUID() {
   let uuid = localStorage.getItem("guestUUID");
   if (!uuid) {
-    uuid = crypto.randomUUID(); // 브라우저 내 UUID 생성
+    // crypto.randomUUID() 지원 여부 확인 후 fallback
+    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        uuid = crypto.randomUUID(); // 브라우저 내 UUID 생성
+    } else {
+        uuid = generateUUID(); // fallback 사용
+    }
     localStorage.setItem("guestUUID", uuid);    // 로컬 스토리지에 비회원 식별자 UUID 저장
   }
   return uuid;
+}
+
+// 배포 서버에서 crypto.randomUUID() 사용이 안될 경우(배포 서버 환경의 내장 브라우저 호환성 -> 최신 브라우저에서만 지원이 됨.)
+function generateUUID() {
+  // fallback UUID generator
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }
 
 // ------------------ 버튼 기반 응답 처리 ------------------ //
@@ -130,7 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // 대화 기록 조회 시 UUID 확인 후 재발급 용도
 function initGuestUUID() {
   if (!localStorage.getItem("guestUUID")) {
-    const uuid = crypto.randomUUID();
+    const uuid = (window.crypto && typeof window.crypto.randomUUID === 'function')
+    ? crypto.randomUUID()
+    : generateUUID();
     localStorage.setItem("guestUUID", uuid);
   }
 }
