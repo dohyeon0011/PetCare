@@ -111,7 +111,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
-  org.hibernate.orm.jdbc.bind: trace
+  org.hibernate.orm.jdbc.bind: debug
 
 # swagger api
 springdoc:
