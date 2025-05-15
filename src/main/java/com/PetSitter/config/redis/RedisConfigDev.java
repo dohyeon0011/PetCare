@@ -1,3 +1,4 @@
+/*
 package com.PetSitter.config.redis;
 
 import org.springframework.context.annotation.Bean;
@@ -7,9 +8,9 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-// Redis 기반 챗봇 AI 설정 Config 클래스
+// Redis 기반 챗봇 AI 설정 Config 클래스(개발 환경)
 @Configuration
-public class RedisConfig {
+public class RedisConfigDev {
     // jedis: cpu 효율성 측면에서 별로 좋지 않음. 극한으로 끌어 올리려면 적절한 커넥션 풀을 찾아서 정해야 함.(동기적으로 처리)
     // Lettuce: 비동기로 처리하기 때문에 성능적인 측면에서 좋음.
     @Bean
@@ -28,3 +29,4 @@ public class RedisConfig {
     }
 }
 
+*/
