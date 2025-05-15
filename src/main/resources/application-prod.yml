@@ -106,6 +106,7 @@ spring:
   redis:
     host: ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com
     port: 6379
+    password: blackrose12
 
 logging.level:
   org.hibernate.SQL: debug  # 하이버네이트가 생성하는(SQL, JPA) 동작들이 로그로 찍혀서 모두 보임.
