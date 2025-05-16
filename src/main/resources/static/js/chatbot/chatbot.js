@@ -8,15 +8,29 @@ async function sendMessage(message) {
     guestUUID: uuid
   };
 
-  const response = await fetch("/api/pets-care/chatbot/send", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const response = await fetch("/api/pets-care/chatbot/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const reply = await response.json(); // ChatMessage DTO
 
-  const reply = await response.text();
-  appendMessage(message, 'USER');
-  appendMessage(reply, 'BOT');
+    // 클라이언트 메시지에도 timestamp 추가
+    const now = new Date();
+    const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);   // UTC 시간에서 9시간을 ms 단위로 더해서 KST로 보정
+    const clientTs = kst.toISOString().slice(0, 16).replace("T", " ");
+    appendMessage({ message, type: "send", timestamp: clientTs });
+
+    // 서버 응답은 DTO의 timestamp 사용
+    appendMessage(reply);
+
+  } catch (error) {
+    console.error("메시지 전송 오류:", error);
+    const now = new Date();
+    const clientTs = now.toISOString().slice(0,16).replace("T"," ");
+    appendMessage({ message: "서버 오류가 발생했습니다.", type: "answer", timestamp: clientTs });
+  }
 }
 
 // UUID 저장 및 불러오기(비회원 게스트인 경우 식별자 UUID를 클라이언트에서 생성)
@@ -79,8 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
 async function handleButtonClick(keyword, label) {
   const uuid = getOrCreateGuestUUID(); // 게스트 UUID (쿠키 or localStorage)
   const memberId = document.getElementById('memberData')?.dataset?.memberId; // 로그인된 사용자 ID
+  const now = new Date();   // 클라이언트가 보낸 채팅도 시간을 표시하기 위해서
+  const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);   // UTC 시간에서 9시간을 ms 단위로 더해서 KST로 보정
+  const clientTs = kst.toISOString().slice(0, 16).replace("T", " ");
 
-  appendMessage(label, 'USER');
+  // 버튼 메시지도 timestamp와 함께
+  appendMessage({ message: label, type: "send", timestamp: clientTs });
 
   // 로그인 유저면 memberId 포함, 아니면 guestUUID 포함
   const payload = {
@@ -94,12 +112,11 @@ async function handleButtonClick(keyword, label) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-
-    const reply = await response.text();
-    appendMessage(reply, 'BOT');
+    const reply = await response.json(); // ChatMessage DTO
+    appendMessage(reply);
   } catch (err) {
-    appendMessage("서버 오류가 발생했습니다.", 'BOT');
     console.error(err);
+    appendMessage({ message: "서버 오류가 발생했습니다.", type: "answer", timestamp: clientTs });
   }
 }
 
@@ -182,9 +199,8 @@ async function loadChatHistory() {
     if (chatHistory.length === 0) {
       return false;
     }
-    chatHistory.forEach(message => {
-      const sender = message.startsWith('USER:') || message.startsWith('GUEST:') ? 'USER' : 'BOT';
-      appendMessage(message, sender);
+    chatHistory.forEach(chatMessage => {
+      appendMessage(chatMessage); // chatMessage는 {sender, message, type, timestamp}
     });
     return true;
   } else {
@@ -194,17 +210,29 @@ async function loadChatHistory() {
 }
 
 // ------------------ 공통 메시지 UI ------------------ //
-function appendMessage(text, sender) {
+// 사용자 화면 메시지 출력
+function appendMessage(chatMessage) {
+  const chatLog = document.getElementById("chat-log");
+
+  // 1) wrapper 생성
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("message-wrapper", chatMessage.type === "send" ? "user" : "bot");
+
+  // 2) 말풍선(message) 생성
   const messageDiv = document.createElement("div");
-  const cleanText = text.replace(/^(USER:|GUEST:|BOT:)\s?/, "");
+  messageDiv.classList.add("message");
+  messageDiv.innerHTML = chatMessage.message.replace(/\n/g, "<br>");
 
-  messageDiv.classList.add("message", sender === 'USER' ? "user" : "bot");
+  // 3) 타임스탬프(timestamp) 생성
+  const tsDiv = document.createElement("div");
+  tsDiv.classList.add("timestamp");
+  tsDiv.textContent = chatMessage.timestamp;
 
-  // 줄바꿈 처리: \n → <br>
-  messageDiv.innerHTML = cleanText.replace(/\n/g, "<br>");
-
-  document.getElementById("chat-log").appendChild(messageDiv);
-  document.getElementById("chat-log").scrollTop = document.getElementById("chat-log").scrollHeight;
+  // 4) wrapper에 차례로 붙이고 로그에 추가
+  wrapper.appendChild(messageDiv);
+  wrapper.appendChild(tsDiv);
+  chatLog.appendChild(wrapper);
+  chatLog.scrollTop = chatLog.scrollHeight;
 }
 
 document.getElementById("chatbot-toggle").addEventListener("click", () => {
