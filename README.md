@@ -142,11 +142,11 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 ---
 
 # 메인 페이지(1)
-<img width="1472" alt="image" src="https://github.com/user-attachments/assets/92182b5a-61c0-4ad6-9f0d-1d9b46d8ff32" />      
+<img width="1609" alt="image" src="https://github.com/user-attachments/assets/aef60f5d-73ea-4391-982a-528db36784a0" />        
 <br><br><br>
 
 # 메인 페이지(2)
-<img width="1469" alt="image" src="https://github.com/user-attachments/assets/31362089-f042-4654-816d-4d700cccedff" />    
+<img width="1630" alt="image" src="https://github.com/user-attachments/assets/e478fd2f-7ffb-42d6-b2a4-010fa50480ad" />      
 (돌봄 리뷰는 가장 최근에 작성된 리뷰 6개만 조회(+페이징))
 
 <br><br><br>
