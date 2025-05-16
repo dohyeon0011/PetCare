@@ -5,8 +5,10 @@ import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.chat.chatbot.request.ChatBotButtonRequest;
 import com.PetSitter.dto.chat.chatbot.request.ChatBotRequest;
+import com.PetSitter.dto.chat.chatbot.request.ChatMessage;
 import com.PetSitter.dto.chat.chatbot.request.GuestMigrationRequest;
 import com.PetSitter.service.chat.chatbot.ChatBotService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +30,8 @@ public class ChatBotController {
 
     // 버튼 클릭 응답
     @PostMapping("/button")
-    public ResponseEntity<String> buttonClick(@RequestBody ChatBotButtonRequest request) {
-        String botResponse = "";
+    public ResponseEntity<ChatMessage> buttonClick(@RequestBody ChatBotButtonRequest request) throws JsonProcessingException {
+        ChatMessage botResponse = null;
         if (request.getMemberId() != null) {
             botResponse = chatBotService.saveChatMessageForUser(request.getMemberId(), request.getKeyword());
         } else if (request.getGuestUUID() != null) {
@@ -57,7 +59,7 @@ public class ChatBotController {
 
     // 사용자 채팅 Output
     @PostMapping("/send")
-    public ResponseEntity<?> sendMessage(@RequestBody ChatBotRequest request, BindingResult result, @AuthenticationPrincipal Object principal) {
+    public ResponseEntity<?> sendMessage(@RequestBody ChatBotRequest request, BindingResult result, @AuthenticationPrincipal Object principal) throws JsonProcessingException {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -76,7 +78,7 @@ public class ChatBotController {
             member = ((CustomOAuth2User) principal).getMember();
         }
 
-        String botResponse;
+        ChatMessage botResponse;
         if (member != null) {
             botResponse = chatBotService.saveChatMessageForUser(member.getId(), request.getMessage());
             log.info("[/api/chatbot/send: chatBotService.saveChatMessageForUser() 호출 성공]");
@@ -91,7 +93,7 @@ public class ChatBotController {
 
     // 로그인된 유저 또는 게스트의 챗봇 대화 기록을 불러오기
     @GetMapping("/history")
-    public ResponseEntity<List<String>> getChatHistory(@AuthenticationPrincipal Object principal, @RequestParam(required = false) String guestUUID) {
+    public ResponseEntity<List<ChatMessage>> getChatHistory(@AuthenticationPrincipal Object principal, @RequestParam(required = false) String guestUUID) {
         Member member = null;
         if (principal instanceof MemberDetails) {
             member = ((MemberDetails) principal).getMember();
@@ -99,7 +101,7 @@ public class ChatBotController {
             member = ((CustomOAuth2User) principal).getMember();
         }
 
-        List<String> chatHistory;
+        List<ChatMessage> chatHistory;
         if (member != null) {
             chatHistory = chatBotService.getChatHistoryForUser(member.getId()); // 유저 대화 기록
         } else {
