@@ -59,11 +59,11 @@ public class ChatBotService {
         try {
             String botMessage = objectMapper.writeValueAsString(botResponse);
             redisTemplate.opsForList().rightPush(key, botMessage);
-            redisTemplate.expire(key, GUEST_CHAT_EXPIRATION);
         } catch (JsonProcessingException e) {
             log.error("saveChatMessageForGuest() - botResponse 직렬화 중 에러 발생: {}", e.getMessage());
             throw new RuntimeException(e);
         }
+        redisTemplate.expire(key, GUEST_CHAT_EXPIRATION);
 
         return botResponse;
     }
@@ -99,11 +99,11 @@ public class ChatBotService {
         try {
             String botMessage = objectMapper.writeValueAsString(botResponse);  // 객체 -> JSON 문자열 직렬화
             redisTemplate.opsForList().rightPush(key, botMessage);
-            redisTemplate.expire(key, USER_CHAT_EXPIRATION);
         } catch (JsonProcessingException e) {
             log.error("saveChatMessageForUser() - botResponse 직렬화 중 에러 발생: {}", e.getMessage());
             throw new RuntimeException(e);
         }
+        redisTemplate.expire(key, USER_CHAT_EXPIRATION);
 
         return botResponse;
     }
