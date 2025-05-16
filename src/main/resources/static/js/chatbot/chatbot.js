@@ -244,7 +244,13 @@ document.getElementById("chatbot-close").addEventListener("click", () => {
 });
 
 function showWelcomeMessage() {
-  appendMessage("안녕하세요! 🐶 반려견 챗봇입니다. \n무엇을 도와드릴까요?", 'BOT');
+    const now = new Date();
+    const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);   // UTC 시간에서 9시간을 ms 단위로 더해서 KST로 보정
+    const clientTs = kst.toISOString().slice(0, 16).replace("T", " ");
+
+    const message = "안녕하세요! 🐶 반려견 챗봇입니다.\n무엇을 도와드릴까요?";
+
+    appendMessage({ message: message, type: "answer", timestamp: clientTs });
 }
 
 // 챗봇 토글
