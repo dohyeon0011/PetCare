@@ -47,7 +47,7 @@ public class ChatBotService {
         log.info("saveChatMessageForGuest() 호출: [key=" + key +", guest save message=" + message + "]");
 
         // 2. 게스트가 전송한 채팅 직렬화 후 Redis 서버에 저장
-        storeChatFromClient(message, key);
+        storeChatFromClient(key, message);
 
         // 3. 챗봇이 응답한 메시지 직렬화 후 Redis 서버에 저장 -> 클라이언트 응답
         ChatMessage botResponse = getChatMessage(key, message);
@@ -159,12 +159,12 @@ public class ChatBotService {
         String userKey = "chat:user:" + memberId;
         log.info("migrateGuestChatToUser 호출: [guestKey=" + guestKey +", userKey=" + userKey + "]");
 
-        List<String> guestMessages = redisTemplate.opsForList().range(guestKey, 0, -1); // 게스트 키(chat:guest:{uuid}) 에 저장된 모든 메시지를 불러옴.
-        if (guestMessages != null) {
-            for (String message : guestMessages) {
-                redisTemplate.opsForList().rightPush(userKey, message); // 사용자 메시지와 챗봇 응답 메시지 모두 마이그레이션
-            }
-            redisTemplate.delete(guestKey); // 이전 완료 후 삭제
-        }
+        Objects.requireNonNull(redisTemplate.opsForList().range(guestKey, 0, -1), "guestKey=[" + guestKey + "] migration chat list is empty.")   // 게스트 키(chat:guest:{uuid}) 에 저장된 모든 메시지를 불러옴.
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(chatMessage -> {
+                    redisTemplate.opsForList().rightPush(userKey, chatMessage); // 사용자 메시지와 챗봇 응답 메시지 모두 마이그레이션
+                });
+        redisTemplate.delete(guestKey); // 이전 완료 후 삭제
     }
 }
