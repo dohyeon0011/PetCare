@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
-@Schema(description = "채팅 메시지 Response DTO")
-public class ChatMessage {
+@Schema(description = "챗봇 채팅 메시지 DTO")
+public class ChatBotMessage {
     @Schema(description = "전송자", pattern = "guestUUid, user id")
     private String sender;  // guestUUID, user id
 
@@ -23,7 +23,7 @@ public class ChatMessage {
     @Schema(description = "전송 유형", pattern = "send(사용자 전송), answer(챗봇 응답)")
     private String type;    // send, answer
 
-    public ChatMessage(String sender, String message, String type) {
+    public ChatBotMessage(String sender, String message, String type) {
         this.sender = sender;
         this.message = message;
         this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
