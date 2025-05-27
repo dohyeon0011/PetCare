@@ -1,6 +1,6 @@
 package com.PetSitter.service.chat.chatbot;
 
-import com.PetSitter.dto.chat.chatbot.request.ChatMessage;
+import com.PetSitter.dto.chat.chatbot.request.ChatBotMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class ChatBotService {
     /**
      * 게스트 채팅 기록 저장 및 봇 응답
      */
-    public ChatMessage saveChatMessageForGuest(String uuid, String message) {
+    public ChatBotMessage saveChatMessageForGuest(String uuid, String message) {
         // 1. Redis 서버에 저장할 key 생성
         String key = "chat:guest:" + uuid;
         log.info("saveChatMessageForGuest() 호출: [key=" + key +", guest save message=" + message + "]");
@@ -50,7 +50,7 @@ public class ChatBotService {
         storeChatFromClient(key, message);
 
         // 3. 챗봇이 응답한 메시지 직렬화 후 Redis 서버에 저장 -> 클라이언트 응답
-        ChatMessage botResponse = getChatMessage(key, message);
+        ChatBotMessage botResponse = getChatMessage(key, message);
         log.info("saveChatMessageForGuest() 호출: [key=" + key +", bot save message=" + botResponse + "]");
         serializeAndStoreChatBotMessage(botResponse, key, GUEST_CHAT_EXPIRATION);
 
@@ -60,7 +60,7 @@ public class ChatBotService {
     // 클라이언트가 전송한 채팅 직렬화 후 Redis 서버에 저장하는 메서드
     private void storeChatFromClient(String key, String message) {
         try {
-            String userMessage = objectMapper.writeValueAsString(new ChatMessage(key, message, CHAT_TYPE_CLIENT));
+            String userMessage = objectMapper.writeValueAsString(new ChatBotMessage(key, message, CHAT_TYPE_CLIENT));
             redisTemplate.opsForList().rightPush(key, userMessage);
         } catch (JsonProcessingException e) {
             log.error("storeChatFromClient() - objectMapper 직렬화 중 에러 발생: {}", e.getMessage());
@@ -69,8 +69,8 @@ public class ChatBotService {
     }
 
     // 클라이언트가 전송한 메시지에 따라 챗봇 응답 객체(ChatMessage) 생성 메서드
-    private ChatMessage getChatMessage(String key, String message) {
-        ChatMessage botResponse = new ChatMessage(key, getBotResponse(message), CHAT_TYPE_CHATBOT);
+    private ChatBotMessage getChatMessage(String key, String message) {
+        ChatBotMessage botResponse = new ChatBotMessage(key, getBotResponse(message), CHAT_TYPE_CHATBOT);
         return botResponse;
     }
 
@@ -85,7 +85,7 @@ public class ChatBotService {
     }
 
     // 챗봇이 응답한 메시지 직렬화 후 Redis 서버에 저장 메서드
-    private void serializeAndStoreChatBotMessage(ChatMessage botResponse, String key, Duration CHAT_EXPIRATION) {
+    private void serializeAndStoreChatBotMessage(ChatBotMessage botResponse, String key, Duration CHAT_EXPIRATION) {
         try {
             String botMessage = objectMapper.writeValueAsString(botResponse);
             redisTemplate.opsForList().rightPush(key, botMessage);
@@ -99,7 +99,7 @@ public class ChatBotService {
     /**
      * 로그인 유저 채팅 기록 저장 및 봇 응답
      */
-    public ChatMessage saveChatMessageForUser(long memberId, String message) {
+    public ChatBotMessage saveChatMessageForUser(long memberId, String message) {
         // 1. Redis 서버에 저장할 key 생성
         String key = "chat:user:" + memberId;
         log.info("saveChatMessageForUser() 호출:[key=" + key +", user save message=" + message + "]");
@@ -108,7 +108,7 @@ public class ChatBotService {
         storeChatFromClient(key, message);
 
         // 3. 챗봇이 응답한 메시지 직렬화 후 Redis 서버에 저장 -> 클라이언트 응답
-        ChatMessage botResponse = getChatMessage(key, message);
+        ChatBotMessage botResponse = getChatMessage(key, message);
         log.info("saveChatMessageForUser() 호출: [key=" + key +", bot save message=" + botResponse + "]");
         serializeAndStoreChatBotMessage(botResponse, key, USER_CHAT_EXPIRATION);
 
@@ -118,7 +118,7 @@ public class ChatBotService {
     /**
      * 게스트의 대화 기록 불러 오기
      */
-    public List<ChatMessage> getChatHistoryForGuest(String guestUUID) {
+    public List<ChatBotMessage> getChatHistoryForGuest(String guestUUID) {
         // Redis 서버에 저장한 key 값
         String key = "chat:guest:" + guestUUID;
         log.info("getChatHistoryForGuest() 호출: [key=" + key + "]");
@@ -126,13 +126,13 @@ public class ChatBotService {
     }
 
     // 챗봇과 진행한 모든 대화 기록을 불러오는 메서드
-    private List<ChatMessage> getAllChatMessages(String key) {
+    private List<ChatBotMessage> getAllChatMessages(String key) {
         return Objects.requireNonNull(redisTemplate.opsForList().range(key, 0, -1), "역직렬화 실패. chat list is empty.")
                 .stream()
                 .filter(Objects::nonNull)
                 .map(chatMessage -> {
                     try {
-                        return objectMapper.readValue(chatMessage, ChatMessage.class);  // JSON 문자열 -> 객체 역직렬화
+                        return objectMapper.readValue(chatMessage, ChatBotMessage.class);  // JSON 문자열 -> 객체 역직렬화
                     } catch (JsonProcessingException e) {
                         log.error("getChatMessages() - objectMapper.readValue() 중 에러 발생: message={}, error={}", chatMessage, e.getMessage());
                         throw new RuntimeException(e);
@@ -144,7 +144,7 @@ public class ChatBotService {
     /**
      * 로그인 유저의 대화 기록 불러오기
      */
-    public List<ChatMessage> getChatHistoryForUser(long memberId) {
+    public List<ChatBotMessage> getChatHistoryForUser(long memberId) {
         // Redis 서버에 저장한 key 값
         String key = "chat:user:" + memberId;
         log.info("getChatHistoryForUser() 호출: [key=" + key + "]");
