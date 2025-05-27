@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
-@Schema(description = "챗봇 채팅 메시지 DTO")
+@Schema(description = "챗봇 채팅 메시지 Response DTO")
 public class ChatBotMessage {
     @Schema(description = "전송자", pattern = "guestUUid, user id")
     private String sender;  // guestUUID, user id
