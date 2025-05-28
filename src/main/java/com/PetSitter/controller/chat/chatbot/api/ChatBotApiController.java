@@ -1,4 +1,4 @@
-package com.PetSitter.controller.chat.chatbot;
+package com.PetSitter.controller.chat.chatbot.api;
 
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
@@ -9,6 +9,7 @@ import com.PetSitter.dto.chat.chatbot.request.ChatBotMessage;
 import com.PetSitter.dto.chat.chatbot.request.GuestMigrationRequest;
 import com.PetSitter.service.chat.chatbot.ChatBotService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +25,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/pets-care/chatbot")
 @Slf4j
-public class ChatBotController {
+public class ChatBotApiController {
 
     private final ChatBotService chatBotService;
 
     // 버튼 클릭 응답
+    @Operation(summary = "챗봇 버튼 키워드 전송", description = "챗봇 버튼 키워드 전송 API")
     @PostMapping("/button")
     public ResponseEntity<ChatBotMessage> buttonClick(@RequestBody ChatBotButtonRequest request) throws JsonProcessingException {
         ChatBotMessage botResponse = null;
@@ -44,6 +46,7 @@ public class ChatBotController {
 
     // 버튼 목록 제공
     // 로그인 여부와 관계없이 버튼 목록을 반환하는 API
+    @Operation(summary = "챗봇 버튼 키워드 목록 조회", description = "챗봇 버튼 목록 조회 API")
     @GetMapping("/buttons")
     public ResponseEntity<?> getButtons() {
         // 비로그인 상태일 경우와 로그인 상태일 경우 버튼 목록을 다르게 처리
@@ -58,6 +61,7 @@ public class ChatBotController {
     }
 
     // 사용자 채팅 Output
+    @Operation(summary = "챗봇 채팅 메시지 전송", description = "챗봇 채팅 메시지 전송 API")
     @PostMapping("/send")
     public ResponseEntity<?> sendMessage(@RequestBody ChatBotRequest request, BindingResult result, @AuthenticationPrincipal Object principal) throws JsonProcessingException {
         if (result.hasErrors()) {
@@ -92,6 +96,7 @@ public class ChatBotController {
     }
 
     // 로그인된 유저 또는 게스트의 챗봇 대화 기록을 불러오기
+    @Operation(summary = "챗봇 대화 기록 조회", description = "챗봇 대화 기록 조회 API")
     @GetMapping("/history")
     public ResponseEntity<List<ChatBotMessage>> getChatHistory(@AuthenticationPrincipal Object principal, @RequestParam(required = false) String guestUUID) {
         Member member = null;
@@ -117,6 +122,7 @@ public class ChatBotController {
     }
 
     // 비회원 -> 로그인 채팅 기록 마이그레이션
+    @Operation(summary = "챗봇 대화 기록 마이그레이션", description = "챗봇 대화 기록 마이그레이션 API")
     @PostMapping("/migrate")
     public ResponseEntity<?> migrateChat(@RequestBody GuestMigrationRequest request, BindingResult result, @AuthenticationPrincipal Object principal) {
         if (result.hasErrors()) {
