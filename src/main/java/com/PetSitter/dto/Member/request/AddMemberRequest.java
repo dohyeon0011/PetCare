@@ -4,6 +4,7 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.Member.SocialProvider;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,6 +67,7 @@ public class AddMemberRequest {
     private String socialProvider;
 
     @Schema(description = "자기소개")
+    @Lob
     private String introduction;
 
     @Schema(description = "돌봄사 경력연차", defaultValue = "NULL")
