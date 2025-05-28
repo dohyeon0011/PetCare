@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-// Redis 기반 챗봇 AI 설정 Config 클래스(배포 환경)
+// Redis 기반 챗봇 설정 Config 클래스(배포 환경)
 @Configuration
 public class RedisConfigProd {
     // jedis: cpu 효율성 측면에서 별로 좋지 않음. 극한으로 끌어 올리려면 적절한 커넥션 풀을 찾아서 정해야 함.(동기적으로 처리)
