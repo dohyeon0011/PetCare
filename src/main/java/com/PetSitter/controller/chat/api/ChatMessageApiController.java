@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class ChatMessageApiController {
     private final ChatMessageService chatMessageService;
 
     @Operation(summary = "채팅방 채팅 메시지 전송", description = "채팅방 채팅 메시지 전송 API")
-    @PostMapping
+    @MessageMapping("/message")
     public ResponseEntity<?> saveChatMessage(@RequestBody @Valid ChatMessageRequest chatMessageRequest, BindingResult result, @AuthenticationPrincipal Object principal) {
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
