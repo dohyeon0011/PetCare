@@ -44,7 +44,8 @@ public class WebSecurityConfig {
                                 "/css/**", "/js/**", "/images/**", "/uploads/profile/**",
                                 "/uploads/pets/**", "/uploads/carelogs/**",
                                 "/api/auth/token",
-                                "/api/pets-care/chatbot/buttons", "/api/pets-care/chatbot/button", "/api/pets-care/chatbot/send", "/api/pets-care/chatbot/history")
+                                "/api/pets-care/chatbot/buttons", "/api/pets-care/chatbot/button", "/api/pets-care/chatbot/send", "/api/pets-care/chatbot/history",
+                                "/ws/**")   // handshake endpoint 허용
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/pets-care/members/new").permitAll() // 회원가입 API 허용
                         .requestMatchers("/api/pets-care/reservable/members/**").permitAll() // 리뷰 API 추가 (비로그인 상태에서도 접근 가능)
