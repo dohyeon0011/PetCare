@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @Schema(description = "고객 - 돌봄사 간 채팅방 채팅 메시지 Req DTO")
 public class ChatMessageRequest {
 
-    @Schema(description = "채팅방 번호 id")
-    private String roomId;
-
     @Schema(description = "발신자 id")
     @NotNull(message = "발신자 id 값은 필수입니다.")
     private Long senderId;
