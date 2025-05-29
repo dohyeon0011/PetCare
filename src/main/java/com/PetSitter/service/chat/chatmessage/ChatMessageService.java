@@ -31,13 +31,13 @@ public class ChatMessageService {
     public ChatMessage saveMessage(String roomId, Long senderId, Long receiverId, String message) {
         // 1. 채팅방 조회
         ChatRoom chatRoom = null;
-        if (roomId != null && !roomId.isBlank()) {   // 기존 채팅방에서 메시지를 전송할 경우
-            log.info("ChatMessageService - saveMessage(): 기존 채팅방 메시지 저장: roomId={}", roomId);
-            chatRoom = chatRoomRepository.findByRoomId(roomId)
-                .orElseThrow(() -> new EntityNotFoundException("채팅방 엔티티 조회 오류. [ChatRoom id=" + roomId + "]"));
-        } else {    // 새로운 대화를 시작할 경우
+        if (roomId.equals("new")) { // 새로운 대화를 시작할 경우
             log.info("ChatMessageService - saveMessage(): 새 채팅방 생성 후 메시지 저장: senderId={}, receiverId={}", senderId, receiverId);
             chatRoom = chatRoomService.createOrGetChatRoom(senderId, receiverId);
+        } else {    // 기존 채팅방에서 메시지를 전송할 경우
+            log.info("ChatMessageService - saveMessage(): 기존 채팅방 메시지 저장: roomId={}", roomId);
+            chatRoom = chatRoomRepository.findByRoomId(roomId)
+                    .orElseThrow(() -> new EntityNotFoundException("채팅방 엔티티 조회 오류. [ChatRoom id=" + roomId + "]"));
         }
 
         // 2. 발신자, 수신자 조회
