@@ -7,6 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/reviewStyle.css}" rel="stylesheet">
     <link th:href="@{/css/chatbot.css}" rel="stylesheet">
+    <link th:href="@{/css/chat.css}" rel="stylesheet">
 </head>
 <body>
 <!--회원 로그인 방식 설정 -->
@@ -41,6 +42,29 @@
                         안녕하세요,
                         <b th:text="${currentUser.name}"></b>님!
                     </a>
+
+                    <!-- 채팅 아이콘 버튼 -->
+                    <button id="chatroom-icon" class="btn btn-outline-info ml-2">
+                        💭 채팅
+                    </button>
+
+                    <!-- 채팅방 목록 팝업 -->
+                    <div id="chatroom-list-modal" class="modal d-none">
+                        <div class="modal-content">
+                            <span class="close-btn" id="close-chatroom-list">&times;</span>
+                            <h5>채팅방 목록</h5>
+                            <ul id="chatroom-list" class="chatroom-list"></ul>
+                        </div>
+                    </div>
+
+                    <!-- 채팅창 -->
+                    <div id="chat-box" class="d-none">
+                        <div id="chat-header">채팅</div>
+                        <div id="chat-messages"></div>
+                        <input type="text" id="chat-input" placeholder="메시지를 입력하세요" />
+                        <button id="send-btn">전송</button>
+                    </div>
+
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
@@ -194,5 +218,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
 <script src="/js/token/token.js"></script>
 <script src="/js/chatbot/chatbot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script> <!-- SockJS CDN 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script> <!-- STOMP client가 필요할 때 -->
+<script src="/js/chat/chat.js"></script>
 </body>
 </html>
