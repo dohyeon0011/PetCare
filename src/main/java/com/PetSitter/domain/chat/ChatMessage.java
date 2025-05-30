@@ -1,6 +1,7 @@
 package com.PetSitter.domain.chat;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.dto.chat.response.ChatMessageResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -66,5 +67,10 @@ public class ChatMessage {  // 채팅방 메시지 엔티티
     @Comment("수신자 연관관계 설정 편의 메서드")
     private void addReceiver(Member receiver) {
         this.receiver = receiver;
+    }
+
+    @Comment("ChatMessage Entity -> Response DTO Method")
+    public ChatMessageResponse toChatMessageResponse() {
+        return new ChatMessageResponse(this.chatRoom.getId(), this.sender.getId(), this.receiver.getId(), this.message, this.getSentAt());
     }
 }
