@@ -1,0 +1,45 @@
+.modal {
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid #ccc;
+    width: 400px;
+    z-index: 9999;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.modal-content {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.d-none {
+    display: none;
+}
+.chatroom-list {
+    list-style: none;
+    padding: 0;
+}
+.chatroom-list li {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.chat-messages {
+    height: 250px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+}
