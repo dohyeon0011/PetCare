@@ -4,6 +4,7 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
+import com.PetSitter.dto.chat.response.ChatMessageResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.chat.chatmessage.ChatMessageRepository;
 import com.PetSitter.repository.chat.chatroom.ChatRoomRepository;
@@ -11,6 +12,7 @@ import com.PetSitter.service.chat.chatroom.ChatRoomService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +26,13 @@ public class ChatMessageService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomService chatRoomService;
     private final MemberRepository memberRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     /**
      * 채팅 메시지 생성
      */
-    public ChatMessage saveMessage(String roomId, Long senderId, Long receiverId, String message) {
-        // 1. 채팅방 조회
+    public ChatMessageResponse saveMessage(String roomId, Long senderId, Long receiverId, String message) {
+        // 채팅방 조회
         ChatRoom chatRoom = null;
         if (roomId.equals("new")) { // 새로운 대화를 시작할 경우
             log.info("ChatMessageService - saveMessage(): 새 채팅방 생성 후 메시지 저장: senderId={}, receiverId={}", senderId, receiverId);
@@ -40,13 +43,13 @@ public class ChatMessageService {
                     .orElseThrow(() -> new EntityNotFoundException("채팅방 엔티티 조회 오류. [ChatRoom id=" + roomId + "]"));
         }
 
-        // 2. 발신자, 수신자 조회
+        // 발신자, 수신자 조회
         Member sender = memberRepository.findById(senderId)
                 .orElseThrow(() -> new EntityNotFoundException("발신자 엔티티 조회 오류: [senderId=" + senderId + "]"));
         Member receiver = memberRepository.findById(receiverId)
                 .orElseThrow(() -> new EntityNotFoundException("수신자 엔티티 조회 오류: [receiverId=" + receiverId + "]"));
 
-        // 3. 채팅 메시지 엔티티 생성
+        // 채팅 메시지 엔티티 생성
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoom(chatRoom)
                 .sender(sender)
@@ -55,7 +58,13 @@ public class ChatMessageService {
                 .build();
         log.info("ChatMessageService: saveMessage() - ChatMessage Entity Create Success. id={}", chatMessage.getId());
 
-        return chatMessageRepository.save(chatMessage);
+        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+
+        // 수신자(해당 경로 구독자)에게 메시지 전송
+        String destination = "/queue/chat-message";
+        messagingTemplate.convertAndSendToUser(senderId.toString(), destination, savedMessage);
+
+        return savedMessage.toChatMessageResponse();
     }
 
 }
