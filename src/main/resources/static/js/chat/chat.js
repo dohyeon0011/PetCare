@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!content || !currentRoomId) return;
 
         stompClient.send(
-            `/app/chat-room/${currentRoomId}/message`,
+            `/app/chat-rooms/${currentRoomId}/message`,
             {},
             JSON.stringify({
                 senderId: memberId,
@@ -52,13 +52,13 @@ document.addEventListener("DOMContentLoaded", () => {
         chatMessages.appendChild(newMsg);
     };
 
-    // 채팅방 아이콘 클릭 → 모달 표시
+    // 채팅방 아이콘 클릭 -> 채팅방 목록 팝업 표시
     document.getElementById("chatroom-icon").addEventListener("click", () => {
-        document.getElementById("chatroom-list-modal").classList.remove("d-none");
         loadChatRoomList();
+        document.getElementById("chatroom-list-modal").classList.remove("d-none");
     });
 
-    // 채팅방 모달 닫기
+    // 채팅방 목록 팝업 닫기
     document.getElementById("close-chatroom-list").addEventListener("click", () => {
         document.getElementById("chatroom-list-modal").classList.add("d-none");
     });
@@ -68,9 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 채팅방 목록 불러오기 (ajax)
     const loadChatRoomList = () => {
-        fetch(`/api/pets-care/members/${memberId}/chat/rooms/`)
+        fetch(`/api/pets-care/members/${memberId}/chat/chat-rooms`)
             .then((res) => res.json())
             .then((rooms) => {
+                console.log("rooms:", rooms);
                 const list = document.getElementById("chatroom-list");
                 list.innerHTML = "";
                 rooms.forEach((room) => {
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("chat-messages").innerHTML = "";
 
         // 기존 메시지 조회
-        fetch(`/api/pets-care/chat/rooms/${roomId}/messages`)
+        fetch(`/api/pets-care/chat/chat-rooms/${roomId}/messages`)
             .then((res) => res.json())
             .then((messages) => {
                 messages.forEach(showMessage);
