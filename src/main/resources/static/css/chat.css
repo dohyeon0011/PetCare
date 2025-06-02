@@ -25,7 +25,7 @@
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 .chatroom-list {
     list-style: none;
