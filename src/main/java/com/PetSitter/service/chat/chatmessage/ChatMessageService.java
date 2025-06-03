@@ -1,7 +1,6 @@
 package com.PetSitter.service.chat.chatmessage;
 
 import com.PetSitter.domain.Member.Member;
-import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
 import com.PetSitter.dto.chat.response.ChatMessageResponse;
@@ -31,7 +30,7 @@ public class ChatMessageService {
     /**
      * 채팅 메시지 생성
      */
-    public ChatMessageResponse saveMessage(String roomId, Long senderId, Long receiverId, String message) {
+    public ChatMessageResponse.messageDto saveMessage(String roomId, Long senderId, Long receiverId, String message) {
         // 채팅방 조회
         ChatRoom chatRoom = null;
         if (roomId.equals("new")) { // 새로운 대화를 시작할 경우
@@ -56,7 +55,7 @@ public class ChatMessageService {
                 .receiver(receiver)
                 .message(message)
                 .build();
-        log.info("ChatMessageService: saveMessage() - ChatMessage Entity Create Success. id={}", chatMessage.getId());
+        log.info("ChatMessageService - saveMessage(): ChatMessage Entity Create Success. id={}", chatMessage.getId());
 
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
 
@@ -66,5 +65,4 @@ public class ChatMessageService {
 
         return savedMessage.toChatMessageResponse();
     }
-
 }
