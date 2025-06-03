@@ -70,7 +70,7 @@ public class ChatMessage {  // 채팅방 메시지 엔티티
     }
 
     @Comment("ChatMessage Entity -> Response DTO Method")
-    public ChatMessageResponse toChatMessageResponse() {
-        return new ChatMessageResponse(this.chatRoom.getId(), this.sender.getId(), this.receiver.getId(), this.message, this.getSentAt());
+    public ChatMessageResponse.messageDto toChatMessageResponse() {
+        return new ChatMessageResponse.messageDto(this.id, this.chatRoom.getId(), this.sender.getId(), this.receiver.getId(), this.message, this.getSentAt());
     }
 }
