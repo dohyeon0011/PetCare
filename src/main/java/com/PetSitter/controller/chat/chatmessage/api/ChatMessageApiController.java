@@ -47,7 +47,7 @@ public class ChatMessageApiController {
             result.getFieldErrors().forEach(error -> {
                 errors.put(error.getField(), error.getDefaultMessage());
             });
-            log.error("ChatMessageApiController - saveChatMessage() 에러 발생, errors={}", errors);
+            log.error("ChatMessageApiController - saveChatMessage(): 에러 발생, errors={}", errors);
 
             return ResponseEntity.badRequest()
                     .body(errors);
@@ -59,12 +59,12 @@ public class ChatMessageApiController {
         } else if (principal instanceof CustomOAuth2User) {
             member = ((CustomOAuth2User) principal).getMember();
         } else if (principal == null) {
-            log.warn("WebSocket principal 인증 정보 없음. principal: {}", principal);
+            log.error("WebSocket principal 인증 정보 없음. principal: {}", principal);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("인증되지 않은 사용자입니다.");
         }
 
-        ChatMessageResponse chatMessage = null;
+        ChatMessageResponse.messageDto chatMessage = null;
         if (member != null) {
              chatMessage = chatMessageService.saveMessage(roomId, chatMessageRequest.getSenderId(),
                     chatMessageRequest.getReceiverId(), chatMessageRequest.getMessage());
