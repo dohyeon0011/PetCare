@@ -1,16 +1,16 @@
 package com.PetSitter.service.chat.chatroom;
 
 import com.PetSitter.domain.Member.Member;
+import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
 import com.PetSitter.dto.chat.chatroom.response.ChatRoomResponse;
 import com.PetSitter.repository.Member.MemberRepository;
+import com.PetSitter.repository.chat.chatmessage.ChatMessageRepository;
 import com.PetSitter.repository.chat.chatroom.ChatRoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +26,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Comment("채팅방 생성 Or 불러오기")
     public ChatRoom createOrGetChatRoom(Long senderId, Long receiverId) {
@@ -44,22 +45,47 @@ public class ChatRoomService {
                             .receiver(receiver)
                             .build();
 
-                    log.info("ChatRoomService: createOrGetChatRoom() - ChatRoom Entity Create Success. id={}", newChatRoom.getId());
+                    log.info("ChatRoomService - createOrGetChatRoom(): ChatRoom Entity Create Success. id={}", newChatRoom.getId());
                     return chatRoomRepository.save(newChatRoom);
                 });
 
-        log.info("ChatRoomService: createOrGetChatRoom() - ChatRoom Entity Loading Success. id={}", chatRoom.getRoomId());
+        log.info("ChatRoomService - createOrGetChatRoom(): ChatRoom Entity Loading Success. id={}", chatRoom.getRoomId());
         return chatRoom;
     }
 
     @Comment("참여중인 채팅방 목록 전체 조회")
+    @Transactional(readOnly = true)
     public List<ChatRoomResponse.getChatRoomList> getAllChatRooms(Long memberId) {
         log.info("ChatRoomService - getAllChatRooms() 호출 성공.");
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("ChatRoomService: getAllChatRooms() - 회원 엔티티 조회 실패. id=" + memberId));
+                .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getAllChatRooms() - 회원 엔티티 조회 실패. id=" + memberId));
         authorizationMember(member);
 
         return chatRoomRepository.findAllByMemberId(member.getId());
+    }
+
+    @Comment("참여중인 특정 채팅방 조회")
+    @Transactional(readOnly = true)
+    public ChatRoomResponse.getChatRoomDetail getChatRoom(Long memberId, String roomId) {
+        log.info("ChatRoomService - getChatRooms(): 호출 성공.");
+        Member sender = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms: 회원 엔티티 조회 실패. id=" + memberId));
+        authorizationMember(sender);
+
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms(): 채팅방 엔티티 조회 실패. roomId=" + roomId));
+
+        List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomOrderBySentAtAsc(chatRoom);
+
+        // 수신자(회원) id 조회
+        Long receiverId = null;
+        if (sender.getId() != chatRoom.getReceiver().getId()) { // 고객 시점에서 특정 돌봄사와의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 수신자를 수신자로 간주)
+            receiverId = chatRoom.getReceiver().getId();
+            return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, chatMessages);
+        }
+        // 돌봄사 시점에서 특정 고객과의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 발신자를 수신자로 간주)
+        receiverId = chatRoom.getSender().getId();
+        return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, chatMessages);
     }
 
     private static void authorizationMember(Member member) {
