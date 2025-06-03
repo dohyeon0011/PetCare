@@ -1,7 +1,6 @@
 package com.PetSitter.dto.chat.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Lob;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,7 +20,6 @@ public class ChatMessageRequest {
     private Long receiverId;
 
     @Schema(description = "전송할 채팅 메시지")
-    @Lob
     @NotBlank(message = "전송할 채팅 메시지 필드 값은 필수입니다.")
     private String message;
 }
