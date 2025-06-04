@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -86,6 +87,14 @@ public class ChatRoomService {
         // 돌봄사 시점에서 특정 고객과의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 발신자를 수신자로 간주)
         receiverId = chatRoom.getSender().getId();
         return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, chatMessages);
+    }
+
+    @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
+    @Transactional(readOnly = true)
+    public Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(Long senderId, Long receiverId) {
+        log.info("ChatRoomService - existsChatRooms() 호출 성공.");
+        return chatRoomRepository.existsChatRooms(senderId, receiverId)
+                .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId()));
     }
 
     private static void authorizationMember(Member member) {
