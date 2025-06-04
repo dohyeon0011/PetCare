@@ -27,6 +27,8 @@ public class ChatMessageService {
     private final MemberRepository memberRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
+    private static final String destination = "/queue/chat-message";
+
     /**
      * 채팅 메시지 생성
      */
@@ -60,7 +62,6 @@ public class ChatMessageService {
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
 
         // 수신자(해당 경로 구독자)에게 메시지 전송
-        String destination = "/queue/chat-message";
         messagingTemplate.convertAndSendToUser(senderId.toString(), destination, savedMessage);
 
         return savedMessage.toChatMessageResponse();
