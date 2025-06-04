@@ -28,6 +28,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             select
                 cr.id as id,
                 cr.room_id as roomId,
+                receiver.member_id as receiverId,
                 receiver.name as receiverName,
                 cm.message as latestMessage,
                 cm.sent_at as latestAt
@@ -49,4 +50,13 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             nativeQuery = true
     )
     List<ChatRoomResponse.getChatRoomList> findAllByMemberId(@Param("memberId") Long memberId);
+
+    // 특정 돌봄사와의 진행중인 채팅방 존재 여부 확인
+    @Query("select new com.PetSitter.dto.chat.chatroom.response.ChatRoomResponse$getExistsChatRoomDetail(" +
+            "cr.roomId, receiver.id) " +
+            "from ChatRoom cr " +
+            "join cr.receiver receiver " +
+            "where cr.sender.id = :senderId " +
+            "and receiver.id = :receiverId")
+    Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
 }
