@@ -23,6 +23,9 @@ public class ChatRoomResponse {
         @Schema(description = "채팅방 번호")
         private String roomId;
 
+        @Schema(description = "수신자 id")
+        private Long receiverId;
+
         @Schema(description = "수신자 이름")
         private String receiverName;
 
@@ -32,9 +35,10 @@ public class ChatRoomResponse {
         @Schema(description = "최근 송/수신 시간")
         private LocalDateTime latestAt;
 
-        public getChatRoomList(Long id, String roomId, String receiverName, String latestMessage, LocalDateTime latestAt) {
+        public getChatRoomList(Long id, String roomId, Long receiverId, String receiverName, String latestMessage, LocalDateTime latestAt) {
             this.id = id;
             this.roomId = roomId;
+            this.receiverId = receiverId;
             this.receiverName = receiverName;
             this.latestMessage = latestMessage;
             this.latestAt = latestAt;
@@ -68,6 +72,22 @@ public class ChatRoomResponse {
             this.chatMessages = chatMessages.stream()
                     .map(ChatMessageResponse.chatMessageDto::new)
                     .toList();
+        }
+    }
+
+    @Schema(description = "특정 돌봄사와의 진행중인 채팅방 존재 여부 확인 Response DTO")
+    @NoArgsConstructor
+    @Getter
+    public static class getExistsChatRoomDetail {
+        @Schema(description = "채팅방 번호")
+        private String roomId;
+
+        @Schema(description = "수신자 id")
+        private Long receiverId;
+
+        public getExistsChatRoomDetail(String roomId, Long receiverId) {
+            this.roomId = roomId;
+            this.receiverId = receiverId;
         }
     }
 }
