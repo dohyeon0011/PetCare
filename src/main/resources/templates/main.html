@@ -43,26 +43,31 @@
                         <b th:text="${currentUser.name}"></b>님!
                     </a>
 
-                    <!-- 채팅 아이콘 버튼 -->
-                    <button id="chatroom-icon" class="btn btn-outline-info ml-2">
-                        💭 채팅
+                    <!-- 채팅방 버튼 -->
+                    <button id="chatroom-icon" class="btn btn-outline-primary">
+                        💭
                     </button>
 
-                    <!-- 채팅방 목록 팝업 -->
-                    <div id="chatroom-list-modal" class="modal d-none">
+                    <!-- 채팅방 목록 -->
+                    <div id="chatroom-list-modal" class="chatroom-dropdown d-none" style="position: absolute; top: 100%; right: 0; margin-top: 20px;">
                         <div class="modal-content">
                             <span class="close-btn" id="close-chatroom-list">&times;</span>
-                            <h5>채팅방 목록</h5>
+                            <h5 style="margin-bottom: 1rem;">채팅방 목록</h5>
                             <ul id="chatroom-list" class="chatroom-list"></ul>
                         </div>
                     </div>
 
                     <!-- 채팅창 -->
-                    <div id="chat-box" class="d-none">
-                        <div id="chat-header">채팅</div>
-                        <div id="chat-messages"></div>
-                        <input type="text" id="chat-input" placeholder="메시지를 입력하세요" />
-                        <button id="send-btn">전송</button>
+                    <div id="chatroom-window" class="chatroom-window d-none">
+                        <div class="chat-header">
+                            <span id="chatroom-title">채팅방 제목</span>
+                            <span class="close-btn" id="close-chatroom-window">&times;</span>
+                        </div>
+                        <div class="chat-messages" id="chat-messages"></div>
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chat-input" placeholder="메시지를 입력하세요" />
+                            <button id="send-chat">전송</button>
+                        </div>
                     </div>
 
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
