@@ -40,6 +40,18 @@ public class ChatMessageResponse {
             this.message = message;
             this.sentAt = sentAt;
         }
+
+        @Override
+        public String toString() {
+            return "messageDto{" +
+                    "id=" + id +
+                    ", roomId=" + roomId +
+                    ", senderId=" + senderId +
+                    ", receiverId=" + receiverId +
+                    ", message='" + message + '\'' +
+                    ", sentAt=" + sentAt +
+                    '}';
+        }
     }
 
     @Schema(description = "특정 채팅방 메시지 조회 DTO")
