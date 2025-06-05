@@ -28,32 +28,38 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             select
                 cr.id as id,
                 cr.room_id as roomId,
-                receiver.member_id as receiverId,
-                receiver.name as receiverName,
+                case
+                    when cr.sender_member_id = :memberId then receiver.member_id
+                    else sender.member_id
+                end as receiverId,
+                case
+                    when cr.sender_member_id = :memberId then receiver.name
+                    else sender.name
+                end as receiverName,
                 cm.message as latestMessage,
                 cm.sent_at as latestAt
             from chat_room cr
-            join members sender on cr.sender_member_id = sender_member_id
-            join members receiver on cr.receiver_member_id = receiver_member_id
+            join members sender on cr.sender_member_id = sender.member_id
+            join members receiver on cr.receiver_member_id = receiver.member_id
             join (
                 select *
-                    from (
-                        select *,
-                           ROW_NUMBER() OVER (PARTITION BY chat_room_id order by sent_at DESC) as rn
-                        from chat_message
+                from (
+                    select *,
+                       ROW_NUMBER() OVER (PARTITION BY chat_room_id order by sent_at DESC) as rn
+                    from chat_message
                 ) ranked
                 where rn = 1
             ) cm on cm.chat_room_id = cr.id
-            where cr.sender_member_id = :memberId
+            where cr.sender_member_id = :memberId or cr.receiver_member_id = :memberId
             order by cm.sent_at desc
             """,
             nativeQuery = true
     )
-    List<ChatRoomResponse.getChatRoomList> findAllByMemberId(@Param("memberId") Long memberId);
+    List<Object[]> findAllByMemberId(@Param("memberId") Long memberId);
 
     // 특정 돌봄사와의 진행중인 채팅방 존재 여부 확인
     @Query("select new com.PetSitter.dto.chat.chatroom.response.ChatRoomResponse$getExistsChatRoomDetail(" +
-            "cr.roomId, receiver.id) " +
+            "cr.roomId, receiver.id, receiver.name) " +
             "from ChatRoom cr " +
             "join cr.receiver receiver " +
             "where cr.sender.id = :senderId " +
