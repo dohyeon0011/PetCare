@@ -15,9 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -62,7 +64,18 @@ public class ChatRoomService {
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getAllChatRooms() - 회원 엔티티 조회 실패. id=" + memberId));
         authorizationMember(member);
 
-        return chatRoomRepository.findAllByMemberId(member.getId());
+        List<Object[]> result = chatRoomRepository.findAllByMemberId(member.getId());
+
+        return result.stream()
+                .map(row -> new ChatRoomResponse.getChatRoomList(
+                        ((Number) row[0]).longValue(),
+                        (String) row[1],
+                        ((Number) row[2]).longValue(),
+                        (String) row[3],
+                        (String) row[4],
+                        row[5] != null ? ((Timestamp) row[5]).toLocalDateTime() : null
+                ))
+                .collect(Collectors.toList());
     }
 
     @Comment("참여중인 특정 채팅방 조회")
@@ -80,13 +93,16 @@ public class ChatRoomService {
 
         // 수신자(회원) id 조회
         Long receiverId = null;
-        if (sender.getId() != chatRoom.getReceiver().getId()) { // 고객 시점에서 특정 돌봄사와의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 수신자를 수신자로 간주)
+        String receiverName;
+        if (sender.getId() != chatRoom.getReceiver().getId()) { // 고객 시점에서 특정 돌봄사와의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 receiver를 수신자로 간주)
             receiverId = chatRoom.getReceiver().getId();
-            return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, chatMessages);
+            receiverName = chatRoom.getReceiver().getName();
+            return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, receiverName, chatMessages);
         }
         // 돌봄사 시점에서 특정 고객과의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 발신자를 수신자로 간주)
         receiverId = chatRoom.getSender().getId();
-        return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, chatMessages);
+        receiverName = chatRoom.getSender().getName();
+        return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, receiverName, chatMessages);
     }
 
     @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
@@ -94,7 +110,7 @@ public class ChatRoomService {
     public Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(Long senderId, Long receiverId) {
         log.info("ChatRoomService - existsChatRooms() 호출 성공.");
         return chatRoomRepository.existsChatRooms(senderId, receiverId)
-                .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId()));
+                .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId(), cr.getReceiverName()));
     }
 
     private static void authorizationMember(Member member) {
