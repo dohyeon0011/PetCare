@@ -21,9 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("STOMP 연결 성공.");
 
                 // 1:1 메시지 수신 구독 (로그인 사용자 기준)
-                stompClient.subscribe(`/user/queue/chat-message`, (message) => {
+                stompClient.subscribe(`/user/queue/chat/message`, (message) => {
                     const chatMessage = JSON.parse(message.body);
-                    showMessage(chatMessage);
+
+                    // 현재 채팅방과 일치할 때만 메시지 표시
+                    if (chatMessage.roomId === currentRoomId) {
+                        showMessage(chatMessage);
+                    } else { // 다른 채팅방 메시지일 경우 알림과 같은 방법으로 처리
+                        showNotification(chatMessage);
+                    }
                 });
             },
             (error) => console.error("STOMP 연결 실패.", error)
@@ -69,21 +75,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const showMessage = (msg) => {
         const chatMessages = document.getElementById("chat-messages");
-        const newMsg = document.createElement("div");
-        newMsg.className = "message"; // CSS 스타일링을 위한 클래스 추가
+
+        // 메시지 컨테이너 생성
+        const messageContainer = document.createElement("div");
+        messageContainer.className = "message-container"; // 커스텀 컨테이너
+
+        // 메시지 말풍선 생성
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message";
 
         // 본인이 보낸 메시지인지 확인하여 스타일 구분
         if (msg.senderId == memberId) {
-            newMsg.classList.add("sent");
+            messageContainer.classList.add("sent");
+            messageDiv.classList.add("sent");
         } else {
-            newMsg.classList.add("received");
+            messageContainer.classList.add("received");
+            messageDiv.classList.add("received");
         }
 
-        newMsg.textContent = `[${msg.senderId}] ${msg.message}`;
-        chatMessages.appendChild(newMsg);
+        // 메시지 본문
+        messageDiv.textContent = msg.message;
+
+        // 날짜/시간 정보 (말풍선 외부에 위치)
+        const timestamp = document.createElement("div");
+        timestamp.className = "timestamp";
+        timestamp.textContent = formatDateTime(msg.sentAt);
+
+        // 컨테이너에 말풍선과 timestamp 추가
+        messageContainer.appendChild(messageDiv);
+        messageContainer.appendChild(timestamp);
+
+        // 채팅 메시지 영역에 컨테이너 추가
+        chatMessages.appendChild(messageContainer);
 
         // 스크롤을 맨 아래로 이동 (새 메시지가 보이도록)
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+
+    // 날짜와 시각 포맷 함수 (예: 2025-06-05 14:32 형식)
+    const formatDateTime = (isoString) => {
+        const date = new Date(isoString);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
     };
 
     // 채팅방 아이콘 클릭 -> 채팅방 목록 팝업 표시
@@ -107,11 +144,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // 엔터키로 메시지 전송
     document.getElementById("chat-input").addEventListener("keypress", (event) => {
         // Enter키가 눌렸고, Shift키가 함께 눌리지 않은 경우에만 전송
+        // Shift + Enter는 줄바꿈으로 동작
         if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault(); // 기본 엔터 동작(줄바꿈) 방지
             sendMessage();
         }
-        // Shift + Enter는 줄바꿈으로 동작 (기본 동작 유지)
     });
 
     // 채팅방 목록 불러오기 (ajax)
@@ -139,8 +176,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 rooms.forEach((room) => {
                     const li = document.createElement("li");
-                    li.textContent = `채팅방 ${room.roomId}`;
-                    li.addEventListener("click", () => enterRoom(room.roomId, room.receiverId));
+                    li.textContent = `${room.receiverName} 채팅방 `;
+                    li.addEventListener("click", () => enterRoom(room.roomId, room.receiverId, room.receiverName));
                     list.appendChild(li);
                 });
             })
@@ -151,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
-    const enterRoom = (roomId, receiverId) => {
+    const enterRoom = (roomId, receiverId, receiverName) => {
         currentRoomId = roomId;
         receiverUserId = receiverId;
 
@@ -161,10 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("chatroom-window").classList.remove("d-none");
 
         // 채팅방 제목 업데이트
-        document.getElementById("chatroom-title").textContent = `채팅방 ${roomId}`;
+        document.getElementById("chatroom-title").textContent = `${receiverName}님과의 채팅방 `;
 
         // 기존 메시지 목록 초기화
         document.getElementById("chat-messages").innerHTML = "";
+        document.getElementById("chat-messages").innerHTML = "<div style='text-align:center; color: #999;'>이전 메시지가 없습니다.</div>";
 
         // 기존 메시지 조회
         fetch(`/api/pets-care/members/${memberId}/chat/chat-rooms/${roomId}/messages`)
@@ -174,8 +212,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 return res.json();
             })
-            .then((messages) => {
-                messages.forEach(showMessage);
+            .then((data) => {
+                const messages = data.chatMessages; // chatMessages 리스트 배열 추출
+                messages.forEach(showMessage);      // 각 메시지를 화면에 출력
             })
             .catch((error) => {
                 console.error("채팅 메시지 로드 실패:", error);
@@ -215,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (roomId && receiverId) {
                     // 해당 돌봄사와 진행하던 기존 채팅방이 있는 경우 enterRoom을 호출해 메시지 불러오기
-                    enterRoom(roomId, receiverId);
+                    enterRoom(roomId, receiverId, sitterName);
                 } else {
                     // 없을 경우: 새로운 메시지 전송 시 'new'로 처리
                     currentRoomId = null;
@@ -225,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 채팅창 UI 열기만
                 document.getElementById("chatroom-window").classList.remove("d-none");
                 document.getElementById("chatroom-title").textContent = `${sitterName}님과의 채팅`;
-                document.getElementById("chat-messages").innerHTML = "";
+                document.getElementById("chat-messages").innerHTML = "<div style='text-align:center; color: #999;'>이전 메시지가 없습니다.</div>";
                 document.getElementById("chat-input").focus();
             })
     });
@@ -260,4 +299,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("STOMP 연결 해제");
         }
     });
+
+    function showNotification(msg) {
+        // UI 상단이나 알림 창에 표시
+        const notify = document.getElementById("chat-notification");
+        notify.textContent = `새 메시지: ${msg.message}`;
+        notify.classList.add("show");
+    }
 });
