@@ -38,6 +38,7 @@ public class WebSocketConfigDev implements WebSocketMessageBrokerConfigurer {
         // 클라이언트에서 WebSocket 연결을 위해 사용할 엔드포인트
         registry.addEndpoint("/ws-chat") // ex: ws://localhost:8080/ws-chat, WebSocket 연결을 시작할 때 사용할 엔드포인트. 클라이언트는 이 경로로 3-handshake를 시도.
                 .setAllowedOriginPatterns("*") // CORS 허용
+                .addInterceptors(new UserHandshakeInterceptor())
                 .withSockJS(); // SockJS fallback 지원, WebSocket을 사용할 수 없는 환경에서 fallback으로 SockJS 사용 가능하게 함.
     }
 
