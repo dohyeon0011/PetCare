@@ -304,6 +304,37 @@
     display: none !important;
 }
 
+.message-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    animation: chatroomMessageIn 0.3s ease;
+}
+
+.message-container.sent {
+    align-items: flex-end;
+}
+
+.message-container.received {
+    align-items: flex-start;
+}
+
+.message-container .timestamp {
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-top: 6px;
+    padding: 0 8px;
+    user-select: none;
+}
+
+.message-container.sent .timestamp {
+    text-align: right;
+}
+
+.message-container.received .timestamp {
+    text-align: left;
+}
+
 /* 애니메이션 키프레임 */
 @keyframes chatroomWindowIn {
     from {
