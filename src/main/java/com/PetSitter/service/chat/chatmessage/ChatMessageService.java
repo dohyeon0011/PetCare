@@ -27,7 +27,7 @@ public class ChatMessageService {
     private final MemberRepository memberRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
-    private static final String destination = "/queue/chat-message";
+    private static final String destination = "/queue/chat/message";
 
     /**
      * 채팅 메시지 생성
@@ -58,12 +58,12 @@ public class ChatMessageService {
                 .message(message)
                 .build();
         log.info("ChatMessageService - saveMessage(): ChatMessage Entity Create Success. id={}", chatMessage.getId());
-
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+        ChatMessageResponse.messageDto chatMessageResponse = savedMessage.toChatMessageResponse();
 
         // 수신자(해당 경로 구독자)에게 메시지 전송
-        messagingTemplate.convertAndSendToUser(senderId.toString(), destination, savedMessage);
+        messagingTemplate.convertAndSendToUser(receiver.getLoginId(), destination, chatMessageResponse);
 
-        return savedMessage.toChatMessageResponse();
+        return chatMessageResponse;
     }
 }
