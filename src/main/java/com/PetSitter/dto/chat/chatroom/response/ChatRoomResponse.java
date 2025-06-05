@@ -61,14 +61,18 @@ public class ChatRoomResponse {
         @Schema(description = "수신자 id")
         private Long receiverId;
 
+        @Schema(description = "수신자 이름")
+        private String receiverName;
+
         @Schema(description = "채팅 메시지 내역")
         List<ChatMessageResponse.chatMessageDto> chatMessages = new ArrayList<>();
 
-        public getChatRoomDetail(Long id, String roomId, Long senderId, Long receiverId, List<ChatMessage> chatMessages) {
+        public getChatRoomDetail(Long id, String roomId, Long senderId, Long receiverId, String receiverName, List<ChatMessage> chatMessages) {
             this.id = id;
             this.roomId = roomId;
             this.senderId = senderId;
             this.receiverId = receiverId;
+            this.receiverName = receiverName;
             this.chatMessages = chatMessages.stream()
                     .map(ChatMessageResponse.chatMessageDto::new)
                     .toList();
@@ -85,9 +89,13 @@ public class ChatRoomResponse {
         @Schema(description = "수신자 id")
         private Long receiverId;
 
-        public getExistsChatRoomDetail(String roomId, Long receiverId) {
+        @Schema(description = "수신자 이름")
+        private String receiverName;
+
+        public getExistsChatRoomDetail(String roomId, Long receiverId, String receiverName) {
             this.roomId = roomId;
             this.receiverId = receiverId;
+            this.receiverName = receiverName;
         }
     }
 }
