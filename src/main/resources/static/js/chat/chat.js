@@ -1,11 +1,14 @@
 let stompClient = null;
 let currentRoomId = null;
 let receiverUserId = null;
+const chatInput = document.getElementById('chat-input');
+const sendButton = document.getElementById('send-chat');
 
 document.addEventListener("DOMContentLoaded", () => {
     const memberId = document.getElementById("memberData").dataset.memberId;
     const token = document.getElementById("memberData").dataset.jwtToken;
 
+    // STOMP 연결
     const connect = () => {
         const socket = new SockJS("http://localhost:9090/ws-chat");
         stompClient = Stomp.over(socket);
@@ -15,17 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
             headers['Authorization'] = `Bearer ${token}`;
         }
 
+        // STOMP 연결 후 동작
         stompClient.connect(
             headers,
             () => {
                 console.log("STOMP 연결 성공.");
+                console.log("Subscribing to /user/queue/chat/message");
 
                 // 1:1 메시지 수신 구독 (로그인 사용자 기준)
                 stompClient.subscribe(`/user/queue/chat/message`, (message) => {
-                    const chatMessage = JSON.parse(message.body);
+                    const parsed = JSON.parse(message.body);
 
+                    // ChatMessageResponse.messageDto 스펙인지, GenericMessage로 감싸진 구조인지 확인(@SendToUser로 받은 것인지, 상대가 보낸 경로를 구독하여 받은 것인지 구별하기 위해서)
+                    const isMessageDto = parsed.roomCode && parsed.message;
+                    const chatMessage = isMessageDto ? parsed : parsed.body;
+                    console.log("받은 메시지:", chatMessage);
+
+                    const isCurrentRoomOpen = chatMessage.roomCode === currentRoomId;
+                    const isMyMessage = Number(chatMessage.senderId) === Number(memberId);
                     // 현재 채팅방과 일치할 때만 메시지 표시
-                    if (chatMessage.roomId === currentRoomId) {
+                    if (isCurrentRoomOpen || isMyMessage) { // 내가 보낸 메시지나 현재 채팅방에 접속해서 보고 있을 때
                         showMessage(chatMessage);
                     } else { // 다른 채팅방 메시지일 경우 알림과 같은 방법으로 처리
                         showNotification(chatMessage);
@@ -36,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     };
 
+    // 메시지 전송
     const sendMessage = () => {
         const chatInput = document.getElementById("chat-input");
         const content = chatInput.value.trim();
@@ -71,8 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         chatInput.value = "";   // 입력창 초기화
         chatInput.focus();  // 포커스를 다시 입력창에 맞춤 (사용자 경험(편의성) 향상)
+        sendButton.disabled = true;
+        // 전송 애니메이션
+        sendButton.style.transform = 'translateY(0) scale(0.9)';
+        setTimeout(() => {
+            sendButton.style.transform = '';
+        }, 150);
     };
 
+    // 해당 채팅방에 메시지 표시
     const showMessage = (msg) => {
         const chatMessages = document.getElementById("chat-messages");
 
@@ -92,14 +112,13 @@ document.addEventListener("DOMContentLoaded", () => {
             messageContainer.classList.add("received");
             messageDiv.classList.add("received");
         }
-
         // 메시지 본문
         messageDiv.textContent = msg.message;
 
         // 날짜/시간 정보 (말풍선 외부에 위치)
         const timestamp = document.createElement("div");
         timestamp.className = "timestamp";
-        timestamp.textContent = formatDateTime(msg.sentAt);
+        timestamp.textContent = formatDateTimeForChatMessage(msg.sentAt);
 
         // 컨테이너에 말풍선과 timestamp 추가
         messageContainer.appendChild(messageDiv);
@@ -112,8 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
 
-    // 날짜와 시각 포맷 함수 (예: 2025-06-05 14:32 형식)
-    const formatDateTime = (isoString) => {
+    // 채팅 메시지별 날짜와 시각 포맷 함수 (예: 2025-06-05 14:32 형식)
+    const formatDateTimeForChatMessage = (isoString) => {
         const date = new Date(isoString);
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -127,15 +146,22 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("chatroom-icon").addEventListener("click", () => {
         loadChatRoomList();
         const chatModal = document.getElementById("chatroom-list-modal");
-        chatModal.classList.remove("d-none");
-        chatModal.classList.add("show");
+        chatModal.classList.remove("d-none"); // 일단 숨김 해제
+
+        // 다음 repaint 시점에 .show 추가해서 transition 적용
+        requestAnimationFrame(() => {
+            chatModal.classList.add("show");
+        });
     });
 
     // 채팅방 목록 팝업 닫기
     document.getElementById("close-chatroom-list").addEventListener("click", () => {
         const chatModal = document.getElementById("chatroom-list-modal");
         chatModal.classList.remove("show");
-        chatModal.classList.add("d-none");
+        // transition 시간(0.4초) 후에 d-none 추가해서 완전 숨김 처리
+        setTimeout(() => {
+            chatModal.classList.add("d-none");
+        }, 400);
     });
 
     // 메시지 전송 버튼 클릭 이벤트
@@ -176,7 +202,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 rooms.forEach((room) => {
                     const li = document.createElement("li");
-                    li.textContent = `${room.receiverName} 채팅방 `;
+                    li.classList.add("chatroom-item");
+
+                    // 채팅방 이름 (수신자 이름)
+                    const nameDiv = document.createElement("div");
+                    nameDiv.classList.add("chatroom-name");
+                    nameDiv.textContent = room.receiverName;
+
+                    // 최근 메시지
+                    const messageDiv = document.createElement("div");
+                    messageDiv.classList.add("chatroom-latest-message");
+                    messageDiv.textContent = room.latestMessage || "메시지가 없습니다.";
+
+                    // 시간 포맷팅해서 보여주기 (ex: 카카오톡처럼 14:23, 어제, 2023-06-01)
+                    const timeDiv = document.createElement("div");
+                    timeDiv.classList.add("chatroom-latest-time");
+                    timeDiv.textContent = formatDateTimeForChatRoom(room.latestAt);
+
+                    li.appendChild(nameDiv);
+                    li.appendChild(messageDiv);
+                    li.appendChild(timeDiv);
+
                     li.addEventListener("click", () => enterRoom(room.roomId, room.receiverId, room.receiverName));
                     list.appendChild(li);
                 });
@@ -186,6 +232,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 const list = document.getElementById("chatroom-list");
                 list.innerHTML = "<li style='color: red;'>채팅방 목록을 불러올 수 없습니다.</li>";
             });
+    };
+
+    // 채팅방별 마지막으로 진행된 메시지 날짜, 시간 표기 설정(카카오톡처럼)
+    const formatDateTimeForChatRoom = (dateTimeString) => {
+        if (!dateTimeString) return "";
+
+        const date = new Date(dateTimeString);
+        const now = new Date();
+
+        const diffMs = now.getTime() - date.getTime();
+        const diffSec = Math.floor(diffMs / 1000);
+        const diffMin = Math.floor(diffSec / 60);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+
+        if (diffSec < 60) {
+            return "방금 전";
+        } else if (diffMin < 60) {
+            return `${diffMin}분 전`;
+        } else if (diffHour < 24 && now.getDate() === date.getDate()) {
+            // 오늘 날짜 내 1시간 이상인 경우
+            return `${diffHour}시간 전`;
+        } else if (diffDay === 1) {
+            return "어제";
+        } else if (diffDay > 1 && diffDay < 7) {
+            return `${diffDay}일 전`;
+        } else {
+            // 7일 이상: YYYY-MM-DD
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, "0");
+            const day = date.getDate().toString().padStart(2, "0");
+            return `${year}-${month}-${day}`;
+        }
     };
 
     const enterRoom = (roomId, receiverId, receiverName) => {
@@ -289,6 +368,41 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // 채팅창 알림 표시
+    function showNotification(msg) {
+        console.log("알림 표시 시도:", msg);
+        // UI 상단이나 알림 창에 표시
+        const notify = document.getElementById("chat-notification");
+        if (!notify) {
+            return;
+        }
+        notify.classList.remove("d-none");
+        notify.textContent = `${msg.senderName}님의 새 메시지: ${msg.message}`;
+        notify.classList.add("show");
+
+        // 알림창 클릭 시 해당 채팅방으로 이동
+        notify.onclick = () => {
+            if (msg.roomCode) {
+                enterRoom(msg.roomCode, msg.senderId, msg.senderName);
+            }
+        };
+
+        // 5초 표시 후 자동 숨기기
+        setTimeout(() => {
+            notify.classList.remove("show");
+            notify.classList.add("d-none");
+        }, 4000);
+    }
+
+    // 입력 내용에 따라 버튼 활성화/비활성화
+    chatInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            sendButton.disabled = false;
+        } else {
+            sendButton.disabled = true;
+        }
+    });
+
     // STOMP 연결
     connect();
 
@@ -300,10 +414,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    function showNotification(msg) {
-        // UI 상단이나 알림 창에 표시
-        const notify = document.getElementById("chat-notification");
-        notify.textContent = `새 메시지: ${msg.message}`;
-        notify.classList.add("show");
-    }
+    // 초기 상태: 버튼 비활성화
+    sendButton.disabled = true;
 });
