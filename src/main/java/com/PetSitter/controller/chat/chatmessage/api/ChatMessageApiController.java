@@ -58,9 +58,6 @@ public class ChatMessageApiController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("인증되지 않은 사용자입니다.");
         }
-        log.info("principal class={}", principal.getClass().getName());
-        log.info("principal info={}", principal.getName());
-        log.info("member info={}", member);
 
         ChatMessageResponse.messageDto chatMessage = null;
         if (member != null) {
