@@ -34,10 +34,12 @@ public class ChatMessageService {
      */
     public ChatMessageResponse.messageDto saveMessage(String roomId, Long senderId, Long receiverId, String message) {
         // 채팅방 조회
-        ChatRoom chatRoom = null;
+        ChatRoom chatRoom;
+        boolean isNew = false;
         if (roomId.equals("new")) { // 새로운 대화를 시작할 경우
             log.info("ChatMessageService - saveMessage(): 새 채팅방 생성 후 메시지 저장: senderId={}, receiverId={}", senderId, receiverId);
             chatRoom = chatRoomService.createOrGetChatRoom(senderId, receiverId);
+            isNew = true;
         } else {    // 기존 채팅방에서 메시지를 전송할 경우
             log.info("ChatMessageService - saveMessage(): 기존 채팅방 메시지 저장: roomId={}", roomId);
             chatRoom = chatRoomRepository.findByRoomId(roomId)
@@ -57,9 +59,9 @@ public class ChatMessageService {
                 .receiver(receiver)
                 .message(message)
                 .build();
-        log.info("ChatMessageService - saveMessage(): ChatMessage Entity Create Success. id={}", chatMessage.getId());
+        log.info("ChatMessageService - saveMessage(): ChatMessage Entity Create Success.");
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-        ChatMessageResponse.messageDto chatMessageResponse = savedMessage.toChatMessageResponse();
+        ChatMessageResponse.messageDto chatMessageResponse = savedMessage.toChatMessageResponse(isNew);
 
         // 수신자(해당 경로 구독자)에게 메시지 전송
         messagingTemplate.convertAndSendToUser(receiver.getLoginId(), destination, chatMessageResponse);
