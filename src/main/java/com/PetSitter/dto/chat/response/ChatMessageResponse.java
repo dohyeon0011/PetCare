@@ -1,6 +1,7 @@
 package com.PetSitter.dto.chat.response;
 
 import com.PetSitter.domain.chat.ChatMessage;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,14 @@ public class ChatMessageResponse {
         @Schema(description = "채팅방 id")
         private Long roomId;
 
+        @Schema(description = "채팅방 식별용 번호", pattern = "uuid")
+        private String roomCode;
+
         @Schema(description = "발신자 id")
         private Long senderId;
+
+        @Schema(description = "발신자 이름(채팅 알림 발신자 이름 표시용)")
+        private String senderName;
 
         @Schema(description = "수신자 id")
         private Long receiverId;
@@ -32,13 +39,20 @@ public class ChatMessageResponse {
         @Schema(description = "전송 시간")
         private LocalDateTime sentAt;
 
-        public messageDto(Long id, Long roomId, Long senderId, Long receiverId, String message, LocalDateTime sentAt) {
+        @Schema(description = "대화방 최초 생성 or 기존 채팅방 여부")
+        @JsonProperty("isNew")
+        private boolean isNew;
+
+        public messageDto(Long id, Long roomId, String roomCode, Long senderId, String senderName, Long receiverId, String message, LocalDateTime sentAt, boolean isNew) {
             this.id = id;
             this.roomId = roomId;
+            this.roomCode = roomCode;
             this.senderId = senderId;
+            this.senderName = senderName;
             this.receiverId = receiverId;
             this.message = message;
             this.sentAt = sentAt;
+            this.isNew = isNew;
         }
 
         @Override
@@ -46,7 +60,9 @@ public class ChatMessageResponse {
             return "messageDto{" +
                     "id=" + id +
                     ", roomId=" + roomId +
+                    ", roomCode=" + roomCode +
                     ", senderId=" + senderId +
+                    ", senderName=" + senderName +
                     ", receiverId=" + receiverId +
                     ", message='" + message + '\'' +
                     ", sentAt=" + sentAt +
