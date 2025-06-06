@@ -11,7 +11,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,6 @@ public class ChatRoomService {
                 .orElseGet(() -> {  // 발신자 - 수신자가 최초 대화할 경우, 새로운 채팅방 엔티티 생성
                     Member sender = memberRepository.findById(senderId)
                             .orElseThrow(() -> new EntityNotFoundException("발신자 엔티티 조회 오류: [senderId=" + senderId + "]"));
-                    authorizationMember(sender);
                     Member receiver = memberRepository.findById(receiverId)
                             .orElseThrow(() -> new EntityNotFoundException("수신자 엔티티 조회 오류: [receiverId=" + receiverId + "]"));
 
@@ -62,7 +60,6 @@ public class ChatRoomService {
         log.info("ChatRoomService - getAllChatRooms() 호출 성공.");
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getAllChatRooms() - 회원 엔티티 조회 실패. id=" + memberId));
-        authorizationMember(member);
 
         List<Object[]> result = chatRoomRepository.findAllByMemberId(member.getId());
 
@@ -84,7 +81,6 @@ public class ChatRoomService {
         log.info("ChatRoomService - getChatRooms(): 호출 성공.");
         Member sender = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms: 회원 엔티티 조회 실패. id=" + memberId));
-        authorizationMember(sender);
 
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms(): 채팅방 엔티티 조회 실패. roomId=" + roomId));
@@ -111,13 +107,5 @@ public class ChatRoomService {
         log.info("ChatRoomService - existsChatRooms() 호출 성공.");
         return chatRoomRepository.existsChatRooms(senderId, receiverId)
                 .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId(), cr.getReceiverName()));
-    }
-
-    private static void authorizationMember(Member member) {
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-
-        if(!member.getLoginId().equals(userName)) {
-            throw new IllegalArgumentException("회원 본인만 가능합니다.");
-        }
     }
 }
