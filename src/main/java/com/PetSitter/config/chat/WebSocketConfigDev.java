@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -43,6 +44,9 @@ public class WebSocketConfigDev implements WebSocketMessageBrokerConfigurer {
     }
 
     // 클라이언트가 보낸 메시지를 가로채기 위한 인터셉터 등록 (ex: 토큰 확인 등)
+    // SecurityContextHolder는 ThreadLocal 기반(로직을 수행하는 특정 스레드에서만 값 저장 -> 값은 같은 스레드 내에서만 공유하게 됨.)
+    // WebSocket 처리 중엔 비동기 처리나 다른 스레드에서 동작할 수 있기 때문에 SecurityContextHolder가 공유되지 않음.
+    // 그래서 매 요청마다 SecurityContextHoler.setContext()로 명시적으로 인증 정보를 설정해 줘야 함.
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {    // ChannelInterceptor는 메시지 채널을 가로채서 인증 처리, 로깅, 필터링 등을 할 수 있는 인터페이스.
@@ -59,7 +63,12 @@ public class WebSocketConfigDev implements WebSocketMessageBrokerConfigurer {
                     if (token != null && token.startsWith("Bearer ")) {
                         String jwt = token.substring(7);
                         Authentication auth = tokenProvider.getAuthentication(jwt);
-                        accessor.setUser(auth); // Websocket에 인증 정보 설정
+                        accessor.setUser(auth); // Websocket에 인증 정보 설정(Principal용 설정)
+
+                        // SecurityContextHolder에도 명시적으로 설정
+                        SecurityContext context = SecurityContextHolder.createEmptyContext();
+                        context.setAuthentication(auth);
+                        SecurityContextHolder.setContext(context);
 
                         return message;
                     }
@@ -68,6 +77,10 @@ public class WebSocketConfigDev implements WebSocketMessageBrokerConfigurer {
                     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
                     if (auth != null && auth.isAuthenticated()) {
                         accessor.setUser(auth);
+
+                        SecurityContext context = SecurityContextHolder.createEmptyContext();
+                        context.setAuthentication(auth);
+                        SecurityContextHolder.setContext(context);
                     }
                 }
                 return message;
