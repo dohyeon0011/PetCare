@@ -21,9 +21,9 @@
 
 <ol>JWT 기반 인증: Access & Refresh Token 활용</ol>  
 
-<ol>회원 신고 기능: 부적절한 회원 신고 기능(+개발 예정)</ol>  
+<ol>고객과 돌봄사간의 실시간 채팅 기능(WebSocket + STOMP)(+개발 완료)</ol>  
 
-<ol>고객과 돌봄사간의 실시간 채팅 기능(WebSocket + STOMP)(+개발 예정)</ol>  
+<ol>회원 신고 기능: 부적절한 회원 신고 기능(+개발 예정)</ol>    
 
 <br>
 
