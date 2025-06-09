@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class ChatMessage {  // 채팅방 메시지 엔티티
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("대화방(ChatRoom) 1 : N")
