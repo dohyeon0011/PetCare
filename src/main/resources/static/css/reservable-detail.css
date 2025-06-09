@@ -141,6 +141,9 @@ body {
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     transition: background 0.3s;
+    white-space: normal; /* 텍스트가 자동 줄바꿈 되도록 허용(nowrap이면 한 줄 유지) */
+    overflow-wrap: break-word; /* 너무 긴 단어(공백 없는 문자열)를 강제로 줄바꿈 */
+    word-break: break-word; /* 긴 영단어나 URL 등 잘라서 줄바꿈 */
 }
 .review:hover {
     background: var(--color-container);
