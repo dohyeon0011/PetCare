@@ -8,6 +8,7 @@
     <link th:href="@{/css/admin-reservation-list.css}" rel="stylesheet">
     <link th:href="@{/css/pagination.css}" rel="stylesheet">
     <link th:href="@{/css/chatbot.css}" rel="stylesheet">
+    <link th:href="@{/css/chat.css}" rel="stylesheet">
 </head>
 <body>
 <!--로그인 여부 확인(챗봇)-->
@@ -40,6 +41,41 @@
                         안녕하세요,
                         <b th:text="${currentUser.name}"></b>님!
                     </a>
+
+                    <!-- 채팅방 버튼 -->
+                    <button id="chatroom-icon" class="btn btn-outline-primary">
+                        💭
+                    </button>
+
+                    <!-- 채팅방 목록 -->
+                    <div id="chatroom-list-modal" class="chatroom-dropdown d-none" style="position: absolute; top: 100%; right: 0; margin-top: 20px;">
+                        <div class="modal-content">
+                            <span class="close-btn" id="close-chatroom-list">&times;</span>
+                            <h5 style="margin-bottom: 1rem;">채팅방 목록</h5>
+                            <ul id="chatroom-list" class="chatroom-list"></ul>
+                        </div>
+                    </div>
+
+                    <!-- 채팅창 -->
+                    <div id="chatroom-window" class="chatroom-window d-none">
+                        <div class="chat-header">
+                            <span id="chatroom-title">채팅방 제목</span>
+                            <span class="close-btn" id="close-chatroom-window">&times;</span>
+                        </div>
+                        <div class="chat-messages" id="chat-messages"></div>
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chat-input" placeholder="메시지를 입력하세요" />
+                            <button id="send-chat" type="button">
+                                <svg class="send-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 채팅 알림 -->
+                    <div id="chat-notification" class="chat-notification d-none"></div>
+
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
@@ -191,6 +227,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>  <!-- Bootstrap JS -->
 <script src="/js/chatbot/chatbot.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script> <!-- SockJS CDN 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script> <!-- STOMP client가 필요할 때 -->
+<script src="/js/chat/chat.js"></script>
 <script>
     function confirmDelete(event, form) {
         if (confirm("정말로 이 예약을 취소하시겠습니까?")) {
