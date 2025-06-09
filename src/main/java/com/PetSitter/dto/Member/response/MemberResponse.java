@@ -225,7 +225,7 @@ public class MemberResponse {
 
     @NoArgsConstructor
     @Getter
-    @Schema(description = "회원(고객) 정보 수정 후 조회 Response DTO")
+    @Schema(description = "회원(펫시터) 정보 수정 후 조회 Response DTO")
     public static class getUpdateSitter {
         @Schema(description = "회원 id")
         private long id;
