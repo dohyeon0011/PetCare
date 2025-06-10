@@ -15,7 +15,7 @@ import org.hibernate.annotations.Comment;
 public class PetReservation {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pet_reservation_id")
     private long id;
 
