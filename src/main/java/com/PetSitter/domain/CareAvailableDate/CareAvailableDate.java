@@ -27,7 +27,7 @@ public class CareAvailableDate { // 예약 가능 날짜(돌봄사)
 
     @Comment("예약 가능한 날짜")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd") // 이 어노테이션은 주로 컨트롤러에서 바인딩할 때 사용됨, 엔티티는 가급적이면 데이터베이스 매핑에만 집중을 권장
-    @Column(name = "available_at", unique = true)
+    @Column(name = "available_at")
     private LocalDate availableAt;
 
     @Comment("돌봄 비용")
