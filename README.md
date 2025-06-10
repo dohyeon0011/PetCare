@@ -81,7 +81,7 @@
 
 <br>
 
-Redis 기반 웹 서비스 이용 가이드 챗봇(+개발 완료)
+Redis(Lettuce) 기반 웹 서비스 이용 가이드 챗봇(+개발 완료)
 
 ---
 
@@ -99,7 +99,9 @@ QueryDSL & JPQL - 동적 쿼리 처리
 
 Spring Security  
 
-Redis  
+Redis(Lettuce)
+
+WebSocket + STOMP
 
 <br>
 
@@ -150,6 +152,9 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 # 메인 페이지(2)
 <img width="1630" alt="image" src="https://github.com/user-attachments/assets/e478fd2f-7ffb-42d6-b2a4-010fa50480ad" />      
 (돌봄 리뷰는 가장 최근에 작성된 리뷰 6개만 조회(+페이징))
+
+# WebSocket + STOMP 실시간 통신
+
 
 <br><br><br>
 
