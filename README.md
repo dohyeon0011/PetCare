@@ -135,7 +135,7 @@ MySQL
 
 <br>
 
-<img width="1236" alt="image" src="https://github.com/user-attachments/assets/d9de55a2-0c08-47c4-8ece-c181dd0367b7" />  
+![스크린샷 2025-06-10 오후 9 14 12](https://github.com/user-attachments/assets/cddb0966-b16c-46f9-96da-dc159dbe2332)    
 
 ---
 
