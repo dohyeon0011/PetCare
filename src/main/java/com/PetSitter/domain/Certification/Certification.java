@@ -15,7 +15,7 @@ import org.hibernate.annotations.Comment;
 public class Certification {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "certification_id", updatable = false)
     private long id;
 
