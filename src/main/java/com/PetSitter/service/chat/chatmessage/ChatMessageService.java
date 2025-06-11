@@ -27,7 +27,7 @@ public class ChatMessageService {
     private final MemberRepository memberRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
-    private static final String destination = "/queue/chat/message";
+    private static final String destination = "/queue/chat/messages";
 
     /**
      * 채팅 메시지 생성
@@ -67,5 +67,15 @@ public class ChatMessageService {
         messagingTemplate.convertAndSendToUser(receiver.getLoginId(), destination, chatMessageResponse);
 
         return chatMessageResponse;
+    }
+
+    /**
+     * 채팅 메시지 읽음 처리
+     */
+    public void messageAsRead(Long messageId) {
+        log.info("ChatMessageService - messageAsRead(): 메시지 읽음 처리. id={}", messageId);
+        ChatMessage findChatMessage = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new EntityNotFoundException("ChatMessageService - messageAsRead(): ChatMessage Not found. [id=" + messageId + "]"));
+        findChatMessage.changeRead();
     }
 }
