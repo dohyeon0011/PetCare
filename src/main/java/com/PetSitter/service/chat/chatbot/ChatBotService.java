@@ -22,8 +22,8 @@ public class ChatBotService {
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
-    private final static Duration GUEST_CHAT_EXPIRATION = Duration.ofHours(12);
-    private final static Duration USER_CHAT_EXPIRATION = Duration.ofHours(168); // 일주일
+    private final static Duration GUEST_CHAT_EXPIRATION = Duration.ofHours(6);
+    private final static Duration USER_CHAT_EXPIRATION = Duration.ofHours(72); // 3일
 
     private final static String CHAT_TYPE_CLIENT = "send";
     private final static String CHAT_TYPE_CHATBOT = "answer";
