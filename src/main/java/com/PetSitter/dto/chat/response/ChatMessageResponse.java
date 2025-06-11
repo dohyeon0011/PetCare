@@ -43,7 +43,11 @@ public class ChatMessageResponse {
         @JsonProperty("isNew")
         private boolean isNew;
 
-        public messageDto(Long id, Long roomId, String roomCode, Long senderId, String senderName, Long receiverId, String message, LocalDateTime sentAt, boolean isNew) {
+        @Schema(description = "읽음 여부")
+        @JsonProperty("isRead")
+        private boolean isRead;
+
+        public messageDto(Long id, Long roomId, String roomCode, Long senderId, String senderName, Long receiverId, String message, LocalDateTime sentAt, boolean isNew, boolean isRead) {
             this.id = id;
             this.roomId = roomId;
             this.roomCode = roomCode;
@@ -53,6 +57,7 @@ public class ChatMessageResponse {
             this.message = message;
             this.sentAt = sentAt;
             this.isNew = isNew;
+            this.isRead = isRead;
         }
 
         @Override
@@ -60,12 +65,14 @@ public class ChatMessageResponse {
             return "messageDto{" +
                     "id=" + id +
                     ", roomId=" + roomId +
-                    ", roomCode=" + roomCode +
+                    ", roomCode='" + roomCode + '\'' +
                     ", senderId=" + senderId +
-                    ", senderName=" + senderName +
+                    ", senderName='" + senderName + '\'' +
                     ", receiverId=" + receiverId +
                     ", message='" + message + '\'' +
                     ", sentAt=" + sentAt +
+                    ", isNew=" + isNew +
+                    ", isRead=" + isRead +
                     '}';
         }
     }
@@ -95,6 +102,10 @@ public class ChatMessageResponse {
         @Schema(description = "전송 시간")
         private LocalDateTime sentAt;
 
+        @Schema(description = "읽음 여부")
+        @JsonProperty("is_read")
+        private boolean isRead;
+
         public chatMessageDto(ChatMessage chatMessage) {
             this.id = chatMessage.getId();
             this.senderId = chatMessage.getSender().getId();
@@ -103,6 +114,7 @@ public class ChatMessageResponse {
             this.receiverName = chatMessage.getReceiver().getName();
             this.message = chatMessage.getMessage();
             this.sentAt = chatMessage.getSentAt();
+            this.isRead = chatMessage.isRead();
         }
     }
 }
