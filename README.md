@@ -156,9 +156,13 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 # 메인 페이지(2)
 <img width="1630" alt="image" src="https://github.com/user-attachments/assets/e478fd2f-7ffb-42d6-b2a4-010fa50480ad" />      
 (돌봄 리뷰는 가장 최근에 작성된 리뷰 6개만 조회(+페이징))
+<br><br>
 
-# WebSocket + STOMP 실시간 통신
-
+# WebSocket + STOMP 실시간 통신  
+<img width="1654" alt="image" src="https://github.com/user-attachments/assets/4f367df6-b104-41ef-972d-ee5957dbae5e" /><br>  
+<img width="1703" alt="image" src="https://github.com/user-attachments/assets/c84002b4-e499-46ac-bce8-71fb10268866" />  
+(접속 중이지 않은 다른 채팅방에게서 온 메시지는 알림 형식으로 표시)<br>  
+<img width="1584" alt="image" src="https://github.com/user-attachments/assets/d8724ddf-6c68-413a-a38c-97a15035b010" />  
 
 <br><br><br>
 
@@ -180,11 +184,12 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (자신이 등록한 모든 돌봄 케어 로그 목록 조회 페이지(+페이징), 클릭 시 케어 로그 작성한 해당 예약 페이지로 이동)<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
-<img width="1431" alt="image" src="https://github.com/user-attachments/assets/1bedc685-0c3a-4615-9e44-0c39b99ffe76" />        
+<img width="680" alt="image" src="https://github.com/user-attachments/assets/f82cea2d-46cd-4e97-84f8-32149dc77a6c" />        
+
 (돌봄 예약 가능 날짜를 등록한 펫시터 중 현재 예약이 가능한 펫시터만 조회(+페이징))<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
-<img width="1400" alt="image" src="https://github.com/user-attachments/assets/a1e9d908-5b3b-42f0-8066-eba72d4f191e" />      
+<img width="609" alt="image" src="https://github.com/user-attachments/assets/48a3b3ac-a23e-4dc7-bf26-e5f697ebe21a" />        
 <img width="724" alt="image" src="https://github.com/user-attachments/assets/46e23b8b-8f20-4840-8ee9-4687c3e16f90" />    
 <img width="780" alt="image" src="https://github.com/user-attachments/assets/9fb8094c-8767-41f2-9250-71953a998bba" />    
 
