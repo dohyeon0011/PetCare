@@ -46,6 +46,10 @@ public class ChatMessage {  // 채팅방 메시지 엔티티
     @Column(name = "sent_at", updatable = false)
     private LocalDateTime sentAt;
 
+    @Comment("읽음 여부")
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead = false;
+
     @Builder
     public ChatMessage(ChatRoom chatRoom, Member sender, Member receiver, String message) {
         addChatRoom(chatRoom);
@@ -69,8 +73,13 @@ public class ChatMessage {  // 채팅방 메시지 엔티티
         this.receiver = receiver;
     }
 
+    @Comment("메시지 읽음 상태 변환 메서드")
+    public void changeRead() {
+        this.isRead = true;
+    }
+
     @Comment("ChatMessage Entity -> Response DTO Method")
     public ChatMessageResponse.messageDto toChatMessageResponse(boolean isNew) {
-        return new ChatMessageResponse.messageDto(this.id, this.chatRoom.getId(), this.chatRoom.getRoomId(), this.sender.getId(), this.sender.getName(), this.receiver.getId(), this.message, this.getSentAt(), isNew);
+        return new ChatMessageResponse.messageDto(this.id, this.chatRoom.getId(), this.chatRoom.getRoomId(), this.sender.getId(), this.sender.getName(), this.receiver.getId(), this.message, this.getSentAt(), isNew, this.isRead);
     }
 }
