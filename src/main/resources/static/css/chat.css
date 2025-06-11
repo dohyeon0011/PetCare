@@ -106,6 +106,8 @@
 
 /* 채팅방 목록 스타일 */
 .chatroom-list {
+    max-height: 300px;
+    overflow-y: auto; /* 스크롤 생성 */
     list-style: none;
     display: flex;
     flex-direction: column;
