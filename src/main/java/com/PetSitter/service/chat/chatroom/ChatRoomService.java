@@ -102,14 +102,6 @@ public class ChatRoomService {
         return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), member.getId(), receiverId, receiverName, chatMessages);
     }
 
-    @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
-    @Transactional(readOnly = true)
-    public Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(Long senderId, Long receiverId) {
-        log.info("ChatRoomService - existsChatRooms() 호출 성공.");
-        return chatRoomRepository.existsChatRooms(senderId, receiverId)
-                .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId(), cr.getReceiverName()));
-    }
-
     /**
      * 특정 채팅방 입장 시, 상대방이 보낸 메시지 읽음 처리 메서드
      */
@@ -117,5 +109,13 @@ public class ChatRoomService {
         chatMessages.stream()
                 .filter(chatMessage -> chatMessage.getReceiver().getId() == member.getId() && !chatMessage.isRead())
                 .forEach(ChatMessage::changeRead);
+    }
+
+    @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
+    @Transactional(readOnly = true)
+    public Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(Long senderId, Long receiverId) {
+        log.info("ChatRoomService - existsChatRooms() 호출 성공.");
+        return chatRoomRepository.existsChatRooms(senderId, receiverId)
+                .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId(), cr.getReceiverName()));
     }
 }
