@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("Subscribing to /user/queue/chat/message");
 
                 // 1:1 메시지 수신 구독 (로그인 사용자 기준)
-                stompClient.subscribe(`/user/queue/chat/message`, (message) => {
+                stompClient.subscribe(`/user/queue/chat/messages`, (message) => {
                     const parsed = JSON.parse(message.body);
 
                     // ChatMessageResponse.messageDto 스펙인지, GenericMessage로 감싸진 구조인지 확인(@SendToUser로 받은 것인지, 상대가 보낸 경로를 구독하여 받은 것인지 구별하기 위해서)
@@ -37,12 +37,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const isCurrentRoomOpen = chatMessage.roomCode === currentRoomId;
                     const isMyMessage = Number(chatMessage.senderId) === Number(memberId);
+
                     // 현재 채팅방과 일치할 때만 메시지 표시
                     if (isCurrentRoomOpen || isMyMessage) { // 내가 보낸 메시지나 현재 채팅방에 접속해서 보고 있을 때
+                        if (isCurrentRoomOpen && !isMyMessage) { // 내가 받은 메시지면서 현재 열려있는 채팅방이면 즉시 읽음 처리
+                            fetch(`/api/pets-care/chat/messages/${chatMessage.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                            }).then(() => {
+                                chatMessage.isRead = true; // 서버 반영 완료 후 읽음 상태 변경
+                                updateReadStatusInDOM(chatMessage.id, true); // DOM 업데이트 함수 호출
+                            });
+                        }
                         showMessage(chatMessage);
                     } else { // 다른 채팅방 메시지일 경우 알림과 같은 방법으로 처리
                         showNotification(chatMessage);
                     }
+                });
+
+                // 내가 보낸 메시지를 상대가 읽었을 때 알림 받기
+                stompClient.subscribe(`/user/queue/chat/messages/read-updates`, (message) => {
+                    const readUpdate = JSON.parse(message.body);
+                    console.log("읽음 알림 수신:", readUpdate);
+
+                    updateReadStatusInDOM(readUpdate.id, readUpdate.isRead);
                 });
             },
             (error) => console.error("STOMP 연결 실패.", error)
@@ -75,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const roomId = currentRoomId || "new";
 
         stompClient.send(
-            `/app/chat-rooms/${roomId}/message`,
+            `/app/chat-rooms/${roomId}/messages`,
             {},
             JSON.stringify({
                 senderId: memberId,
@@ -96,17 +114,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // 해당 채팅방에 메시지 표시
     const showMessage = (msg) => {
         const chatMessages = document.getElementById("chat-messages");
+        const isSent = Number(msg.senderId) === Number(memberId)
 
         // 메시지 컨테이너 생성
         const messageContainer = document.createElement("div");
         messageContainer.className = "message-container"; // 커스텀 컨테이너
+        messageContainer.dataset.messageId = msg.id; // 메시지 ID를 data 속성으로 설정
 
         // 메시지 말풍선 생성
         const messageDiv = document.createElement("div");
         messageDiv.className = "message";
+        messageDiv.setAttribute("data-message-id", msg.id);
 
         // 본인이 보낸 메시지인지 확인하여 스타일 구분
-        if (msg.senderId == memberId) {
+        if (isSent) {
             messageContainer.classList.add("sent");
             messageDiv.classList.add("sent");
         } else {
@@ -125,12 +146,29 @@ document.addEventListener("DOMContentLoaded", () => {
         messageContainer.appendChild(messageDiv);
         messageContainer.appendChild(timestamp);
 
+        // 읽음 여부 표시 (본인이 보낸 메시지에만 표시)
+        if (isSent) {
+            const readStatus = document.createElement("div");
+            readStatus.className = "read-status";
+            readStatus.textContent = msg.isRead ? "읽음" : "안 읽음";
+            messageContainer.appendChild(readStatus);
+        }
         // 채팅 메시지 영역에 컨테이너 추가
         chatMessages.appendChild(messageContainer);
-
         // 스크롤을 맨 아래로 이동 (새 메시지가 보이도록)
         chatMessages.scrollTop = chatMessages.scrollHeight;
     };
+
+    // 채팅방 메시지 읽음 여부 필드 수정 함수
+    function updateReadStatusInDOM(messageId, isRead) {
+        const container = document.querySelector(`.message-container[data-message-id="${messageId}"]`);
+        if (!container) return;
+
+        const readStatus = container.querySelector(".read-status");
+        if (readStatus) {
+            readStatus.textContent = isRead ? "읽음" : "안 읽음";
+        }
+    }
 
     // 채팅 메시지별 날짜와 시각 포맷 함수 (예: 2025-06-05 14:32 형식)
     const formatDateTimeForChatMessage = (isoString) => {
