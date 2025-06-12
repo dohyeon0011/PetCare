@@ -4,6 +4,7 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
 import com.PetSitter.dto.chat.response.ChatMessageResponse;
+import com.PetSitter.dto.chat.response.ReadStatusUpdateMessageRes;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.chat.chatmessage.ChatMessageRepository;
 import com.PetSitter.repository.chat.chatroom.ChatRoomRepository;
@@ -77,5 +78,9 @@ public class ChatMessageService {
         ChatMessage findChatMessage = chatMessageRepository.findById(messageId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatMessageService - messageAsRead(): ChatMessage Not found. [id=" + messageId + "]"));
         findChatMessage.changeRead();
+
+        messagingTemplate.convertAndSendToUser(findChatMessage.getSender().getLoginId(),
+                "/queue/chat/messages/read-updates",
+                new ReadStatusUpdateMessageRes(findChatMessage.getId(), findChatMessage.isRead()));
     }
 }
