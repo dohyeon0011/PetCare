@@ -76,29 +76,30 @@ public class ChatRoomService {
     }
 
     @Comment("참여중인 특정 채팅방 조회")
-    @Transactional(readOnly = true)
     public ChatRoomResponse.getChatRoomDetail getChatRoom(Long memberId, String roomId) {
         log.info("ChatRoomService - getChatRooms(): 호출 성공.");
-        Member sender = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms: 회원 엔티티 조회 실패. id=" + memberId));
 
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId)
                 .orElseThrow(() -> new EntityNotFoundException("ChatRoomService - getChatRooms(): 채팅방 엔티티 조회 실패. roomId=" + roomId));
 
+        // 해당 채팅방의 채팅 메시지 조회 후, 채팅 메시지 읽음 처리
         List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomOrderBySentAtAsc(chatRoom);
+        chatMessageChangeRead(chatMessages, member);
 
         // 수신자(회원) id 조회
         Long receiverId = null;
         String receiverName;
-        if (sender.getId() != chatRoom.getReceiver().getId()) { // 고객 시점에서 특정 돌봄사와의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 receiver를 수신자로 간주)
+        if (member.getId() != chatRoom.getReceiver().getId()) { // 고객 시점에서 특정 돌봄사와의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 receiver를 수신자로 간주)
             receiverId = chatRoom.getReceiver().getId();
             receiverName = chatRoom.getReceiver().getName();
-            return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, receiverName, chatMessages);
+            return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), member.getId(), receiverId, receiverName, chatMessages);
         }
         // 돌봄사 시점에서 특정 고객과의 채팅방을 조회할 경우(ChatRoom 엔티티 기준 발신자를 수신자로 간주)
         receiverId = chatRoom.getSender().getId();
         receiverName = chatRoom.getSender().getName();
-        return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), sender.getId(), receiverId, receiverName, chatMessages);
+        return new ChatRoomResponse.getChatRoomDetail(chatRoom.getId(), chatRoom.getRoomId(), member.getId(), receiverId, receiverName, chatMessages);
     }
 
     @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
@@ -107,5 +108,14 @@ public class ChatRoomService {
         log.info("ChatRoomService - existsChatRooms() 호출 성공.");
         return chatRoomRepository.existsChatRooms(senderId, receiverId)
                 .map(cr -> new ChatRoomResponse.getExistsChatRoomDetail(cr.getRoomId(), cr.getReceiverId(), cr.getReceiverName()));
+    }
+
+    /**
+     * 특정 채팅방 입장 시, 상대방이 보낸 메시지 읽음 처리 메서드
+     */
+    private static void chatMessageChangeRead(List<ChatMessage> chatMessages, Member member) {
+        chatMessages.stream()
+                .filter(chatMessage -> chatMessage.getReceiver().getId() == member.getId() && !chatMessage.isRead())
+                .forEach(ChatMessage::changeRead);
     }
 }
