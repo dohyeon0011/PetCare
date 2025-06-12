@@ -466,6 +466,23 @@
     animation: notificationSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* 읽음 여부 표시 */
+.read-status {
+    font-size: 11px;
+    color: #4caf50;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    margin-top: 0; /* 상하 여백 제거 */
+}
+
+.read-status::before {
+    content: "✓ ";
+    color: #4caf50;
+}
+
+.read-status:empty {
+    display: none;
+}
+
 /* 기존 애니메이션 키프레임 */
 @keyframes chatroomWindowIn {
     from {
