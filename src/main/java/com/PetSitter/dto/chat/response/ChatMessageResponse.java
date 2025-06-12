@@ -103,7 +103,7 @@ public class ChatMessageResponse {
         private LocalDateTime sentAt;
 
         @Schema(description = "읽음 여부")
-        @JsonProperty("is_read")
+        @JsonProperty("isRead")
         private boolean isRead;
 
         public chatMessageDto(ChatMessage chatMessage) {
