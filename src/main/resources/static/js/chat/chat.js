@@ -3,6 +3,8 @@ let currentRoomId = null;
 let receiverUserId = null;
 const chatInput = document.getElementById('chat-input');
 const sendButton = document.getElementById('send-chat');
+const notificationIcon = document.getElementById('notification-icon');
+const notificationTab = document.getElementById('notification-tab');
 
 document.addEventListener("DOMContentLoaded", () => {
     const memberId = document.getElementById("memberData").dataset.memberId;
@@ -10,9 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // STOMP 연결
     const connect = () => {
-        const socket = new SockJS("http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/ws-chat"); // 배포 환경
-//        const socket = new SockJS("http://localhost:9090/ws-chat");   // 개발 환경
-        stompClient = Stomp.over(socket);
+//        const socket = new SockJS("http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/ws-chat"); // 배포 환경
+        const socket = new SockJS("http://localhost:9090/ws-chat");   // 개발 환경
+        stompClient = Stomp
+        .over(socket);
 
         const headers = {};
         if (token && token !== "undefined" && token.trim() !== "") {    // JWT 토큰이 있을 때만 헤더에 넣음
@@ -248,6 +251,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     nameDiv.classList.add("chatroom-name");
                     nameDiv.textContent = room.receiverName;
 
+                    // 읽지 않은 메시지 개수 표시
+                    if (room.unreadMessageCount !== null && room.unreadMessageCount > 0) {
+                        const badgeSpan = document.createElement("span");
+                        badgeSpan.classList.add("chatroom-unread-badge");
+                        badgeSpan.textContent = room.unreadMessageCount;
+                        nameDiv.appendChild(badgeSpan); // 수신자 이름 옆에 뱃지처럼 붙이기
+                    }
                     // 최근 메시지
                     const messageDiv = document.createElement("div");
                     messageDiv.classList.add("chatroom-latest-message");
@@ -273,38 +283,37 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
+    // 시간 포맷팅 함수
     // 채팅방별 마지막으로 진행된 메시지 날짜, 시간 표기 설정(카카오톡처럼)
-    const formatDateTimeForChatRoom = (dateTimeString) => {
-        if (!dateTimeString) return "";
+    function formatDateTimeForChatRoom(sentAt) {
+        if (!sentAt) return '';
 
-        const date = new Date(dateTimeString);
         const now = new Date();
+        const messageTime = new Date(sentAt);
+        const diffInMinutes = Math.floor((now - messageTime) / (1000 * 60));
 
-        const diffMs = now.getTime() - date.getTime();
-        const diffSec = Math.floor(diffMs / 1000);
-        const diffMin = Math.floor(diffSec / 60);
-        const diffHour = Math.floor(diffMin / 60);
-        const diffDay = Math.floor(diffHour / 24);
-
-        if (diffSec < 60) {
-            return "방금 전";
-        } else if (diffMin < 60) {
-            return `${diffMin}분 전`;
-        } else if (diffHour < 24 && now.getDate() === date.getDate()) {
-            // 오늘 날짜 내 1시간 이상인 경우
-            return `${diffHour}시간 전`;
-        } else if (diffDay === 1) {
-            return "어제";
-        } else if (diffDay > 1 && diffDay < 7) {
-            return `${diffDay}일 전`;
+        if (diffInMinutes < 1) {
+            return '방금 전';
+        } else if (diffInMinutes < 60) {
+            return `${diffInMinutes}분 전`;
+        } else if (diffInMinutes < 1440) { // 24시간
+            const hours = Math.floor(diffInMinutes / 60);
+            return `${hours}시간 전`;
         } else {
-            // 7일 이상: YYYY-MM-DD
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, "0");
-            const day = date.getDate().toString().padStart(2, "0");
-            return `${year}-${month}-${day}`;
+            const days = Math.floor(diffInMinutes / 1440);
+            if (days === 1) {
+                return '어제';
+            } else if (days < 7) {
+                return `${days}일 전`;
+            } else {
+                // 일주일 이상인 경우 날짜 표시
+                return messageTime.toLocaleDateString('ko-KR', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
         }
-    };
+    }
 
     const enterRoom = (roomId, receiverId, receiverName) => {
         currentRoomId = roomId;
@@ -441,6 +450,101 @@ document.addEventListener("DOMContentLoaded", () => {
             sendButton.disabled = true;
         }
     });
+
+     // 알림 아이콘 클릭 시 탭을 토글하고, 안 읽은 메시지 요청 보내기
+    document.getElementById("notification-icon").addEventListener("click", () => {
+        notificationTab.classList.remove('d-none');
+        setTimeout(() => {
+            notificationTab.classList.add('show');
+        }, 10);
+
+        // 탭이 보이게 된 경우에만 서버에 요청
+        if (!notificationTab.classList.contains("d-none")) {
+            loadUnreadMessages();
+        }
+    });
+
+    // 닫기 버튼 클릭 시 알림 탭 숨기기
+    document.getElementById("close-notification-tab").addEventListener("click", () => {
+        notificationTab.classList.remove('show');
+        setTimeout(() => {
+            notificationTab.classList.add('d-none');
+        }, 300);
+    });
+
+    // 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+        if (!notificationIcon.contains(e.target) && !notificationTab.contains(e.target)) {
+            notificationTab.classList.remove('show');
+            setTimeout(() => {
+                notificationTab.classList.add('d-none');
+            }, 300);
+        }
+    });
+
+    // 안 읽은 메시지 목록 가져와서 렌더링
+    function loadUnreadMessages() {
+        fetch("/api/pets-care/chat/messages/unread")
+            .then(res => res.json())
+            .then(data => {
+                renderUnreadMessages(data);
+            })
+            .catch(err => {
+                console.error("알림 메시지 로딩 실패:", err);
+            });
+    }
+
+    // 리스트에 메시지 렌더링
+    function renderUnreadMessages(unreadMessages) {
+        const list = document.getElementById("unread-list");
+        list.innerHTML = "";
+
+        if (!Array.isArray(unreadMessages)) {
+            console.error("서버 응답이 배열이 아님:", unreadMessages);
+            return;
+        }
+
+        if (unreadMessages.length === 0) {
+            const li = document.createElement("li");
+            li.textContent = "안 읽은 메시지가 없습니다.";
+            list.appendChild(li);
+            return;
+        }
+
+        unreadMessages.forEach(msg => {
+            const li = document.createElement("li");
+            li.classList.add("unread-message-item");
+
+            // 메시지 구조 생성
+            const messageHeader = document.createElement("div");
+            messageHeader.classList.add("message-header");
+
+            const senderName = document.createElement("span");
+            senderName.classList.add("message-sender");
+            senderName.textContent = msg.senderName;
+
+            const messageTime = document.createElement("span");
+            messageTime.classList.add("message-time");
+            messageTime.textContent = formatDateTimeForChatRoom(msg.sentAt);
+
+            messageHeader.appendChild(senderName);
+            messageHeader.appendChild(messageTime);
+
+            const messageContent = document.createElement("div");
+            messageContent.classList.add("message-content");
+            messageContent.textContent = msg.message;
+
+            li.appendChild(messageHeader);
+            li.appendChild(messageContent);
+
+            li.addEventListener("click", () => {
+                enterRoom(msg.roomCode, msg.senderId, msg.senderName);
+                document.getElementById("notification-tab").classList.add("d-none");
+            });
+
+            list.appendChild(li);
+        });
+    }
 
     // STOMP 연결
     connect();
