@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // STOMP 연결
     const connect = () => {
-//        const socket = new SockJS("http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/ws-chat"); // 배포 환경
-        const socket = new SockJS("http://localhost:9090/ws-chat");   // 개발 환경
+        const socket = new SockJS("http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/ws-chat"); // 배포 환경
+//        const socket = new SockJS("http://localhost:9090/ws-chat");   // 개발 환경
         stompClient = Stomp
         .over(socket);
 
