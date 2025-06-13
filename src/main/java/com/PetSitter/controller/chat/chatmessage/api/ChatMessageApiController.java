@@ -5,6 +5,7 @@ import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.dto.chat.request.ChatMessageRequest;
 import com.PetSitter.dto.chat.response.ChatMessageResponse;
+import com.PetSitter.dto.chat.response.UnreadMessageRes;
 import com.PetSitter.service.chat.chatmessage.ChatMessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -76,5 +78,24 @@ public class ChatMessageApiController {
         chatMessageService.messageAsRead(messageId);
         return ResponseEntity.ok()
                 .build();
+    }
+
+    @Operation(summary = "사용자가 읽지 않은 메시지 조회", description = "사용자가 읽지 않은 메시지 조회 API")
+    @GetMapping("/messages/unread")
+    public ResponseEntity<?> getUnreadMessages(@AuthenticationPrincipal Object principal) {
+        Member member = null;
+        if (principal instanceof MemberDetails memberDetails) {
+            member = memberDetails.getMember();
+        } else if (principal instanceof CustomOAuth2User customOAuth2User) {
+            member = customOAuth2User.getMember();
+        } else {
+            log.error("Authentication 인증 정보가 존재하지 않음. principal is null");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Authentication 인증 정보가 존재하지 않음. principal is null");
+        }
+        List<UnreadMessageRes> unreadMessages = chatMessageService.findUnreadMessages(member.getId());
+
+        return ResponseEntity.ok()
+                .body(unreadMessages);
     }
 }
