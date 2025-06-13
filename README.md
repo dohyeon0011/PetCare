@@ -139,7 +139,7 @@ MySQL
 
 <br>
 
-![스크린샷 2025-06-10 오후 9 14 12](https://github.com/user-attachments/assets/cddb0966-b16c-46f9-96da-dc159dbe2332)    
+<img width="1299" alt="erd-temp" src="https://github.com/user-attachments/assets/05d441ed-8bfe-486d-83e3-1bccf243ce15" />    
 
 ---
 
