@@ -5,6 +5,7 @@ import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
 import com.PetSitter.dto.chat.response.ChatMessageResponse;
 import com.PetSitter.dto.chat.response.ReadStatusUpdateMessageRes;
+import com.PetSitter.dto.chat.response.UnreadMessageRes;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.chat.chatmessage.ChatMessageRepository;
 import com.PetSitter.repository.chat.chatroom.ChatRoomRepository;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -82,5 +85,14 @@ public class ChatMessageService {
         messagingTemplate.convertAndSendToUser(findChatMessage.getSender().getLoginId(),
                 "/queue/chat/messages/read-updates",
                 new ReadStatusUpdateMessageRes(findChatMessage.getId(), findChatMessage.isRead()));
+    }
+
+    /**
+     * 사용자가 읽지 않은 메시지만 조회(읽지 않은 메시지 알림 탭)
+     */
+    @Transactional(readOnly = true)
+    public List<UnreadMessageRes> findUnreadMessages(Long memberId) {
+        log.info("ChatMessageService - findUnreadMessages(): 읽지 않은 메시지 조회. memberId={}", memberId);
+        return chatMessageRepository.findUnreadMessagesByMemberId(memberId);
     }
 }
