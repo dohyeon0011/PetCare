@@ -35,13 +35,17 @@ public class ChatRoomResponse {
         @Schema(description = "최근 송/수신 시간")
         private LocalDateTime latestAt;
 
-        public getChatRoomList(Long id, String roomId, Long receiverId, String receiverName, String latestMessage, LocalDateTime latestAt) {
+        @Schema(description = "안 읽은 메시지 개수")
+        private Long unreadMessageCount;
+
+        public getChatRoomList(Long id, String roomId, Long receiverId, String receiverName, String latestMessage, LocalDateTime latestAt, Long unreadMessageCount) {
             this.id = id;
             this.roomId = roomId;
             this.receiverId = receiverId;
             this.receiverName = receiverName;
             this.latestMessage = latestMessage;
             this.latestAt = latestAt;
+            this.unreadMessageCount = unreadMessageCount;
         }
     }
 
