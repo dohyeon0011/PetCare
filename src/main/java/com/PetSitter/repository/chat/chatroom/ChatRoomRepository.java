@@ -2,8 +2,6 @@ package com.PetSitter.repository.chat.chatroom;
 
 import com.PetSitter.domain.chat.ChatRoom;
 import com.PetSitter.dto.chat.chatroom.response.ChatRoomResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +35,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                     else sender.name
                 end as receiverName,
                 cm.message as latestMessage,
-                cm.sent_at as latestAt
+                cm.sent_at as latestAt,
+                cm_cnt.unread_cnt as unreadMessageCount
             from chat_room cr
             join members sender on cr.sender_member_id = sender.member_id
             join members receiver on cr.receiver_member_id = receiver.member_id
@@ -50,6 +49,12 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                 ) ranked
                 where rn = 1
             ) cm on cm.chat_room_id = cr.id
+            left join (
+                select chat_room_id, count(*) as unread_cnt
+                from chat_message
+                where is_read = false and receiver_member_id =:memberId
+                group by chat_room_id
+            ) cm_cnt on cm_cnt.chat_room_id = cr.id
             where cr.sender_member_id = :memberId or cr.receiver_member_id = :memberId
             order by cm.sent_at desc
             """,
