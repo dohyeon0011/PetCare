@@ -70,7 +70,8 @@ public class ChatRoomService {
                         ((Number) row[2]).longValue(),
                         (String) row[3],
                         (String) row[4],
-                        row[5] != null ? ((Timestamp) row[5]).toLocalDateTime() : null
+                        row[5] != null ? ((Timestamp) row[5]).toLocalDateTime() : null,
+                        row[6] != null ? ((Number) row[6]).longValue() : null
                 ))
                 .collect(Collectors.toList());
     }
