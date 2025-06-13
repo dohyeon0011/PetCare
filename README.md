@@ -162,7 +162,10 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 <img width="1704" alt="image" src="https://github.com/user-attachments/assets/6bdf162e-5a3a-4f46-9f7a-13f274370ddd" /><br>  
 <img width="1686" alt="image" src="https://github.com/user-attachments/assets/380b16ae-d7ee-4eda-a7a9-0f1dac6b0fcd" />    
 (접속 중이지 않은 다른 채팅방에게서 온 메시지는 알림 형식으로 표시)<br>  
-<img width="1584" alt="image" src="https://github.com/user-attachments/assets/d8724ddf-6c68-413a-a38c-97a15035b010" />  
+<img width="1223" alt="image" src="https://github.com/user-attachments/assets/aa36eb4f-53af-4bfd-9512-fd02bedf6c4f" />    
+<br>  
+<img width="1243" alt="image" src="https://github.com/user-attachments/assets/7369ceed-2059-442d-87a3-3af5c3aced1e" />  
+사용자가 아직 읽지 않은 메시지는 별도의 알림 탭에서 확인 가능  
 
 <br><br><br>
 
