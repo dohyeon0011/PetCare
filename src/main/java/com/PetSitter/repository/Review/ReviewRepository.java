@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom {
 
-    boolean existsByCustomerReservationAndIsDeletedFalse(CustomerReservation customerReservation);
+    Optional<Review> findByCustomerReservation(CustomerReservation customerReservation);
 
     // 고객 시점 예약 엔티티의 customerId(고객)를 기준으로 모든 리뷰 조회
     List<Review> findByCustomerReservationCustomerId(long customerId);
