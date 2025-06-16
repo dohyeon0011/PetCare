@@ -1,6 +1,7 @@
 package com.PetSitter.domain.Review;
 
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
+import com.PetSitter.dto.Review.response.ReviewResponse;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,12 +50,17 @@ public class Review {
     }
 
     @Comment("리뷰 수정")
-    public void updateReview(Double rating, String comment) {
+    public void update(Double rating, String comment) {
         if (this.createdAt.plusDays(3).isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("작성한 지 3일이 지난 경우 수정이 불가합니다.");
         }
         this.rating = rating;
         this.comment = comment;
+    }
+
+    @Comment("리뷰 복구")
+    public void recover() {
+        this.isDeleted = false;
     }
 
     // 고객 시점 예약 - 리뷰 연관관계 펀의 메서드
@@ -68,8 +74,7 @@ public class Review {
         this.isDeleted = isDeleted;
     }
 
-    /*public ReviewResponse.GetDetail toResponse() {
+    public ReviewResponse.GetDetail toResponse() {
         return new ReviewResponse.GetDetail(this);
-    }*/
-
+    }
 }
