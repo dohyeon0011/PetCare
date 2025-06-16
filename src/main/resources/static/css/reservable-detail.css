@@ -126,6 +126,25 @@ body {
     border-bottom: none;
 }
 
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+}
+
+.review-header strong,
+.review-header .created-at {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.created-at {
+    font-size: 0.9em;
+    color: #888;
+}
+
 /* Review Section */
 .review-section {
     margin-top: 2rem;
