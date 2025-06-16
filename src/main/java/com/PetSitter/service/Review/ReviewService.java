@@ -13,6 +13,7 @@ import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
 import com.PetSitter.repository.Review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewService {
 
     private final MemberRepository memberRepository;
@@ -43,23 +46,29 @@ public class ReviewService {
         CustomerReservation customerReservation = customerReservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NoSuchElementException("리뷰 등록 실패: 해당 예약을 찾을 수 없습니다."));
 
-        if (reviewRepository.existsByCustomerReservationAndIsDeletedFalse(customerReservation)) {
-            throw new IllegalArgumentException("이미 해당 예약에 대한 리뷰가 존재합니다.");
-        }
-
         if (customerReservation.getStatus().equals(ReservationStatus.CANCEL)) {
+            log.error("취소된 예약에는 리뷰 작성이 불가능합니다. reservationId={}", customerReservation.getId());
             throw new IllegalArgumentException("취소된 예약에는 리뷰 작성이 불가능합니다.");
         }
 
+        // 기존에 삭제 했었던 리뷰가 있던 경우, 새로 insert 하지 않고 복구 후 수정
+        Optional<Review> existingReview = reviewRepository.findByCustomerReservation(customerReservation);
+        if (existingReview.isPresent()) {
+            Review review = existingReview.get();
+            if (!review.isDeleted()) {
+                log.error("리뷰 등록 실패: 이미 해당 예약에 대한 리뷰가 존재합니다. reviewId={}", review.getId());
+                throw new IllegalArgumentException("리뷰 등록 실패: 이미 해당 예약에 대한 리뷰가 존재합니다. reviewId=" + review.getId());
+            }
+            review.recover();
+            review.update(request.getRating(), request.getComment());
+            return review.toResponse();
+        }
+        // 새로 리뷰를 작성하는 경우
         Review review = request.toEntity(customerReservation);
         reviewRepository.save(review);
 
-//        return review.toResponse();
-
-        ReviewResponse.GetDetail response = reviewRepository.findReviewDetail(review.getId())
+        return reviewRepository.findReviewDetail(review.getId())
                 .orElseThrow(() -> new NoSuchElementException("해당 예약에 대한 리뷰를 조회하는데 실패했습니다."));
-
-        return response;
     }
 
     @Comment("특정 회원의 작성한 리뷰 전체 조회")
@@ -127,7 +136,7 @@ public class ReviewService {
         Review review = reviewRepository.findByCustomerReservationCustomerIdAndIdAndIsDeletedFalse(customer.getId(), reviewId)
                 .orElseThrow(() -> new NoSuchElementException("해당 리뷰를 찾을 수 없습니다."));
 
-        review.updateReview(request.getRating(), request.getComment());
+        review.update(request.getRating(), request.getComment());
 
 //        return review.toResponse();
         return reviewRepository.findReviewDetail(review.getId())
