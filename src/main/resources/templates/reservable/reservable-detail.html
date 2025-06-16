@@ -217,7 +217,11 @@
         <div id="review-list">
             <th:block th:each="review : ${reservableSitter.reviews}">
                 <div th:id="'review-' + ${review.id}" class="review">
-                    <p><strong th:text="${review.customerNickName}"></strong> 님의 후기</p>
+                    <div class="review-header">
+                        <strong th:text="${review.customerNickName} + ' 님의 후기'"></strong>
+                        <span class="created-at" th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+                    </div>
+                    <br>
                     <p class="rating">
                 <span th:each="i : ${#numbers.sequence(1, 5)}">
                     <span th:if="${i <= review.rating}" class="star filled">★</span>
