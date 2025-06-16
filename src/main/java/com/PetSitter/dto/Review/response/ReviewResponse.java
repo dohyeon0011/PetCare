@@ -1,6 +1,7 @@
 package com.PetSitter.dto.Review.response;
 
 import com.PetSitter.domain.Member.Role;
+import com.PetSitter.domain.Review.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -75,14 +76,14 @@ public class ReviewResponse {
         @Schema(description = "작성일자", pattern = "yyyy-MM-dd:HH:mm:ss")
         private LocalDateTime createdAt;
 
-        /*public GetDetail(Review review) {
+        public GetDetail(Review review) {
             this.id = review.getId();
             this.customerReservationId = review.getCustomerReservation().getId();
             this.customerNickName = review.getCustomerReservation().getCustomer().getNickName();
             this.sitterName = review.getCustomerReservation().getSitter().getName();
             this.rating = review.getRating();
             this.comment = review.getComment();
-        }*/
+        }
 
         public GetDetail(long id, long customerReservationId, String customerNickName, String sitterName, LocalDate reservationAt, Double rating, String comment, LocalDateTime createdAt) {
             this.id = id;
