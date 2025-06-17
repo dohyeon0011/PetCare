@@ -94,6 +94,20 @@
                         </div>
                     </div>
 
+                    <!-- 안 읽은 메시지 알림 버튼 -->
+                    <button id="notification-icon" class="notification-icon">
+                        📱
+                    </button>
+
+                    <!-- 안 읽은 메시지 알림 탭 -->
+                    <div id="notification-tab" class="chat-notification-tab d-none">
+                        <div class="modal-content">
+                            <span class="close-btn" id="close-notification-tab">&times;</span>
+                            <h5>안 읽은 메시지</h5>
+                            <ul id="unread-list" class="unread-list"></ul>
+                        </div>
+                    </div>
+
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
