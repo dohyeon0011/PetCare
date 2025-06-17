@@ -193,8 +193,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
 <img width="609" alt="image" src="https://github.com/user-attachments/assets/48a3b3ac-a23e-4dc7-bf26-e5f697ebe21a" />        
-<img width="724" alt="image" src="https://github.com/user-attachments/assets/46e23b8b-8f20-4840-8ee9-4687c3e16f90" />    
-<img width="780" alt="image" src="https://github.com/user-attachments/assets/9fb8094c-8767-41f2-9250-71953a998bba" />    
+<img width="722" alt="image" src="https://github.com/user-attachments/assets/15fb1850-8d5b-47be-99a6-9777e701754b" />          
 
 (선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개  
 조회 후, 이후 비동기로 5개씩 페이징))<br><br><br>
