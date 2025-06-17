@@ -76,6 +76,20 @@
                     <!-- 채팅 알림 -->
                     <div id="chat-notification" class="chat-notification d-none"></div>
 
+                    <!-- 안 읽은 메시지 알림 버튼 -->
+                    <button id="notification-icon" class="notification-icon">
+                        📱
+                    </button>
+
+                    <!-- 안 읽은 메시지 알림 탭 -->
+                    <div id="notification-tab" class="chat-notification-tab d-none">
+                        <div class="modal-content">
+                            <span class="close-btn" id="close-notification-tab">&times;</span>
+                            <h5>안 읽은 메시지</h5>
+                            <ul id="unread-list" class="unread-list"></ul>
+                        </div>
+                    </div>
+
                     <div class="dropdown-menu" aria-labelledby="userDropdown">
                         <!-- ADMIN이 아닌 경우 마이페이지 링크 표시 -->
                         <a class="dropdown-item"
@@ -162,7 +176,7 @@
         <p>
             <strong>📌 예약 상태:</strong>
             <span th:classappend="${reservation.status.name() == 'RESERVATION'} ? 'text-success' : 'text-danger'"
-                  th:text="${reservation.status.name() == 'RESERVATION'} ? '✅ 예약 완료' : '❌ 취소'"></span>
+                  th:text="${reservation.status.name() == 'RESERVATION'} ? '☑️ 예약 완료' : '❌ 취소'"></span>
         </p>
         <p><strong>사용된 포인트:</strong> <span th:text="${reservation.usingPoint == null ? '없음' : #numbers.formatInteger(reservation.usingPoint, 3, 'COMMA') + '원'}"></span></p>
         <p><strong>💲 원래 금액:</strong> <span th:text="${#numbers.formatInteger(reservation.originalPrice, 3, 'COMMA')}"></span>원</p>
