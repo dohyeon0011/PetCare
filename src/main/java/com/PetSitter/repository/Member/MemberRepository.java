@@ -35,11 +35,11 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     @EntityGraph(attributePaths = {"pets"})
     @Query("select m from Member m where m.id = :id and m.role = :role")
 //    @Query("select m from Member m join fetch m.pets where m.id = :id and m.role = :role")
-    Optional<Member> findByCustomerId(@Param("id") long id, @Param("role") Role role);
+    Optional<Member> findByCustomerIdAndRole(@Param("id") long id, @Param("role") Role role);
 
     @EntityGraph(attributePaths = {"certifications"})
     @Query("select m from Member m where m.id = :id and m.role = :role")
-    Optional<Member> findBySitterId(@Param("id") long id, @Param("role") Role role);
+    Optional<Member> findBySitterIdAndRole(@Param("id") long id, @Param("role") Role role);
 
     @Query("select m.role from Member m where m.id = :id")
     Optional<Role> findRoleById(@Param("id") long id);
@@ -62,4 +62,9 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
         """)
     Page<Member> findBestSitters(Pageable pageable);
 
+    // 돌봄사: 돌봄 가능 날짜 등록 시, careAvailabilities 리스트 fetch join
+    @Query("select m from Member m " +
+            "left join fetch m.careAvailabilities " +
+            "where m.id = :id")
+    Optional<Member> findByIdWithCareAvailableDates(@Param("id") long memberId);
 }
