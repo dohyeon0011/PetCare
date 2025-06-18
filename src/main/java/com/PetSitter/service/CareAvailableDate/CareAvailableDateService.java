@@ -1,5 +1,6 @@
 package com.PetSitter.service.CareAvailableDate;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDateStatus;
 import com.PetSitter.domain.Member.Member;
@@ -10,7 +11,6 @@ import com.PetSitter.dto.CareAvailableDate.response.CareAvailableDateResponse;
 import com.PetSitter.repository.CareAvailableDate.CareAvailableDateRepository;
 import com.PetSitter.repository.Member.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,11 +29,12 @@ public class CareAvailableDateService {
     private final MemberRepository memberRepository;
     private final CareAvailableDateRepository careAvailableDateRepository;
 
-    @Transactional
+    /**
+     *  돌봄사: 돌봄 가능 날짜 등록
+     */
     public CareAvailableDateResponse.GetDetail save(long sitterId, AddCareAvailableDateRequest request) {
-        Member sitter = memberRepository.findById(sitterId)
+        Member sitter = memberRepository.findByIdWithCareAvailableDates(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("돌봄 날짜 등록 오류: 현재 회원은 존재하지 않는 회원입니다."));
-
         verifyingPermissions(sitter);
 
         if (request.getAvailableAt().isBefore(LocalDate.now())) {
@@ -43,89 +44,79 @@ public class CareAvailableDateService {
         if (careAvailableDateRepository.findBySitterId(sitterId).stream().anyMatch(c -> c.getAvailableAt().equals(request.getAvailableAt()))) {
             throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
         }
-
         CareAvailableDate careAvailableDate = request.toEntity();
         careAvailableDate.addPetSitter(sitter);
 
-        careAvailableDateRepository.save(careAvailableDate);
+        careAvailableDateRepository.saveAndFlush(careAvailableDate); // 단건 update는 @Transactional 제거 후 직접 db에 flush가 비용이 쌈. 대신, 영속성 컨텍스트 관리 비용이 들어감.(jpql or native query로도 가능.)
 
         return careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDate.getId())
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
     }
 
-    @Comment("모든 회원의 돌봄 가능 날짜 조회")
-    @Transactional(readOnly = true)
+    /**
+     * 모든 회원의 돌봄 가능 날짜 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public List<CareAvailableDateResponse.GetList> findAll() {
-        List<CareAvailableDateResponse.GetList> careAvailableDateList = careAvailableDateRepository.findAll()
+        return careAvailableDateRepository.findAll()
                 .stream()
                 .map(CareAvailableDateResponse.GetList::new)
                 .collect(Collectors.toList());
-
-        return careAvailableDateList;
     }
 
-    @Comment("등록한 돌봄 가능 날짜 조회")
-    @Transactional(readOnly = true)
+    /**
+     * 돌봄사: 등록한 돌봄 가능 날짜 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public Page<CareAvailableDateResponse.GetList> findAllById(long sitterId, Pageable pageable) {
-//        List<CareAvailableDateResponse.GetList> careAvailableDateList = careAvailableDateRepository.findBySitterId(sitterId)
-//                .stream()
-//                .map(CareAvailableDateResponse.GetList::new)
-//                .collect(Collectors.toList());
-
-//        return careAvailableDateList;
-
-        Page<CareAvailableDateResponse.GetList> careAvailableDates = careAvailableDateRepository.findBySitterId(sitterId, pageable);
-
-        return careAvailableDates;
+        return careAvailableDateRepository.findBySitterId(sitterId, pageable);
     }
 
-    @Comment("등록한 돌봄 가능 날짜 단건 조회")
-    @Transactional(readOnly = true)
+    /**
+     * 돌봄사: 등록한 돌봄 가능 날짜 단건 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public CareAvailableDateResponse.GetDetail findById(long sitterId, long careAvailableDateId) {
-        /*CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
+        return careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
-
-        return new CareAvailableDateResponse.GetDetail(careAvailableDate);*/
-
-        CareAvailableDateResponse.GetDetail careAvailableDate = careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDateId)
-                .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
-
-        return careAvailableDate;
     }
 
-    @Comment("등록한 돌봄 가능 날짜 삭제")
+    /**
+     * 돌봄사: 등록한 돌봄 가능 날짜 삭제
+     */
     @Transactional
     public void delete(long memberId, long careAvailableDateId) {
         Member sitter = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
-
         authorizationMember(sitter);
         verifyingPermissions(sitter);
 
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(memberId, careAvailableDateId)
+        CareAvailableDate findCareAvailableDate = careAvailableDateRepository.findBySitterIdAndId(memberId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
-        if (!careAvailableDate.getStatus().equals(CareAvailableDateStatus.POSSIBILITY)) {
-            throw new IllegalArgumentException("해당 돌봄 날짜가 현재 예약에 배정된 상태이므로 삭제가 불가합니다. (해당 돌봄 날짜: " + careAvailableDate.getAvailableAt() + ")");
+        if (!findCareAvailableDate.getStatus().equals(CareAvailableDateStatus.POSSIBILITY)) {
+            throw new IllegalArgumentException("해당 돌봄 날짜가 현재 예약에 배정된 상태이므로 삭제가 불가합니다. (해당 돌봄 날짜: " + findCareAvailableDate.getAvailableAt() + ")");
         }
-
-        careAvailableDateRepository.delete(careAvailableDate);
+        careAvailableDateRepository.delete(findCareAvailableDate); // SimpleJpaRepository에서 delete 메서드가 @Transactional이 걸려있음.(트랜잭션 안 쓰려면 오버라이딩 해야됨.)
     }
 
-    @Comment("등록한 돌봄 가능 정보 수정")
+    /**
+     * 돌봄사: 등록한 돌봄 가능 정보 수정
+     */
     @Transactional
     public CareAvailableDateResponse.GetDetail update(long sitterId, long careAvailableDateId, UpdateCareAvailableDateRequest request) {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("회원 정보를 불러오는데 실패했습니다."));
-
         authorizationMember(sitter);
         verifyingPermissions(sitter);
 
         if (request.getAvailableAt().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("현재 날짜보다 이전 날짜는 등록할 수 없습니다.");
         }
-
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
+        CareAvailableDate findCareAvailableDate = careAvailableDateRepository.findBySitterIdAndId(sitterId, careAvailableDateId)
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
 
         // 이미 등록된 돌봄 날짜가 현재 수정하려는 날짜와 동일하지 않은지 확인
@@ -133,33 +124,20 @@ public class CareAvailableDateService {
                 .anyMatch(c -> c.getId() != careAvailableDateId && c.getAvailableAt().equals(request.getAvailableAt()))) {
             throw new IllegalArgumentException("이미 돌봄 등록한 날짜입니다. 날짜를 다시 선택해 주세요.");
         }
+        findCareAvailableDate.update(request.getAvailableAt(), request.getPrice(), request.getStatus());
 
-        careAvailableDate.update(request.getAvailableAt(), request.getPrice(), request.getStatus());
-
-//        return new CareAvailableDateResponse.GetDetail(careAvailableDate);
-
-        // 추가적인 DB 쿼리가 발생하지 않는 대신에(영속성 컨텍스트에 이미 올라가져 있으니) 불필요한 데이터가 조회되고, 영속성 컨텍스트에 의존해서 트랜잭션 내에서만 유효하게 됨.
-        // 성능적인 측면으로 봤을 때는 이 방법이 좋긴 함.
-        /*return new CareAvailableDateResponse.GetDetail(
-                careAvailableDate.getId(),
-                careAvailableDate.getAvailableAt(),
-                careAvailableDate.getPrice(),
-                careAvailableDate.getSitter().getZipcode(),
-                careAvailableDate.getSitter().getAddress(),
-                careAvailableDate.getStatus()
-        );*/
-
-        // 수정된 데이터 다시 조회
-        // 새로운 DB 쿼리가 발생하지만 엔티티를 수정한 후, 최신 상태를 DB에서 직접 조회하기 때문에 데이터의 정확성 보장 가능.
-        CareAvailableDateResponse.GetDetail updateCareAvailableDate = careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDateId)
-                .orElseThrow(() -> new NoSuchElementException("등록된 돌봄 날짜가 존재하지 않습니다."));
-
-        return updateCareAvailableDate;
+        return new CareAvailableDateResponse.GetDetail(
+                findCareAvailableDate.getId(),
+                findCareAvailableDate.getAvailableAt(),
+                findCareAvailableDate.getPrice(),
+                findCareAvailableDate.getSitter().getZipcode(),
+                findCareAvailableDate.getSitter().getAddress(),
+                findCareAvailableDate.getStatus()
+        );
     }
 
     private static void authorizationMember(Member member) {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName(); // 로그인에 사용된 아이디 값 반환
-
         if(!member.getLoginId().equals(userName)) {
             throw new IllegalArgumentException("회원 본인만 가능합니다.");
         }
@@ -170,5 +148,4 @@ public class CareAvailableDateService {
             throw new IllegalArgumentException("돌봄사만 돌봄 날짜 등록 및 수정,삭제가 가능합니다.");
         }
     }
-
 }
