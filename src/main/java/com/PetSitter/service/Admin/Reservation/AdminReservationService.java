@@ -1,5 +1,6 @@
 package com.PetSitter.service.Admin.Reservation;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
@@ -16,7 +17,6 @@ import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservat
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,86 +35,95 @@ public class AdminReservationService {
     private final CareAvailableDateRepository careAvailableDateRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-    @Comment("관리자 페이지 모든 예약 목록 조회")
-    @Transactional(readOnly = true)
-    public Page<AdminReservationResponse.ReservationListResponse> findAllForAdmin(ReservationSearch reservationSearch, Member member, Pageable pageable) {
-        verifyingPermissionsAdmin(member);
-
+    /**
+     * 관리자 페이지 모든 예약 목록 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
+    public Page<AdminReservationResponse.ReservationListResponse> findAllForAdmin(ReservationSearch reservationSearch, Member admin, Pageable pageable) {
+        verifyingPermissionsAdmin(admin);
         return customerReservationRepository.findAllReservation(reservationSearch, pageable);
     }
 
-    @Comment("관리자 페이지 예약 상세 정보 조회")
+    /**
+     * 관리자 페이지 예약 상세 정보 조회
+     */
     @Transactional(readOnly = true)
-    public AdminReservationResponse.ReservationDetailResponse findForAdmin(long id, Member member) {
-        verifyingPermissionsAdmin(member);
+    public AdminReservationResponse.ReservationDetailResponse findForAdmin(long id, Member admin) {
+        verifyingPermissionsAdmin(admin);
 
-        CustomerReservation customerReservation = customerReservationRepository.findForAdmin(id)
+        CustomerReservation findCustomerReservation = customerReservationRepository.findForAdmin(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 예약을 찾을 수 없습니다."));
 
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(customerReservation.getSitter().getId(), customerReservation.getReservationAt())
-                .orElseThrow(() -> new EntityNotFoundException("해당 돌봄 예약 날짜가 존재하지 않습니다. (" + customerReservation.getReservationAt() + ")"));
+        CareAvailableDate findCareAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAt(findCustomerReservation.getSitter().getId(), findCustomerReservation.getReservationAt())
+                .orElseThrow(() -> new EntityNotFoundException("해당 돌봄 예약 날짜가 존재하지 않습니다. (" + findCustomerReservation.getReservationAt() + ")"));
 
-        Optional<PointsHistory> usingPointHistory = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
+        Optional<PointsHistory> findUsingPointHistory = pointHistoryRepository.findByCustomerReservationAndPointsStatus(findCustomerReservation, PointsStatus.USING);
 
         Integer usingPoint = null;
-        if (usingPointHistory.isPresent()) {
-            usingPoint = usingPointHistory.get().getPoint();
+        if (findUsingPointHistory.isPresent()) {
+            usingPoint = findUsingPointHistory.get().getPoint();
         }
 
-        List<CareLog> careLogs = customerReservation.getSitter().getSitterSchedules()
+        List<CareLog> findCareLogs = findCustomerReservation.getSitter().getSitterSchedules()
                 .stream()
-                .filter(schedule -> schedule.getCustomerReservation().getId() == customerReservation.getId()) // 예약 ID가 일치하는 스케줄만 필터링
+                .filter(schedule -> schedule.getCustomerReservation().getId() == findCustomerReservation.getId()) // 예약 ID가 일치하는 스케줄만 필터링
                 .flatMap(schedule -> schedule.getCareLogList().stream()) // schedule의 CareLogList를 펼쳐서 하나의 리스트로 변환(map()과 다르게 flatMap()은 중첩된 리스트를 하나의 리스트로 풀어서 반환해줌)
                 .toList();
 
         return new AdminReservationResponse.ReservationDetailResponse(
-                customerReservation.getCustomer(),
-                customerReservation.getSitter(),
-                customerReservation,
-                customerReservation.getPetReservations(),
-                careLogs,
-                customerReservation.getReview(),
+                findCustomerReservation.getCustomer(),
+                findCustomerReservation.getSitter(),
+                findCustomerReservation,
+                findCustomerReservation.getPetReservations(),
+                findCareLogs,
+                findCustomerReservation.getReview(),
                 usingPoint,
-                careAvailableDate.getPrice()
+                findCareAvailableDate.getPrice()
         );
     }
 
-    @Comment("관리자 권한 예약 취소")
+    /**
+     * 관리자 권한 예약 취소
+     */
     @Transactional
-    public void deleteForAdmin(long id, Member member) {
-        verifyingPermissionsAdmin(member);
+    public void deleteForAdmin(long id, Member admin) {
+        verifyingPermissionsAdmin(admin);
 
-        CustomerReservation customerReservation = customerReservationRepository.findById(id)
+        CustomerReservation findCustomerReservation = customerReservationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("해당 예약을 찾을 수 없습니다."));
 
-        SitterSchedule sitterSchedule = sitterScheduleRepository.findByCustomerReservation(customerReservation)
+        SitterSchedule findSitterSchedule = sitterScheduleRepository.findByCustomerReservation(findCustomerReservation)
                 .orElseThrow(() -> new NoSuchElementException("해당 예약과 연결된 돌봄 일정이 존재하지 않습니다."));
 
-        CareAvailableDate careAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAtWithLock(sitterSchedule.getSitter().getId(), customerReservation.getReservationAt())
+        CareAvailableDate findCareAvailableDate = careAvailableDateRepository.findBySitterIdAndAvailableAtWithLock(findSitterSchedule.getSitter().getId(), findCustomerReservation.getReservationAt())
                 .orElseThrow(() -> new NoSuchElementException("예약 취소 오류: 돌봄사의 해당 예약 날짜를 찾을 수 없습니다."));
 
-        Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.USING);
-        Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(customerReservation, PointsStatus.SAVING);
+        Optional<PointsHistory> existingUsingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(findCustomerReservation, PointsStatus.USING);
+        Optional<PointsHistory> existingSavingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(findCustomerReservation, PointsStatus.SAVING);
 
-        Member customer = customerReservation.getCustomer();
+        Member findCustomer = findCustomerReservation.getCustomer();
 
-        usingPoints.ifPresentOrElse(
+        existingUsingPoints.ifPresentOrElse(
                 pointsHistory -> {  // 고객이 적립금을 사용했었을 때
-                    customer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
-                    customer.subRewardPoints(savingPoints.get().getPoint()); // 적립된 적립금 회수
+                    findCustomer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
+                    findCustomer.subRewardPoints(existingSavingPoints.get().getPoint()); // 적립된 적립금 회수
                 },
-                () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
+                () -> findCustomer.subRewardPoints(existingSavingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
         );
+        cancelReservation(findCustomerReservation, findSitterSchedule, findCareAvailableDate);
+    }
 
+    public static void verifyingPermissionsAdmin(Member admin) {
+        if (!admin.getRole().equals(Role.ADMIN)) {
+            throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
+        }
+    }
+
+    private static void cancelReservation(CustomerReservation customerReservation, SitterSchedule sitterSchedule, CareAvailableDate careAvailableDate) {
         customerReservation.cancel();
         sitterSchedule.cancel();
         careAvailableDate.cancel();
-    }
-
-    public static void verifyingPermissionsAdmin(Member member) {
-        if (!member.getRole().equals(Role.ADMIN)) {
-            throw new IllegalArgumentException("관리자 인증이 되지 않은 사용자입니다.");
-        }
     }
 }
 
