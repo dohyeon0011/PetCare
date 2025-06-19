@@ -60,6 +60,9 @@ public class Review {
 
     @Comment("리뷰 복구")
     public void recover() {
+        if (!this.isDeleted) {
+            throw new IllegalArgumentException("이미 작성되어 있는 돌봄 리뷰가 존재합니다.");
+        }
         this.isDeleted = false;
     }
 
