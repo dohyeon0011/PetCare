@@ -17,7 +17,11 @@ public interface SitterScheduleRepository extends JpaRepository<SitterSchedule, 
     List<SitterSchedule> findBySitterId(long sitterId);
 
     // 돌봄사의 특정 돌봄 예약 조회
-    Optional<SitterSchedule> findBySitterIdAndId(long sitterId, long id);
+    @Query("select ss " +
+            "from SitterSchedule ss " +
+            "join fetch ss.customerReservation cr " +
+            "where ss.id = :id and ss.sitter.id = :sitterId")
+    Optional<SitterSchedule> findBySitterIdAndIdWithCustomerReservation(@Param("sitterId") long sitterId, @Param("id") long id);
 
     // 고객 예약으로 돌봄사에게 배정됐던 특정 예약 조회
     Optional<SitterSchedule> findByCustomerReservation(CustomerReservation customerReservation);
@@ -29,4 +33,10 @@ public interface SitterScheduleRepository extends JpaRepository<SitterSchedule, 
             "join ss.customer c " +
             "where ss.id = :sitterScheduleId")
     Optional<CareLogResponse.GetNewCareLog> findBySitterScheduleId(@Param("sitterScheduleId") long sitterScheduleId);
+
+    @Query("select ss " +
+            "from SitterSchedule ss " +
+            "left join fetch ss.careLogList " +
+            "where ss.id = :sitterScheduleId")
+    Optional<SitterSchedule> findByIdWithCareLogs(@Param("sitterScheduleId") long sitterScheduleId);
 }
