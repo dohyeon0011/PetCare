@@ -47,7 +47,7 @@ public class CareAvailableDateService {
         CareAvailableDate careAvailableDate = request.toEntity();
         careAvailableDate.addPetSitter(sitter);
 
-        careAvailableDateRepository.saveAndFlush(careAvailableDate); // 단건 update는 @Transactional 제거 후 직접 db에 flush가 비용이 쌈. 대신, 영속성 컨텍스트 관리 비용이 들어감.(jpql or native query로도 가능.)
+        careAvailableDateRepository.saveAndFlush(careAvailableDate); // 단건 insert는 @Transactional 제거 후 직접 db에 flush가 비용이 쌈. 대신, 영속성 컨텍스트 관리 비용이 들어감.(jpql or native query로도 가능.)
 
         return careAvailableDateRepository.findBySitterIdAndIdDetail(sitterId, careAvailableDate.getId())
                 .orElseThrow(() -> new NoSuchElementException("등록한 돌봄 날짜가 존재하지 않습니다."));
