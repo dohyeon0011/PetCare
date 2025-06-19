@@ -1,5 +1,6 @@
 package com.PetSitter.service.chat.chatmessage;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
@@ -22,7 +23,6 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
@@ -36,6 +36,7 @@ public class ChatMessageService {
     /**
      * 채팅 메시지 생성
      */
+    @Transactional
     public ChatMessageResponse.messageDto saveMessage(String roomId, Long senderId, Long receiverId, String message) {
         // 채팅방 조회
         ChatRoom chatRoom;
@@ -76,6 +77,7 @@ public class ChatMessageService {
     /**
      * 채팅 메시지 읽음 처리
      */
+    @Transactional
     public void messageAsRead(Long messageId) {
         log.info("ChatMessageService - messageAsRead(): 메시지 읽음 처리. id={}", messageId);
         ChatMessage findChatMessage = chatMessageRepository.findById(messageId)
@@ -89,8 +91,9 @@ public class ChatMessageService {
 
     /**
      * 사용자가 읽지 않은 메시지만 조회(읽지 않은 메시지 알림 탭)
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
-    @Transactional(readOnly = true)
+    @ReadOnlyTransactional
     public List<UnreadMessageRes> findUnreadMessages(Long memberId) {
         log.info("ChatMessageService - findUnreadMessages(): 읽지 않은 메시지 조회. memberId={}", memberId);
         return chatMessageRepository.findUnreadMessagesByMemberId(memberId);
