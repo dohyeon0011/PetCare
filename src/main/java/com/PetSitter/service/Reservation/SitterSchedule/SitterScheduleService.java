@@ -1,5 +1,6 @@
 package com.PetSitter.service.Reservation.SitterSchedule;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.CareAvailableDate.CareAvailableDate;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
@@ -13,7 +14,6 @@ import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,32 +32,24 @@ public class SitterScheduleService {
     private final CareAvailableDateRepository careAvailableDateRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-    @Comment("특정 돌봄사의 전체 돌봄 예약 목록 조회")
-    @Transactional(readOnly = true)
+    /**
+     * 돌봄사: 특정 돌봄사의 전체 돌봄 예약 목록 조회
+     */
+    @ReadOnlyTransactional
     public Page<SitterScheduleResponse.GetList> findAllById(long sitterId, Pageable pageable) {
         Member sitter = memberRepository.findById(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("돌봄 예약 조회 오류: 돌봄사 정보 조회에 실패했습니다."));
-
         verifyingPermissionsSitter(sitter);
 
-//        List<SitterScheduleResponse.GetList> sitterSchedules = sitter.getSitterSchedules().stream()
-//                .map(SitterScheduleResponse.GetList::new)
-//                .toList();
-
-//        List<SitterScheduleResponse.GetList> sitterSchedules = sitterScheduleRepository.findBySitterId(sitter.getId())
-//                .stream()
-//                .map(SitterScheduleResponse.GetList::new)
-//                .toList();
-
-        Page<SitterScheduleResponse.GetList> sitterSchedules = sitterScheduleRepository.findBySitterId(sitterId, pageable);
-
-        return sitterSchedules;
+        return sitterScheduleRepository.findBySitterId(sitterId, pageable);
     }
 
-    @Comment("특정 돌봄사의 특정 돌봄 예약 정보 조회")
+    /**
+     * 돌봄사: 특정 돌봄사의 특정 돌봄 예약 정보 조회
+     */
     @Transactional(readOnly = true)
     public SitterScheduleResponse.GetDetail findById(long sitterId, long sitterScheduleId) {
-        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndId(sitterId, sitterScheduleId)
+        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndIdWithCustomerReservation(sitterId, sitterScheduleId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 예약이 존재하지 않습니다."));
 
         verifyingPermissionsSitter(memberRepository.findById(sitterId)
@@ -72,23 +64,22 @@ public class SitterScheduleService {
         if (usingPointHistory.isPresent()) {
             usingPoint = usingPointHistory.get().getPoint();
         }
-
         return sitterSchedule.toResponse(usingPoint, careAvailableDate.getPrice());
     }
 
-    @Comment("특정 돌봄사의 특정 돌봄 예약 취소")
+    /**
+     * 특정 돌봄사의 특정 돌봄 예약 취소
+     */
     @Transactional
     public void delete(long sitterId, long sitterScheduleId) {
-        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndId(sitterId, sitterScheduleId)
+        SitterSchedule sitterSchedule = sitterScheduleRepository.findBySitterIdAndIdWithCustomerReservation(sitterId, sitterScheduleId)
                 .orElseThrow(() -> new NoSuchElementException("해당 돌봄 예약이 존재하지 않습니다."));
 
         // 순환 대기로 데드락을 방지하기 위해 (고객 시점)예약 취소와 동일하게 고객 -> 돌봄사 순으로 락 획득 조회.
         Member customer = memberRepository.findByIdAndFalseWithLock(sitterSchedule.getCustomer().getId())
                 .orElseThrow(() -> new NoSuchElementException("로그인한 회원 정보를 불러오는데 실패했습니다."));
-
         Member sitter = memberRepository.findByIdAndFalseWithLock(sitterId)
                 .orElseThrow(() -> new NoSuchElementException("회원의 정보를 조회에 실패했습니다."));
-
         authorizationMember(sitter);
         verifyingPermissionsSitter(sitter);
 
@@ -97,7 +88,6 @@ public class SitterScheduleService {
 
         Optional<PointsHistory> usingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.USING);
         Optional<PointsHistory> savingPoints = pointHistoryRepository.findByCustomerReservationAndPointsStatus(sitterSchedule.getCustomerReservation(), PointsStatus.SAVING);
-
         usingPoints.ifPresentOrElse(
                 pointsHistory -> {  // 고객이 적립금을 사용했었을 때
                     customer.addRewardPoints(pointsHistory.getPoint()); // 사용한 적립금 반환
@@ -105,7 +95,6 @@ public class SitterScheduleService {
                 },
                 () -> customer.subRewardPoints(savingPoints.get().getPoint()) // 적립된 적립금 회수(해당 예약 건에 적립금 사용하지 않았을 때)
         );
-
         sitterScheduleCancel(sitterSchedule, careAvailableDate);
     }
 
@@ -123,6 +112,7 @@ public class SitterScheduleService {
         }
     }
 
+    @Transactional
     private static void sitterScheduleCancel(SitterSchedule sitterSchedule, CareAvailableDate careAvailableDate) {
         sitterSchedule.cancel();
         careAvailableDate.cancel();
