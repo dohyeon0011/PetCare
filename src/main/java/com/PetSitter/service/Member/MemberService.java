@@ -1,5 +1,6 @@
 package com.PetSitter.service.Member;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.config.exception.BadRequestCustom;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
@@ -10,7 +11,6 @@ import com.PetSitter.dto.Member.request.UpdateMemberRequest;
 import com.PetSitter.dto.Member.response.MemberResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
-import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -32,7 +32,6 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SitterScheduleRepository sitterScheduleRepository;
 
-    @Transactional
     public Object save(AddMemberRequest request, UploadFile uploadFile) {
         validateDuplicateMember(request.getLoginId());
 
@@ -45,32 +44,25 @@ public class MemberService {
             member = request.toEntity(encodedPassword, null); // 프로필 이미지를 등록하지 않았을 때
         }
 
-        return memberRepository.save(member).toResponse();
+        return memberRepository.saveAndFlush(member).toResponse(); // 단건 insert는 @Transactional 제거 후 직접 db에 flush가 비용이 쌈. 대신, 영속성 컨텍스트 관리 비용이 들어감.(jpql or native query로도 가능.)
     }
 
-    @Transactional(readOnly = true)
+    @ReadOnlyTransactional
     public Object findById(long id) {
-        /*Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-        return member.toResponse();*/
-
         Role role = memberRepository.findRoleById(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
         if (role.equals(Role.CUSTOMER)) {
-            Member member = memberRepository.findByCustomerId(id, role)
+            Member findMember = memberRepository.findByCustomerIdAndRole(id, role)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
 
-            return new MemberResponse.GetCustomer(member, member.getPets().stream()
+            return new MemberResponse.GetCustomer(findMember, findMember.getPets().stream()
                     .filter(pet -> !pet.isDeleted())
                     .collect(Collectors.toList()));
         } else if (role.equals(Role.PET_SITTER)) {
-            Member member = memberRepository.findBySitterId(id, role)
+            Member findMember = memberRepository.findBySitterIdAndRole(id, role)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-//            return new MemberResponse.GetSitter(member, member.getCertifications());
-            return member.toResponse();
+            return findMember.toResponse();
         } else if (role.equals(Role.ADMIN)) {
             return new MemberResponse();
         }
@@ -78,58 +70,46 @@ public class MemberService {
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
 
-    // 회원 + 보유중인 반려견 목록 조회
-//    public List<Pet> findPetsByMemberId(long id) {
-//        Member member = memberRepository.findById(id).
-//                orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-//
-//        return memberRepository.findPetsByMemberId(member.getId());
-//    }
-
     @Transactional
     public void delete(long id) {
-        Member member = memberRepository.findByIdAndFalseWithLock(id)
+        Member findMember = memberRepository.findByIdAndFalseWithLock(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+        authorizationMember(findMember);
 
-        authorizationMember(member);
-
-        if (!sitterScheduleRepository.findBySitterId(member.getId()).isEmpty()) {
+        if (!sitterScheduleRepository.findBySitterId(findMember.getId()).isEmpty()) {
             throw new IllegalArgumentException("회원 탈퇴 오류[id=" + id + "]: " + "현재 돌봄이 진행중인 예약이 존재합니다.");
         }
-
-        member.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
+        findMember.changeIsDeleted(true); // 논리적으로 탈퇴 처리(직접 리포지토리에서 쿼리 날리면 update 쿼리문 최적화 가능(실제 update 하는 것만 하면 되니 -> 변경 감지 없이 직업 sql을 실행해서), 이 경우에는 객체 지향적이지만 쿼리문 최적화 불가능(필드들 다 update 쿼리 날라감.))
+        memberRepository.saveAndFlush(findMember);
     }
 
     @Transactional
     public Object update(long id, UpdateMemberRequest request, UploadFile uploadFile) {
-        Member member = memberRepository.findByIdAndFalseWithLock(id)
+        Member findMember = memberRepository.findByIdAndFalseWithLock(id)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
-
-        authorizationMember(member);
+        authorizationMember(findMember);
 
         // 소셜 로그인 회원이 아닌 경우에만 비밀번호 입력 필수 처리
-        if ((member.getSocialProvider() == null || member.getSocialProvider().equals(SocialProvider.NONE)) && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
+        if ((findMember.getSocialProvider() == null || findMember.getSocialProvider().equals(SocialProvider.NONE)) && (request.getPassword() == null || request.getPassword().trim().isEmpty())) {
             throw new BadRequestCustom("비밀번호 입력은 필수입니다.(최소 8자 입력 필요)");
         }
 
-        String password = member.getPassword();
+        String password = findMember.getPassword();
         if (request.getPassword() != null) {
             password = bCryptPasswordEncoder.encode(request.getPassword());
         }
+        boolean roleChanged = !findMember.getRole().equals(Role.valueOf(request.getRole())); // 회원 역할 변경 여부(Role ex) 'CUSTOMER' or 'PET_SITTER')
 
-        boolean roleChanged = !member.getRole().equals(Role.valueOf(request.getRole())); // 회원 역할 변경 여부(Role ex) 'CUSTOMER' or 'PET_SITTER')
-
-        member.update(
+        findMember.update(
                 password, request.getName(), request.getNickName(), request.getEmail(),
                 request.getPhoneNumber(), request.getZipcode(), request.getAddress(),
                 uploadFile != null ? uploadFile.getServerFileName() : null,
                 request.getIntroduction(), request.getCareerYear(), request.getRole()
         );
-
-        return member.toUpdateResponse(roleChanged);
+        return findMember.toUpdateResponse(roleChanged);
     }
 
-    @Transactional(readOnly = true)
+    @ReadOnlyTransactional
     public Object findByIdUpdate(long memberId) {   // 회원 정보 수정 시 보여질 폼 데이터
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보 수정 폼 데이터 조회 오류: 회원 정보 조회에 실패했습니다.(id=" + memberId + ")"));
@@ -148,7 +128,6 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Object findBestSitters() {
         PageRequest pageable = PageRequest.of(0, 3);
-
         return memberRepository.findBestSitters(pageable)
                 .stream()
                 .map(Member::toResponse)
