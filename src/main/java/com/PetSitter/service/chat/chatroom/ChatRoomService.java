@@ -1,5 +1,6 @@
 package com.PetSitter.service.chat.chatroom;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.chat.ChatMessage;
 import com.PetSitter.domain.chat.ChatRoom;
@@ -10,7 +11,6 @@ import com.PetSitter.repository.chat.chatroom.ChatRoomRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.Comment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,14 +23,16 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    @Comment("채팅방 생성 Or 불러오기")
+    /**
+     * 채팅방 생성 Or 불러오기
+     */
+    @Transactional
     public ChatRoom createOrGetChatRoom(Long senderId, Long receiverId) {
         log.info("ChatRoomService - createOrGetChatRoom() 호출 성공.");
         ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId)
@@ -54,8 +56,11 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    @Comment("참여중인 채팅방 목록 전체 조회")
-    @Transactional(readOnly = true)
+    /**
+     * 참여중인 채팅방 목록 전체 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public List<ChatRoomResponse.getChatRoomList> getAllChatRooms(Long memberId) {
         log.info("ChatRoomService - getAllChatRooms() 호출 성공.");
         Member member = memberRepository.findById(memberId)
@@ -76,7 +81,10 @@ public class ChatRoomService {
                 .collect(Collectors.toList());
     }
 
-    @Comment("참여중인 특정 채팅방 조회")
+    /**
+     * 참여중인 특정 채팅방 조회
+     */
+    @Transactional
     public ChatRoomResponse.getChatRoomDetail getChatRoom(Long memberId, String roomId) {
         log.info("ChatRoomService - getChatRooms(): 호출 성공.");
         Member member = memberRepository.findById(memberId)
@@ -106,14 +114,18 @@ public class ChatRoomService {
     /**
      * 특정 채팅방 입장 시, 상대방이 보낸 메시지 읽음 처리 메서드
      */
+    @Transactional
     private static void chatMessageChangeRead(List<ChatMessage> chatMessages, Member member) {
         chatMessages.stream()
                 .filter(chatMessage -> chatMessage.getReceiver().getId() == member.getId() && !chatMessage.isRead())
                 .forEach(ChatMessage::changeRead);
     }
 
-    @Comment("특정 돌봄사와의 진행중인 채팅방 존재 여부 확인")
-    @Transactional(readOnly = true)
+    /**
+     * 특정 돌봄사와의 진행중인 채팅방 존재 여부 확인
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public Optional<ChatRoomResponse.getExistsChatRoomDetail> existsChatRooms(Long senderId, Long receiverId) {
         log.info("ChatRoomService - existsChatRooms() 호출 성공.");
         return chatRoomRepository.existsChatRooms(senderId, receiverId)
