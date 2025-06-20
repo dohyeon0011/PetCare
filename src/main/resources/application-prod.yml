@@ -67,7 +67,7 @@ spring:
           google:
             client-id: ${GOOGLE_OAUTH_CLIENT_ID}
             client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET}
-            redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/google"
+            redirect-uri: "http://petscarebook.com/login/oauth2/code/google"
             scope:
               - profile
               - email
@@ -76,7 +76,7 @@ spring:
             client-id: ${KAKAO_OAUTH_CLIENT_ID}
             client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
             client-authentication-method: client_secret_post
-            redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/kakao"
+            redirect-uri: "http://petscarebook.com/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
             scope: profile_nickname, account_email
             client-name: Kakao
@@ -85,7 +85,7 @@ spring:
           naver:
             client-id: ${NAVER_OAUTH_CLIENT_ID}
             client-secret: ${NAVER_OAUTH_CLIENT_SECRET}
-            redirect-uri: "http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/login/oauth2/code/naver"
+            redirect-uri: "http://petscarebook.com/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, mobile
             client-name: Naver
@@ -112,7 +112,7 @@ spring:
   # 일반 redis-cli 와 같이 평문으로 접속이 되면 TLS(SSL) 사용하지 않은 경우.
   # Redis 6+에서 ACL을 사용하고 있을 경우 username: 이렇게 설정해도 됨.(본인은 따로 Redis 설정 클래스에서 수동으로 설정함.)
   redis:
-    host: ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com
+    host: http://petscarebook.com
     port: 6379
     password: blackrose12
     ssl: false
