@@ -1,4 +1,4 @@
-# [🐶 반려견 돌봄 서비스](http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/pets-care/main)
+# [🐶 반려견 돌봄 서비스](http://www.petscarebook.com/pets-care/main)
 
 반려견 돌봄을 위한 펫시터 서비스입니다. 고객은 원하는 펫시터를 선택해서 예약하고, 돌봄 기록을 확인하며, 리뷰를 남길 수 있습니다.  
 펫시터는 자신의 자격을 인증하고, 예약을 관리하며, 돌봄 기록을 작성할 수 있습니다.
