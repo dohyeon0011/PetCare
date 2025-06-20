@@ -213,7 +213,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (돌봄 예약 내역 전체 조회(+페이징), 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
-<img width="659" alt="image" src="https://github.com/user-attachments/assets/1872adcf-2d2a-4c39-a8b7-6a04c11b2d1b" />                
+<img width="638" alt="image" src="https://github.com/user-attachments/assets/73951d2e-9418-4229-9816-b4934cd7817b" />                  
 <br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(2)(돌봄사도 동일)
@@ -242,15 +242,15 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 
 # 관리자 페이지 - 회원 관리
 <img width="1091" alt="image" src="https://github.com/user-attachments/assets/2d8ff36c-82b8-4c5b-9140-aa12f0204842" />  
-<img width="509" alt="image" src="https://github.com/user-attachments/assets/80e5ee4a-6ee6-4737-9ff5-f210e7c21d81" />        
-<img width="503" alt="image" src="https://github.com/user-attachments/assets/6088b783-3a6c-4477-b248-91491b468ae6" />      
-<img width="668" alt="image" src="https://github.com/user-attachments/assets/8e1da2ab-cf23-4e85-9a3d-938988cc60b8" />  
+<img width="614" alt="image" src="https://github.com/user-attachments/assets/a068bc82-b48e-4ad1-b9f3-8304da2f99b8" />          
+<img width="631" alt="image" src="https://github.com/user-attachments/assets/e1fa8bb1-bf2f-4d60-947d-485963b12e73" />        
+<img width="1325" alt="image" src="https://github.com/user-attachments/assets/f92c09b3-528e-4d5c-94a2-564f4006a4be" />    
 
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능(+페이징), 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
 <img width="1037" alt="image" src="https://github.com/user-attachments/assets/10d3c641-387e-42af-ba8c-1f1d8b283d16" />  
-<img width="614" alt="image" src="https://github.com/user-attachments/assets/fb8f2248-4861-451f-9125-97375483f77a" />        
+<img width="611" alt="image" src="https://github.com/user-attachments/assets/dd3636b3-38e2-4a5a-8c90-bc783cdd3856" />          
 <img width="636" alt="image" src="https://github.com/user-attachments/assets/2ba9d9f8-2e89-4b6b-8dba-a8b4a2926b3e" />        
 
 (고객의 이름을 조건으로 검색해서 원하는 돌봄 예약만 검색 가능(+페이징), 관리자 권한으로 돌봄 예약 및 부적절한 돌봄 케어 로그 및 부적절한 리뷰 삭제 가능)<br><br><br>
