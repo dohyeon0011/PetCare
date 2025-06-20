@@ -17,7 +17,7 @@ public class RedisConfigProd {
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {    // RedisConnectionFactory: Redis 데이터베이스와의 연결을 설정하는 역할
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-        config.setHostName("ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com");
+        config.setHostName("petscarebook.com");
         config.setPort(6379);
         config.setUsername("default"); // 대부분은 "default" 사용
         config.setPassword("blackrose12");
