@@ -33,7 +33,7 @@ public class CoordinateConverter {
     public static LatLng convertTMToWGS84(Double tmX, Double tmY) {
         MathTransform transform = null;
         try {
-            // 원본 -> 대상 좌표계를 변환할 수 있는 MathTransform 객체를 갖고 옴.
+            // 원본 -> 대상 좌표계를 변환할 수 있는 MathTransform 객체를 갖고 옴.(lenient: false로 주면 엄격한 비교로 변환하는데 이러면 축의 방향, 단위, 차원 수 등이 아예 맞아야 해서 보통 true로 관대한 비교로 변환함.)
             transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
 
             // 원본 좌표(tmX, tmY)를 DirectPosition2D(src)에 담고 변환한 좌표를 dest에 저장
