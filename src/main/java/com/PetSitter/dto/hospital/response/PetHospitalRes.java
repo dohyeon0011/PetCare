@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "동물병원 CSV Res DTO")
+@Schema(description = "동물 병원 CSV Res DTO")
 @NoArgsConstructor
 @Getter
 public class PetHospitalRes {
