@@ -10,7 +10,7 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor
 @Table
 @Getter
-public class PetHospital {  // 전국 동물병원 정보 엔티티
+public class PetHospital {  // 전국 동물 병원 정보 엔티티
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
