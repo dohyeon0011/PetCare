@@ -29,7 +29,7 @@ public class PetHospitalService {
     private final PetHospitalRepository petHospitalRepository;
 
     /**
-     * 전국 동물병원 Save csv file
+     * 전국 동물 병원 Save csv file
      */
     @Transactional
     public void saveFromCsv(Path csvPath) throws IOException {
