@@ -40,11 +40,7 @@ public class PetHospitalService {
             strategy.setType(PetHospitalRes.class);
 
             // CsvToBeanBuilder를 사용하면 CSV 파일을 한 번에 List<객체>로 파싱 가능(CSV 한 줄 == 객체 한 개)
-            List<PetHospitalRes> petHospitals = new CsvToBeanBuilder<PetHospitalRes>(reader)
-                    .withMappingStrategy(strategy)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .build()
-                    .parse();
+            List<PetHospitalRes> petHospitals = getPetHospitalRes(reader, strategy);
 
             List<PetHospital> savePetHospital = new ArrayList<>();
             for (PetHospitalRes row : petHospitals) {
@@ -73,5 +69,16 @@ public class PetHospitalService {
             }
             petHospitalRepository.saveAll(savePetHospital);
         }
+    }
+
+    /**
+     * CSV -> 객체 파싱 메서드
+     */
+    private static List<PetHospitalRes> getPetHospitalRes(Reader reader, HeaderColumnNameMappingStrategy<PetHospitalRes> strategy) {
+        return new CsvToBeanBuilder<PetHospitalRes>(reader)
+                .withMappingStrategy(strategy)
+                .withIgnoreLeadingWhiteSpace(true)
+                .build()
+                .parse();
     }
 }
