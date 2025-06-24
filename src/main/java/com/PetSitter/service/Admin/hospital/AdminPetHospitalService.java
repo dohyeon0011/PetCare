@@ -47,7 +47,7 @@ public class AdminPetHospitalService {
         Path csvPath = getCsvPath(file);
 
         // try-with-resources -> try 문 종료 후, 선언부에 생성된 객체 알아서 닫아줌.
-        try (Reader reader = Files.newBufferedReader(csvPath, StandardCharsets.ISO_8859_1)) {    // CSV 파일을 UTF-8로 읽는 Reader 객체 생성
+        try (Reader reader = Files.newBufferedReader(csvPath, StandardCharsets.ISO_8859_1)) {    // CSV 파일을 ISO_8859_1 인코딩 방식으로 읽는 Reader 객체 생성
             // CSV의 헤더 이름을 DTO 필드와 매핑(DTO 클래스의 @CsvBindByName(column = "")이 붙은 필드에 매핑)
             HeaderColumnNameMappingStrategy<PetHospitalDTO> strategy = new HeaderColumnNameMappingStrategy<>();
             strategy.setType(PetHospitalDTO.class);
