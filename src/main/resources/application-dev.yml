@@ -134,3 +134,5 @@ petsUpload:
 carelogsUpload:
   path: /Users/idohyeon/petcare-uploads/carelogs/
 
+petHospitalUpload:
+  path: /Users/idohyeon/petcare-uploads/petHospital/
