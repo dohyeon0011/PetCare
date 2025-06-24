@@ -138,3 +138,6 @@ petsUpload:
 
 carelogsUpload:
   path: /home/ubuntu/petscare/uploads/carelogs/
+
+petHospitalUpload:
+  path: /home/ubuntu/petscare/uploads/petHospital/
