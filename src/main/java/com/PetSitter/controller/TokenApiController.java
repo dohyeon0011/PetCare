@@ -7,6 +7,7 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
 import com.PetSitter.service.Member.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class TokenApiController {
     private final TokenProvider tokenProvider;
     private final MemberService memberService;
 
+    @Operation(summary = "액세스 토큰 갱신", description = "액세스 토큰 갱신 API")
     @PostMapping("/token")
     public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) throws NoSuchAlgorithmException {
         // 쿠키에서 리프레시 토큰 가져오기
