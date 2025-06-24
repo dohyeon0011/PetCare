@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Schema(description = "동물 병원 CSV Res DTO")
+import java.time.LocalDateTime;
+
+@Schema(description = "동물 병원 DTO")
 @NoArgsConstructor
 @Getter
-public class PetHospitalRes {
+public class PetHospitalDTO {
 
     @Schema(description = "병원 이름")
     @CsvBindByName(column = "사업장명") // csv 파일에서 해당하는 이름의 컬럼을 필드에 매핑 시켜주는 어노테이션
@@ -41,4 +43,8 @@ public class PetHospitalRes {
     @Schema(description = "경도")
     @CsvBindByName(column = "좌표정보x(epsg5174)")
     private Double lng;
+
+    @Schema(description = "데이터 갱신 일자")
+    @CsvBindByName(column = "데이터갱신일자")
+    private LocalDateTime latestAt;
 }
