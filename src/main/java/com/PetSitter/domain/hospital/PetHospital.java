@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor
 @Table
@@ -43,8 +45,11 @@ public class PetHospital {  // 전국 동물 병원 정보 엔티티
     @Comment("경도")
     private Double lng;
 
+    @Comment("데이터 갱신 일자")
+    private LocalDateTime latestAt;
+
     @Builder
-    public PetHospital(String name, String zipcode, String address, String streetZipcode, String streetAddress, String tel, Double lat, Double lng) {
+    public PetHospital(String name, String zipcode, String address, String streetZipcode, String streetAddress, String tel, Double lat, Double lng, LocalDateTime latestAt) {
         this.name = name;
         this.zipcode = zipcode;
         this.address = address;
@@ -53,14 +58,16 @@ public class PetHospital {  // 전국 동물 병원 정보 엔티티
         this.tel = tel;
         this.lat = lat;
         this.lng = lng;
+        this.latestAt = latestAt;
     }
 
     /**
      * 병원 정보 업데이트
      */
-    public void update(String tel, Double lat, Double lng) {
+    public void update(String tel, Double lat, Double lng, LocalDateTime latestAt) {
         this.tel = tel;
         this.lat = lat;
         this.lng = lng;
+        this.latestAt = latestAt;
     }
 }
