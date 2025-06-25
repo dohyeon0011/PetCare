@@ -1,14 +1,14 @@
-/* CSS Variables for Theme */
+/* CSS Variables for Theme (Dark Mode) */
 :root {
-  --bg-light: #f5f6fa;
-  --card-bg: #ffffff;
+  --bg-light: #1a202c; /* 다크 배경 */
+  --card-bg: #2d3748; /* 카드 배경 */
   --accent-blue: #4a90e2;
   --accent-red: #e74c3c;
   --accent-green: #27ae60;
-  --text-dark: #2c3e50;
-  --text-muted: #7f8c8d;
-  --shadow-light: rgba(0, 0, 0, 0.05);
-  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --text-dark: #e2e8f0; /* 밝은 텍스트 */
+  --text-muted: #a0aec0; /* 흐린 회색 */
+  --shadow-light: rgba(0, 0, 0, 0.25);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
 }
 
 /* Base Styles */
@@ -49,7 +49,7 @@ h4 {
 
 /* List Group Items */
 .list-group-item {
-  background: var(--bg-light);
+  background: #2c3e50;
   border: none;
   padding: 0.75rem 1rem;
   margin-bottom: 0.5rem;
@@ -58,7 +58,7 @@ h4 {
   transition: background 0.2s;
 }
 .list-group-item:hover {
-  background: #eef3f8;
+  background: #3c4a5e;
 }
 
 /* Care Log Grid */
@@ -113,7 +113,7 @@ h4 {
   border: none;
 }
 .button-group .btn-cancel:hover {
-  background-color: darken(var(--accent-red), 5%);
+  background-color: #c0392b;
 }
 
 .button-group .btn-confirm {
@@ -122,14 +122,14 @@ h4 {
   border: none;
 }
 .button-group .btn-confirm:hover {
-  background-color: darken(var(--accent-green), 5%);
+  background-color: #219150;
 }
 
 /* Modal Overlay & Content */
 .modal {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -165,14 +165,16 @@ h4 {
 .form-control {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #4a5568;
   border-radius: 8px;
-  transition: border-color 0.2s;
+  background-color: #3b475a;
+  color: #f0f0f0;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .form-control:focus {
   outline: none;
   border-color: var(--accent-blue);
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
 }
 
 /* No-Review State */
@@ -180,10 +182,10 @@ h4 {
   text-align: center;
   font-size: 1rem;
   color: var(--text-muted);
-  background-color: #fafafa;
+  background-color: #2e3748;
   padding: 1.5rem;
   border-radius: 10px;
-  border: 1px solid #ececec;
+  border: 1px solid #4a5568;
   margin-top: 1.5rem;
 }
 .no-review .btn-primary {
@@ -197,7 +199,7 @@ h4 {
   transition: background 0.2s;
 }
 .no-review .btn-primary:hover {
-  background-color: var(--accent-blue-hover, #3a78c2);
+  background-color: #3a78c2;
 }
 
 /* Pet Profile Image */
