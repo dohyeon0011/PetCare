@@ -109,7 +109,7 @@ public class MemberService {
         return findMember.toUpdateResponse(roleChanged);
     }
 
-    @ReadOnlyTransactional
+    @Transactional(readOnly = true)
     public Object findByIdUpdate(long memberId) {   // 회원 정보 수정 시 보여질 폼 데이터
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원 정보 수정 폼 데이터 조회 오류: 회원 정보 조회에 실패했습니다.(id=" + memberId + ")"));
