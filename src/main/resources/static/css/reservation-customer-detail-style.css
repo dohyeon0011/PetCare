@@ -1,19 +1,18 @@
-/* Dashboard Sections & Reviews Styling */
+/* Dashboard Sections & Reviews Styling - 다크모드 트렌디 버전 */
 :root {
-  --color-bg-light: #f5f7fa;
-  --color-card: #ffffff;
-  --color-primary: #5c6ac4;
-  --color-primary-light: #e0e7ff;
-  --color-accent: #ff6f61;
-  --color-text: #2c3e50;
-  --color-muted: #7f8c8d;
-  --shadow-light: rgba(0, 0, 0, 0.05);
-  --color-review-bg: #fbfcfe; /* 밝은 리뷰 배경 */
+  --color-bg-light: #1a202e; /* 어두운 배경 */
+  --color-card: #2d3748; /* 카드 배경 어둡게 */
+  --color-primary: #6794ff; /* 좀 더 밝고 부드러운 파랑 */
+  --color-primary-light: #3c4f9c; /* 다크한 파랑 */
+  --color-accent: #ff7a71; /* 부드러운 오렌지-핑크 */
+  --color-text: #e4e8f0; /* 밝은 텍스트 */
+  --color-muted: #7a8dbf; /* 약간 흐린 블루톤 */
+  --shadow-light: rgba(0, 0, 0, 0.7); /* 진한 그림자 */
+  --color-review-bg: #324060; /* 리뷰 배경 진한 블루 */
 }
 
 /* Section Containers */
 .reservation-info,
-.pets-info,
 .care-log-section {
   background: var(--color-card);
   border-radius: 1rem;
@@ -27,7 +26,7 @@ h4 {
   position: relative;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--color-primary);
   margin-bottom: 1rem;
 }
 h4::after {
@@ -48,6 +47,14 @@ h4::after {
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 0.5rem;
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+  background: var(--color-accent);
+  color: #fff;
 }
 
 /* Care Log Cards */
@@ -66,6 +73,7 @@ h4::after {
   align-items: center;
   text-align: center;
   transition: transform 0.3s, box-shadow 0.3s;
+  color: var(--color-text);
 }
 .care-log-card:hover {
   transform: translateY(-6px);
@@ -89,6 +97,15 @@ h4::after {
   border-radius: 2rem;
   padding: 0.75rem 1.5rem;
   font-weight: 600;
+  color: var(--color-text);
+  background-color: var(--color-primary);
+  border: none;
+  box-shadow: 0 4px 10px rgba(103, 148, 255, 0.7);
+  transition: background-color 0.3s ease;
+}
+.button-group .btn:hover {
+  background-color: var(--color-accent);
+  color: #fff;
 }
 
 /* Review Container */
@@ -99,12 +116,13 @@ h4::after {
   padding: 2rem;
   margin-bottom: 2rem;
   box-shadow: 0 6px 18px var(--shadow-light);
+  color: var(--color-text);
 }
 
 .review-header {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--color-primary);
   margin-bottom: 1rem;
 }
 
@@ -123,23 +141,23 @@ h4::after {
 }
 
 .btn-warning {
-  background: #ffcc00;
-  color: #2c3e50;
+  background: #fbbf24;
+  color: #121826;
   border: none;
   transition: background 0.3s;
 }
 .btn-warning:hover {
-  background: #e0b900;
+  background: #f59e0b;
 }
 
 .btn-danger {
-  background: #f44336;
+  background: #ef4444;
   color: #fff;
   border: none;
   transition: background 0.3s;
 }
 .btn-danger:hover {
-  background: #d32f2f;
+  background: #b91c1c;
 }
 
 .no-review {
@@ -171,3 +189,72 @@ h4::after {
   margin-bottom: 1rem;
   box-shadow: 0 4px 12px var(--shadow-light);
 }
+.pets-info {
+  background: var(--color-card);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 18px var(--shadow-light);
+  color: var(--color-text);
+}
+
+.pets-info h4 {
+  position: relative;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+.pets-info h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.5rem;
+  width: 50px;
+  height: 4px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+/* 다크모드용 리스트 아이템 배경 수정 */
+.pets-info .list-group-item {
+  background: #3a445c; /* 기존 var(--color-primary-light) 대신 더 어두운 중간 톤 */
+  border: none;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: background-color 0.3s ease;
+}
+
+.pets-info .list-group-item:hover {
+  background: #4b566d; /* hover 시 더 밝은 회청색 */
+  color: #fff;
+}
+
+
+/* 프로필 이미지 */
+.pets-info .pet-profile-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px var(--shadow-light);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* 텍스트 줄바꿈 정리 */
+.pets-info strong,
+.pets-info span {
+  display: inline;
+  color: var(--color-text);
+}
+
