@@ -18,7 +18,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/pets-care/admin/pet-hospital")
+@RequestMapping("/api/pets-care/admin/pet-hospitals")
 @Slf4j
 public class AdminPetHospitalApiController {
 
