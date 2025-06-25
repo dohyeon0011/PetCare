@@ -1,159 +1,181 @@
-/* 전체적인 리뷰 목록 스타일 - 모던한 디자인 */
+/* 전체적인 리뷰 목록 스타일 - 모던 다크 모드 */
+
 body {
-    background-color: #f8f9fa; /* 밝고 깔끔한 배경색 */
-    font-family: 'Poppins', 'Noto Sans KR', sans-serif; /* 세련된 폰트 조합 */
-    color: #212529; /* 어두운 회색 텍스트로 가독성 향상 */
+    background-color: #121622; /* 다크 배경 - 부드럽고 깊은 네이비 */
+    font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+    color: #e1e6ef; /* 밝은 회색 톤 텍스트 */
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 h2 {
     text-align: center;
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    font-size: 1.75rem;
-    letter-spacing: -0.5px;
+    color: #82aaff; /* 밝고 선명한 블루 */
+    font-weight: 700;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    letter-spacing: -0.7px;
 }
 
-.table {
-    border-radius: 12px;
+/* 테이블 래퍼 */
+.table-responsive {
+    border-radius: 14px;
     overflow: hidden;
-    background: #fff;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    border: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     margin-bottom: 2rem;
 }
 
+/* 테이블 기본 스타일 */
+.table {
+    width: 100%;
+    background: linear-gradient(145deg, #1e293b, #162132);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    color: #cbd5e1;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.03);
+}
+
+/* 헤더 스타일 */
 .table thead {
-    background: #f1f3f5;
+    background: #273549;
 }
 
 .table th {
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
-    color: #495057;
-    padding: 1rem;
-    border-bottom: 2px solid #e9ecef;
+    font-size: 0.85rem;
+    letter-spacing: 0.6px;
+    color: #a5b1d6;
+    padding: 1rem 1.2rem;
+    border-bottom: 2px solid #394867;
+    user-select: none;
 }
 
+/* 본문 셀 스타일 */
 .table td {
-    padding: 1rem;
+    padding: 1rem 1.2rem;
     vertical-align: middle;
-    border-color: #e9ecef;
-    font-size: 0.95rem;
+    border-bottom: 1px solid #394867;
+    font-size: 1rem;
+    color: #e1e6ef;
+    transition: background-color 0.25s ease;
 }
 
-.pagination-container {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: center;
+/* 줄무늬 스타일 */
+table.table-striped tbody tr:nth-child(odd) {
+    background-color: #1f2937;
 }
 
-.btn-primary {
-    background: #4263eb; /* 현대적인 블루 색상 */
-    border-color: #4263eb;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    box-shadow: 0 2px 5px rgba(66, 99, 235, 0.2);
+table.table-striped tbody tr:nth-child(even) {
+    background-color: #162032;
+}
+
+/* 호버 효과 */
+table.table-striped tbody tr:hover {
+    background-color: #3a4e72 !important;
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(58, 78, 114, 0.7);
     transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-    background: #3b5bdb;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(66, 99, 235, 0.3);
-}
-
-.review-title {
-    color: #212529;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
-}
-
-table.table-striped tbody tr {
-    background-color: #fff;
-    transition: all 0.2s ease;
-}
-
-table.table-striped tbody tr:nth-child(odd) {
-    background-color: #f8f9fa; /* 매우 연한 줄무늬 효과 */
-}
-
-table.table-striped tbody tr:hover {
-    background-color: #e7f5ff !important; /* 연한 블루 하이라이트 */
-    cursor: pointer;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-/* 추가: 모던한 테이블 스타일링 */
-.table-responsive {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-/* 추가: 테이블 내 작은 배지 스타일 */
+/* 배지 스타일 */
 .badge {
     font-size: 0.75rem;
-    font-weight: 500;
-    padding: 0.35em 0.65em;
-    border-radius: 6px;
+    font-weight: 600;
+    padding: 0.4em 0.75em;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    user-select: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease;
 }
 
 .badge-primary {
-    background-color: #4263eb;
-    color: white;
+    background: linear-gradient(135deg, #4263eb, #2a46c0);
+    color: #e0e6f3;
+    box-shadow: 0 0 8px #4263ebaa;
 }
 
 .badge-success {
-    background-color: #40c057;
-    color: white;
+    background: linear-gradient(135deg, #40c057, #2d8f39);
+    color: #e0f7e9;
+    box-shadow: 0 0 8px #40c057aa;
 }
 
-/* 추가: 다크 모드 지원 */
-/*@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #212529;
-        color: #f8f9fa;
+/* 페이징 버튼 */
+.pagination-container {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+/* 페이징 버튼 기본 */
+.btn-primary {
+    background: linear-gradient(135deg, #4263eb, #2a46c0);
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    color: #e0e6f3;
+    box-shadow: 0 5px 15px rgba(66, 99, 235, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* 호버 시 효과 */
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #2a46c0, #1e2d6a);
+    box-shadow: 0 8px 25px rgba(42, 70, 192, 0.7);
+    transform: translateY(-3px);
+    outline: none;
+}
+
+/* 버튼 비활성화 스타일 */
+.btn-primary:disabled,
+.btn-primary[disabled] {
+    background: #5568b5;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* 반응형 테이블 내 텍스트 줄임 */
+.table td,
+.table th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* 스크롤바 (웹킷 브라우저용) */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #162032;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #4263eb;
+    border-radius: 8px;
+}
+
+/* 작은 스크린에서 가독성 향상 */
+@media (max-width: 576px) {
+    .table th,
+    .table td {
+        font-size: 0.8rem;
+        padding: 0.75rem 0.8rem;
     }
 
     h2 {
-        color: #f1f3f5;
+        font-size: 1.5rem;
     }
-
-    .table {
-        background: #343a40;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .table thead {
-        background: #495057;
-    }
-
-    .table th {
-        color: #dee2e6;
-        border-bottom: 2px solid #495057;
-    }
-
-    .table td {
-        border-color: #495057;
-        color: #e9ecef;
-    }
-
-    table.table-striped tbody tr {
-        background-color: #343a40;
-    }
-
-    table.table-striped tbody tr:nth-child(odd) {
-        background-color: #3b4046;
-    }
-
-    table.table-striped tbody tr:hover {
-        background-color: #495057 !important;
-    }*/
 }
