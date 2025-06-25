@@ -1,17 +1,17 @@
-/* Theme Variables */
+/* Theme Variables - Dark Mode */
 :root {
-  --bg-gradient-start: #eef2f7;
-  --bg-gradient-end:   #d9e4f5;
-  --card-bg:           #ffffffcc;  /* slight transparency */
-  --card-hover-bg:     #ffffff;
-  --border-color:      #e1e4ea;
-  --shadow-light:      rgba(0, 0, 0, 0.04);
-  --shadow-medium:     rgba(0, 0, 0, 0.1);
-  --accent-blue:       #4a90e2;
-  --accent-yellow:     #f5a623;
-  --accent-red:        #e74c3c;
-  --text-default:      #2c3e50;
-  --text-muted:        #7f8c8d;
+  --bg-gradient-start: #0f172a;
+  --bg-gradient-end:   #1e293b;
+  --card-bg:           #1e293bcc;  /* 어두운 투명 배경 */
+  --card-hover-bg:     #273549cc;
+  --border-color:      #334155;
+  --shadow-light:      rgba(0, 0, 0, 0.5);
+  --shadow-medium:     rgba(0, 0, 0, 0.7);
+  --accent-blue:       #60a5fa;
+  --accent-yellow:     #facc15;
+  --accent-red:        #ef4444;
+  --text-default:      #ffffff;    /* 모든 기본 텍스트 흰색 */
+  --text-muted:        #bbbbbb;    /* 연한 흰색 */
   --radius-base:       10px;
   --spacing-sm:        0.5rem;
   --spacing-md:        1rem;
@@ -28,27 +28,33 @@ body {
   padding: 0;
 }
 
+/* 전역 텍스트 흰색 강제 적용 (우선순위 문제 예방) */
+body, body * {
+  color: var(--text-default) !important;
+  text-shadow: none !important;
+}
+
 /* Navbar */
 .navbar {
   background: var(--card-hover-bg);
-  box-shadow: 0 2px 8px var(--shadow-light);
+  box-shadow: 0 2px 8px var(--shadow-medium);
   padding: var(--spacing-md) var(--spacing-lg);
 }
 .navbar-brand {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--accent-blue);
+  color: var(--text-default) !important;
 }
 .navbar-nav {
   margin: 0 auto;
 }
 .nav-link {
-  color: var(--text-muted);
-  margin: 0 var(--spacing-md);
+  color: var(--text-muted) !important;
+  margin: 0 1rem;
   transition: color 0.2s;
 }
 .nav-link:hover {
-  color: var(--accent-blue);
+  color: var(--accent-blue) !important;
 }
 
 /* Card Base & Hover */
@@ -66,6 +72,7 @@ body {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 6px 16px var(--shadow-medium);
   background: var(--card-hover-bg);
+  cursor: pointer;
 }
 
 /* Card Footer */
@@ -95,61 +102,69 @@ body {
 .detail-card-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--accent-blue);
+  color: var(--text-default) !important;
   margin-bottom: var(--spacing-sm);
+  text-shadow: 0 0 4px var(--accent-blue);
 }
 .detail-card-text {
-  color: var(--text-muted);
+  color: var(--text-default) !important;
   line-height: 1.5;
   margin-bottom: var(--spacing-md);
 }
 .detail-card-text strong {
-  color: var(--text-default);
+  color: var(--text-default) !important;
 }
 
 /* Detail Buttons */
 .detail-btn-warning {
   background: var(--accent-yellow);
   border-color: var(--accent-yellow);
-  color: #fff;
+  color: #1e293b !important;  /* 버튼 내 텍스트는 어두운색으로 유지 */
   border-radius: 5px;
   padding: var(--spacing-sm) var(--spacing-md);
   transition: background 0.2s;
+  box-shadow: 0 0 6px var(--accent-yellow);
 }
 .detail-btn-warning:hover {
-  background: darken(var(--accent-yellow), 5%);
+  background: #eab308;
+  box-shadow: 0 0 10px #eab308cc;
 }
 .detail-btn-danger {
   background: var(--accent-red);
   border-color: var(--accent-red);
-  color: #fff;
+  color: #1e293b !important;  /* 버튼 내 텍스트는 어두운색으로 유지 */
   border-radius: 5px;
   padding: var(--spacing-sm) var(--spacing-md);
   transition: background 0.2s;
+  box-shadow: 0 0 6px var(--accent-red);
 }
 .detail-btn-danger:hover {
-  background: darken(var(--accent-red), 5%);
+  background: #dc2626;
+  box-shadow: 0 0 10px #dc2626cc;
 }
 
 /* Back Button */
 .detail-btn-secondary {
   margin-top: var(--spacing-lg);
   background: var(--border-color);
-  color: var(--text-muted);
+  color: var(--text-muted) !important;
   border: none;
   border-radius: 5px;
   padding: var(--spacing-sm) var(--spacing-md);
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: none;
 }
 .detail-btn-secondary:hover {
   background: var(--text-muted);
-  color: #fff;
+  color: var(--text-default);
 }
 
 /* Utility */
 .text-accent-blue {
   color: var(--accent-blue) !important;
+  text-shadow: 0 0 6px var(--accent-blue);
 }
 .text-accent-red {
   color: var(--accent-red) !important;
+  text-shadow: 0 0 6px var(--accent-red);
 }
