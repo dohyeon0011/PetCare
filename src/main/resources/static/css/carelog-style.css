@@ -1,34 +1,36 @@
-/* 현대적인 케어로그 테이블 스타일 */
+/* Modern Dark Mode Carelog Table Styling - 기본 다크 모드 스타일로 */
+
 body {
-    background-color: #f9fafb; /* 밝고 현대적인 배경색 */
+    background-color: #121c2c; /* 진한 네이비 블루 계열 */
     font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-    color: #111827;
+    color: #cbd5e1; /* 연한 회색-블루 */
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* 제목 스타일 개선 */
 .carelog-title {
     text-align: center;
     font-size: 1.75rem;
     font-weight: 700;
-    color: #111827;
+    color: #82aaff; /* 밝고 부드러운 블루 */
     padding: 1.5rem 0;
     margin-bottom: 2rem;
     position: relative;
+    text-shadow: 0 0 8px #82aaffaa;
 }
 
-/* 모던한 언더라인 스타일 */
 .carelog-title:after {
     content: '';
     display: block;
     width: 60px;
     height: 4px;
-    background: linear-gradient(90deg, #4263eb, #74c0fc);
+    background: linear-gradient(90deg, #4361ee, #74c0fc);
     border-radius: 2px;
     margin: 0.75rem auto 0;
+    box-shadow: 0 0 12px #4361ee, 0 0 20px #74c0fc;
 }
 
-/* 컨테이너 스타일 */
 .carelog-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -40,34 +42,35 @@ body {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background-color: #fff;
-    border-radius: 12px;
+    background: linear-gradient(135deg, #1e293bcc, #273549cc); /* 투명한 진한 블루 그라데이션 */
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(10, 25, 47, 0.8);
     margin-bottom: 2rem;
 }
 
-/* 테이블 헤더 스타일 */
+/* 테이블 헤더 */
 .table thead {
-    background-color: #f8fafc;
+    background-color: #1f2a45;
 }
 
 .table thead th {
     text-align: center;
     padding: 1rem 1.25rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #3a4a73;
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.025em;
     text-transform: uppercase;
-    color: #4b5563;
+    color: #a3b8ff;
+    text-shadow: 0 0 6px #a3b8ffaa;
 }
 
-/* 테이블 본문 스타일 */
+/* 테이블 바디 */
 .table tbody tr {
-    background-color: white;
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #f1f5f9;
+    background-color: rgba(30, 41, 59, 0.85);
+    border-bottom: 1px solid #3a4a73;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .table tbody tr:last-child {
@@ -75,9 +78,9 @@ body {
 }
 
 .table tbody tr:hover {
-    background-color: #f0f9ff !important; /* 청량한 하늘색 호버 */
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background-color: #4361eeaa !important;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(67, 97, 238, 0.7);
     cursor: pointer;
 }
 
@@ -85,22 +88,21 @@ body {
     text-align: center;
     padding: 1rem 1.25rem;
     font-size: 0.95rem;
-    color: #1f2937;
+    color: #d0d9ff;
     vertical-align: middle;
 }
 
-/* 설명 텍스트 스타일 */
+/* 설명 텍스트 */
 .description {
-    display: inline-block;
     max-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: 400;
-    color: #4b5563;
+    color: #8aa1d1;
 }
 
-/* 상태 배지 스타일 */
+/* 상태 배지 */
 .status-badge {
     display: inline-flex;
     align-items: center;
@@ -110,63 +112,69 @@ body {
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.025em;
+    color: #f0f5ff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
 }
 
 .status-completed {
-    background-color: #ecfdf5;
-    color: #059669;
+    background: linear-gradient(135deg, #22c55ecc, #16a34acc);
+    text-shadow: 0 0 8px #22c55e99;
 }
 
 .status-pending {
-    background-color: #fffbeb;
-    color: #d97706;
+    background: linear-gradient(135deg, #fbbf24cc, #f59e0bcc);
+    text-shadow: 0 0 8px #fbbf24cc;
 }
 
 .status-cancelled {
-    background-color: #fef2f2;
-    color: #dc2626;
+    background: linear-gradient(135deg, #ef4444cc, #dc2626cc);
+    text-shadow: 0 0 8px #ef444499;
 }
 
-/* 날짜 및 시간 스타일 */
+/* 날짜 및 시간 */
 .date-time {
-    color: #6b7280;
+    color: #a3b8ffcc;
     font-size: 0.875rem;
 }
 
-/* 테이블 액션 버튼 스타일 */
+/* 액션 버튼 */
 .action-button {
     padding: 0.4rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: 12px;
     border: none;
-    background-color: #f3f4f6;
-    color: #4b5563;
-    transition: all 0.2s ease;
+    background-color: #3a4a73cc;
+    color: #d0d9ff;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
 }
 
 .action-button:hover {
-    background-color: #e5e7eb;
-    color: #111827;
+    background-color: #4361eecc;
+    box-shadow: 0 6px 18px rgba(67, 97, 238, 0.7);
+    color: #f0f5ff;
 }
 
 .action-button.primary {
-    background-color: #4263eb;
+    background: linear-gradient(135deg, #4361ee, #74c0fc);
     color: white;
+    box-shadow: 0 6px 20px rgba(67, 97, 238, 0.9);
 }
 
 .action-button.primary:hover {
-    background-color: #3b5bdb;
+    background: linear-gradient(135deg, #3659d1, #4a96f3);
+    box-shadow: 0 8px 24px rgba(54, 89, 209, 1);
 }
 
-/* 테이블 페이지네이션 스타일 */
+/* 페이지네이션 */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 2rem;
-    gap: 0.5rem;
+    gap: 0.7rem;
 }
 
 .page-link {
@@ -175,42 +183,44 @@ body {
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    border-radius: 6px;
+    border-radius: 12px;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #4b5563;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
+    color: #8aa1d1;
+    background-color: #1e293bcc;
+    box-shadow: 0 1px 5px rgba(67, 97, 238, 0.3);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .page-link:hover {
-    background-color: #f3f4f6;
-    color: #111827;
+    background-color: #4361eecc;
+    color: #f0f5ff;
+    box-shadow: 0 6px 20px rgba(67, 97, 238, 0.7);
 }
 
 .page-link.active {
-    background-color: #4263eb;
+    background: linear-gradient(135deg, #4361ee, #74c0fc);
     color: white;
+    box-shadow: 0 0 14px #4361ee, 0 0 18px #74c0fc;
 }
 
-/* 반응형 조정 */
+/* 반응형 */
 @media (max-width: 768px) {
     .table {
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(67, 97, 238, 0.3);
     }
-    
+
     .table thead th {
         padding: 0.75rem 0.5rem;
         font-size: 0.75rem;
     }
-    
+
     .table td {
         padding: 0.75rem 0.5rem;
         font-size: 0.85rem;
     }
-    
+
     .description {
         max-width: 150px;
     }
@@ -219,84 +229,5 @@ body {
 /* 스크롤 가능한 테이블 컨테이너 */
 .table-responsive {
     overflow-x: auto;
-    border-radius: 12px;
-}
-
-/* 다크 모드 지원 */
-/*@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #111827;
-        color: #f9fafb;
-    }
-    
-    .carelog-title {
-        color: #f3f4f6;
-    }
-    
-    .table {
-        background-color: #1f2937;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-    
-    .table thead {
-        background-color: #374151;
-    }
-    
-    .table thead th {
-        color: #e5e7eb;
-        border-bottom: 1px solid #4b5563;
-    }
-    
-    .table tbody tr {
-        background-color: #1f2937;
-        border-bottom: 1px solid #374151;
-    }
-    
-    .table tbody tr:hover {
-        background-color: #2d3748 !important;
-    }
-    
-    .table td {
-        color: #e5e7eb;
-    }
-    
-    .description {
-        color: #d1d5db;
-    }
-    
-    .status-completed {
-        background-color: rgba(5, 150, 105, 0.2);
-    }
-    
-    .status-pending {
-        background-color: rgba(217, 119, 6, 0.2);
-    }
-    
-    .status-cancelled {
-        background-color: rgba(220, 38, 38, 0.2);
-    }
-    
-    .date-time {
-        color: #9ca3af;
-    }
-    
-    .action-button {
-        background-color: #374151;
-        color: #e5e7eb;
-    }
-    
-    .action-button:hover {
-        background-color: #4b5563;
-        color: #f9fafb;
-    }
-    
-    .page-link {
-        background-color: #1f2937;
-        color: #e5e7eb;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    
-    .page-link:hover {
-        background-color: #374151;
-    }*/
+    border-radius: 16px;
 }
