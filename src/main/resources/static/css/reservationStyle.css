@@ -1,178 +1,263 @@
-/* Reservation Form Page Styling */
-:root {
-    --color-bg-light: #f4f6f8;
-    --color-card: #ffffff;
-    --color-accent: #3b8beb;
-    --color-accent-hover: #336fb2;
-    --color-muted: #95a5a6;
-    --color-muted-light: #e9ecef;
-    --color-text: #2c3e50;
-    --color-danger: #e74c3c;
-    --color-success: #2ecc71;
-    --font-body: 'Roboto', sans-serif;
+/* Reservation Form Page Styling - Dark Mode Harmonized */
+
+.reservation-form {
+  background-color: var(--color-surface, #1e293b);
+  color: var(--color-text, #f1f5f9);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  margin: 2rem auto;
 }
 
-body {
-    background: var(--color-bg-light);
-    font-family: var(--font-body);
-    color: var(--color-text);
-    padding: 2rem 1rem;
+.reservation-form h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-text);
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-    font-size: 2rem;
-    color: var(--color-text);
-}
-
-.form-section {
-    background: var(--color-card);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+/* 기존 레이아웃 관련 스타일 유지 */
+.form-section,
+.payment-section {
+  /* margin, padding, border-radius, box-shadow 유지 */
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border-radius: 1rem; /* 기존 1rem 유지 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--color-border, #334155);
+  background-color: var(--color-surface, #1e293b); /* 어두운 카드 배경 */
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
-    display: flex;
-    flex-direction: column;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
+
 .form-group label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--color-text);
-}
-.form-control {
-    padding: 0.75rem 1rem;
-    border: 1px solid #dce1e7;
-    border-radius: 0.75rem;
-    font-size: 1rem;
-    background: var(--color-bg-light);
-    transition: border-color 0.2s;
-}
-.form-control:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(59,139,235,0.2);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-text-light, #94a3b8);
 }
 
-/* Pet Selection Styles */
+/* form-control 관련 스타일 : padding, border-radius, font-size 유지 */
+.form-control,
+select {
+  background-color: #0f172a;
+  color: var(--color-text, #f1f5f9);
+  border: 1px solid var(--color-border, #334155);
+  padding: 0.75rem 1rem; /* 기존 0.75rem 1rem 유지 */
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.3s;
+}
+
+.form-control::placeholder {
+  color: #64748b;
+}
+
+.form-control:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-accent, #3b8beb);
+  box-shadow: 0 0 0 2px rgba(59, 139, 235, 0.3);
+  background-color: #1e293b;
+}
+
+/* readonly div 스타일 (결제 금액 등) */
+.form-control[readonly] {
+  background-color: #0f172a !important;
+  color: var(--color-text, #f1f5f9) !important;
+  border: 1px solid var(--color-border, #334155);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+  user-select: text;
+}
+
+/* textarea 폼 컨트롤 리사이즈 금지 유지 */
+textarea.form-control {
+  resize: none;
+}
+
 .pet-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-.form-check {
-    background: var(--color-muted-light);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    flex: 1 1 calc(48% - 1rem);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    transition: background 0.2s;
-}
-.form-check:hover {
-    background: var(--color-card);
-}
-.form-check-input {
-    margin-right: 0.5rem;
-    transform: scale(1.2);
-}
-.form-check-label {
-    font-size: 0.95rem;
-    color: var(--color-text);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-/* Payment Section */
-.payment-section {
-    background: var(--color-card);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    border-top: 4px solid var(--color-accent);
+.form-check {
+  background-color: #0f172a;
+  padding: 1rem;
+  border-radius: 12px;
+  flex: 1 1 calc(50% - 1rem);
+  border: 1px solid var(--color-border, #334155);
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
 }
-.payment-section .form-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    align-items: center;
+
+.form-check:hover {
+  background-color: #1e293b;
 }
-.payment-section .form-group label {
-    margin: 0;
-    font-weight: 600;
+
+.form-check-input {
+  margin-right: 0.5rem;
+  transform: scale(1.2);
 }
-.payment-section .form-group div,
-.payment-section .form-group input {
-    background: var(--color-bg-light);
-    border: 1px solid #dce1e7;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1rem;
-    font-weight: 600;
-    text-align: right;
+
+.form-check-label {
+  font-size: 0.95rem;
+  color: var(--color-text);
 }
 
 #priceDisplay,
 #finalPrice {
-    font-size: 1.25rem;
-    color: var(--color-danger);
-}
-#finalPrice {
-    background: var(--color-bg-light);
-    border: 1px solid #dce1e7;
+  font-size: 1.25rem;
+  color: #ef4444;
 }
 
 #availablePoints {
-    font-size: 1rem;
-    color: var(--color-success);
+  font-size: 1rem;
+  color: #34d399;
+}
+
+#pointsToUse.form-control {
+  background-color: #0f172a;   /* 어두운 배경 */
+  color: #f1f5f9;              /* 밝은 텍스트 */
+  border: 1px solid #334155;   /* 테두리 색 */
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#pointsToUse.form-control::placeholder {
+  color: #64748b;              /* 희미한 회색 텍스트 */
+}
+
+#pointsToUse.form-control:focus {
+  outline: none;
+  border-color: #6366f1;       /* 포커스 시 강조색 */
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  background-color: #1e293b;   /* 포커스 시 배경 조금 밝게 */
+  color: #f1f5f9;
 }
 
 .btn-container {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .btn {
-    padding: 0.75rem 1.5rem;
-    min-width: 140px;
-    border-radius: 2rem;
-    font-weight: 600;
-    transition: background 0.3s;
+  padding: 0.75rem 1.5rem;
+  min-width: 140px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  font-family: var(--font-body);
 }
+
 .btn-primary {
-    background: var(--color-accent);
-    color: #fff;
-    border: none;
+  background-color: var(--color-primary, #6366f1);
+  color: white;
+  border: none;
 }
+
 .btn-primary:hover {
-    background: var(--color-accent-hover);
+  background-color: var(--color-primary-hover, #4f46e5);
 }
+
 .btn-secondary {
-    background: var(--color-muted-light);
-    color: var(--color-text);
-    border: 1px solid var(--color-muted);
+  background-color: #1e293b;
+  border: 1px solid var(--color-border, #334155);
+  color: var(--color-text-light, #94a3b8);
 }
+
 .btn-secondary:hover {
-    background: var(--color-muted);
-    color: #fff;
+  background-color: var(--color-border, #334155);
+  color: var(--color-text);
 }
 
 .error-message {
-    color: var(--color-danger);
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #ef4444;
 }
 
 .amount-text,
 #amountText {
-    font-size: 1rem;
-    color: var(--color-muted);
+  font-size: 1rem;
+  color: var(--color-text-muted, #64748b);
 }
+
 #amountText {
-    font-weight: 700;
-    font-size: 1.125rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+/* input, textarea, select 공통 다크모드 스타일 */
+.form-control,
+textarea.form-control,
+select.form-control {
+  background-color: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid var(--color-border, #334155);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-control::placeholder,
+textarea.form-control::placeholder {
+  color: #64748b;
+}
+
+.form-control:focus,
+textarea.form-control:focus,
+select.form-control:focus {
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  outline: none;
+  background-color: #1e293b;
+}
+
+/* readonly div 스타일 맞춤 (input과 동일 톤) */
+.form-control[readonly] {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid var(--color-border, #334155);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  user-select: text; /* 텍스트 선택 가능하도록 */
+}
+
+/* readonly div 포커스 스타일 (필요시) */
+.form-control[readonly]:focus {
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  outline: none;
+  background-color: #1e293b !important;
+}
+
+@media (max-width: 768px) {
+  .payment-section .form-group {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-check {
+    flex: 1 1 100%;
+  }
 }
