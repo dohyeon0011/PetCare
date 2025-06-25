@@ -1,13 +1,17 @@
-/* Table Page Styling */
+/* Modern Dark Mode Table Styling */
 :root {
-    --color-bg: #f5f7fa;
-    --color-card: #ffffff;
-    --color-primary: #5c6ac4;
-    --color-primary-light: #e0e7ff;
-    --color-accent: #ff6f61;
-    --color-text: #2c3e50;
-    --color-muted: #7f8c8d;
-    --font-body: 'Roboto', sans-serif;
+    --color-bg: #12181f;
+    --color-card: #1f2937;
+    --color-primary: #7f9cf5;
+    --color-primary-light: #374151;
+    --color-accent: #ff6f91;
+    --color-text: #e0e7ff;
+    --color-muted: #9ca3af;
+    --font-body: 'Inter', 'Roboto', sans-serif;
+
+    --shadow-glow: 0 0 8px rgba(127, 156, 245, 0.5);
+    --shadow-subtle: 0 2px 10px rgba(0, 0, 0, 0.5);
+    --transition-fast: all 0.25s ease-in-out;
 }
 
 body {
@@ -16,69 +20,102 @@ body {
     color: var(--color-text);
     margin: 0;
     padding: 2rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .table-container {
     background: var(--color-card);
     padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-subtle);
     overflow-x: auto;
 }
 
+/* Table */
 .table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 0.75rem;
+    border-spacing: 0 12px; /* 줄 간격 띄우기 */
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .table thead {
-    background: var(--color-primary-light);
+    background: transparent;
 }
 
 .table thead th {
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.75rem;
     text-align: left;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--color-primary);
     border-bottom: 2px solid var(--color-primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
 }
 
 .table tbody tr {
-    background: var(--color-card);
-    transition: background 0.2s;
+    background: #273449;
+    border-radius: 1rem;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .table tbody tr:hover {
-    background: var(--color-primary-light);
+    background: #2e3a59;
+    box-shadow: 0 0 12px var(--color-primary);
     cursor: pointer;
 }
 
 .table tbody td {
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.75rem;
     color: var(--color-text);
-    border-bottom: 1px solid #e9ebef;
+    border: none;
+    vertical-align: middle;
+    font-weight: 500;
+    font-size: 1rem;
 }
 
 /* Reservation Status Badges */
 .badge-status {
     display: inline-block;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 1rem;
-    font-weight: 600;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.85rem;
+    border-radius: 9999px;
+    font-weight: 700;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    user-select: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .badge-success {
-    background: rgba(56,142,60,0.1);
-    color: #388e3c;
+    background: linear-gradient(135deg, #34d399, #059669);
+    color: #e6fffa;
+    box-shadow: 0 0 10px #34d399;
 }
 
 .badge-danger {
-    background: rgba(211,47,47,0.1);
-    color: #d32f2f;
+    background: linear-gradient(135deg, #f87171, #b91c1c);
+    color: #fff1f2;
+    box-shadow: 0 0 10px #f87171;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-container {
+        padding: 1rem;
+    }
+    .table thead th {
+        padding: 0.75rem 1rem;
+        font-size: 0.75rem;
+    }
+    .table tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
 }
