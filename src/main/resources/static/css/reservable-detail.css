@@ -1,14 +1,14 @@
-/* Theme Variables (if not already defined) */
+/* Theme Variables - 다크모드 고정 */
 :root {
-    --color-bg-start: #e8f4fe;
-    --color-bg-end: #f2fbff;
-    --color-container: #ffffff;
-    --color-accent: #3b8beb;
-    --color-accent-hover: #336fb2;
-    --color-secondary: #f0f4f8;
-    --color-secondary-hover: #e1e7ed;
-    --color-text: #2c3e50;
-    --color-text-light: #555;
+    --color-bg-start: #0d1117;
+    --color-bg-end: #161b22;
+    --color-container: #1a202c;
+    --color-accent: #768fff;
+    --color-accent-hover: #5661a0;
+    --color-secondary: #2d3748;
+    --color-secondary-hover: #3e4a6e;
+    --color-text: #cbd5e0;
+    --color-text-light: #94a3b8;
     --font-body: 'Roboto', sans-serif;
 
     /* Modern Button Variables */
@@ -16,8 +16,8 @@
     --btn-padding: 0.625rem 1.25rem;
     --btn-font-size: 0.9rem;
     --btn-font-weight: 500;
-    --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.8);
     --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -36,7 +36,7 @@ body {
     padding: 2rem;
     background: var(--color-container);
     border-radius: 1rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
     z-index: 1;
 }
 
@@ -46,9 +46,10 @@ body {
     border: none;
     border-radius: 1rem;
     padding: 2rem;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
     margin-bottom: 2rem;
     transition: transform 0.3s ease;
+    color: var(--color-text);
 }
 .sitter-info:hover {
     transform: translateY(-4px);
@@ -87,24 +88,25 @@ body {
 /* Career Badge */
 .sitter-info .career {
     display: inline-block;
-    background: linear-gradient(135deg, var(--color-accent), #4facfe);
+    background: linear-gradient(135deg, var(--color-accent), #4b6fe8);
     color: white;
     padding: 0.4rem 1rem;
     border-radius: var(--btn-radius);
     font-weight: var(--btn-font-weight);
     font-size: 0.85rem;
     margin-top: 1rem;
-    box-shadow: var(--shadow-subtle);
+    box-shadow: 0 2px 8px rgba(74, 111, 232, 0.6);
     transition: var(--transition);
 }
 
 /* Certifications Section */
 .certifications {
-    background: var(--color-container);
+    background: var(--color-secondary);
     padding: 1.5rem;
     border-radius: 1rem;
     margin-top: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    color: var(--color-text-light);
 }
 .certifications h4 {
     font-size: 1.5rem;
@@ -120,7 +122,7 @@ body {
     font-size: 1rem;
     color: var(--color-text-light);
     padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .certifications li:last-child {
     border-bottom: none;
@@ -142,7 +144,7 @@ body {
 
 .created-at {
     font-size: 0.9em;
-    color: #888;
+    color: #777;
 }
 
 /* Review Section */
@@ -170,14 +172,16 @@ body {
     padding: 1.5rem;
     margin-top: 1rem;
     border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
     transition: background 0.3s;
     white-space: normal;
     overflow-wrap: break-word;
     word-break: break-word;
+    color: var(--color-text-light);
 }
 .review:hover {
     background: var(--color-container);
+    color: var(--color-text);
 }
 .review strong {
     display: block;
@@ -226,7 +230,7 @@ body {
 .reservation-button-container button,
 .back-btn-container a,
 .back-btn-container button {
-    background: linear-gradient(135deg, var(--color-accent), #4facfe);
+    background: linear-gradient(135deg, var(--color-accent), #4b6fe8);
     color: white;
     padding: var(--btn-padding);
     border-radius: var(--btn-radius);
@@ -251,7 +255,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
     transition: left 0.5s;
 }
 
@@ -260,7 +264,7 @@ body {
 .back-btn-container button:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-hover);
-    background: linear-gradient(135deg, #336fb2, #3b8beb);
+    background: linear-gradient(135deg, #5661a0, #768fff);
 }
 
 .reservation-button-container button:hover::before,
@@ -348,8 +352,8 @@ body {
 
 #sitterChatButton:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    background: linear-gradient(135deg, #5661a0, #768fff);
 }
 
 #sitterChatButton:hover::before {
