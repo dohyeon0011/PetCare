@@ -1,34 +1,25 @@
-/* 모던 예약 상세 페이지 스타일 - 2025 트렌드 */
+/* 모던 예약 상세 페이지 스타일 - 2025 다크 테마 */
 :root {
-  /* 컬러 시스템 */
-  --primary: #6366f1; /* 인디고 컬러 */
+  --primary: #6366f1;
   --primary-light: #818cf8;
   --primary-dark: #4f46e5;
-  --success: #10b981; /* 에메랄드 */
-  --success-light: #d1fae5;
-  --danger: #f43f5e; /* 로즈 */
-  --danger-light: #ffe4e6;
-  --neutral-50: #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cbd5e1;
-  --neutral-600: #475569;
-  --neutral-700: #334155;
-  --neutral-800: #1e293b;
-
-  /* 타이포그래피 */
+  --success: #10b981;
+  --success-light: rgba(16, 185, 129, 0.1);
+  --danger: #f43f5e;
+  --danger-light: rgba(244, 63, 94, 0.1);
+  --neutral-50: #1a1c2b;
+  --neutral-100: #23263a;
+  --neutral-200: #2e324d;
+  --neutral-300: #444862;
+  --neutral-600: #cbd5e1;
+  --neutral-700: #e2e8f0;
+  --neutral-800: #f8fafc;
   --font-sans: 'Pretendard', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* 그림자 */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-  /* 애니메이션 */
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* 테두리 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 25px rgba(0, 0, 0, 0.6);
+  --transition: all 0.2s ease-in-out;
   --radius-base: 12px;
   --radius-lg: 16px;
   --radius-full: 9999px;
@@ -41,7 +32,6 @@ body {
   line-height: 1.6;
 }
 
-/* 헤더 스타일 */
 h2.text-center {
   font-size: 2.25rem;
   font-weight: 700;
@@ -63,7 +53,6 @@ h2.text-center::after {
   border-radius: 2px;
 }
 
-/* 섹션 헤더 */
 h4 {
   font-size: 1.5rem;
   font-weight: 600;
@@ -85,9 +74,8 @@ h4::before {
   border-radius: 2px;
 }
 
-/* 카드 스타일링 */
 .card.p-3 {
-  background-color: white;
+  background-color: var(--neutral-100);
   border: 1px solid var(--neutral-200);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
@@ -112,17 +100,15 @@ h4::before {
   transform: translateY(-2px);
 }
 
-/* 예약 상세 정보 */
 .card p {
   font-size: 1rem;
-  color: var(--neutral-700);
+  color: var(--neutral-600);
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* 레이블 스타일 */
 .card p strong {
   color: var(--neutral-800);
   font-weight: 600;
@@ -130,9 +116,8 @@ h4::before {
   display: inline-block;
 }
 
-/* 상태 스타일링 */
 .text-success {
-  color: var(--success) !important;
+  color: var(--success);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -149,7 +134,7 @@ h4::before {
 }
 
 .text-danger {
-  color: var(--danger) !important;
+  color: var(--danger);
   font-weight: 600;
   display: inline-flex;
   align-items: center;
@@ -165,7 +150,6 @@ h4::before {
   margin-right: 6px;
 }
 
-/* 배지 컴포넌트 */
 .badge {
   display: inline-block;
   padding: 0.35rem 0.75rem;
@@ -185,7 +169,6 @@ h4::before {
   color: var(--danger);
 }
 
-/* 버튼 스타일 */
 .btn {
   font-size: 0.95rem;
   padding: 0.75rem 1.25rem;
@@ -210,7 +193,6 @@ h4::before {
   transform: translateY(0);
 }
 
-/* 취소 및 뒤로가기 버튼 */
 .btn-danger {
   background: linear-gradient(135deg, var(--danger), #e11d48);
   color: white;
@@ -222,8 +204,8 @@ h4::before {
 }
 
 .btn-secondary {
-  background-color: white;
-  color: var(--neutral-700);
+  background-color: var(--neutral-200);
+  color: var(--neutral-800);
   border: 1px solid var(--neutral-300);
 }
 
@@ -232,7 +214,6 @@ h4::before {
   color: var(--neutral-800);
 }
 
-/* 기본 버튼 */
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
@@ -243,27 +224,42 @@ h4::before {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-/* 리스트 스타일링 */
-.list-group-item {
-  background-color: white;
-  border: 1px solid var(--neutral-200);
+.pet-list,
+.pet-list-item {
+  all: unset;
+  display: block;
+  list-style: none;
+}
+
+.pet-list {
+  padding: 0;
+  margin: 0;
+}
+
+.pet-list-item * {
+  background: transparent !important;
+}
+
+.pet-list-item {
+  background-color: var(--neutral-800) !important;
+  color: var(--neutral-100) !important;
+  border: 1px solid var(--neutral-700);
   border-radius: var(--radius-base);
   margin-bottom: 0.75rem;
   padding: 1rem 1.25rem;
   transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  display: block;
 }
 
-.list-group-item:hover {
+.pet-list-item:hover {
   border-color: var(--primary-light);
+  background-color: var(--neutral-700);
   box-shadow: var(--shadow-sm);
   transform: translateX(4px);
 }
 
-/* 리뷰 삭제 버튼 */
-#deleteReview {
+#deleteReview,
+.deleteCareLog {
   background: linear-gradient(135deg, var(--danger), #e11d48);
   color: white;
   font-weight: 500;
@@ -274,13 +270,13 @@ h4::before {
   font-size: 0.85rem;
 }
 
-#deleteReview:hover {
+#deleteReview:hover,
+.deleteCareLog:hover {
   background: linear-gradient(135deg, #e11d48, #be123c);
   box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
   transform: translateY(-1px);
 }
 
-/* 리뷰 없음 섹션 */
 .no-review {
   background-color: var(--neutral-100);
   padding: 1.5rem;
@@ -291,7 +287,6 @@ h4::before {
   border: 1px dashed var(--neutral-300);
 }
 
-/* 케어 로그 섹션 */
 .care-log-img {
   width: 100%;
   max-width: 250px !important;
@@ -308,25 +303,6 @@ h4::before {
   box-shadow: var(--shadow);
 }
 
-/* 케어 로그 삭제 버튼 */
-.deleteCareLog {
-  background: linear-gradient(135deg, var(--danger), #e11d48);
-  color: white;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-base);
-  border: none;
-  transition: var(--transition);
-  font-size: 0.85rem;
-}
-
-.deleteCareLog:hover {
-  background: linear-gradient(135deg, #e11d48, #be123c);
-  box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
-  transform: translateY(-1px);
-}
-
-/* 펫 프로필 이미지 */
 .pet-profile-img {
   width: 100px;
   height: 100px;
@@ -334,7 +310,7 @@ h4::before {
   border-radius: 50%;
   margin-bottom: 0.75rem;
   box-shadow: var(--shadow);
-  border: 3px solid white;
+  border: 3px solid var(--neutral-200);
   transition: var(--transition);
 }
 
@@ -344,12 +320,11 @@ h4::before {
   border-color: var(--primary-light);
 }
 
-/* 프로필 카드 */
 .profile-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
+  background-color: var(--neutral-100);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow);
@@ -361,7 +336,6 @@ h4::before {
   transform: translateY(-2px);
 }
 
-/* 알림 스타일 */
 .alert {
   border-radius: var(--radius-base);
   padding: 1rem 1.25rem;
@@ -380,24 +354,19 @@ h4::before {
   color: var(--danger);
 }
 
-/* 반응형 디자인 */
 @media (max-width: 768px) {
   .card.p-3 {
     padding: 1.25rem !important;
   }
-
   .card p strong {
     min-width: 100px;
   }
-
   h2.text-center {
     font-size: 1.75rem;
   }
-
   h4 {
     font-size: 1.25rem;
   }
-
   .btn {
     font-size: 0.9rem;
     padding: 0.65rem 1rem;
