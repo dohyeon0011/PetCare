@@ -196,11 +196,14 @@
                 <div th:if="${pet.profileImage != null}">
                     <img th:src="@{'/uploads/pets/' + ${pet.profileImage}}" alt="반려견 프로필 사진" class="pet-profile-img">
                 </div>
-                <strong th:text="${pet.name}"></strong>
-                (나이: <span th:text="${pet.age}"></span>세,
-                품종: <span th:text="${pet.breed}"></span>)
-                <br>
-                <strong>건강 상태 및 특이사항:</strong> <span th:text="${pet.medicalConditions} ?: '없음'"></span>
+                <p>
+                    <strong th:text="${pet.name}"></strong>
+                    (<span>나이: <span th:text="${pet.age}"></span>세, 품종: <span th:text="${pet.breed}"></span></span>)
+                </p>
+                <p>
+                    <strong>건강 상태 및 특이사항:</strong>
+                    <span th:text="${pet.medicalConditions} ?: '없음'"></span>
+                </p>
             </li>
         </ul>
     </div><br>
