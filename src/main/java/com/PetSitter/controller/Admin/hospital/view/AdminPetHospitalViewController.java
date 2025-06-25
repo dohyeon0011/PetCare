@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/pets-care/admin/pet-hospital")
+@RequestMapping("/pets-care/admin/pet-hospitals")
 public class AdminPetHospitalViewController {
 
     /**
