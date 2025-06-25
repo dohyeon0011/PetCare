@@ -7,6 +7,7 @@
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
     <link th:href="@{/css/chatbot.css}" rel="stylesheet">
     <link th:href="@{/css/chat.css}" rel="stylesheet">
+    <link th:href="@{/css/admin-pet-hospital.css}" rel="stylesheet">
 </head>
 <body>
 <!--로그인 여부 확인(챗봇)-->
@@ -141,15 +142,35 @@
     </div>
 </nav>
 
-<div class="container mt-5" th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
-    <h2>동물 병원 정보 CSV 파일 업로드</h2>
-    <form id="csvUploadForm" enctype="multipart/form-data" class="mt-4">
-        <div class="form-group">
-            <label for="csvFile">CSV 파일 선택</label>
-            <input type="file" class="form-control-file" id="csvFile" name="file" accept=".csv" required>
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">업로드</button>
-    </form>
+<div class="upload-wrapper">
+    <div class="upload-container">
+        <h2 class="upload-title">동물 병원 정보</h2>
+        <p class="upload-subtitle">CSV 파일을 업로드하여 병원 정보를 등록하세요</p>
+
+        <form id="csvUploadForm" enctype="multipart/form-data">
+            <div class="upload-form-group">
+                <label class="upload-form-label" for="csvFile">CSV 파일 선택</label>
+                <div class="file-input-container" id="fileInputContainer">
+                    <input type="file" class="file-input" id="csvFile" name="file" accept=".csv" required>
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">파일을 선택하거나 드래그하세요</div>
+                    <div class="upload-hint">CSV 파일만 업로드 가능합니다<br>최대 파일 크기: 10MB</div>
+                </div>
+                <div class="file-selected" id="fileSelected">
+                    <div class="file-icon">📄</div>
+                    <div class="file-info">
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">업로드 시작</button>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- Bootstrap JS and dependencies -->
