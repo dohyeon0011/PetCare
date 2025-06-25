@@ -1,9 +1,10 @@
-/* Profile Page Styling */
+/* Profile Page Styling - Dark Mode */
+
 .profile-header {
     text-align: center;
     margin-bottom: 2rem;
     font-family: 'Montserrat', sans-serif;
-    color: var(--color-primary);
+    color: #82aaff; /* 밝은 블루 */
 }
 
 .profile-card {
@@ -11,38 +12,40 @@
     margin: 0 auto 3rem;
     padding: 2rem;
     border-radius: 1rem;
-    background: linear-gradient(135deg, rgba(236, 240, 243, 0.9), rgba(255, 250, 245, 0.9));
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    background: linear-gradient(135deg, #1e293bcc, #273549cc); /* 어두운 블루 계열 그라데이션 */
+    box-shadow: 0 8px 24px rgba(10, 25, 47, 0.8);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #e0e6f3; /* 연한 회색 톤 텍스트 */
 }
 
 .profile-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px rgba(10, 25, 47, 1);
 }
 
 .profile-card .card-body {
-    background-color: rgba(255, 255, 250, 0.95);
+    background-color: rgba(30, 41, 59, 0.85);
     padding: 1.5rem;
     border-radius: 0.75rem;
+    color: #cbd5e1; /* 조금 더 연한 텍스트 */
 }
 
 .profile-card .card-title {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.75rem;
     margin-bottom: 1rem;
-    color: var(--color-text);
+    color: #82aaff;
 }
 
 .profile-card .card-text {
     font-family: var(--font-body);
     line-height: 1.75;
     margin-bottom: 1.5rem;
-    color: var(--color-text-light);
+    color: #a8b2d1;
 }
 
 .profile-card .card-text strong {
-    color: var(--color-text);
+    color: #e0e6f3;
 }
 
 .profile-card .card-text br {
@@ -51,79 +54,89 @@
 }
 
 /* Buttons */
+
 .btn-edit {
-    background-color: #f0a500;
-    color: #fff;
+    background-color: #f0a500cc;
+    color: #1a1a1a;
     padding: 0.75rem 1.5rem;
     border-radius: 2rem;
     font-weight: 500;
     transition: background 0.3s ease;
+    box-shadow: 0 4px 10px rgba(240, 165, 0, 0.4);
 }
 
 .btn-edit:hover {
-    background-color: #cf8b00;
+    background-color: #cf8b00cc;
+    box-shadow: 0 6px 14px rgba(207, 139, 0, 0.6);
+    color: #fff;
 }
 
 .custom-blue-btn,
-btn-primary,
 .btn-primary {
-    background-color: #3b8beb !important;
-    border-color: #3b8beb !important;
+    background-color: #3b82f6 !important; /* 선명한 블루 */
+    border-color: #3b82f6 !important;
     color: #fff !important;
     padding: 0.75rem 1.5rem;
     border-radius: 2rem;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
 }
 
 .custom-blue-btn:hover,
 .btn-primary:hover {
-    background-color: #336fb2 !important;
-    border-color: #336fb2 !important;
+    background-color: #2563eb !important; /* 좀 더 진한 블루 */
+    border-color: #2563eb !important;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.8);
 }
 
 .btn-secondary {
-    background-color: rgba(108, 117, 125, 0.1) !important; /* 연한 그레이 톤 */
-    border-color: rgba(108, 117, 125, 0.3) !important;
-    color: var(--color-text-light) !important;
+    background-color: rgba(108, 117, 125, 0.2) !important; /* 연한 그레이 투명 */
+    border-color: rgba(108, 117, 125, 0.4) !important;
+    color: #a0aec0 !important; /* 연한 회색 텍스트 */
     padding: 0.75rem 1.5rem;
     border-radius: 2rem;
     transition: background 0.3s ease, color 0.3s ease;
+    box-shadow: none;
 }
 
 .btn-secondary:hover {
-    background-color: rgba(108, 117, 125, 0.2) !important;
-    color: var(--color-text) !important;
+    background-color: rgba(108, 117, 125, 0.3) !important;
+    color: #e2e8f0 !important;
 }
 
 .btn-green {
-    background-color: #39b54a !important;
-    border-color: #39b54a !important;
+    background-color: #22c55e !important; /* 밝고 생동감 있는 그린 */
+    border-color: #22c55e !important;
     color: #fff !important;
     padding: 0.75rem 1.5rem;
     border-radius: 2rem;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.6);
 }
 
 .btn-green:hover {
-    background-color: #2f953d !important;
-    border-color: #2f953d !important;
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.8);
 }
 
 /* Pet Section & Certification Section */
+
 .pet-section,
 .certification-section {
-    background-color: rgba(245, 249, 252, 0.9);
+    background-color: #1e293bcc; /* 어두운 배경 투명 */
     border-radius: 0.75rem;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 14px rgba(10, 25, 47, 0.6);
+    color: #cbd5e1;
 }
 
 .pet-section h3,
 .certification-section h3 {
     font-size: 1.25rem;
     margin-bottom: 1rem;
-    color: var(--color-text);
+    color: #82aaff;
 }
 
 .pet-profile-img {
@@ -132,9 +145,10 @@ btn-primary,
     object-fit: cover;
     border-radius: 50%;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 14px rgba(10, 25, 47, 0.8);
 }
 
+/* 버튼 그룹 */
 .button-group {
     display: flex;
     justify-content: center;
