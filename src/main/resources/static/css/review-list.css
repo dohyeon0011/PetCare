@@ -1,19 +1,19 @@
-/* Theme Variables */
+/* Theme Variables - Dark Mode */
 :root {
-  --bg-page:       #f4f6f8;
-  --bg-search:     #ffffff;
-  --bg-review:     #ffffff;
+  --bg-page:       #1e2227;       /* 다크 페이지 배경 */
+  --bg-search:     #2a2e35;       /* 입력창 배경 */
+  --bg-review:     #2f343b;       /* 리뷰 카드 배경 */
   --accent-blue:   #3498db;
   --accent-blue-dk:#2980b9;
-  --text-default:  #2c3e50;
-  --text-muted:    #7f8c8d;
-  --border-light:  #dde2e6;
+  --text-default:  #ecf0f1;       /* 밝은 기본 텍스트 */
+  --text-muted:    #95a5a6;       /* 흐릿한 텍스트 */
+  --border-light:  #3c434b;       /* 경계선 색상 */
   --radius-base:   8px;
   --spacing-xs:    0.5rem;
   --spacing-sm:    1rem;
   --spacing-md:    1.5rem;
-  --shadow-light:  rgba(0, 0, 0, 0.04);
-  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-light:  rgba(0, 0, 0, 0.3);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
 }
 
 /* Global Page Styles */
@@ -28,19 +28,23 @@ body {
 
 /* ── 검색 폼 적당히 넉넉한 크기 & 우측 고정 ── */
 .search-form {
-  max-width: 600px;      /* 충분히 넉넉하게 확장 */
+  max-width: 600px;
   width: 100%;
   margin: var(--spacing-md) 0;
-  margin-left: auto;     /* 우측 정렬 유지 */
+  margin-left: auto;
   margin-right: 0;
   display: flex;
   justify-content: flex-end;
 }
 
-/* 입력 요소들은 너비 100% 대신 content 기준 */
 .search-form select,
 .search-form input[type="text"] {
-  width: auto;               /* content 크기만큼 */
+  width: auto;
+  background-color: var(--bg-search);
+  color: var(--text-default);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-base);
+  padding: 0.5rem 0.75rem;
 }
 
 .search-form select:focus,
@@ -67,32 +71,28 @@ body {
 }
 
 /* ── 리뷰 카드 중앙 정렬 ── */
-/* 컨테이너는 flex column + align-items:center 로 유지 */
 .review-container {
   display: flex;
   flex-direction: column;
-  align-items: center;      /* 리뷰 아이템 전체 중앙 배치 */
+  align-items: center;
 }
 
-/* 각 리뷰 아이템은 max-width만 적용하고 auto 마진으로 중앙 정렬 */
 .review-item {
   width: 100%;
   max-width: 700px;
   margin: var(--spacing-sm) auto;
   padding: var(--spacing-md);
-  border: 1px solid var(--border-light); /* 테두리 추가 */
-  border-radius: var(--radius-base);     /* 모서리 둥글게 */
-  box-shadow: 0 2px 6px var(--shadow-light); /* 약간의 그림자 */
-  background-color: var(--bg-review);    /* 배경 흰색 */
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-base);
+  box-shadow: 0 2px 6px var(--shadow-light);
+  background-color: var(--bg-review);
   transition: background 0.2s;
 }
 
-/* 마지막 아이템 아래 경계선 제거 */
 .review-item:last-child {
   border-bottom: none;
 }
 
-/* Review Title */
 .review-title {
   text-align: center;
   font-size: 1.75rem;
@@ -105,7 +105,7 @@ body {
   border-bottom: none;
 }
 .review-item:hover {
-  background: #f9fbfd;
+  background: #363c45;
 }
 
 /* Review Header: Star & Author */
@@ -120,28 +120,40 @@ body {
 
 /* Review Stars */
 .rating {
-  display: flex;
-  gap: 4px;
+  display: inline-block;
+  font-size: 1.5rem;
 }
+
 .star {
+  display: inline-block;
+  margin-right: 4px;
+  font-size: 24px;
   position: relative;
-  font-size: 1.2rem;
-  color: var(--border-light);
-  transition: transform 0.2s;
+  color: #888; /* 어두운 회색 별 */
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: default;
+  user-select: none;
 }
+
 .star.filled {
-  color: gold;
+  color: #fbbf24;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6));
 }
-.star.half-filled::before {
-  content: '★';
-  position: absolute;
-  left: 0;
-  width: 50%;
-  overflow: hidden;
-  color: gold;
+
+.star.half-filled {
+  background: linear-gradient(to right, #fbbf24 50%, #888 50%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
+
+.star.empty {
+  color: #888;
+}
+
 .star:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
 }
 
 /* Review Comment */
