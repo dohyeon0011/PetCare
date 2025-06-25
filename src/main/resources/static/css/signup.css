@@ -1,0 +1,141 @@
+/* 카드 스타일 */
+.card {
+  background-color: var(--color-surface, #1e293b);
+  color: var(--color-text, #f1f5f9);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+}
+
+/* 카드 헤더 */
+.card-header {
+  background-color: var(--color-primary, #6366f1);
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px 12px 0 0;
+  color: white;
+}
+
+.card-header h4 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+/* 카드 바디 */
+.card-body {
+  padding-top: 24px;
+}
+
+/* 인풋 필드 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control,
+.form-control-file,
+select {
+  width: 100%;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid var(--color-border, #334155);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.form-control::placeholder {
+  color: #64748b;
+}
+
+.form-control:focus,
+select:focus {
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  outline: none;
+  background-color: #1e293b;
+}
+
+/* 에러 메시지 */
+.error-message {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #ef4444;
+}
+
+/* 경력 필드 */
+#careerField {
+  transition: all 0.3s ease-in-out;
+}
+
+/* 프로필 파일 업로드 */
+.form-control-file {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: #f1f5f9;
+}
+
+/* 자기소개 텍스트에어리어 */
+textarea.form-control {
+  resize: none;
+}
+
+/* 버튼 */
+.btn-primary {
+  background-color: var(--color-primary, #6366f1);
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover, #4f46e5);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* 푸터 */
+.card-footer {
+  background-color: transparent;
+  border-top: none;
+  margin-top: 20px;
+  color: var(--color-text-light, #94a3b8);
+}
+
+.card-footer a {
+  color: var(--color-primary, #6366f1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.card-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 576px) {
+  .card {
+    padding: 20px;
+  }
+
+  .card-header {
+    padding: 16px;
+  }
+
+  .btn-primary {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+}
