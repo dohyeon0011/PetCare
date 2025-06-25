@@ -124,6 +124,7 @@
                             <a class="dropdown-item" th:href="@{/pets-care/admin/members}">회원 관리</a>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/reservations}">예약 관리</a>
                             <a class="dropdown-item" th:href="@{/pets-care/admin/amounts}">포인트 내역 관리</a>
+                            <a class="dropdown-item" th:href="@{/pets-care/admin/pet-hospitals}">동물 병원 정보 관리</a>
                         </div>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
@@ -146,7 +147,7 @@
 </nav>
 
 <div class="container mt-4">
-    <h1 class="text-center">👨‍⚕️ 예약 가능한 펫시터 👩‍⚕️</h1><br><br>
+    <h1 class="text-center">실시간 예약 가능한 펫시터️</h1><br><br>
     <div class="row" id="sitter-list">
         <div class="col-md-4" th:each="sitter : ${reservableSitters}">
             <div class="sitter-card">
