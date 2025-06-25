@@ -1,11 +1,107 @@
+/* 카드 스타일 개선 */
+.card {
+    background-color: var(--color-surface, #1e293b);
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding: 32px;
+    color: var(--color-text, #f1f5f9);
+}
+
+/* 헤더 */
+.card-header {
+    background-color: transparent;
+    text-align: center;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.card-header h4 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: white !important;
+}
+
+/* 인풋 스타일 개선 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border: 1px solid var(--color-border, #334155);
+    background-color: #0f172a;
+    color: #f8fafc;
+    padding: 12px;
+    border-radius: 8px;
+    transition: border 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary, #6366f1);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+    background-color: #1e293b;
+}
+
+/* 버튼 */
+.btn-primary {
+    background-color: var(--color-primary, #6366f1);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover, #4f46e5);
+}
+
+/* 소셜 로그인 */
 .social-login {
     display: flex;
-    justify-content: center;  /* 가운데 정렬 */
-    gap: 20px; /* 아이콘 간 간격 조절 */
-    margin-top: 20px; /* 위쪽 여백 추가 */
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 32px;
+    padding: 0 16px;
+}
+
+.social-login a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    height: 48px;
+    transition: transform 0.2s;
+    overflow: hidden;
+}
+
+.social-login a:hover {
+    transform: scale(1.02);
 }
 
 .social-login a img {
-    width: 160px; /* 이미지 크기 조정 (원하는 크기로 변경 가능) */
-    height: auto;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px 24px;
+}
+
+/* 푸터 */
+.card-footer {
+    background-color: transparent;
+    text-align: center;
+    border-top: none;
+    margin-top: 24px;
+    color: var(--color-text-light, #94a3b8);
+}
+
+.card-footer a {
+    color: var(--color-primary, #6366f1);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.card-footer a:hover {
+    text-decoration: underline;
 }
