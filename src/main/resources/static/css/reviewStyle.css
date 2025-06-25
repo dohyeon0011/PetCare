@@ -8,28 +8,33 @@
     margin-right: 4px;
     font-size: 24px; /* 별 크기 */
     position: relative;
-    color: #ddd; /* 기본 색: 비어있는 별 */
+    color: #555; /* 다크모드용 기본 비어있는 별 색 (회색) */
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: default;
+    user-select: none;
 }
 
 /* 채워진 별 */
 .star.filled {
-    color: gold; /* 채워진 별 색 */
+    color: #fbbf24; /* 고급진 골드 */
+    filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.6));
 }
 
 /* 반 채워진 별 */
 .star.half-filled {
-    background: linear-gradient(to right, gold 50%, #ddd 50%); /* 왼쪽 반은 gold, 오른쪽 반은 #ddd */
+    background: linear-gradient(to right, #fbbf24 50%, #555 50%);
     -webkit-background-clip: text;
-    background-clip: text; /* 배경을 텍스트에 맞게 잘라서 반별 처리 */
-    color: transparent; /* 텍스트 색상은 투명으로 설정 */
+    background-clip: text;
+    color: transparent;
 }
 
 /* 비어있는 별 */
 .star.empty {
-    color: #ddd; /* 비어있는 별 색 */
+    color: #555; /* 다크모드용 비어있는 별 색 */
 }
 
 /* 별 hover 효과 */
 .star:hover {
     transform: scale(1.2);
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
 }
