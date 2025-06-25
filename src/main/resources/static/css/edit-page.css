@@ -1,0 +1,128 @@
+/* 프로필 수정 폼 - 다크모드 입력 필드 스타일 */
+
+.container.mt-5 {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #cbd5e1; /* 연한 회색 텍스트 */
+  font-family: 'Montserrat', sans-serif;
+}
+
+h2.text-center {
+  color: #82aaff; /* 밝은 블루 */
+  margin-bottom: 2rem;
+}
+
+/* form 내부 모든 라벨 */
+form label {
+  font-weight: 600;
+  color: #94a3b8; /* 연한 회색 */
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* input, select, textarea 기본 스타일 */
+form input.form-control,
+form select.form-control,
+form textarea.form-control {
+  width: 100%;
+  background-color: #0f172a; /* 어두운 배경 */
+  color: #e0e6f3; /* 밝은 텍스트 */
+  border: 1px solid #334155; /* 어두운 테두리 */
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: inherit;
+  resize: vertical; /* textarea만 리사이즈 가능 */
+}
+
+/* placeholder 색상 */
+form input.form-control::placeholder,
+form textarea.form-control::placeholder {
+  color: #64748b;
+}
+
+/* focus 스타일 */
+form input.form-control:focus,
+form select.form-control:focus,
+form textarea.form-control:focus {
+  outline: none;
+  border-color: #3b82f6; /* 선명한 블루 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  background-color: #1e293b; /* 좀 더 밝은 배경 */
+  color: #e0e6f3;
+}
+
+/* 프로필 이미지 관련 텍스트 */
+.form-group.text-center label {
+  color: #82aaff;
+}
+
+/* 프로필 이미지 미리보기 */
+#profilePreview {
+  box-shadow: 0 4px 14px rgba(10, 25, 47, 0.8);
+  border-radius: 50%;
+}
+
+/* 삭제 버튼 */
+#deleteProfileImageBtn {
+  background-color: #ef4444;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+#deleteProfileImageBtn:hover {
+  background-color: #b91c1c;
+}
+
+/* 버튼 */
+button.btn-primary {
+  background-color: #3b82f6;
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.6);
+  cursor: pointer;
+}
+
+button.btn-primary:hover {
+  background-color: #2563eb;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.8);
+}
+
+a.btn-secondary {
+  background-color: rgba(108, 117, 125, 0.2);
+  border: none;
+  color: #a0aec0;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+a.btn-secondary:hover {
+  background-color: rgba(108, 117, 125, 0.3);
+  color: #e2e8f0;
+}
+
+/* number input 경계선 겹침 방지 */
+input[type=number].form-control {
+  -moz-appearance: textfield;
+}
+
+input[type=number].form-control::-webkit-inner-spin-button,
+input[type=number].form-control::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
