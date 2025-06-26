@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table
 @Getter
+@DynamicInsert // JPA가 모든 필드에 insert 하는 게 아니라 실제 등록한 컬럼(의도한)만 query 날림.
+@DynamicUpdate // JPA가 모든 필드를 update 치지 않고 실제 update 하는 컬럼(의도한)만 query 날림.
 public class PetHospital {  // 전국 동물 병원 정보 엔티티
 
     @Id
