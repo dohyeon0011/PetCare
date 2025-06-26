@@ -1,5 +1,6 @@
 package com.PetSitter.service.Admin.hospital;
 
+import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.hospital.PetHospital;
@@ -40,14 +41,14 @@ public class AdminPetHospitalService {
     /**
      * 전국 동물 병원 Save csv file
      */
-    @Transactional
+    @Transactional(rollbackFor = IOException.class) // CSV 파일 못 읽을 경우 트랜잭션 롤백 되게 설정(기본은 RuntimeException, 일반 error만 된다 함.), 항상 해당 메서드의 바깥 외부로 던져야 롤백이 됨.
     public void saveFromCsv(MultipartFile file, Member admin) throws IOException {
         log.info("AdminPetHospitalService - saveFromCsv(): 호출 성공.");
         verifyingPermissionsAdmin(admin);
         Path csvPath = getCsvPath(file);
 
         // try-with-resources -> try 문 종료 후, 선언부에 생성된 객체 알아서 닫아줌.
-        try (Reader reader = Files.newBufferedReader(csvPath, StandardCharsets.ISO_8859_1)) {    // CSV 파일을 ISO_8859_1 인코딩 방식으로 읽는 Reader 객체 생성
+        try (Reader reader = Files.newBufferedReader(csvPath, StandardCharsets.UTF_8)) {    // CSV 파일을 ISO_8859_1 인코딩 방식으로 읽는 Reader 객체 생성
             // CSV의 헤더 이름을 DTO 필드와 매핑(DTO 클래스의 @CsvBindByName(column = "")이 붙은 필드에 매핑)
             HeaderColumnNameMappingStrategy<PetHospitalDTO> strategy = new HeaderColumnNameMappingStrategy<>();
             strategy.setType(PetHospitalDTO.class);
@@ -61,39 +62,35 @@ public class AdminPetHospitalService {
                     log.warn("this row is null.");
                     continue;
                 }
-                log.info("row.getName()={}, row.getAddress()={}", row.getName(), row.getAddress());
-                if (row.getLat() == null || row.getLng() == null) {
+                /*if (row.getLat() == null || row.getLng() == null) {
                     log.warn("위도/경도 value is null. lat={}, lng={}", row.getLat(), row.getLng());
                     continue;
-                }
-                // 좌표 변환: EPSG:5174 -> WGS84(지도에 마커 표시를 위해)
-                LatLng wgs84 = CoordinateConverter.convertTMToWGS84(row.getLng(), row.getLat());
+                }*/
+                log.info("CSV -> DTO 파싱 결과: name={}, lat={}, lng={}", row.getName(), row.getLat(), row.getLng());
 
+                // 좌표 변환: EPSG:5174 -> WGS84(지도에 마커 표시를 위해)
+                LatLng wgs84 = null;
+                if (row.getLat() != null && row.getLng() != null) {
+                    wgs84 = CoordinateConverter.convertTMToWGS84(row.getLng(), row.getLat());
+                }
                 // 이미 정보가 있는 병원인 경우, 정보가 업데이트 됐을 수도 있으니 전화번호, 위경도 수정
                 Optional<PetHospital> existingPetHospital = petHospitalRepository.findByNameAndAddress(row.getName(), row.getAddress());
                 if (existingPetHospital.isPresent()) {
                     PetHospital petHospital = existingPetHospital.get();
                     if (petHospital.getLatestAt() != null && row.getLatestAt() != null &&
                             petHospital.getLatestAt().isBefore(row.getLatestAt())) {
-                        petHospital.update(row.getTel(), wgs84.lat(), wgs84.lng(), row.getLatestAt());
+                        petHospital.update(row.getTel(),
+                                wgs84 != null ? wgs84.lat() : petHospital.getLat(),
+                                wgs84 != null ? wgs84.lng() : petHospital.getLng(),
+                                row.getLatestAt());
                         continue;
                     }
                 }
                 // 새로운 병원일 때
-                PetHospital petHospital = PetHospital.builder()
-                        .name(row.getName())
-                        .zipcode(row.getZipcode())
-                        .address(row.getAddress())
-                        .streetZipcode(row.getStreetZipcode())
-                        .streetAddress(row.getStreetAddress())
-                        .tel(row.getTel())
-                        .lat(wgs84.lat())
-                        .lng(wgs84.lng())
-                        .latestAt(row.getLatestAt())
-                        .build();
-                savePetHospital.add(petHospital);
+                mapAndAddPetHospital(row, wgs84, savePetHospital);
             }
             petHospitalRepository.saveAll(savePetHospital);
+            log.info("총 파싱된 병원 수: {}", petHospitalDTOList.size());
         }
         Files.deleteIfExists(csvPath);
         log.info("AdminPetHospitalService - saveFromCsv(): Successful Save ALL.");
@@ -128,8 +125,29 @@ public class AdminPetHospitalService {
     }
 
     /**
-     * 동물 병원 전체 조회
+     * 저장할 동물 병원 정보 DTO -> Entity로 매핑 메서드
+     * @param savePetHospital: 새롭게 저장할 Entity를 담는 List
      */
+    private static void mapAndAddPetHospital(PetHospitalDTO row, LatLng wgs84, List<PetHospital> savePetHospital) {
+        PetHospital petHospital = PetHospital.builder()
+                .name(row.getName())
+                .zipcode(row.getZipcode())
+                .address(row.getAddress())
+                .streetZipcode(row.getStreetZipcode())
+                .streetAddress(row.getStreetAddress())
+                .tel(row.getTel())
+                .lat(wgs84 != null ? wgs84.lat() : null)
+                .lng(wgs84 != null ? wgs84.lng() : null)
+                .latestAt(row.getLatestAt())
+                .build();
+        savePetHospital.add(petHospital);
+    }
+
+    /**
+     * 동물 병원 전체 조회
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @ReadOnlyTransactional
     public List<PetHospitalDTO> getPetHospitalList() {
         return null;
     }
