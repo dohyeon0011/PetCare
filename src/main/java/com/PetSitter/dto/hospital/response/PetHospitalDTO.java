@@ -1,13 +1,14 @@
 package com.PetSitter.dto.hospital.response;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Schema(description = "동물 병원 DTO")
+@Schema(description = "동물 병원 매핑 DTO class")
 @NoArgsConstructor
 @Getter
 public class PetHospitalDTO {
@@ -46,5 +47,6 @@ public class PetHospitalDTO {
 
     @Schema(description = "데이터 갱신 일자")
     @CsvBindByName(column = "데이터갱신일자")
+    @CsvDate("yyyy-MM-dd HH:mm:ss")
     private LocalDateTime latestAt;
 }
