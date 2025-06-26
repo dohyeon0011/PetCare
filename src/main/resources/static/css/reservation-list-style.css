@@ -119,3 +119,44 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* Alert Components - Dark Mode */
+.alert {
+  background: var(--color-card);
+  border: 1px solid var(--color-primary-light);
+  border-radius: 1rem;
+  color: var(--color-text) !important;
+  box-shadow: var(--shadow-subtle);
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.alert-info {
+  background: rgba(127, 156, 245, 0.15);  /* 프라이머리 컬러 투명 배경 */
+  border-color: var(--color-primary);
+  color: var(--color-text) !important;
+  box-shadow: var(--shadow-glow);
+}
+
+.alert-warning {
+  background: rgba(255, 111, 145, 0.15);  /* 악센트 컬러 투명 배경 */
+  border-color: var(--color-accent);
+  color: var(--color-text) !important;
+  box-shadow: 0 0 8px rgba(255, 111, 145, 0.5);
+}
+
+.alert-danger {
+  background: rgba(248, 113, 113, 0.15);  /* 빨간색 투명 배경 */
+  border-color: #f87171;
+  color: var(--color-text) !important;
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+}
+
+.alert-success {
+  background: rgba(52, 211, 153, 0.15);  /* 초록색 투명 배경 */
+  border-color: #34d399;
+  color: var(--color-text) !important;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.5);
+}
