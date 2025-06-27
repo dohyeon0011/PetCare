@@ -1,12 +1,16 @@
 package com.PetSitter.controller.Admin.hospital.api;
 
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.dto.hospital.response.PetHospitalDTO;
 import com.PetSitter.service.Admin.hospital.AdminPetHospitalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +30,7 @@ public class AdminPetHospitalApiController {
 
     @Operation(summary = "관리자 페이지 - 동물 병원 파일 업로드", description = "관리자 권한 - 동물 병원 파일 업로드 API")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadPetHospitalFromCsv(@RequestPart("file") @Parameter(description = "전국 동물병원 CSV 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile file,
+    public ResponseEntity<String> uploadPetHospitalsFromCsv(@RequestPart("file") @Parameter(description = "전국 동물병원 CSV 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile file,
                                                            @AuthenticationPrincipal MemberDetails memberDetails) {
         if (file.isEmpty() || !file.getOriginalFilename().endsWith(".csv")) {
             return ResponseEntity.badRequest()
@@ -47,5 +51,13 @@ public class AdminPetHospitalApiController {
             return ResponseEntity.internalServerError()
                     .body("파일 처리 중 오류 발생: " + e.getMessage());
         }
+    }
+
+    @Operation(summary = "전국 동물 병원 조회", description = "전국 동물 병원 조회 API")
+    @GetMapping
+    public ResponseEntity<Page<PetHospitalDTO>> indexPetHospitals(@PageableDefault(size = 9) @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable) {
+        Page<PetHospitalDTO> petHospitalList = adminPetHospitalService.getPetHospitalList(pageable);
+        return ResponseEntity.ok()
+                .body(petHospitalList);
     }
 }
