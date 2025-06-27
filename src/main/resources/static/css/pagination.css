@@ -1,12 +1,13 @@
 :root {
-  --pagination-link-color: #bbb;
-  --pagination-border-color: #555;
-  --pagination-hover-bg: #60a5fa;
-  --pagination-hover-color: #fff;
-  --pagination-active-bg: #007bff;
-  --pagination-active-border: #007bff;
-  --pagination-active-hover-bg: #0056b3;
-  --pagination-active-hover-border: #0056b3;
+  --pagination-link-color: #9ca3af;
+  --pagination-border-color: #374151;
+  --pagination-hover-bg: #4b5563;
+  --pagination-hover-color: #ffffff;
+  --pagination-active-bg: #3b82f6;
+  --pagination-active-border: #3b82f6;
+  --pagination-active-hover-bg: #2563eb;
+  --pagination-active-hover-border: #2563eb;
+  --pagination-bg: #1f2937;
 }
 
 .pagination {
@@ -21,33 +22,38 @@
 
 .page-link {
   color: var(--pagination-link-color) !important;
-  border-radius: 0.25rem;
+  background-color: var(--pagination-bg);
+  border-radius: 0.375rem;
   padding: 0.5rem 1rem;
   border: 1px solid var(--pagination-border-color);
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .page-link:hover {
   background-color: var(--pagination-hover-bg);
   color: var(--pagination-hover-color) !important;
+  border-color: var(--pagination-hover-bg);
+  transform: translateY(-1px);
 }
 
 .page-item.active .page-link {
   background-color: var(--pagination-active-bg) !important;
   border-color: var(--pagination-active-border) !important;
   color: var(--pagination-hover-color) !important;
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 .page-item.active .page-link:hover {
   background-color: var(--pagination-active-hover-bg) !important;
   border-color: var(--pagination-active-hover-border) !important;
   color: var(--pagination-hover-color) !important;
+  transform: translateY(-1px);
 }
 
 .page-link > span {
   color: var(--pagination-link-color) !important;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
 .page-link:hover > span {
@@ -62,3 +68,18 @@
   color: var(--pagination-hover-color) !important;
 }
 
+/* 추가적인 다크모드 개선사항 */
+.page-item.disabled .page-link {
+  color: #6b7280 !important;
+  background-color: var(--pagination-bg);
+  border-color: #374151;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.page-item.disabled .page-link:hover {
+  background-color: var(--pagination-bg);
+  color: #6b7280 !important;
+  border-color: #374151;
+  transform: none;
+}
