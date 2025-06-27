@@ -49,4 +49,16 @@ public class PetHospitalDTO {
     @CsvBindByName(column = "데이터갱신일자")
     @CsvDate("yyyy-MM-dd HH:mm:ss")
     private LocalDateTime latestAt;
+
+    public PetHospitalDTO(String name, String zipcode, String address, String streetZipcode, String streetAddress, String tel, Double lat, Double lng, LocalDateTime latestAt) {
+        this.name = name;
+        this.zipcode = zipcode;
+        this.address = address;
+        this.streetZipcode = streetZipcode;
+        this.streetAddress = streetAddress;
+        this.tel = tel;
+        this.lat = lat;
+        this.lng = lng;
+        this.latestAt = latestAt;
+    }
 }
