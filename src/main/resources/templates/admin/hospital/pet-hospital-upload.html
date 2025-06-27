@@ -173,6 +173,25 @@
     </div>
 </div>
 
+<!-- 챗봇 토글 버튼 -->
+<button id="chatbot-toggle" class="chatbot-float-btn">
+    💬
+</button>
+
+<!-- 챗봇 UI -->
+<div id="chatbot-container" class="chatbot-container d-none">
+    <div class="chat-header">
+        <span class="chat-title">🐶 반려견 챗봇</span>
+        <button id="chatbot-close" class="chat-close-btn">&times;</button>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div id="button-container" class="chat-buttons"></div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요..." />
+        <button id="send-btn">전송</button>
+    </div>
+</div>
+
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  <!-- Full 버전 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>  <!-- Popper.js -->
