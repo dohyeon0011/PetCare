@@ -144,7 +144,7 @@ MySQL
 
 ---
 
-# [📌 API 명세](http://ec2-3-36-128-60.ap-northeast-2.compute.amazonaws.com:9090/swagger-ui/index.html)
+# [📌 API 명세](http://petscarebook.com/swagger-ui/index.html)
 
 API 명세서는 Swagger 문서에서 확인할 수 있습니다.  
 
