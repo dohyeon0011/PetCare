@@ -13,6 +13,9 @@ import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +27,7 @@ import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -148,7 +152,27 @@ public class AdminPetHospitalService {
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
     @ReadOnlyTransactional
-    public List<PetHospitalDTO> getPetHospitalList() {
-        return null;
+    public Page<PetHospitalDTO> getPetHospitalList(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int offset = (int) pageable.getOffset();
+
+        List<Object[]> result = petHospitalRepository.findAllLatestPetHospitalsByNameAndAddress(pageSize, offset);
+        int totalCount = petHospitalRepository.countGroupedHospitals();
+
+        List<PetHospitalDTO> content = result.stream()
+                .map(row -> new PetHospitalDTO(
+                        (String) row[0],
+                        row[1] != null ? (String) row[1] : null,
+                        (String) row[2],
+                        row[3] != null ? (String) row[3] : null,
+                        row[4] != null ? (String) row[4] : null,
+                        row[5] != null ? (String) row[5] : null,
+                        row[6] != null ? ((Number) row[6]).doubleValue() : null,
+                        row[7] != null ? ((Number) row[7]).doubleValue() : null,
+                        row[8] != null ? ((Timestamp) row[8]).toLocalDateTime() : null
+                ))
+                .toList();
+
+        return new PageImpl<>(content, pageable, totalCount);
     }
 }
