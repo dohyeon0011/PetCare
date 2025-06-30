@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("pageData:", data);
                     renderHospitalList(data.content);
                     renderPagination(data);
-//                    updateMarkers(data.content);
+                    updateMarkers(data.content);
                     currentPage = data.number;
                 } catch (e) {
                     console.error("Error inside then:", e);
