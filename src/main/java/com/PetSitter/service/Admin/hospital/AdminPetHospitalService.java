@@ -75,7 +75,7 @@ public class AdminPetHospitalService {
                 // 좌표 변환: EPSG:5174 -> WGS84(지도에 마커 표시를 위해)
                 LatLng wgs84 = null;
                 if (row.getLat() != null && row.getLng() != null) {
-                    wgs84 = CoordinateConverter.convertTMToWGS84(row.getLng(), row.getLat());
+                    wgs84 = CoordinateConverter.convertTMToWGS84(row.getLat(), row.getLng());
                 }
                 // 이미 정보가 있는 병원인 경우, 정보가 업데이트 됐을 수도 있으니 전화번호, 위경도 수정
                 Optional<PetHospital> existingPetHospital = petHospitalRepository.findByNameAndAddress(row.getName(), row.getAddress());
