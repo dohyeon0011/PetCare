@@ -41,7 +41,7 @@ public class CoordinateConverter {
             DirectPosition2D dest = new DirectPosition2D();
             transform.transform(src, dest); // 좌표 변환
 
-            return new LatLng(dest.getY(), dest.getX()); // 위경도 좌표 recode 객체 클래스로 반환
+            return new LatLng(dest.getX(), dest.getY()); // 위경도 좌표 recode 객체 클래스로 반환
         } catch (FactoryException | TransformException e) {
             throw new RuntimeException("좌표 변환에 실패했습니다.", e);
         }
