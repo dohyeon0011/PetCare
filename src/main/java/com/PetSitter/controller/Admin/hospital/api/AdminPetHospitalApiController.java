@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Admin.hospital.api;
 
 import com.PetSitter.domain.Member.MemberDetails;
+import com.PetSitter.domain.hospital.PetHospitalSearch;
 import com.PetSitter.dto.hospital.response.PetHospitalDTO;
 import com.PetSitter.service.Admin.hospital.AdminPetHospitalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,8 +56,9 @@ public class AdminPetHospitalApiController {
 
     @Operation(summary = "전국 동물 병원 조회", description = "전국 동물 병원 조회 API")
     @GetMapping
-    public ResponseEntity<Page<PetHospitalDTO>> indexPetHospitals(@PageableDefault(size = 9) @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable) {
-        Page<PetHospitalDTO> petHospitalList = adminPetHospitalService.getPetHospitalList(pageable);
+    public ResponseEntity<Page<PetHospitalDTO>> indexPetHospitals(@PageableDefault(size = 9) @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
+                                                                  @ModelAttribute @Parameter(description = "검색 파라미터: 시/도, 시/군/구") PetHospitalSearch search) {
+        Page<PetHospitalDTO> petHospitalList = adminPetHospitalService.getPetHospitalList(pageable, search);
         return ResponseEntity.ok()
                 .body(petHospitalList);
     }
