@@ -4,6 +4,7 @@ import com.PetSitter.config.annotation.ReadOnlyTransactional;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.domain.hospital.PetHospital;
+import com.PetSitter.domain.hospital.PetHospitalSearch;
 import com.PetSitter.dto.hospital.response.PetHospitalDTO;
 import com.PetSitter.repository.hospital.PetHospitalRepository;
 import com.PetSitter.util.coordinate.CoordinateConverter;
@@ -152,12 +153,13 @@ public class AdminPetHospitalService {
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
     @ReadOnlyTransactional
-    public Page<PetHospitalDTO> getPetHospitalList(Pageable pageable) {
+    public Page<PetHospitalDTO> getPetHospitalList(Pageable pageable, PetHospitalSearch search) {
+        log.info("AdminPetHospitalService - getPetHospitalList(): 호출.");
         int pageSize = pageable.getPageSize();
         int offset = (int) pageable.getOffset();
 
-        List<Object[]> result = petHospitalRepository.findAllLatestPetHospitalsByNameAndAddress(pageSize, offset);
-        int totalCount = petHospitalRepository.countGroupedHospitals();
+        List<Object[]> result = petHospitalRepository.findPageLatestPetHospitalsByNameAndAddressUsingNativeQuery(pageSize, offset, search.getSido(), search.getSigungu());
+        int totalCount = petHospitalRepository.countGroupedHospitals(search.getSido(), search.getSigungu());
 
         List<PetHospitalDTO> content = result.stream()
                 .map(row -> new PetHospitalDTO(
