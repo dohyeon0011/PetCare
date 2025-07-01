@@ -66,7 +66,9 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
         JPAQuery<Long> countQuery = queryFactory
                 .select(careAvailableDate.sitter.id.countDistinct()) // careAvailableDate.sitter.countDistinct()으로 해도 됨.
                 .from(careAvailableDate)
-                .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY));
+                .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY)
+                        .and(careAvailableDate.sitter.isDeleted.eq(Boolean.FALSE))
+                        .and(careAvailableDate.availableAt.goe(LocalDate.now())));
 
 //        System.out.println("countQuery.fetchCount() = " + countQuery.fetchCount()); countQuery는 중복 제거를 못 함. 그래서 fetchOne()으로 총 컨텐트 개수 구해야 함.
 
