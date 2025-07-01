@@ -224,8 +224,22 @@
     <div class="map-container">
         <div id="map"></div>
     </div>
+    <br>
+
     <!-- 병원 리스트 -->
-    <ul class="hospital-list" id="hospital-list"></ul>
+    <div class="hospital-list-container">
+        <!-- 병원 필터링 UI -->
+        <div class="hospital-filter">
+            <select id="sido-select">
+                <option value="">시/도 선택</option>
+            </select>
+            <select id="sigungu-select" disabled>
+                <option value="">시/군/구 선택</option>
+            </select>
+            <button id="filter-btn">검색</button>
+        </div><br>
+        <ul class="hospital-list" id="hospital-list"></ul>
+    </div>
 
     <!-- 페이징 버튼 -->
     <nav aria-label="Page navigation" id="hospital-pagination"></nav>
