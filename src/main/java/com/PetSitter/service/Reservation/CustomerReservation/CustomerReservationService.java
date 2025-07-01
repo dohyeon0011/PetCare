@@ -19,6 +19,7 @@ import com.PetSitter.repository.PointHistory.PointHistoryRepository;
 import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservationRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import com.PetSitter.service.Reservation.Reward.RewardService;
+import com.PetSitter.service.Reservation.Reward.RewardServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class CustomerReservationService {
     private final CustomerReservationRepository customerReservationRepository;
     private final SitterScheduleRepository sitterScheduleRepository;
     private final CareAvailableDateRepository careAvailableDateRepository;
-    private final RewardService rewardService;
+    private final RewardService rewardService = new RewardServiceImpl();
     private final PointHistoryRepository pointHistoryRepository;
 
     /**
@@ -96,7 +97,7 @@ public class CustomerReservationService {
 
         // 돌봄사 시점 돌봄 예약 생성
         sitterReservation(customerReservation, careAvailableDate);
-        rewardService.addReward(customer.getId(), resultPrice); // 적립금을 사용 유무에 상관 없이 무조건 결제 금액 만큼 적립
+        rewardService.addReward(customer, resultPrice); // 적립금을 사용 유무에 상관 없이 무조건 결제 금액 만큼 적립
 
         PointsHistory.builder() // 적립금 적립 내역
                 .customerReservation(customerReservation)
