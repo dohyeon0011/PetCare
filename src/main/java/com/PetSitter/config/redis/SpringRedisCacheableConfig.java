@@ -33,7 +33,7 @@ public class SpringRedisCacheableConfig {
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        // LocalDateTime 직렬화 문제 → jackson-datatype-jsr310 모듈 등록 필수
+        // LocalDateTime 직렬화 문제 -> jackson-datatype-jsr310 모듈 등록 필수
         // Redis 캐시용 GenericJackson2JsonRedisSerializer를 생성할 때 ObjectMapper에 JavaTimeModule 등록 후 주입
         // 그러면 LocalDateTime 포함된 DTO도 Redis 캐시에 문제 없이 저장됨
         ObjectMapper mapper = new ObjectMapper();
