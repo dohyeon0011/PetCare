@@ -23,18 +23,7 @@ public interface PetHospitalRepository extends JpaRepository<PetHospital, Long> 
                 ) p
                 where p.rn = 1
                 limit :limit offset :offset
-    """,
-    countQuery = """
-            select count(*)
-                from (
-                    select 1
-                        from pet_hospital
-                        where (:sido is null or address like concat('%', :sido, '%'))
-                            and (:sigungu is null or address like concat('%', :sigungu, '%'))
-                        group by name, address
-                ) count_table
-            """,
-    nativeQuery = true)
+    """, nativeQuery = true)
     List<Object[]> findPageLatestPetHospitalsByNameAndAddressUsingNativeQuery(@Param("limit") int limit, @Param("offset") int offset, @Param("sido") String sido, @Param("sigungu") String sigungu);
 
     // 병원 이름 + 주소별 카운트 쿼리(페이징 시 이용) + 지역 키워드 조건 검색
