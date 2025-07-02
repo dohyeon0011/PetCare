@@ -104,7 +104,7 @@ QueryDSL & JPQL - 동적 쿼리 처리
 
 Spring Security  
 
-Redis(Lettuce)
+Redis(Lettuce) + 중복 조회 데이터 Cache Aside(Look Aside) 읽기 전략으로 캐싱
 
 WebSocket + STOMP
 
