@@ -37,6 +37,11 @@ spring:
       org:
         springframework:
           web: DEBUG  # Spring 웹 관련 로그도 DEBUG 레벨로 출력됩니다.
+          cache: DEBUG
+          data:
+            redis:
+              cache:
+                RedisCache: DEBUG
     pattern:
       console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"  # 로그 출력 형식 설정
   output:
