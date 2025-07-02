@@ -210,6 +210,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     // 해당 마커 InfoWindow 열기
                     infoWindow.open(map, marker);
+
+                    // 지도 위치로 사용자 화면 이동
+                    document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
                 } else {
                     // 마커(위도, 경도 값이 없는 경우)
                     alert('이 병원은 지도에 위치 정보(위도(lat), 경도(lng))가 없습니다.');
