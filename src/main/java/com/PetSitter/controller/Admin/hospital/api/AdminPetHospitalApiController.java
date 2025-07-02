@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -20,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,10 +58,23 @@ public class AdminPetHospitalApiController {
 
     @Operation(summary = "전국 동물 병원 조회", description = "전국 동물 병원 조회 API")
     @GetMapping
-    public ResponseEntity<Page<PetHospitalDTO>> indexPetHospitals(@PageableDefault(size = 9) @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
-                                                                  @ModelAttribute @Parameter(description = "검색 파라미터: 시/도, 시/군/구") PetHospitalSearch search) {
-        Page<PetHospitalDTO> petHospitalList = adminPetHospitalService.getPetHospitalList(pageable, search);
+    public ResponseEntity<Map<String, Object>> indexPetHospitals(@PageableDefault(size = 9) @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
+                                                            @ModelAttribute @Parameter(description = "검색 파라미터: 시/도, 시/군/구") PetHospitalSearch search) {
+        Map<String, Object> resMap = new HashMap<>();
+
+        List<PetHospitalDTO> petHospitalList = adminPetHospitalService.getPetHospitalList(pageable, search);
+        int currentPage = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        int totalCount = adminPetHospitalService.getTotalCountElementsQuery(search);
+        int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+        resMap.put("content", petHospitalList);
+        resMap.put("number", currentPage);
+        resMap.put("totalPages", totalPages);
+        resMap.put("first", currentPage == 0);
+        resMap.put("last", currentPage == totalPages - 1);
+
         return ResponseEntity.ok()
-                .body(petHospitalList);
+                .body(resMap);
     }
 }
