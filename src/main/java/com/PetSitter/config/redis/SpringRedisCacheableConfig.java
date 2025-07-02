@@ -1,7 +1,5 @@
 package com.PetSitter.config.redis;
 
-//import com.PetSitter.config.exception.LoggingCacheErrorHandler;
-
 import com.PetSitter.config.exception.CustomLoggingCacheErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
