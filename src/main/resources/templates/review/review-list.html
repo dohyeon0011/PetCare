@@ -189,7 +189,10 @@
             <!-- 예약 날짜 및 작성일 -->
             <div class="review-meta">
                 <span>📅 예약일: <span th:text="${review.reservationAt}"></span></span>
-                <span>🕒 작성일: <span th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></span></span>
+                <span>🕒 작성일: <span th:text="${review.createdAt instanceof T(java.time.LocalDateTime)
+                                    ? #temporals.format(review.createdAt, 'yyyy-MM-dd')
+                                    : review.createdAt}"></span>
+                </span>
             </div>
         </div>
     </div>
