@@ -15,6 +15,7 @@ import com.PetSitter.repository.Reservation.CustomerReservation.CustomerReservat
 import com.PetSitter.repository.Review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -148,6 +149,11 @@ public class ReviewService {
      * 모든 리뷰 조회
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
+    @Cacheable(
+            value = "reviewList",
+            key = "'mainPage'",
+            unless = "#result == null || #result.isEmpty()"
+    )
     @ReadOnlyTransactional
     public List<ReviewResponse.GetDetail> getAllReview() {
         return reviewRepository.findLatestReviews();
@@ -166,6 +172,11 @@ public class ReviewService {
      * 이용 후기 페이지에서 사용자가 선택한 돌봄사의 리뷰만 전체 조회(V2: 검색 조건을 검색 전용 클래스 객체로 받기)
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
+    @Cacheable(
+            value = "reviewList",
+            key = "'consumerReviewPage:' + T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#reviewSearch.sitter, 'ALL') + ':' + #page",
+            unless = "#result == null || #result.isEmpty()"
+    )
     @ReadOnlyTransactional
     public List<ReviewResponse.GetDetail> getAllReviewsBySitterV2(ReviewSearch reviewSearch, int page) {
         return reviewRepository.findAllReviewsBySitterV2(reviewSearch, page);
@@ -184,6 +195,11 @@ public class ReviewService {
      * 조건 검색 시 총 리뷰 개수
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
+    @Cacheable(
+            value = "reviewList",
+            key = "'consumerReviewPageTotalCount:' + T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#reviewSearch.sitter, 'ALL')",
+            unless = "#result == null"
+    )
     @ReadOnlyTransactional
     public long countAllReviewsBySitter(ReviewSearch reviewSearch) {
         return reviewRepository.countAllReviewsBySitter(reviewSearch);
@@ -193,6 +209,11 @@ public class ReviewService {
      * 드롭다운 전체 돌봄사 목록 조회
      * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
      */
+    @Cacheable(
+            value = "reviewList",
+            key = "'sitters'",
+            unless = "#result == null || #result.isEmpty()"
+    )
     @ReadOnlyTransactional
     public List<String> getAllSitters() {
         return reviewRepository.getAllSitters();
