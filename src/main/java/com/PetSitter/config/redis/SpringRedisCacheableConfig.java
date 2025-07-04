@@ -2,6 +2,7 @@ package com.PetSitter.config.redis;
 
 import com.PetSitter.config.exception.CustomLoggingCacheErrorHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
@@ -37,12 +38,13 @@ public class SpringRedisCacheableConfig {
         // Redis 캐시용 GenericJackson2JsonRedisSerializer를 생성할 때 ObjectMapper에 JavaTimeModule 등록 후 주입
         // 그러면 LocalDateTime 포함된 DTO도 Redis 캐시에 문제 없이 저장됨
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+        mapper.registerModule(new JavaTimeModule());    // Java 8의 날짜/시간 형식 데이터 지원(직렬화 할 때 필요)
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // 날짜 저장 시 숫자 배열이 아닌 ISO-8601 문자열로 저장(역직렬화 해서 쓸 때 필요)
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(mapper);
 
         // 전역 설정
         RedisCacheConfiguration defaultConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(2))
+                .entryTtl(Duration.ofHours(1))
                 .disableCachingNullValues()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer));
@@ -57,6 +59,12 @@ public class SpringRedisCacheableConfig {
 
         configMap.put("petHospitalListCount", RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofHours(12)) // 동물 병원 리스트 카운트 쿼리 -> 12시간 유지
+                .disableCachingNullValues()
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer)));
+
+        configMap.put("reviewList", RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(15)) // 실시간 돌봄 후기, 이용 후기 데이터 -> 15분 유지
                 .disableCachingNullValues()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer)));
