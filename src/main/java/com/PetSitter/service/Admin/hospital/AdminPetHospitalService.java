@@ -192,7 +192,7 @@ public class AdminPetHospitalService {
     @Cacheable(
             value = "petHospitalListCount",
             key = "T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sido, 'ALL') + ':' + T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sigungu, 'ALL')",
-            unless = "#result == null"
+            unless = "#result == null || #result == 0"
     )
     public int getTotalCountElementsQuery(PetHospitalSearch search) {
         log.info("AdminPetHospitalService - getTotalCountElementsQuery(): " +
