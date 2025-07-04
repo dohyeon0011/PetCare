@@ -140,14 +140,14 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     // 조건 검색 시 총 리뷰 개수
     @Override
     public Long countAllReviewsBySitter(ReviewSearch reviewSearch) {
-        String jpql = "select count(r) from Review r " +
+        String jpql = "select count(r) " +
+                "from Review r " +
                 "join r.customerReservation cr " +
-                "join cr.customer c " +
                 "join cr.sitter s " +
                 "where r.isDeleted = false ";
 
         if (reviewSearch.getSitter() != null && StringUtils.hasText(reviewSearch.getSitter())) {
-            jpql += "and cr.sitter.name = :sitterName ";
+            jpql += "and s.name = :sitterName";
         }
 
         TypedQuery<Long> query = em.createQuery(jpql, Long.class);
@@ -163,9 +163,9 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     @Override
     public List<String> getAllSitters() {
         return em.createQuery(
-                        "select distinct(s.name) from Review r " +
+                        "select distinct(s.name) " +
+                                "from Review r " +
                                 "join r.customerReservation cr " +
-                                "join cr.customer c " +
                                 "join cr.sitter s " +
                                 "order by s.name asc", String.class)
                 .getResultList();
