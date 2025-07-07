@@ -13,7 +13,7 @@ import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -124,8 +124,16 @@ public class MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 유저를 찾을 수 없습니다. (" + username + ")"));
     }
 
-    @Comment("리뷰가 가장 많은 대표 돌봄사 최상위 3명 조회(메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내)")
-    @Transactional(readOnly = true)
+    /**
+     * 리뷰가 가장 많은 대표 돌봄사 최상위 3명 조회(메인 페이지 - 자세히 보기 3 (어떤 분들이 활동하고 있나요?) 안내)
+     * @ReadOnlyTransactional: 커스텀 읽기 전용 어노테이션
+     */
+    @Cacheable(
+            value = "bestSitters",
+            key = "'ALL'",
+            unless = "#result == null || #result.isEmpty()"
+    )
+    @ReadOnlyTransactional
     public Object findBestSitters() {
         PageRequest pageable = PageRequest.of(0, 3);
         return memberRepository.findBestSitters(pageable)
