@@ -99,7 +99,7 @@ public class AdminPetHospitalService {
             log.info("총 파싱된 병원 수: {}", petHospitalDTOList.size());
         }
         Files.deleteIfExists(csvPath);
-//        deleteAllPetHospitalsCache();
+        deleteAllPetHospitalsCache();
         log.info("AdminPetHospitalService - saveFromCsv(): Successful Save ALL.");
     }
 
