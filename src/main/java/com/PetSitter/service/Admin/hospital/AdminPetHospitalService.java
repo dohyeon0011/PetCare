@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,11 +156,11 @@ public class AdminPetHospitalService {
      * 자동으로 Redis에 Cache Aside 읽기 전략으로 저장됨.(RedisCacheManager를 이용, value=캐시 이름(Redis에서는 Hash 이름처럼 동작) -> ex) petHospitalList::서울특별시:용산구:0)
      * @Cacheable unless = false일 때만 결과를 캐시에 저장, condition = true일 때만 캐시에 저장
      */
-    /*@Cacheable(
+    @Cacheable(
             value = "petHospitalList",
             key = "T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sido, 'ALL') + ':' + T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sigungu, 'ALL') + ':' + #pageable.pageNumber", // 검색 조건이 없는 경우 null 처리 위해 -> ALL로 바꿔 저장
             unless = "#result == null || #result.isEmpty()" // condition: 메서드 호출 전 검증(특정 파라미터 조건일 때만 캐싱 한다던가), unless: 메서드 호출 후 결과 값에 따라 캐싱 (result는 SpEL(Spring Expression Language)에 예약된 변수임)
-    )*/
+    )
     @ReadOnlyTransactional
     public List<PetHospitalDTO> getPetHospitalList(Pageable pageable, PetHospitalSearch search) {
         log.info("AdminPetHospitalService - getPetHospitalList(): " +
@@ -187,11 +189,11 @@ public class AdminPetHospitalService {
      * 동물 병원 목록 조회 시 카운트 쿼리 메서드(요소 총 개수)
      * 동물 병원 목록 조회 데이터와 같은 생명 주기로 캐싱
      */
-    /*@Cacheable(
+    @Cacheable(
             value = "petHospitalListCount",
             key = "T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sido, 'ALL') + ':' + T(org.apache.commons.lang3.StringUtils).defaultIfEmpty(#search.sigungu, 'ALL')",
             unless = "#result == null || #result == 0"
-    )*/
+    )
     public int getTotalCountElementsQuery(PetHospitalSearch search) {
         log.info("AdminPetHospitalService - getTotalCountElementsQuery(): " +
                 "Cache Miss로 DB 직접 카운트 쿼리 조회 - key= {}:{}", StringUtils.defaultIfEmpty(search.getSido(), "ALL"), StringUtils.defaultIfEmpty(search.getSigungu(), "ALL"));
@@ -202,7 +204,7 @@ public class AdminPetHospitalService {
      * 병원 데이터가 갱신되었을 때, 이 메서드를 호출하면 petHospitalList와 petHospitalListCount 캐시를 모두 삭제 시키는 메서드
      * allEntries: 모든 키를 제거할 지 말지 여부
      */
-//    @CacheEvict(value = {"petHospitalList", "petHospitalListCount"}, allEntries = true)
+    @CacheEvict(value = {"petHospitalList", "petHospitalListCount"}, allEntries = true)
     public void deleteAllPetHospitalsCache() {
     }
 }
