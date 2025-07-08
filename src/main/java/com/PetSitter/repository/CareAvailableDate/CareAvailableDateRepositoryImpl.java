@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.PetSitter.domain.CareAvailableDate.QCareAvailableDate.careAvailableDate;
+import static com.PetSitter.domain.Review.QReview.review;
+import static com.querydsl.jpa.JPAExpressions.select;
 
 @RequiredArgsConstructor
 public class CareAvailableDateRepositoryImpl implements CareAvailableDateRepositoryCustom {
@@ -53,12 +55,21 @@ public class CareAvailableDateRepositoryImpl implements CareAvailableDateReposit
                 .select(
                         new QReservationSitterResponse_GetList(
                                 careAvailableDate.sitter.id, careAvailableDate.sitter.name, careAvailableDate.sitter.introduction,
-                                careAvailableDate.sitter.careerYear, careAvailableDate.sitter.profileImage)).distinct()
+                                careAvailableDate.sitter.careerYear, careAvailableDate.sitter.profileImage,
+                                select(review.rating.avg())
+                                        .from(review)
+                                        .where(review.customerReservation.sitter.id.eq(careAvailableDate.sitter.id)
+                                                .and(review.isDeleted.isFalse())),
+                                select(review.count())
+                                        .from(review)
+                                        .where(review.customerReservation.sitter.id.eq(careAvailableDate.sitter.id)
+                                                .and(review.isDeleted.isFalse()))
+                        )
+                ).distinct()
                 .from(careAvailableDate)
                 .where(careAvailableDate.status.eq(CareAvailableDateStatus.POSSIBILITY)
                         .and(careAvailableDate.sitter.isDeleted.eq(Boolean.FALSE))
                         .and(careAvailableDate.availableAt.goe(LocalDate.now())))
-                .distinct()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
