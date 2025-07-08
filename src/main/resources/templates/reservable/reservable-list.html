@@ -170,9 +170,19 @@
                                  style="width: 150px; height: 150px; object-fit: cover;">
                         </div>
 
-                        <h5 class="card-title" th:text="${sitter.sitterName}"></h5>
+                        <div class="title-section">
+                            <h5 class="card-title" th:text="${sitter.sitterName}"></h5>
+                            <div class="review-inline">
+                                <span class="review-star">★</span>
+                                <span class="review-info">
+                                        <span class="review-rating" th:text="${sitter.avgRating != null ? #numbers.formatDecimal(sitter.avgRating, 1, 1) : '0.0'}"></span>
+                                        (<span class="review-count" th:text="${sitter.totalReviewCnt}"></span>)
+                                    </span>
+                            </div>
+                        </div>
+
                         <p class="card-text">
-                           🏆 경력: <span th:text="${sitter.careerYear}"></span>년
+                            🏆 경력: <span th:text="${sitter.careerYear}"></span>년
                         </p>
                         <p class="card-text" th:text="${sitter.introduction}"></p>
                         <a th:href="@{/pets-care/reservable/members/{sitterId}(sitterId=${sitter.sitterId})}" class="btn btn-primary">자세히 보기</a>
