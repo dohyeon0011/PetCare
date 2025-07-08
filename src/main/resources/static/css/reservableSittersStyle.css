@@ -203,6 +203,58 @@
     z-index: 2;
 }
 
+/* 제목과 리뷰 정보 컨테이너 */
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* 인라인 리뷰 스타일 */
+.review-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.review-star {
+    color: #ffd700;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(255, 215, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.review-star:hover {
+    transform: scale(1.1);
+}
+
+.review-info {
+    font-size: 0.75rem;
+    color: #cbd5e0 !important;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+}
+
+.review-rating {
+    color: #f7fafc !important;
+    font-weight: 600;
+}
+
+.review-count {
+    color: #a0aec0 !important;
+    font-weight: 400;
+}
+
+.review-inline:hover .review-star {
+    color: #ffed4a;
+}
+
+.review-inline:hover .review-info {
+    color: #e2e8f0 !important;
+}
+
 /* 반응형 조정 */
 @media (max-width: 768px) {
     .sitter-grid {
