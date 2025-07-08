@@ -195,14 +195,14 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (자신이 작성한 모든 돌봄 케어 로그 목록 조회 페이지(클릭 시 케어 로그 작성한 해당 예약 페이지로 이동)<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록  
-<img width="648" alt="image" src="https://github.com/user-attachments/assets/c1e287fb-1b2c-4849-8b29-d356d14db312" />  
+<img width="653" alt="image" src="https://github.com/user-attachments/assets/698c3c4f-9f32-4d18-a442-5800cff38a14" />    
 
 
-(돌봄 예약 가능 날짜를 등록한 펫시터 중 현재 예약이 가능한 펫시터만 조회)<br><br><br>
+(현재 예약이 가능한 펫시터만 조회)<br><br><br>
 
 # 돌봄 예약 가능한 돌봄사 목록 중 돌봄사를 택했을 때  
 <img width="620" alt="image" src="https://github.com/user-attachments/assets/accd5597-5ee4-4dbc-b48b-dbd7083b9b21" />        
-<img width="710" alt="image" src="https://github.com/user-attachments/assets/f33259b7-1bc2-41cb-85c3-7c8b54e17e4a" />   
+<img width="696" alt="image" src="https://github.com/user-attachments/assets/1e688ea0-7f23-4d8e-abae-69cd61d6129d" />     
 
 
 (선택한 돌봄사의 정보와 스펙들을 보여주고, 해당 돌봄사에게 작성된 모든 돌봄 리뷰를 조회(+리뷰는 최상위 5개  
