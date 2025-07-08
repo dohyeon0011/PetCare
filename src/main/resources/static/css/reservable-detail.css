@@ -151,12 +151,22 @@ body {
 .review-section {
     margin-top: 2rem;
 }
+
+/* 제목과 요약 정보 컨테이너 */
+.review-header-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
 .review-section h3 {
     font-size: 1.75rem;
     color: var(--color-text);
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     position: relative;
 }
+
 .review-section h3::after {
     content: '';
     width: 50px;
@@ -167,6 +177,51 @@ body {
     left: 0;
     border-radius: 2px;
 }
+
+/* 리뷰 요약 정보 스타일 */
+.review-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-left: 0.5rem;
+}
+
+.summary-star {
+    color: #ffd700;
+    font-size: 1rem;
+    text-shadow: 0 1px 2px rgba(255, 215, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.summary-star:hover {
+    transform: scale(1.1);
+}
+
+.summary-info {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    font-weight: 500;
+    letter-spacing: 0.1px;
+}
+
+.summary-rating {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.summary-count {
+    color: var(--color-text-light);
+    font-weight: 400;
+}
+
+.review-summary:hover .summary-star {
+    color: #ffed4a;
+}
+
+.review-summary:hover .summary-info {
+    color: var(--color-text);
+}
+
 .review {
     background: var(--color-secondary);
     padding: 1.5rem;
