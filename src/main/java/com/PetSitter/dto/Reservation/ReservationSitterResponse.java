@@ -8,7 +8,6 @@ import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -34,19 +33,21 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         @Schema(description = "돌봄사 프로필 이미지")
         private String profileImage;
 
-        /*public GetList(Member sitter) {
-            this.sitterId = sitter.getId();
-            this.sitterName = sitter.getName();
-            this.introduction = sitter.getIntroduction();
-        }*/
+        @Schema(description = "평균 리뷰 점수")
+        private Double avgRating;
+
+        @Schema(description = "총 리뷰 개수")
+        private Long totalReviewCnt;
 
         @QueryProjection
-        public GetList(long sitterId, String sitterName, String introduction, Integer careerYear, String profileImage) {
+        public GetList(long sitterId, String sitterName, String introduction, Integer careerYear, String profileImage, Double avgRating, Long totalReviewCnt) {
             this.sitterId = sitterId;
             this.sitterName = sitterName;
             this.introduction = introduction;
             this.careerYear = careerYear;
             this.profileImage = profileImage;
+            this.avgRating = avgRating;
+            this.totalReviewCnt = totalReviewCnt != null ? totalReviewCnt : 0;
         }
     }
 
@@ -81,7 +82,13 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
         @Schema(description = "작성된 돌봄 리뷰")
         private List<ReviewResponse.GetDetail> reviews;
 
-        public GetDetail(Member sitter, List<Review> reviews) {
+        @Schema(description = "평균 리뷰 점수")
+        private Double avgRating;
+
+        @Schema(description = "총 리뷰 개수")
+        private Long totalReviewCnt;
+
+        public GetDetail(Member sitter, List<Review> reviews, Double avgRating, Long totalReviewCnt) {
             this.sitterId = sitter.getId();
             this.sitterName = sitter.getName();
             this.introduction = (sitter.getIntroduction() != null) ?
@@ -95,10 +102,6 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
             this.zipcode = sitter.getZipcode();
             this.address = sitter.getAddress();
             this.profileImage = sitter.getProfileImage();
-            /*this.reviews = reviews
-                    .stream()
-                    .map(ReviewResponse.GetDetail::new)
-                    .toList();*/
             this.reviews = reviews
                     .stream()
                     .map(review -> {
@@ -106,6 +109,24 @@ public class ReservationSitterResponse { // 고객이 예약하기 전 보여줄
                                 review.getCustomerReservation().getSitter().getName(), review.getCustomerReservation().getReservationAt(), review.getRating(), review.getComment(), review.getCreatedAt());
                     })
                     .toList();
+            this.avgRating = avgRating;
+            this.totalReviewCnt = totalReviewCnt != null ? totalReviewCnt : 0;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Schema(description = "예약 전 예약 가능 페이지 - 돌봄사 평균 리뷰 점수 및 총 리뷰 개수 조회 Res DTO")
+    public static class avgRatingAndTotalReviewsDTO {
+        @Schema(description = "평균 리뷰 점수")
+        private Double avgRating;
+
+        @Schema(description = "총 리뷰 개수")
+        private Long totalReviewCnt;
+
+        public avgRatingAndTotalReviewsDTO(Double avgRating, Long totalReviewCnt) {
+            this.avgRating = avgRating;
+            this.totalReviewCnt = totalReviewCnt != null ? totalReviewCnt : 0;
         }
     }
 }
