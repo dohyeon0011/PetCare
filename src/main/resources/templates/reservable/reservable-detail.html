@@ -213,7 +213,16 @@
 
     <!-- 이용 후기 섹션 -->
     <div class="review-section">
-        <h3>💬 돌봄 이용 후기</h3>
+        <div class="review-header-container">
+            <h3>💬 돌봄 이용 후기</h3>
+            <div class="review-summary">
+                <span class="summary-star">★</span>
+                <span class="summary-info">
+                <span class="summary-rating" th:text="${reservableSitter.avgRating != null ? #numbers.formatDecimal(reservableSitter.avgRating, 1, 1) : '0.0'}"></span>
+                (<span class="summary-count" th:text="${reservableSitter.totalReviewCnt}"></span>)
+            </span>
+            </div>
+        </div>
         <!-- 리뷰 리스트 -->
         <div id="review-list">
             <th:block th:each="review : ${reservableSitter.reviews}">
