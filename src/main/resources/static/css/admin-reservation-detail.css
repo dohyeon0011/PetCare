@@ -258,6 +258,21 @@ h4::before {
   transform: translateX(4px);
 }
 
+.list-group-item {
+  background-color: var(--neutral-100) !important;
+  color: var(--neutral-700) !important;
+  border: 1px solid var(--neutral-200) !important;
+}
+
+.list-group-item h5 {
+  color: var(--primary) !important;
+}
+
+.list-group-item p,
+.list-group-item span {
+  color: var(--neutral-600) !important;
+}
+
 #deleteReview,
 .deleteCareLog {
   background: linear-gradient(135deg, var(--danger), #e11d48);
