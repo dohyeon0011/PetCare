@@ -163,7 +163,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 <img width="1328" alt="image" src="https://github.com/user-attachments/assets/2a5f640e-2916-4eaa-bb31-bca2993cfab9" />    
 (각 조건 별 검색 결과와 카운트 쿼리 모두 Cache Aside 읽기 패턴으로 12시간 마다 캐싱)  
 
--> 캐싱 하기 전과 후를 비교하면,  
+-> 캐싱 하기 전과 후를 라이트하우스 지수로 비교하면,  
   FCP (First Contentful Paint): 최초 DOM 콘텐츠가 렌더링되기까지의 시간  
   SI (Speed Index): 콘텐츠가 시각적으로 표시되는 속도  
   LCP (Largest Contentful Paint): 페이지 내 가장 큰 콘텐츠 요소가 렌더링되기까지의 시간  
