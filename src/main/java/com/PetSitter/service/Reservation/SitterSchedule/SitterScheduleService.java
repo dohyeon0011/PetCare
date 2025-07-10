@@ -45,6 +45,13 @@ public class SitterScheduleService {
     }
 
     /**
+     * 돌봄사: 특정 돌봄사에게 발생한 총 예약 금액 조회
+     */
+    public Long getTotalReservationAmount(Long sitterId) {
+        return sitterScheduleRepository.findTotalReservationAmountBySitterId(sitterId);
+    }
+
+    /**
      * 돌봄사: 특정 돌봄사의 특정 돌봄 예약 정보 조회
      */
     @Transactional(readOnly = true)
