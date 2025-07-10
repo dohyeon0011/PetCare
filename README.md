@@ -234,7 +234,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 <br><br><br>
 
 # 고객 시점: 돌봄 예약 내역 조회 페이지(돌봄사도 동일)
-<img width="1458" alt="image" src="https://github.com/user-attachments/assets/4d2c28f1-b105-4043-97c0-e4054891d236" />    
+<img width="1465" alt="image" src="https://github.com/user-attachments/assets/1a855999-904f-4fdb-8486-c749542d215a" />      
 (돌봄 예약 내역 전체 조회, 클릭 시 해당 예약 페이지로 이동)<br><br><br>
 
 # 고객 시점: 특정 돌봄 예약 상세 조회 페이지(1)(돌봄사도 동일)
@@ -271,7 +271,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능, 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
 # 관리자 페이지 - 돌봄 예약 관리(+돌봄 케어 로그, 리뷰 관리)
-<img width="998" alt="image" src="https://github.com/user-attachments/assets/9e43beee-5cd0-4a51-b4d9-be48b1443132" />    
+<img width="1518" alt="image" src="https://github.com/user-attachments/assets/1f13f5a0-8c25-423b-ab8b-c1685ff6db31" />      
 <img width="615" alt="image" src="https://github.com/user-attachments/assets/ab219688-0cf7-4bf2-9c60-aa320fe8d0c4" />            
 <img width="586" alt="image" src="https://github.com/user-attachments/assets/0ceb6fcb-bdcf-4616-a33b-d288b5967314" />          
 
