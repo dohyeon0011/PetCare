@@ -147,6 +147,13 @@
 <!-- 예약 목록 -->
 <div class="container mt-3">
     <h2 class="text-center">관리자 돌봄 예약 관리</h2>
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <div class="total-amount-box">
+            총 예약 금액:
+            <span th:if="${totalReservationAmount != null}"
+                  th:text="${#numbers.formatInteger(totalReservationAmount, 3, 'COMMA')} + '원'">0원</span>
+        </div>
+    </div>
 
     <!-- 예약 목록 검색 폼 -->
     <div class="container mt-2">
