@@ -147,6 +147,13 @@
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">돌봄사 예약 전체 목록</h2>
+    <div class="d-flex justify-content-end align-items-center mb-3">
+        <div class="total-amount-box">
+            총 예약 금액:
+            <span th:if="${totalReservationAmount != null}"
+                  th:text="${#numbers.formatInteger(totalReservationAmount, 3, 'COMMA')} + '원'">0원</span>
+        </div>
+    </div>
     <div class="table-responsive table-container" th:if="${not #lists.isEmpty(schedules.content)}">
         <table class="table table-hover table-bordered text-center">
             <thead>
