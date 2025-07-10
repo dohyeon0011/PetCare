@@ -1,6 +1,5 @@
 package com.PetSitter.controller.Admin.Reservation.view;
 
-import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Reservation.ReservationSearch;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.AdminReservationResponse;
@@ -13,7 +12,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,8 +30,11 @@ public class AdminReservationViewController {
                                  @PageableDefault Pageable pageable, Model model) {
         if (memberDetails != null && memberDetails.getMember() != null) {
             Page<AdminReservationResponse.ReservationListResponse> reservations = adminReservationService.findAllForAdmin(reservationSearch, memberDetails.getMember(), pageable);
-            model.addAttribute("reservations", reservations);
+            Long totalReservationAmount = adminReservationService.getTotalReservationAmount(memberDetails.getMember());
+
             model.addAttribute("currentUser", memberDetails.getMember());
+            model.addAttribute("reservations", reservations);
+            model.addAttribute("totalReservationAmount", totalReservationAmount);
         }
 
         return "admin/reservation/reservation-list";
