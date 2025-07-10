@@ -39,4 +39,12 @@ public interface SitterScheduleRepository extends JpaRepository<SitterSchedule, 
             "left join fetch ss.careLogList " +
             "where ss.id = :sitterScheduleId")
     Optional<SitterSchedule> findByIdWithCareLogs(@Param("sitterScheduleId") long sitterScheduleId);
+
+    // 특정 돌봄사에게 발생한 총 예약 금액 조회
+    @Query("""
+            select sum(ss.price)
+                from SitterSchedule ss
+                where ss.sitter.id = :sitterId
+            """)
+    Long findTotalReservationAmountBySitterId(@Param("sitterId") Long sitterId);
 }
