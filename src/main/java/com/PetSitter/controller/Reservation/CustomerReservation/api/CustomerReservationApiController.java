@@ -1,6 +1,7 @@
 package com.PetSitter.controller.Reservation.CustomerReservation.api;
 
 import com.PetSitter.config.exception.BadRequestCustom;
+import com.PetSitter.config.exception.UnauthorizedException;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
@@ -68,29 +69,34 @@ public class CustomerReservationApiController {
 
     @Operation(summary = "고객 - 모든 돌봄 예약 내역 조회", description = "모든 돌봄 예약 내역 조회 API")
     @GetMapping("/members/{customerId}/reservations")
-    public ResponseEntity<Page<CustomerReservationResponse.GetList>> findAllCustomerReservation(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
+    public ResponseEntity<?> findAllCustomerReservation(@PathVariable("customerId") @Parameter(required = true, description = "회원(고객) 고유 번호") long id,
                                                                                                 @Parameter(description = "페이징 파라미터, page: 페이지 번호 - 0부터 시작, size: 한 페이지의 데이터 개수") Pageable pageable,
                                                                                                 @AuthenticationPrincipal Object principal) {
-//        List<CustomerReservationResponse.GetList> customerReservationList = customerReservationService.findAllById(id, pageable);
-
+        Member member = null;
         if (principal instanceof MemberDetails) {
-            Member member = ((MemberDetails) principal).getMember();
-
+            member = ((MemberDetails) principal).getMember();
             if (member.getId() != id) {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         } else if (principal instanceof CustomOAuth2User) {
-            Member member = ((CustomOAuth2User) principal).getMember();
-
+            member = ((CustomOAuth2User) principal).getMember();
             if (member.getId() != id) {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
+        if (member == null) {
+            throw new UnauthorizedException("Member Entity is null. {id=" + id + "}");
+        }
 
-        Page<CustomerReservationResponse.GetList> customerReservationList = customerReservationService.findAllById(id, pageable);
+        Page<CustomerReservationResponse.GetList> customerReservationList = customerReservationService.findAllById(member.getId(), pageable);
+        Long totalReservationAmount = customerReservationService.getTotalReservationAmount(member.getId());
+        Map<String, Object> response = Map.of(
+                "reservations", customerReservationList,
+                "totalReservationAmount", totalReservationAmount
+        );
 
         return ResponseEntity.ok()
-                .body(customerReservationList);
+                .body(response);
     }
 
     @Operation(summary = "고객 - 특정 돌봄 예약 상세 조회", description = "특정 돌봄 예약 상세 조회 API")
