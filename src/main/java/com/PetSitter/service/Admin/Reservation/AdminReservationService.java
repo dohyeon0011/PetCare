@@ -46,6 +46,14 @@ public class AdminReservationService {
     }
 
     /**
+     * 관리자 페이지 발생한 총 예약 금액 조회
+     */
+    public Long getTotalReservationAmount(Member admin) {
+        verifyingPermissionsAdmin(admin);
+        return customerReservationRepository.findAllTotalReservationAmountForAdmin();
+    }
+
+    /**
      * 관리자 페이지 예약 상세 정보 조회
      */
     @Transactional(readOnly = true)
