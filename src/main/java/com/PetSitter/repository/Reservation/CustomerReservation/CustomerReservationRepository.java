@@ -1,7 +1,6 @@
 package com.PetSitter.repository.Reservation.CustomerReservation;
 
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
-import com.PetSitter.domain.Reservation.SitterSchedule.SitterSchedule;
 import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.dto.Review.response.ReviewResponse;
 import org.springframework.data.domain.Page;
@@ -39,8 +38,20 @@ public interface CustomerReservationRepository extends JpaRepository<CustomerRes
             "order by cr.id desc")
     Page<CustomerReservationResponse.GetList> findByCustomerId(@Param("customerId") long customerId, Pageable pageable);
 
-    // 돌봄사의 예약 번호로 특정 회원의 특정 돌봄 예약 내역 조회
-//    Optional<CustomerReservation> findBySitterScheduleId(long sitterScheduleId);
+    // 특정 고객의 총 예약 금액 조회
+    @Query("""
+            select sum(cr.price)
+                from CustomerReservation cr
+                where cr.customer.id = :customerId
+            """)
+    Long findTotalReservationAmountByCustomerId(@Param("customerId") Long customerId);
+
+    // 관리자 페이지 발생한 총 예약 금액 조회
+    @Query("""
+            select sum(cr.price)
+                from CustomerReservation cr
+            """)
+    Long findAllTotalReservationAmountForAdmin();
 
     // 관리자 페이지 예약 상세 정보 조회
     @Query("select cr " +
