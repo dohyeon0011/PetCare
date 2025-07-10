@@ -71,4 +71,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(errorResponse);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorized(UnauthorizedException ex) {
+        Map<String, String> errorRes = new HashMap<>();
+        errorRes.put("error", "회원(Member) 객체가 존재하지 않습니다.");
+        errorRes.put("details", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(errorRes);
+    }
 }
