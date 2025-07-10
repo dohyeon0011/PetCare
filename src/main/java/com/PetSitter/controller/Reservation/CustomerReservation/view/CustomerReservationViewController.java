@@ -54,7 +54,6 @@ public class CustomerReservationViewController {
 //        List<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId);
 
         Member member;
-
         if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
             member = ((MemberDetails) principal).getMember();
             model.addAttribute("currentUser", member);
@@ -65,9 +64,11 @@ public class CustomerReservationViewController {
             model.addAttribute("isOAuthUser", true);
             model.addAttribute("isLogin", member.getId());
         }
-
         Page<CustomerReservationResponse.GetList> reservations = customerReservationService.findAllById(customerId, pageable);
+        Long totalReservationAmount = customerReservationService.getTotalReservationAmount(customerId);
+
         model.addAttribute("reservations", reservations);
+        model.addAttribute("totalReservationAmount", totalReservationAmount);
 
         return "reservation/reservation-list";
     }
