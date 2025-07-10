@@ -126,8 +126,14 @@ public class CustomerReservationService {
         Member customer = memberRepository.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException("예약 조회 오류 : 현재 회원은 존재하지 않는 회원입니다."));
         authorizationMember(customer);
-
         return customerReservationRepository.findByCustomerId(customerId, pageable);
+    }
+
+    /**
+     * 특정 회원의 총 예약 금액 조회
+     */
+    public Long getTotalReservationAmount(Long customerId) {
+        return customerReservationRepository.findTotalReservationAmountByCustomerId(customerId);
     }
 
     /**
