@@ -3,7 +3,6 @@ package com.PetSitter.controller.Reservation.SitterSchedule.view;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberDetails;
 import com.PetSitter.domain.Member.oauth.CustomOAuth2User;
-import com.PetSitter.dto.Reservation.CustomerReservation.response.CustomerReservationResponse;
 import com.PetSitter.dto.Reservation.SitterSchedule.response.SitterScheduleResponse;
 import com.PetSitter.service.Reservation.SitterSchedule.SitterScheduleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +26,7 @@ public class SitterScheduleViewController {
     @Operation(description = "돌봄사의 전체 돌봄 예약 목록 조회")
     @GetMapping("/members/{sitterId}/schedules")
     public String getAllSitterSchedule(@PathVariable("sitterId") long sitterId, @AuthenticationPrincipal Object principal, Model model, Pageable pageable) {
-//        List<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId);
         Member member;
-
         if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {   // 일반 폼 로그인 사용자의 경우
             member = ((MemberDetails) principal).getMember();
             model.addAttribute("currentUser", member);
@@ -40,9 +37,11 @@ public class SitterScheduleViewController {
             model.addAttribute("isOAuthUser", true);
             model.addAttribute("isLogin", member.getId());
         }
-
         Page<SitterScheduleResponse.GetList> schedules = sitterScheduleService.findAllById(sitterId, pageable);
+        Long totalReservationAmount = sitterScheduleService.getTotalReservationAmount(sitterId);
+
         model.addAttribute("schedules", schedules);
+        model.addAttribute("totalReservationAmount", totalReservationAmount);
 
         return "schedule/schedule-list";
     }
