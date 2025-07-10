@@ -19,6 +19,17 @@
   --transition: all 0.2s ease-in-out;
 }
 
+.total-amount-box {
+    background: var(--color-primary-light);
+    color: var(--color-text);
+    padding: 0.75rem 1.25rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-glow);
+    transition: var(--transition-fast);
+}
+
 /* 테이블 스타일 */
 .admin-table {
   width: 100%;
