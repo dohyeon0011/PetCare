@@ -159,8 +159,21 @@
                  class="img-fluid rounded-circle"
                  style="width: 150px; height: 150px; object-fit: cover;">
         </div>
+        <p class="member-name-with-rating">
+            <strong>🆔 이름:</strong>
+            <span th:text="${member.name}"></span>
 
-        <p><strong>🆔 이름:</strong> <span th:text="${member.name}"></span></p>
+            <!-- 평균 별점 표시 (돌봄사일 때만 출력) -->
+            <span class="review-inline"
+                  th:if="${member.role.name() == 'PET_SITTER'}">
+                <span class="review-star">★</span>
+                <span class="review-info">
+                    <span class="review-rating"
+                          th:text="${member.avgRating != null ? #numbers.formatDecimal(member.avgRating, 1, 1) : '0.0'}">
+                    </span>
+                </span>
+            </span>
+        </p>
         <p><strong>🏷️ 닉네임:</strong> <span th:text="${member.nickName}"></span></p>
         <p><strong>📧 이메일:</strong> <span th:text="${member.email}"></span></p>
         <p><strong>📞 전화번호:</strong> <span th:text="${member.phoneNumber}"></span></p>

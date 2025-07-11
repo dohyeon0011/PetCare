@@ -172,7 +172,10 @@ public class AdminMemberResponse {
         @Schema(description = "회원 탈퇴 여부", defaultValue = "false", pattern = "ex) false(활동중), true(탈퇴)")
         private boolean isDeleted;
 
-        public SitterDetailResponse(Member member, List<Certification> certifications) {
+        @Schema(description = "평균 돌봄 리뷰 점수")
+        private Double avgRating;
+
+        public SitterDetailResponse(Member member, List<Certification> certifications, Double avgRating) {
             this.id = member.getId();
             this.name = member.getName();
             this.nickName = member.getNickName();
@@ -191,6 +194,7 @@ public class AdminMemberResponse {
                     .map(CertificationResponse.GetList::new)
                     .collect(Collectors.toList());
             this.isDeleted = member.isDeleted();
+            this.avgRating = avgRating;
         }
     }
 }

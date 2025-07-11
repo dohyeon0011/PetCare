@@ -167,6 +167,51 @@ h3::after {
   font-weight: var(--font-weight-semibold);
 }
 
+.member-name-with-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    font-size: 1rem;
+}
+
+.review-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.review-star {
+    color: #ffd700;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 2px rgba(255, 215, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.review-star:hover {
+    transform: scale(1.1);
+}
+
+.review-info {
+    font-size: 0.75rem;
+    color: #cbd5e0 !important;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+}
+
+.review-rating {
+    color: #f7fafc !important;
+    font-weight: 600;
+}
+
+.review-inline:hover .review-star {
+    color: #ffed4a;
+}
+
+.review-inline:hover .review-info {
+    color: #e2e8f0 !important;
+}
+
 /* Pet & Certification Lists */
 .pet-info ul,
 .cert-info ul {

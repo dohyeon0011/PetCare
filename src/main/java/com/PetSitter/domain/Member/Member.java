@@ -251,10 +251,10 @@ public class Member {
 
     @Comment("관리자 페이지 회원 상세 정보 조회")
     public Object toDetailResponseForAdmin() {
-        if (Role.CUSTOMER.equals(this.getRole())) {
+        if (Role.CUSTOMER.equals(this.getRole())) { 
             return new AdminMemberResponse.CustomerDetailResponse(this, this.pets);
         } else if (Role.PET_SITTER.equals(this.getRole())) {
-            return new AdminMemberResponse.SitterDetailResponse(this, this.certifications);
+            return new AdminMemberResponse.SitterDetailResponse(this, this.certifications, 0.0);
         }
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
