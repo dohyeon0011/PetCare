@@ -110,7 +110,6 @@ public class CustomerReservationService {
         return customerReservation.toResponse(new ArrayList<>(), null, careAvailableDate.getPrice());
     }
 
-    @Transactional  // 전파 범위를 상위 트랜잭션에 포함되게 설정
     private static void sitterReservation(CustomerReservation customerReservation, CareAvailableDate careAvailableDate) {
         SitterSchedule sitterReservation = SitterSchedule.createSitterReservation(customerReservation);
         sitterReservation.changeReservationAt(careAvailableDate.getAvailableAt());
@@ -216,7 +215,6 @@ public class CustomerReservationService {
         }
     }
 
-    @Transactional // 전파 범위를 상위 트랜잭션에 속하게 설정
     private static void reservationCancel(CareAvailableDate careAvailableDate, CustomerReservation customerReservation, SitterSchedule sitterSchedule) {
         careAvailableDate.cancel();
         customerReservation.cancel();
