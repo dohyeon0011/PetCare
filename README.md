@@ -266,7 +266,7 @@ API 명세서는 Swagger 문서에서 확인할 수 있습니다.
 # 관리자 페이지 - 회원 관리
 <img width="1440" alt="image" src="https://github.com/user-attachments/assets/215e19aa-81d7-4210-8277-1ffce98fb2f5" />    
 <img width="632" alt="image" src="https://github.com/user-attachments/assets/e2e2d5d6-1d1b-4214-8c68-d310c82a4e40" />            
-<img width="602" alt="image" src="https://github.com/user-attachments/assets/2954e19d-4c40-4ad2-bcb9-f10dd76d0768" />          
+<img width="690" height="957" alt="image" src="https://github.com/user-attachments/assets/319ffce6-2a46-4cbf-90f1-197d97389aee" />            
 <img width="1080" alt="image" src="https://github.com/user-attachments/assets/a7883a81-9e61-462f-88e5-9c3999ae7d3d" />  
 (회원의 이름을 조건으로 검색해서 원하는 회원만 검색 가능, 관리자 권한으로 부적절한 회원 탈퇴 처리 가능)<br><br><br>
 
