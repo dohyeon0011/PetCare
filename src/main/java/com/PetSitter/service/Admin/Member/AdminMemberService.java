@@ -5,8 +5,10 @@ import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Member.MemberSearch;
 import com.PetSitter.domain.Member.Role;
 import com.PetSitter.dto.Member.response.AdminMemberResponse;
+import com.PetSitter.dto.Reservation.ReservationSitterResponse;
 import com.PetSitter.repository.Member.MemberRepository;
 import com.PetSitter.repository.Reservation.SitterSchedule.SitterScheduleRepository;
+import com.PetSitter.repository.Review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ public class AdminMemberService {
 
     private final MemberRepository memberRepository;
     private final SitterScheduleRepository sitterScheduleRepository;
+    private final ReviewRepository reviewRepository;
 
     /**
      * 관리자 페이지 모든 회원 목록 조회
@@ -49,7 +52,10 @@ public class AdminMemberService {
         } else if (findRole.equals(Role.PET_SITTER)) {
             Member findMember = memberRepository.findBySitterIdAndRole(id, findRole)
                     .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다. id=" + id));
-            return findMember.toDetailResponseForAdmin();
+            ReservationSitterResponse.avgRatingAndTotalReviewsDTO avgRatingAndTotalReviewsDTO = reviewRepository.findAvgRatingAndTotalReviewsBySitterId(findMember.getId())
+                    .orElseGet(() -> new ReservationSitterResponse.avgRatingAndTotalReviewsDTO(null, 0L));
+
+            return new AdminMemberResponse.SitterDetailResponse(findMember, findMember.getCertifications(), avgRatingAndTotalReviewsDTO.getAvgRating());
         }
 
         throw new NoSuchElementException("존재하지 않는 회원입니다. id=" + id);
