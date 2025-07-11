@@ -254,7 +254,7 @@ public class Member {
         if (Role.CUSTOMER.equals(this.getRole())) {
             return new AdminMemberResponse.CustomerDetailResponse(this, this.pets);
         } else if (Role.PET_SITTER.equals(this.getRole())) {
-            return new AdminMemberResponse.SitterDetailResponse(this, this.certifications);
+            return new AdminMemberResponse.SitterDetailResponse(this, this.certifications, 0.0);
         }
         throw new NoSuchElementException("존재하지 않는 회원입니다.");
     }
