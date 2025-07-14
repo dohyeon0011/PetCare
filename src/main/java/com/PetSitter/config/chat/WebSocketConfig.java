@@ -84,7 +84,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     // 4. 폼 로그인 사용자
                     log.info("WebSocket Authentication info={}", auth);
                     if (auth != null && auth.isAuthenticated()) {
-                        System.out.println("hi");
                         accessor.setUser(auth);
 
                         SecurityContext context = SecurityContextHolder.createEmptyContext();
