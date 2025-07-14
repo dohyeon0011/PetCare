@@ -8,7 +8,6 @@ import com.PetSitter.dto.CareLog.request.AddCareLogRequest;
 import com.PetSitter.dto.CareLog.request.UpdateCareLogRequest;
 import com.PetSitter.dto.CareLog.response.CareLogResponse;
 import com.PetSitter.service.CareLog.CareLogService;
-import com.PetSitter.service.FileUploadService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,13 +42,9 @@ public class CareLogApiController {
                                                                  @RequestPart(value = "request") @Valid AddCareLogRequest request, BindingResult result,
                                                                  @RequestPart(value = "careLogImage", required = false) @Parameter(description = "등록할 케어 로그 이미지 파일", content = @Content(mediaType = "multipart/form-data")) MultipartFile careLogImage,
                                                                  @AuthenticationPrincipal Object principal) throws FileUploadException {
-        // 로그 추가 (파라미터 값 확인)
-        System.out.println("sitterId: " + sitterId);
-        System.out.println("sitterScheduleId: " + sitterScheduleId);
         if (careLogImage != null) {
             System.out.println("Uploaded file name: " + careLogImage.getOriginalFilename());
         }
-
         if (result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
@@ -74,7 +69,6 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         CareLogResponse.GetDetail careLog = careLogService.save(sitterId, sitterScheduleId, request, careLogImage);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -99,7 +93,6 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         Page<CareLogResponse.GetList> careLogList = careLogService.findAll(sitterId, pageable);
 
         return ResponseEntity.ok()
@@ -124,7 +117,6 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         List<CareLogResponse.GetDetail> careLogList = careLogService.findAllById(sitterId, sitterScheduleId);
 
         return ResponseEntity.ok()
@@ -149,7 +141,6 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         CareLogResponse.GetDetail careLog = careLogService.findById(sitterId, careLogId);
 
         return ResponseEntity.ok()
@@ -174,7 +165,6 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         careLogService.delete(sitterId, careLogId);
 
         return ResponseEntity.noContent() // 204 No content 응답(백엔드가 204 No Content를 반환하는 경우 프론트엔드 json() 파싱에서 오류 발생 가능)
@@ -201,11 +191,9 @@ public class CareLogApiController {
                 throw new BadRequestCustom("잘못된 요청입니다. 유효한 ID가 아닙니다.");
             }
         }
-
         CareLogResponse.GetDetail careLog = careLogService.update(sitterId, careLogId, request, careLogImage);
 
         return ResponseEntity.ok()
                 .body(careLog);
     }
-
 }
