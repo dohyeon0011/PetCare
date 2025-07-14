@@ -2,6 +2,7 @@ package com.PetSitter.config.chat;
 
 import com.PetSitter.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -20,6 +21,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker // STOMP 기반 WebSocket 메시징을 활성화
 @RequiredArgsConstructor
+@Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final TokenProvider tokenProvider;
@@ -39,7 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 클라이언트에서 WebSocket 연결을 위해 사용할 엔드포인트
         registry.addEndpoint("/ws-chat") // ex: ws://localhost:8080/ws-chat, WebSocket 연결을 시작할 때 사용할 엔드포인트. 클라이언트는 이 경로로 3-handshake를 시도.
                 .setAllowedOriginPatterns("*") // CORS 허용
-                .addInterceptors(new UserHandshakeInterceptor())
+                .addInterceptors(new UserHandshakeInterceptor(tokenProvider))
                 .withSockJS(); // SockJS fallback 지원, WebSocket을 사용할 수 없는 환경에서 fallback으로 SockJS 사용 가능하게 함.
     }
 
@@ -52,19 +54,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new ChannelInterceptor() {    // ChannelInterceptor는 메시지 채널을 가로채서 인증 처리, 로깅, 필터링 등을 할 수 있는 인터페이스.
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                // 인증 처리 가능
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-
                 // 1. 소켓 연결 시작 시
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     String token = accessor.getFirstNativeHeader("Authorization");
+                    System.out.println("token = " + token);
 
                     // 2. 소셜 로그인 사용자 (JWT 기반)
                     if (token != null && token.startsWith("Bearer ")) {
                         String jwt = token.substring(7);
                         Authentication auth = tokenProvider.getAuthentication(jwt);
                         accessor.setUser(auth); // Websocket에 인증 정보 설정(Principal용 설정)
-
+                        System.out.println("jwt = " + jwt);
                         // SecurityContextHolder에도 명시적으로 설정
                         SecurityContext context = SecurityContextHolder.createEmptyContext();
                         context.setAuthentication(auth);
@@ -73,9 +74,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         return message;
                     }
 
-                    // 3. 폼 로그인 사용자
-                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    // 3. 세션 기반 사용자 (폼 로그인, OAuth2 로그인)
+                    Authentication auth = (Authentication) accessor.getSessionAttributes().get("user");
+
+                    // 세션에서 못 가져왔을 때 스프링 컨텍스트 홀더에서 직접 인증 객체를 가져오기
+                    if (auth == null) {
+                        auth = SecurityContextHolder.getContext().getAuthentication();
+                    }
+
+                    // 4. 폼 로그인 사용자
+                    log.info("WebSocket Authentication info={}", auth);
                     if (auth != null && auth.isAuthenticated()) {
+                        System.out.println("hi");
                         accessor.setUser(auth);
 
                         SecurityContext context = SecurityContextHolder.createEmptyContext();
