@@ -41,7 +41,7 @@ public class ChatMessageApiController {
     @PreAuthorize("isAuthenticated()")  //  WebSocket 세션 인증 정보(accessor.setUser(), 해당 메서드나 클래스가 호출되기 전에 인증 정보를 먼저 파악.)
     public ResponseEntity<?> saveChatMessage(@DestinationVariable("roomId") @Parameter(required = true, description = "채팅창 고유 번호") String roomId, // 웹소켓 메세징의 경우 @PathVariable이 아닌 @DestinationVariable(구독 및 발행 url의 path parameter)을 사용해야 함.
                                              @Payload @Valid ChatMessageRequest chatMessageRequest,   // 웹소켓 메시지는 @Payload로 ChatMessageRequest 객체에 매핑
-                                             @AuthenticationPrincipal Principal principal) {
+                                             Principal principal) {
         Member member = null;
         if (principal instanceof Authentication authentication) {
             Object userPrincipal = authentication.getPrincipal();
