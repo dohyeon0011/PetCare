@@ -8,7 +8,7 @@ const notificationTab = document.getElementById('notification-tab');
 
 document.addEventListener("DOMContentLoaded", () => {
     const memberId = document.getElementById("memberData").dataset.memberId;
-    const token = document.getElementById("memberData").dataset.jwtToken;
+//    const token = getCookie("access_token");
 
     // STOMP 연결
     const connect = () => {
@@ -69,6 +69,13 @@ document.addEventListener("DOMContentLoaded", () => {
             (error) => console.error("STOMP 연결 실패.", error)
         );
     };
+
+    /*function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }*/
 
     // 메시지 전송
     const sendMessage = () => {
