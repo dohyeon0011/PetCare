@@ -64,7 +64,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         String jwt = token.substring(7);
                         Authentication auth = tokenProvider.getAuthentication(jwt);
                         accessor.setUser(auth); // Websocket에 인증 정보 설정(Principal용 설정)
-                        System.out.println("jwt = " + jwt);
+
                         // SecurityContextHolder에도 명시적으로 설정
                         SecurityContext context = SecurityContextHolder.createEmptyContext();
                         context.setAuthentication(auth);
