@@ -55,10 +55,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                // 1. 소켓 연결 시작 시
+                // 1. 소켓 연결 시작 시 헤더에 토큰이 있는 경우
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     String token = accessor.getFirstNativeHeader("Authorization");
-                    System.out.println("token = " + token);
 
                     // 2. 소셜 로그인 사용자 (JWT 기반)
                     if (token != null && token.startsWith("Bearer ")) {
