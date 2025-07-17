@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class UserReportService {
     /**
      * 유저 신고 문의 등록 메서드
      */
+    @Transactional
     public UserReportResponse.UserReportDetailDTO insertUserReport(Member reporter, AddUserReportRequest request) {
         log.info("UserReportService - insertUserReport(): Call Success.");
         authorizationMember(reporter);
@@ -66,7 +68,12 @@ public class UserReportService {
      * 유저 신고 문의 내역 삭제 메서드
      */
     public void deleteUserReport(Long id, Member reporter) {
+        log.info("UserReportService - deleteUserReport(): Call Success.");
+        authorizationMember(reporter);
 
+        UserReport userReport = userReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("유저 신고 엔티티 조회에 실패했습니다. id={" + id + "}"));
+        userReport.changeIsDelete();
     }
 
     private static void authorizationMember(Member member) {
