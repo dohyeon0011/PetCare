@@ -32,6 +32,9 @@ public class UserReport {
     @JoinColumn(name = "reported_id")
     private Member reportedUser;
 
+    @Comment("신고 문의 제목")
+    private String title;
+
     @Comment("신고 내용")
     @Lob
     @Column(nullable = false)
@@ -49,12 +52,11 @@ public class UserReport {
     private Boolean isDeleted;
 
     @Builder
-    public UserReport(Member reporter, Member reportedUser, String content) {
+    public UserReport(Member reporter, Member reportedUser, String title, String content) {
         addReporter(reporter);
         addReportedUser(reportedUser);
-        if (!content.isBlank()) {
-            this.content = content;
-        }
+        this.title = title;
+        this.content = content;
         this.status = ReportStatus.PENDING;
     }
 
@@ -75,7 +77,7 @@ public class UserReport {
     /**
      * 삭제 여부 수정 커스텀 메서드
      */
-    private void changeIsDelete() {
+    public void changeIsDelete() {
         if (this.isDeleted) {
             throw new IllegalArgumentException("해당 문의는 이미 삭제 처리가 된 상태입니다. {id=" + this.id + "}");
         }
@@ -85,7 +87,7 @@ public class UserReport {
     /**
      * 문의 처리 진행 현황 상태 수정 커스텀 메서드
      */
-    private void changeReportStatus(ReportStatus status) {
+    public void changeReportStatus(ReportStatus status) {
         this.status = status;
     }
 }
