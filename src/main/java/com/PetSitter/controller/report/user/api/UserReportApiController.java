@@ -17,7 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class UserReportApiController {
     @Operation(summary = "유저 신고 문의 등록", description = "유저 신고 문의 등록 API")
     @PostMapping("/users")
     public ResponseEntity<?> insertUserReport(@RequestBody @Valid AddUserReportRequest request, BindingResult result,
-                                              @AuthenticationPrincipal Principal principal) {
+                                              @AuthenticationPrincipal Object principal) {
         log.info("UserReportApiController - insertUserReport(): Call Success.");
         if (result.hasErrors()) {
             Map<String, String> errorRes = new HashMap<>();
@@ -63,7 +62,7 @@ public class UserReportApiController {
 
     @Operation(summary = "유저 신고 문의 내역 조회", description = "유저 신고 문의 내역 조회 API")
     @GetMapping("/users")
-    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Principal principal) {
+    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Object principal) {
         log.info("UserReportApiController - indexUserReport(): Call Success.");
 
         Member reporter;
@@ -84,7 +83,7 @@ public class UserReportApiController {
 
     @Operation(summary = "유저 신고 문의 내역 상세 조회", description = "유저 신고 문의 내역 상세 조회 API")
     @GetMapping("/{userReportId}/users")
-    public ResponseEntity<?> showUserReport(@PathVariable("userReportId") @Parameter(name = "유저 신고 id") Long userReportId, @AuthenticationPrincipal Principal principal) {
+    public ResponseEntity<?> showUserReport(@PathVariable("userReportId") @Parameter(name = "유저 신고 id") Long userReportId, @AuthenticationPrincipal Object principal) {
         log.info("UserReportApiController - showUserReport(): Call Success.");
 
         Member reporter;
@@ -105,7 +104,7 @@ public class UserReportApiController {
 
     @Operation(summary = "유저 신고 문의 내역 삭제", description = "유저 신고 문의 내역 삭제 API")
     @DeleteMapping("/{userReportId}/users")
-    public ResponseEntity<?> deleteUserReport(@PathVariable("userReportId") @Parameter(name = "유저 신고 id") Long userReportId, @AuthenticationPrincipal Principal principal) {
+    public ResponseEntity<?> deleteUserReport(@PathVariable("userReportId") @Parameter(name = "유저 신고 id") Long userReportId, @AuthenticationPrincipal Object principal) {
         log.info("UserReportApiController - deleteUserReport(): Call Success.");
 
         Member reporter;
