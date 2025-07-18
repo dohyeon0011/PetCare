@@ -1,0 +1,37 @@
+.report-form-container {
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.report-form-container h2 {
+    font-weight: 600;
+    color: #dc3545;
+}
+
+.report-form-container .form-group label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.report-form-container .form-control {
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 1rem;
+}
+
+.report-form-container .btn-danger {
+    padding: 10px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    background-color: #dc3545;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.report-form-container .btn-danger:hover {
+    background-color: #c82333;
+}
