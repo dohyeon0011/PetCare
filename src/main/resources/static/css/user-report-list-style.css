@@ -1,0 +1,31 @@
+.user-report-list-container {
+    max-width: 900px;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 40px 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.user-report-list-container h2 {
+    font-weight: 600;
+    color: #343a40;
+}
+
+.user-report-table th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.user-report-table td, .user-report-table th {
+    vertical-align: middle;
+    padding: 12px 16px;
+}
+
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.clickable-row:hover {
+    background-color: #f1f1f1;
+}
