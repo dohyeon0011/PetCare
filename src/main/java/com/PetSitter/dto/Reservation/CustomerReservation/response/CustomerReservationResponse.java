@@ -3,8 +3,6 @@ package com.PetSitter.dto.Reservation.CustomerReservation.response;
 import com.PetSitter.domain.CareLog.CareLog;
 import com.PetSitter.domain.Member.Member;
 import com.PetSitter.domain.Pet.PetReservation;
-import com.PetSitter.domain.PointHistory.PointsHistory;
-import com.PetSitter.domain.PointHistory.PointsStatus;
 import com.PetSitter.domain.Reservation.CustomerReservation.CustomerReservation;
 import com.PetSitter.domain.Reservation.CustomerReservation.ReservationStatus;
 import com.PetSitter.domain.Review.Review;
@@ -67,6 +65,9 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
         @Schema(description = "고객 닉네임(활동명)")
         private String customerNickName;
 
+        @Schema(description = "돌봄사 id")
+        private long sitterId;
+
         @Schema(description = "돌봄사 이름(실명)")
         private String sitterName;
 
@@ -117,6 +118,7 @@ public class CustomerReservationResponse { // 고객 시점 예약 조회
             this.id = customerReservation.getId();
             this.customerId = customer.getId();
             this.customerNickName = customer.getNickName();
+            this.sitterId = sitter.getId();
             this.sitterName = sitter.getName();
             this.usingPoint = usingPoint;
             this.originalPrice = originalPrice;
