@@ -13,7 +13,7 @@
 <!--회원 로그인 방식 설정 -->
 <meta name="oauth-login" th:content="${isOAuthUser}" />
 <!--로그인 여부 확인(챗봇)-->
-<div id="memberData" th:data-member-id="${isLogin}"></div>
+<div id="memberData" th:data-member-id="${currentUser?.id}"></div>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
@@ -165,6 +165,7 @@
                 <th>신고 ID</th>
                 <th>신고한 회원</th>
                 <th>신고 대상 회원</th>
+                <th>제목</th>
                 <th>처리 상태</th>
                 <th>작성일</th>
             </tr>
@@ -176,11 +177,33 @@
                 <td th:text="${report.id}"></td>
                 <td th:text="${report.reporterName}"></td>
                 <td th:text="${report.reportedUserName}"></td>
-                <td th:text="${report.status}"></td>
+                <td th:text="${report.title}"></td>
+                <td th:text="${report.status.name() == 'PENDING' ? '답변 대기' :
+                                report.status.name() == 'RESOLVE' ? '답변 완료' :
+                                report.status.name() == 'REJECTED' ? '답변 거절' : '알 수 없음'}"></td>
                 <td th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- 챗봇 토글 버튼 -->
+<button id="chatbot-toggle" class="chatbot-float-btn">
+    💬
+</button>
+
+<!-- 챗봇 UI -->
+<div id="chatbot-container" class="chatbot-container d-none">
+    <div class="chat-header">
+        <span class="chat-title">🐶 반려견 챗봇</span>
+        <button id="chatbot-close" class="chat-close-btn">&times;</button>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div id="button-container" class="chat-buttons"></div>
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="메시지를 입력하세요..." />
+        <button id="send-btn">전송</button>
     </div>
 </div>
 
