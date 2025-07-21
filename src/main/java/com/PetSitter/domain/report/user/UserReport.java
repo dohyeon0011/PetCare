@@ -49,7 +49,7 @@ public class UserReport {
     private LocalDateTime createdAt;
 
     @Comment("삭제 여부: True = 삭제, False = 존재")
-    private Boolean isDeleted;
+    private boolean isDeleted;
 
     @Builder
     public UserReport(Member reporter, Member reportedUser, String title, String content) {
