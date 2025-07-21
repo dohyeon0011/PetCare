@@ -74,6 +74,7 @@ public class UserReportService {
         UserReport userReport = userReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("유저 신고 엔티티 조회에 실패했습니다. id={" + id + "}"));
         userReport.changeIsDelete();
+        userReportRepository.saveAndFlush(userReport);
     }
 
     private static void authorizationMember(Member member) {
