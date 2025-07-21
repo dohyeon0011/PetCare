@@ -25,16 +25,20 @@ public class UserReportResponse {
         @Schema(description = "신고 당한 회원")
         private String reportedUserName;
 
+        @Schema(description = "신고 제목")
+        private String title;
+
         @Schema(description = "신고 문의 처리 상태")
         private ReportStatus status;
 
         @Schema(description = "작성 시간")
         private LocalDateTime createdAt;
 
-        public UserReportListDTO(Long id, String reporterName, String reportedUserName, ReportStatus status, LocalDateTime createdAt) {
+        public UserReportListDTO(Long id, String reporterName, String reportedUserName, String title, ReportStatus status, LocalDateTime createdAt) {
             this.id = id;
             this.reporterName = reporterName;
             this.reportedUserName = reportedUserName;
+            this.title = title;
             this.status = status;
             this.createdAt = createdAt;
         }
@@ -53,6 +57,9 @@ public class UserReportResponse {
         @Schema(description = "신고 당한 회원")
         private String reportedUserName;
 
+        @Schema(description = "신고 제목")
+        private String title;
+
         @Schema(description = "신고 내용")
         private String content;
 
@@ -66,10 +73,11 @@ public class UserReportResponse {
         @JsonProperty("isDeleted")
         private Boolean isDeleted;
 
-        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String content, ReportStatus status, LocalDateTime createdAt, Boolean isDeleted) {
+        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String title, String content, ReportStatus status, LocalDateTime createdAt, Boolean isDeleted) {
             this.id = id;
             this.reporterName = reporterName;
             this.reportedUserName = reportedUserName;
+            this.title = title;
             this.content = content;
             this.status = status;
             this.createdAt = createdAt;
