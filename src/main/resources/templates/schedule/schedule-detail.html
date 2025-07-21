@@ -224,6 +224,11 @@
         <button id="cancelReservation" class="btn btn-danger" th:data-reservation-id="${schedule.id}"
                 th:if="${schedule.status.name() != 'CANCEL'}">예약 취소</button>
         <button class="btn btn-secondary" onclick="history.back()">뒤로 가기</button>
+
+        <a class="btn btn-warning"
+           th:href="@{/pets-care/reports/users/{memberId}/new(memberId=${schedule.customerId})}">
+            유저 신고하기
+        </a>
     </div><br>
 
     <!-- 리뷰가 존재하는 경우 -->
