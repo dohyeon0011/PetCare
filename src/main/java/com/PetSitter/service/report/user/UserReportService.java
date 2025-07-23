@@ -10,12 +10,12 @@ import com.PetSitter.repository.report.user.UserReportRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +46,11 @@ public class UserReportService {
      * 유저 신고 문의 내역 조회 메서드
      */
     @ReadOnlyTransactional
-    public List<UserReportResponse.UserReportListDTO> indexUserReport(Member reporter) {
+    public Page<UserReportResponse.UserReportListDTO> indexUserReport(Member reporter, Pageable pageable) {
         log.info("UserReportService - indexUserReport(): Call Success.");
         authorizationMember(reporter);
 
-        return userReportRepository.findAllUserReportDTOByMemberId(reporter.getId());
+        return userReportRepository.findAllUserReportDTOByMemberId(reporter.getId(), pageable);
     }
 
     /**
