@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,7 +63,7 @@ public class UserReportApiController {
 
     @Operation(summary = "유저 신고 문의 내역 조회", description = "유저 신고 문의 내역 조회 API")
     @GetMapping("/users")
-    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Object principal) {
+    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Object principal, Pageable pageable) {
         log.info("UserReportApiController - indexUserReport(): Call Success.");
 
         Member reporter;
@@ -75,7 +76,7 @@ public class UserReportApiController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("인증되지 않은 사용자입니다.");
         }
-        List<UserReportResponse.UserReportListDTO> findAllUserReport = userReportService.indexUserReport(reporter);
+        Page<UserReportResponse.UserReportListDTO> findAllUserReport = userReportService.indexUserReport(reporter, pageable);
 
         return ResponseEntity.ok()
                 .body(findAllUserReport);
