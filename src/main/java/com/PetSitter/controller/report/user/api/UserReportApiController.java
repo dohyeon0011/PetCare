@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,7 +64,7 @@ public class UserReportApiController {
 
     @Operation(summary = "유저 신고 문의 내역 조회", description = "유저 신고 문의 내역 조회 API")
     @GetMapping("/users")
-    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Object principal, Pageable pageable) {
+    public ResponseEntity<?> indexUserReport(@AuthenticationPrincipal Object principal, @PageableDefault Pageable pageable) {
         log.info("UserReportApiController - indexUserReport(): Call Success.");
 
         Member reporter;
