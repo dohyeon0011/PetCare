@@ -36,20 +36,20 @@ public class AdminUserReportService {
      * 관리자: 유저 신고 문의 상세 조회 메서드
      */
     @ReadOnlyTransactional
-    public AdminUserReportResponse.UserReportDetailDTO showUserReport(Member admin, Long id) {
+    public AdminUserReportResponse.UserReportDetailDTO showUserReport(Member admin, Long userReportId) {
         log.info("AdminUserReportService - showUserReport(): Call Success.");
         verifyingPermissionsAdmin(admin);
-        return userReportRepository.findUserReportDetailDTOByIdForAdmin(id);
+        return userReportRepository.findUserReportDetailDTOByIdForAdmin(userReportId);
     }
 
     /**
      * 관리자: 유저 신고 문의 처리 상태 수정 메서드
      */
-    public void updateUserReport(Member admin, AdminUpdateUserReportRequest request) {
+    public void updateUserReport(Member admin, Long userReportId, AdminUpdateUserReportRequest request) {
         log.info("AdminUserReportService - updateUserReport(): Call Success.");
         verifyingPermissionsAdmin(admin);
-        UserReport userReport = userReportRepository.findById(request.getId())
-                .orElseThrow(() -> new EntityNotFoundException("유저 신고 문의 엔티티 조회에 실패했습니다. id={" + request.getId() + "}"));
+        UserReport userReport = userReportRepository.findById(userReportId)
+                .orElseThrow(() -> new EntityNotFoundException("유저 신고 문의 엔티티 조회에 실패했습니다. reportId={" + userReportId + "}"));
 
         userReport.changeReportStatus(request.getUpdateStatus());
         userReportRepository.saveAndFlush(userReport);
