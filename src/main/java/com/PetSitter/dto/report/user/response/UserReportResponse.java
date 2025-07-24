@@ -31,15 +31,20 @@ public class UserReportResponse {
         @Schema(description = "신고 문의 처리 상태")
         private ReportStatus status;
 
+        @Schema(description = "삭제 여부", pattern = "True = 삭제, False = 존재")
+        @JsonProperty("isDeleted")
+        private boolean isDeleted;
+
         @Schema(description = "작성 시간")
         private LocalDateTime createdAt;
 
-        public UserReportListDTO(Long id, String reporterName, String reportedUserName, String title, ReportStatus status, LocalDateTime createdAt) {
+        public UserReportListDTO(Long id, String reporterName, String reportedUserName, String title, ReportStatus status, boolean isDeleted, LocalDateTime createdAt) {
             this.id = id;
             this.reporterName = reporterName;
             this.reportedUserName = reportedUserName;
             this.title = title;
             this.status = status;
+            this.isDeleted = isDeleted;
             this.createdAt = createdAt;
         }
     }
