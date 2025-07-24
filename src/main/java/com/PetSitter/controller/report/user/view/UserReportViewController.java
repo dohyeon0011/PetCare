@@ -9,6 +9,7 @@ import com.PetSitter.service.report.user.UserReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +49,7 @@ public class UserReportViewController {
      * 나의 유저 신고 문의 내역 조회 페이지 반환
      */
     @GetMapping("/users")
-    public String indexUserReport(@AuthenticationPrincipal Object principal, Pageable pageable, Model model) {
+    public String indexUserReport(@AuthenticationPrincipal Object principal, @PageableDefault Pageable pageable, Model model) {
         Member member = null;
         if (principal instanceof MemberDetails && ((MemberDetails) principal).getMember() != null) {
             member = ((MemberDetails) principal).getMember();
