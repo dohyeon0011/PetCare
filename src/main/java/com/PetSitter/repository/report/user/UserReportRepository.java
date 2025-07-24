@@ -27,7 +27,7 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     // 자신의 유저 신고 내역 조회
     @Query("""
             select new com.PetSitter.dto.report.user.response.UserReportResponse$UserReportListDTO(
-                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.status, ur.createdAt
+                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.status, ur.isDeleted, ur.createdAt
             )
             from UserReport ur
             join ur.reporter reporter
@@ -50,7 +50,7 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     // 관리자 - 유저 신고 문의 내역 조회
     @Query("""
             select new com.PetSitter.dto.report.user.response.AdminUserReportResponse$UserReportListDTO(
-                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.status, ur.createdAd
+                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.status, ur.isDeleted, ur.createdAt
             )
             from UserReport ur
             join ur.reporter reporter
@@ -61,10 +61,10 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     // 관리자 - 유저 신고 문의 상세 조회
     @Query("""
             select new com.PetSitter.dto.report.user.response.AdminUserReportResponse$UserReportDetailDTO(
-                ur.id, reporter.name, reported.nickName, ur.title, ur.content, ur.status, ur.createdAt
+                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.content, ur.status, ur.isDeleted, ur.createdAt
             )
             from UserReport ur
-            join ur.report report
+            join ur.reporter reporter
             join ur.reportedUser reportedUser
             where ur.id = :id
             """)
