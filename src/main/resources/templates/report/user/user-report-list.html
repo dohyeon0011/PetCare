@@ -4,6 +4,7 @@
     <title>유저 신고 문의 내역 조회 페이지</title>
     <!-- Bootstrap CSS -->
     <link th:href="@{/css/mainStyle.css}" rel="stylesheet">
+    <link th:href="@{/css/pagination.css}" rel="stylesheet">
     <link th:href="@{/css/user-report-list-style.css}" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/chatbot.css}" rel="stylesheet">
@@ -167,6 +168,7 @@
                 <th>신고 대상 회원</th>
                 <th>제목</th>
                 <th>처리 상태</th>
+                <th>삭제 여부</th>
                 <th>작성일</th>
             </tr>
             </thead>
@@ -181,12 +183,39 @@
                 <td th:text="${report.status.name() == 'PENDING' ? '답변 대기' :
                                 report.status.name() == 'RESOLVE' ? '답변 완료' :
                                 report.status.name() == 'REJECTED' ? '답변 거절' : '알 수 없음'}"></td>
+                <td th:text="${report.isDeleted} ? '삭제됨' : '존재함'"></td>
                 <td th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<!-- 페이지네이션 네비게이션 추가 -->
+<nav th:if="${myUserReports.totalPages > 0}">
+    <ul class="pagination justify-content-center">
+        <!-- 이전 버튼 -->
+        <li class="page-item" th:if="${myUserReports.hasPrevious()}" th:classappend="${myUserReports.number == 0 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/pets-care/reports/users(page=${myUserReports.number - 1})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- 페이지 번호 버튼 -->
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, myUserReports.totalPages - 1)}"
+            th:classappend="${i == myUserReports.number ? 'active' : ''}">
+            <a th:href="@{/pets-care/reports/users(page=${i})}"
+               th:text="${i + 1}" class="page-link"></a>
+        </li>
+
+        <!-- 다음 버튼 -->
+        <li class="page-item" th:if="${myUserReports.hasNext()}" th:classappend="${myUserReports.number == myUserReports.totalPages - 1 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{/pets-care/reports/users(page=${myUserReports.number + 1})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 
 <!-- 챗봇 토글 버튼 -->
 <button id="chatbot-toggle" class="chatbot-float-btn">
