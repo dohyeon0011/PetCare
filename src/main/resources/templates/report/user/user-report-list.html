@@ -152,42 +152,48 @@
     </div>
 </nav>
 
-<div class="container mt-5 mb-5 user-report-list-container">
-    <h2 class="text-center mb-4">나의 유저 신고 문의 내역</h2>
-
-    <div th:if="${#lists.isEmpty(myUserReports)}" class="text-center">
-        <p class="text-muted">등록한 신고 문의 내역이 없습니다.</p>
-    </div>
-
-    <div th:if="${not #lists.isEmpty(myUserReports)}" class="table-responsive">
-        <table class="table table-hover text-center user-report-table">
-            <thead class="thead-dark">
+<div class="user-report-list-container">
+    <h2>유저 신고 문의 내역</h2>
+    <div th:if="${not #lists.isEmpty(myUserReports.content)}">
+        <table class="user-report-table">
+            <thead>
             <tr>
-                <th>신고 ID</th>
-                <th>신고한 회원</th>
-                <th>신고 대상 회원</th>
+                <th>번호</th>
+                <th>신고자</th>
+                <th>피신고자</th>
                 <th>제목</th>
-                <th>처리 상태</th>
+                <th>상태</th>
                 <th>삭제 여부</th>
-                <th>작성일</th>
+                <th>신고일</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="report : ${myUserReports}"
-                th:onclick="'location.href=\'/pets-care/reports/' + ${report.id} + '/users\''"
-                class="clickable-row">
-                <td th:text="${report.id}"></td>
-                <td th:text="${report.reporterName}"></td>
-                <td th:text="${report.reportedUserName}"></td>
-                <td th:text="${report.title}"></td>
-                <td th:text="${report.status.name() == 'PENDING' ? '답변 대기' :
-                                report.status.name() == 'RESOLVE' ? '답변 완료' :
-                                report.status.name() == 'REJECTED' ? '답변 거절' : '알 수 없음'}"></td>
-                <td th:text="${report.isDeleted} ? '삭제됨' : '존재함'"></td>
-                <td th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+            <tr class="clickable-row" th:each="report, stat : ${myUserReports.content}"
+                th:onclick="'location.href=\'/pets-care/reports/' + ${report.id} + '/users\''">
+                <td class="id-cell" th:text="${report.id}"></td>
+                <td class="user-name" th:text="${report.reporterName}"></td>
+                <td class="user-name" th:text="${report.reportedUserName}"></td>
+                <td th:text="${report.title}" th:title="${report.title}"></td>
+                <td>
+                    <span th:class="${'status-badge ' +
+                                  (report.status.name() == 'PENDING' ? 'status-pending' :
+                                   report.status.name() == 'RESOLVE' ? 'status-resolved' :
+                                   report.status.name() == 'REJECTED' ? 'status-rejected' : 'status-unknown')}"
+                          th:text="${report.status.name() == 'PENDING' ? '답변 대기' :
+                                    report.status.name() == 'RESOLVE' ? '답변 완료' :
+                                    report.status.name() == 'REJECTED' ? '답변 거절' : '알 수 없음'}"></span>
+                </td>
+                <td>
+                    <span th:class="${'delete-status ' + (report.isDeleted ? 'deleted' : 'processing')}"
+                          th:text="${report.isDeleted ? '삭제됨' : '처리중'}"></span>
+                </td>
+                <td class="date-cell" th:text="${#temporals.format(report.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>
+    </div>
+    <div th:if="${#lists.isEmpty(myUserReports.content)}" class="empty-state">
+        <p>신고 내역이 없습니다.</p>
     </div>
 </div>
 
