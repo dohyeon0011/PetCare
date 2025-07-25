@@ -24,7 +24,7 @@ public class AdminUserReportViewController {
     /**
      * 관리자 페이지 - 모든 유저 신고 내역 조회 페이지 반환
      */
-    @GetMapping
+    @GetMapping("/users")
     public String indexUserReport(@AuthenticationPrincipal MemberDetails memberDetails, @PageableDefault Pageable pageable, Model model) {
         if (memberDetails != null && memberDetails.getMember() != null) {
             Page<AdminUserReportResponse.UserReportListDTO> userReportList = adminUserReportService.indexUserReport(memberDetails.getMember(), pageable);
