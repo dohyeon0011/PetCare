@@ -1,5 +1,6 @@
 .user-report-list-container {
-    max-width: 900px;
+    max-width: 1200px;
+    margin: 0 auto;
     background: linear-gradient(145deg, #1a1d23 0%, #2a2d35 100%);
     border-radius: 24px;
     padding: 40px 30px;
@@ -32,6 +33,7 @@
     margin-bottom: 24px;
     font-size: 1.75rem;
     letter-spacing: -0.025em;
+    text-align: center;
 }
 
 .user-report-table {
@@ -40,6 +42,10 @@
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(8px);
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 .user-report-table th {
@@ -51,6 +57,8 @@
     letter-spacing: 0.05em;
     border: none;
     position: relative;
+    vertical-align: middle;
+    padding: 16px 20px;
 }
 
 .user-report-table th::after {
@@ -63,17 +71,14 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 }
 
-.user-report-table td, .user-report-table th {
-    vertical-align: middle;
-    padding: 16px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 .user-report-table td {
     color: #cbd5e1;
     font-weight: 500;
     background: rgba(30, 41, 59, 0.4);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    vertical-align: middle;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .user-report-table tbody tr {
@@ -84,27 +89,22 @@
     border-bottom: none;
 }
 
+/* 각 컬럼별 너비 조정 - 더 넓게 */
+.user-report-table th:nth-child(1), .user-report-table td:nth-child(1) { width: 100px; }   /* 번호 */
+.user-report-table th:nth-child(2), .user-report-table td:nth-child(2) { width: 150px; }  /* 신고자 */
+.user-report-table th:nth-child(3), .user-report-table td:nth-child(3) { width: 150px; }  /* 피신고자 */
+.user-report-table th:nth-child(4), .user-report-table td:nth-child(4) { width: 300px; }  /* 제목 */
+.user-report-table th:nth-child(5), .user-report-table td:nth-child(5) { width: 140px; }  /* 상태 */
+.user-report-table th:nth-child(6), .user-report-table td:nth-child(6) { width: 140px; }  /* 삭제 여부 */
+.user-report-table th:nth-child(7), .user-report-table td:nth-child(7) { width: 180px; }  /* 신고일 */
+
 /* 제목 필드 텍스트 오버플로우 처리 */
 .user-report-table td:nth-child(4) {
-    max-width: 200px;
+    max-width: 300px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-/* 테이블 전체 레이아웃 고정 */
-.user-report-table {
-    table-layout: fixed;
-    width: 100%;
-}
-
-/* 각 컬럼별 너비 조정 */
-.user-report-table th:nth-child(1), .user-report-table td:nth-child(1) { width: 80px; }   /* 신고 ID */
-.user-report-table th:nth-child(2), .user-report-table td:nth-child(2) { width: 120px; }  /* 신고한 회원 */
-.user-report-table th:nth-child(3), .user-report-table td:nth-child(3) { width: 120px; }  /* 신고 대상 회원 */
-.user-report-table th:nth-child(4), .user-report-table td:nth-child(4) { width: 200px; }  /* 제목 */
-.user-report-table th:nth-child(5), .user-report-table td:nth-child(5) { width: 100px; }  /* 처리 상태 */
-.user-report-table th:nth-child(6), .user-report-table td:nth-child(6) { width: 140px; }  /* 작성일 */
 
 /* 호버 시 제목 툴팁 효과 */
 .user-report-table td:nth-child(4):hover {
@@ -151,11 +151,93 @@
     transition: transform 0.1s ease;
 }
 
-/* 추가적인 현대적 효과들 */
-.user-report-table {
-    animation: fadeInUp 0.6s ease-out;
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+.status-pending {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff;
+}
+
+.status-resolved {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+}
+
+.status-rejected {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+}
+
+.status-unknown {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    color: #fff;
+}
+
+.delete-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.delete-status.deleted {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+}
+
+.delete-status.processing {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    color: #fff;
+}
+
+.delete-status::before {
+    content: '●';
+    font-size: 10px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+    font-size: 1.1rem;
+}
+
+.empty-state::before {
+    content: '📋';
+    display: block;
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.id-cell {
+    color: #a78bfa;
+    font-weight: 700;
+}
+
+.user-name {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.date-cell {
+    color: #94a3b8;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    font-size: 0.8rem;
+}
+
+/* 애니메이션 효과 */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -165,6 +247,10 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.user-report-list-container {
+    animation: fadeInUp 0.8s ease-out;
 }
 
 /* 스크롤바 스타일링 */
@@ -188,9 +274,12 @@
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+    body {
+        padding: 20px 16px;
+    }
+
     .user-report-list-container {
         padding: 24px 20px;
-        margin: 0 16px;
         border-radius: 20px;
     }
 
@@ -201,5 +290,17 @@
 
     .user-report-list-container h2 {
         font-size: 1.5rem;
+    }
+
+    .user-report-table {
+        min-width: 1000px;
+    }
+    .status-badge, .delete-status {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+    }
+
+    .user-report-list-container {
+        overflow-x: auto;
     }
 }
