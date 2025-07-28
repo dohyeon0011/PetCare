@@ -90,4 +90,36 @@ public class AdminUserReportResponse {
             this.createdAt = createdAt;
         }
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Schema(description = "관리자 - 유저 신고 문의 답변 시 화면 데이터 반환 Res DTO")
+    public static class AdminUserReportReplyResDTO {
+        @Schema(description = "신고 문의 id")
+        private Long id;
+
+        @Schema(description = "신고한 회원")
+        private String reporterName;
+
+        @Schema(description = "신고 당한 회원")
+        private String reportedUserName;
+
+        @Schema(description = "신고 제목")
+        private String title;
+
+        @Schema(description = "신고 내용")
+        private String content;
+
+        @Schema(description = "작성 시간")
+        private LocalDateTime createdAt;
+
+        public AdminUserReportReplyResDTO(Long id, String reporterName, String reportedUserName, String title, String content, LocalDateTime createdAt) {
+            this.id = id;
+            this.reporterName = reporterName;
+            this.reportedUserName = reportedUserName;
+            this.title = title;
+            this.content = content;
+            this.createdAt = createdAt;
+        }
+    }
 }
