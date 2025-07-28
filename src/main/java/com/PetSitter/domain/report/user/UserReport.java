@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -32,24 +33,30 @@ public class UserReport {
     @JoinColumn(name = "reported_id")
     private Member reportedUser;
 
-    @Comment("신고 문의 제목")
+    @Comment("유저 신고 문의 제목")
     private String title;
 
-    @Comment("신고 내용")
+    @Comment("유저 신고 내용")
     @Lob
     @Column(nullable = false)
     private String content;
 
-    @Comment("처리 상태")
+    @Comment("신고 문의 처리 상태")
     @Enumerated(value = EnumType.STRING)
     private ReportStatus status;
 
-    @Comment("작성 시간")
+    @Comment("신고 문의 작성 시간")
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Comment("삭제 여부: True = 삭제, False = 존재")
     private boolean isDeleted;
+
+    @Comment("관리자 문의 답변 내용")
+    private String replyContent;
+
+    @Comment("관리자 문의 답변 시간")
+    private LocalDateTime replyAt;
 
     @Builder
     public UserReport(Member reporter, Member reportedUser, String title, String content) {
@@ -89,5 +96,22 @@ public class UserReport {
      */
     public void changeReportStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    /**
+     * 관리자: 문의 답변 내용 설정 커스텀 메서드
+     */
+    public void changeReplyContent(String replyContent) {
+        if (!StringUtils.hasText(replyContent)) {
+            throw new IllegalArgumentException("문의 답변 내용이 공백일 수 없습니다. 다시 입력해 주세요.");
+        }
+        this.replyContent = replyContent;
+    }
+
+    /**
+     * 관리자: 문의 답변 작성 시간 설정 커스텀 메서드
+     */
+    public void changeReplyAt() {
+        this.replyAt = LocalDateTime.now();
     }
 }
