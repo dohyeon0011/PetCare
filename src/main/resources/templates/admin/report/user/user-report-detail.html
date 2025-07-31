@@ -191,7 +191,7 @@
 
     <!-- 버튼 영역 -->
     <div class="mt-4 text-center">
-        <a th:href="@{'/pets-care/admin/reports/users/' + ${userReport.id} + '/reply'}" class="btn btn-primary">답변하기</a>
+        <a th:href="@{'/pets-care/admin/reports/' + ${userReport.id} + '/users/reply'}" class="btn btn-primary">답변하기</a>
         <button type="button" class="btn btn-secondary mr-2" onclick="history.back();">뒤로가기</button>
     </div>
 </div>
