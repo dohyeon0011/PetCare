@@ -6,6 +6,7 @@ import com.PetSitter.dto.report.user.response.AdminUserReportResponse;
 import com.PetSitter.service.Admin.report.user.AdminUserReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,9 +46,17 @@ public class AdminUserReportApiController {
                 .body(userReportDetailDTO);
     }
 
-    @Operation(summary = "관리자 페이지 - 유저 신고 문의 처리 현황 상태 변경", description = "관리자 권한 - 유저 신고 문의 처리 현황 상태 변경 API")
+    @Operation(summary = "관리자 페이지 - 유저 신고 문의 답변", description = "관리자 권한 - 유저 신고 문의 답변 API")
     @PutMapping("/{userReportId}/users")
-    public ResponseEntity<Void> updateUserReport(@PathVariable("userReportId") Long userReportId, @AuthenticationPrincipal MemberDetails memberDetails, AdminUpdateUserReportRequest request) {
+    public ResponseEntity<?> updateUserReport(@PathVariable("userReportId") Long userReportId, @AuthenticationPrincipal MemberDetails memberDetails, @RequestBody @Valid AdminUpdateUserReportRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errorRes = new HashMap<>();
+            result.getFieldErrors().forEach(error -> {
+                errorRes.put(error.getField(), error.getDefaultMessage());
+            });
+            return ResponseEntity.badRequest()
+                    .body(errorRes);
+        }
         adminUserReportService.updateUserReport(memberDetails.getMember(), userReportId, request);
 
         return ResponseEntity.noContent()
