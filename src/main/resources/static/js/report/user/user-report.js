@@ -19,7 +19,7 @@
     .then(res => {
         if (res.ok) {
             alert("신고가 성공적으로 접수되었습니다.");
-            location.href = '/pets-care/main';
+            location.href = '/pets-care/reports/users';
         } else {
             return res.json().then(err => Promise.reject(err));
         }
