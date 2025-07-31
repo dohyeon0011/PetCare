@@ -69,4 +69,16 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
             where ur.id = :id
             """)
     AdminUserReportResponse.UserReportDetailDTO findUserReportDetailDTOByIdForAdmin(@Param("id") Long id);
+
+    // 관리자 - 유저 신고 문의 답변 페이지 데이터 조회
+    @Query("""
+            select new com.PetSitter.dto.report.user.response.AdminUserReportResponse$AdminUserReportReplyResDTO(
+                ur.id, reporter.name, reportedUser.nickName, ur.title, ur.content, ur.createdAt
+            )
+            from UserReport ur
+            join ur.reporter reporter
+            join ur.reportedUser reportedUser
+            where ur.id = :id
+            """)
+    AdminUserReportResponse.AdminUserReportReplyResDTO findUserReportReplyResDTOForAdmin(@Param("id") Long id);
 }
