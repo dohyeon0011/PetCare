@@ -52,7 +52,7 @@ public class AdminUserReportViewController {
     /**
      * 관리자 페이지 - 유저 신고 문의 답변 페이지 반환
      */
-    @GetMapping("/{userReportId}/reply")
+    @GetMapping("/{userReportId}/users/reply")
     public String newUserReportReply(@PathVariable("userReportId") Long userReportId, @AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         if (memberDetails != null && memberDetails.getMember() != null) {
             AdminUserReportResponse.AdminUserReportReplyResDTO userReportReplyInfo = adminUserReportService.getNewUserReportReplyInfo(memberDetails.getMember(), userReportId);
