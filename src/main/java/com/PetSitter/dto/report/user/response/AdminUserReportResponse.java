@@ -79,7 +79,13 @@ public class AdminUserReportResponse {
         @Schema(description = "작성 시간")
         private LocalDateTime createdAt;
 
-        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String title, String content, ReportStatus status, boolean isDeleted, LocalDateTime createdAt) {
+        @Schema(description = "관리자 문의 답변 내용")
+        private String replyContent;
+
+        @Schema(description = "관리자 문의 답변 시간")
+        private LocalDateTime replyAt;
+
+        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String title, String content, ReportStatus status, boolean isDeleted, LocalDateTime createdAt, String replyContent, LocalDateTime replyAt) {
             this.id = id;
             this.reporterName = reporterName;
             this.reportedUserName = reportedUserName;
@@ -88,6 +94,8 @@ public class AdminUserReportResponse {
             this.status = status;
             this.isDeleted = isDeleted;
             this.createdAt = createdAt;
+            this.replyContent = replyContent;
+            this.replyAt = replyAt;
         }
     }
 
