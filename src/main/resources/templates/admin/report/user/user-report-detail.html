@@ -196,6 +196,26 @@
     </div>
 </div>
 
+<div class="admin-reply-section">
+    <h2 class="reply-title">관리자 답변</h2>
+    <div th:if="${userReport.replyContent != null}">
+        <table class="report-table">
+            <tr>
+                <th>답변 내용</th>
+                <td th:text="${userReport.replyContent}"></td>
+            </tr>
+            <tr>
+                <th>답변 시간</th>
+                <td th:text="${#temporals.format(userReport.replyAt, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${userReport.replyContent == null}" class="no-reply-message">
+        아직 답변이 등록되지 않았습니다.
+    </div>
+</div>
+
 <!-- 챗봇 토글 버튼 -->
 <button id="chatbot-toggle" class="chatbot-float-btn">
     💬
