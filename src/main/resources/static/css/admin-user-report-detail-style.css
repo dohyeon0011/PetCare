@@ -103,3 +103,64 @@
     background: linear-gradient(135deg, #1f2937, #111827);
     transform: translateY(-2px);
 }
+
+.admin-reply-section {
+    margin-top: 48px;
+    padding: 32px;
+    background-color: #1e1e1e;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid #2c2c2c;
+}
+
+.reply-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #ffd54f; /* 노란색 계열 강조 */
+    margin-bottom: 24px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+}
+
+.admin-reply-section .report-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-reply-section .report-table th,
+.admin-reply-section .report-table td {
+    padding: 14px 18px;
+    border: 1px solid #333;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.admin-reply-section .report-table th {
+    background-color: #333;
+    color: #90caf9; /* 파란색 계열 강조 */
+    width: 160px;
+    font-weight: 500;
+}
+
+.no-reply-message {
+    background-color: #292929;
+    color: #b0bec5;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px dashed #555;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* 부드러운 등장 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
