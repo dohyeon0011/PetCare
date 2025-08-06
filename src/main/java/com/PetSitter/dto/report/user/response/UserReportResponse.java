@@ -78,7 +78,13 @@ public class UserReportResponse {
         @JsonProperty("isDeleted")
         private Boolean isDeleted;
 
-        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String title, String content, ReportStatus status, LocalDateTime createdAt, Boolean isDeleted) {
+        @Schema(description = "관리자 문의 답변 내용")
+        private String replyContent;
+
+        @Schema(description = "관리자 문의 답변 시간")
+        private LocalDateTime replyAt;
+
+        public UserReportDetailDTO(Long id, String reporterName, String reportedUserName, String title, String content, ReportStatus status, LocalDateTime createdAt, Boolean isDeleted, String replyContent, LocalDateTime replyAt) {
             this.id = id;
             this.reporterName = reporterName;
             this.reportedUserName = reportedUserName;
@@ -87,6 +93,8 @@ public class UserReportResponse {
             this.status = status;
             this.createdAt = createdAt;
             this.isDeleted = isDeleted;
+            this.replyContent = replyContent;
+            this.replyAt = replyAt;
         }
     }
 }
